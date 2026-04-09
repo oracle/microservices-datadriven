@@ -183,21 +183,6 @@ oracle-database-exporter:
   # Override default resources if needed (defaults: cpu 250m-500m, memory 64Mi-128Mi)
   # resources: {}
 
-# Conductor Server (Netflix Conductor - Workflow Orchestration)
-conductor-server:
-  global:
-    imagePullSecrets: *imagePullSecrets
-  enabled: true
-  replicas: 1
-  image:
-    repository: myregistry.example.com/obaas/conductor
-    tag: "server-2.0.0"
-  redisImage:
-    repository: myregistry.example.com/obaas/conductor
-    tag: "cache-2.0.0"
-  # Override default resources if needed (defaults: cpu 500m-1000m, memory 512Mi-1Gi)
-  # resources: {}
-
 # =============================================================================
 # Database Configuration
 # =============================================================================
@@ -759,7 +744,6 @@ kafka:
 # global kubectl (PVC cleanup hook)  | docker.io                     | global.utilities.kubectl.image.registry
 # eureka                             | container-registry.oracle.com | eureka.image.repository
 # admin-server                       | container-registry.oracle.com | admin-server.image.repository
-# conductor-server                   | container-registry.oracle.com | conductor-server.image.repository
 # otmm                               | container-registry.oracle.com | otmm.image.repository
 # oracle-database-exporter           | container-registry.oracle.com | oracle-database-exporter.image.repository
 # oracle-database-exporter (busybox) | docker.io                     | oracle-database-exporter.busybox.repository

@@ -79,4 +79,5 @@ AppVersion: 2.1.0-build.8
 
 AppVersion: 2.1.0-build.9
 
-
+- Fixes for Kafka cluster creation
+- OSS Conductor removed (replaced by OTMM/MicroTx Workflow)

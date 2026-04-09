@@ -43,11 +43,6 @@ Config Server:
   ✓ Spring Config Server
 {{- end }}
 
-Optional Services:
-{{- if and (index .Values "conductor-server").enabled .Values.database.enabled }}
-  ✓ Conductor Server (Workflow Orchestration) - {{ (index .Values "conductor-server").replicas }} replica(s)
-{{- end }}
-
 ================================================================================
 GETTING STARTED
 ================================================================================
@@ -103,11 +98,6 @@ SigNoz Observability:
 Oracle Database Exporter:
   Metrics: http://{{ .Release.Name }}-metrics-exporter.{{ .Release.Namespace }}.svc.cluster.local:9161/metrics
 {{- end }}
-{{- if and (index .Values "conductor-server").enabled .Values.database.enabled }}
-
-Conductor Server:
-  API: http://{{ .Release.Name }}-conductor-server.{{ .Release.Namespace }}.svc.cluster.local:8080
-{{- end }}
 
 {{- if (index .Values "config-server").enabled }}
 
@@ -153,13 +143,7 @@ IMPORTANT NOTES
 
 {{- if not .Values.database.enabled }}
 ⚠ WARNING: Database is disabled. Services requiring database will not start:
-   - Conductor Server
    - Oracle Database Exporter
-{{- end }}
-
-{{- if and (index .Values "conductor-server").enabled (not .Values.database.enabled) }}
-⚠ WARNING: Conductor Server is enabled but database is disabled.
-   Enable database configuration to use Conductor Server.
 {{- end }}
 
 {{- if and (index .Values "oracle-database-exporter").enabled (not .Values.database.enabled) }}

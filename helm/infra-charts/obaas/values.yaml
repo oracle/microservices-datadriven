@@ -411,19 +411,6 @@ oracle-database-exporter:
   # Override default resources if needed (defaults: cpu 250m-500m, memory 64Mi-128Mi)
   # resources: {}
 
-# Conductor Server (Netflix Conductor - Workflow Orchestration)
-conductor-server:
-  enabled: true
-  replicas: 1
-  image:
-    repository: container-registry.oracle.com/obaas/conductor
-    tag: "server-2.0.0"
-  redisImage:
-    repository: container-registry.oracle.com/obaas/conductor
-    tag: "cache-2.0.0"
-  # Override default resources if needed (defaults: cpu 500m-1000m, memory 512Mi-1Gi)
-  # resources: {}
-
 # Database Configuration
 # Supports SIDB-FREE, ADB-FREE, ADB-S (OCI Autonomous Database), or OTHER (external database)
 database:

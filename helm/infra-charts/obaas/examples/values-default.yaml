@@ -35,9 +35,6 @@ ingress-nginx:
 admin-server:
   enabled: true
 
-conductor-server:
-  enabled: true
-
 otmm:
   enabled: true
 

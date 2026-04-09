@@ -74,9 +74,8 @@ Each OBaaS instance includes:
 - **signoz** - Observability stack (with its own ClickHouse)
 - **Coherence Operator** - Coherence cluster operator
 - **Admin Server** - Admins server
-- **Conductor server and Redis** - Workflow server
 - **Eureka** - Service Discovery
-- **OTMM** - Oracle Transaction Manager for Microserveices
+- **OTMM** - Oracle Transaction Manager for Microserveices (including MicroTX Workflow)
 - **APISIX** - APISIX API GW
 
 ## Architecture

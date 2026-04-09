@@ -183,7 +183,7 @@ These subcharts have a dedicated registry field (set to your registry URL):
 
 ### OBaaS Components Requiring Full Repository Path
 These components require the full image path including registry in their `image.repository`:
-- **eureka**, **admin-server**, **conductor-server**, **otmm**, **oracle-database-exporter**
+- **eureka**, **admin-server**, **otmm**, **oracle-database-exporter**
 - **database** (for SIDB-FREE/ADB-FREE)
 - **apisix**: `apisix.image.repository`, `apisix.initContainer.image`
 
