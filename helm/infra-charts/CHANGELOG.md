@@ -75,8 +75,13 @@ AppVersion: 2.1.0-build.8
 - Fixes for Strimzi operator and Kafka
 - Allow OpenTelemetry operator image to be installed from a private registry
 
-# 0.0.10 - TBA
+# 0.0.10 - Apr 9, 2026
 
 AppVersion: 2.1.0-build.9
 
+- Fixes for Kafka cluster creation
+- OSS Conductor removed (replaced by OTMM/MicroTx Workflow)
 
+# 0.0.11 - TBA
+
+AppVersion: 2.1.0-build.9

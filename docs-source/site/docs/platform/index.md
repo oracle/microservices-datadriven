@@ -34,7 +34,7 @@ Oracle Backend for Microservices and AI includes a set of pre-integrated platfor
 | [Oracle Database Metrics Exporter](./dbexporter.md) | Exposes Oracle Database metrics for monitoring and alerting |
 | [External Secrets Operator](./esooperator.md) | Syncs secrets from external stores (OCI Vault, AWS, HashiCorp Vault) into Kubernetes |
 | [Spring Boot Admin Server](./sbadminserver.md) | Web dashboard for monitoring and managing Spring Boot applications |
-| [Conductor Workflow Orchestration](./conductor.md) | Workflow orchestration engine for multi-step service choreography |
+| [MicroTx Workflow Orchestration](./conductor.md) | Workflow orchestration engine for multi-step service choreography |
 
 ## Architecture
 
