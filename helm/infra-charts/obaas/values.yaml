@@ -336,7 +336,7 @@ apisix:
   # Init container image
   initContainer:
     image: "docker.io/busybox"
-    tag: "1.36"
+    tag: "1.37"
 
 # Admin Server
 admin-server:
@@ -403,11 +403,11 @@ oracle-database-exporter:
   replicas: 1
   image:
     repository: container-registry.oracle.com/database/observability-exporter
-    tag: "2.2.0"
+    tag: "2.2.2"
   # Busybox sidecar for tailing alert.log
   busybox:
     repository: docker.io/busybox
-    tag: "1.36"
+    tag: "1.37"
   # Override default resources if needed (defaults: cpu 250m-500m, memory 64Mi-128Mi)
   # resources: {}
 
@@ -514,7 +514,7 @@ signoz:
       image:
         registry: docker.io
         repository: busybox
-        tag: 1.36
+        tag: 1.37
   # Authentication configuration for SigNoz admin user
   auth:
     # Existing secret configuration
@@ -541,7 +541,7 @@ signoz:
         image:
           registry: docker.io
           repository: busybox
-          tag: "1.36"
+          tag: "1.37"
   schemaMigrator:
     image:
       registry: docker.io
@@ -551,7 +551,7 @@ signoz:
         image:
           registry: docker.io
           repository: busybox
-          tag: "1.36"
+          tag: "1.37"
       chReady:
         image:
           registry: docker.io

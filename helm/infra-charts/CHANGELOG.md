@@ -84,4 +84,7 @@ AppVersion: 2.1.0-build.9
 
 # 0.0.11 - TBA
 
-AppVersion: 2.1.0-build.9
+AppVersion: 2.1.0-build.10
+
+- Database Exporter updated to version 2.2.2
+- Busybox updated to version 1.37
