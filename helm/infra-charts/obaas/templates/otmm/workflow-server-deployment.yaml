@@ -213,6 +213,7 @@ spec:
               emptyDir: {}
             - name: oracle-db-wallet-volume
               secret:
+                optional: true
                 secretName: {{ ternary (include "obaas.databaseAdbTnsAdminSecret" $) (include "obaas.databaseTnsAdminSecret" $) (eq (include "obaas.database.isADB" $) "true") }}
             - name: encryption-key-volume
               secret:
