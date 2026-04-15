@@ -5,15 +5,24 @@
 # AutonomousDatabase Operator Resource (ADB-S)
 {{- if .Values.database }}
 {{- if eq (include "obaas.database.isADBS" .) "true" }}
+{{- $adbName := printf "%s-adb-s" .Release.Name -}}
+{{- $existingAdb := lookup "database.oracle.com/v4" "AutonomousDatabase" .Release.Namespace $adbName -}}
+{{- $action := "Sync" -}}
+{{- if $existingAdb -}}
+  {{- $spec := (index $existingAdb "spec") | default dict -}}
+  {{- if hasKey $spec "action" -}}
+    {{- $action = (index $spec "action") | default "" -}}
+  {{- end -}}
+{{- end }}
 apiVersion: database.oracle.com/v4
 kind: AutonomousDatabase
 metadata:
-  name: {{ .Release.Name }}-adb-s
+  name: {{ $adbName }}
   labels:
     app.kubernetes.io/component: database
     {{- include "obaas.labels" . | nindent 4 }}
 spec:
-  action: "Sync"
+  action: {{ $action | quote }}
   details:
     id: {{ .Values.database.oci.ocid }}
   wallet:
