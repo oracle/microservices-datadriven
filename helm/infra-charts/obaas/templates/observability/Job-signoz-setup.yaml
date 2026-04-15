@@ -133,17 +133,26 @@ spec:
           name: signoz-dashboards-2
           readOnly: true
       initContainers:
-      - command:
+      - name: wait-for-query-service
+        image: {{ .Values.signoz.utilities.curlJq.image.registry }}/{{ .Values.signoz.utilities.curlJq.image.repository }}:{{ .Values.signoz.utilities.curlJq.image.tag }}
+        command:
         - sh
         - -c
         - |
           until wget --spider -q {{ .Release.Name }}-signoz:8080/api/v1/health?live=1; do 
             echo "Waiting for query-service..."; sleep 5; 
           done
-          echo "query-service ready, extracting Org ID from database..."
+          echo "query-service ready."
+      - name: signoz-id-discovery
+        image: {{ .Values.signoz.clickhouse.image.registry }}/{{ .Values.signoz.clickhouse.image.repository }}:{{ .Values.signoz.clickhouse.image.tag | default .Chart.AppVersion }}
+        command:
+        - sh
+        - -c
+        - |
+          echo "Extracting Org ID from database using clickhouse-local..."
           
-          # Extract Org ID directly from the mounted SQLite DB using binary-safe grep
-          ORG_ID=$(grep -oaE "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}" /signoz-db/signoz.db | grep -v "00000000" | head -n 1)
+          # Extract Org ID using clickhouse-local (SQLite engine)
+          ORG_ID=$(clickhouse-local -q "SELECT id FROM sqlite('/signoz-db/signoz.db', 'organizations') LIMIT 1")
           
           if [ -n "$ORG_ID" ]; then
             echo "$ORG_ID" > /shared/orgID
@@ -152,8 +161,6 @@ spec:
             echo "ERROR: Could not find Org ID in DB file"
             exit 1
           fi
-        image: {{ .Values.signoz.utilities.curlJq.image.registry }}/{{ .Values.signoz.utilities.curlJq.image.repository }}:{{ .Values.signoz.utilities.curlJq.image.tag }}
-        name: signoz-id-discovery
         volumeMounts:
         - mountPath: /shared
           name: shared-data
