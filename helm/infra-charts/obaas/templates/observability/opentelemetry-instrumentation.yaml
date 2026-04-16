@@ -15,4 +15,9 @@ spec:
     {{- if .Values.signoz.instrumentation.sampler.argument }}
     argument: {{ .Values.signoz.instrumentation.sampler.argument | quote }}
     {{- end }}
+  {{- if .Values.signoz.instrumentation.java.env }}
+  java:
+    env:
+      {{- toYaml .Values.signoz.instrumentation.java.env | nindent 6 }}
+  {{- end }}
 {{- end }}
