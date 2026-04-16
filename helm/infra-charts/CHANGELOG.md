@@ -82,7 +82,7 @@ AppVersion: 2.1.0-build.9
 - Fixes for Kafka cluster creation
 - OSS Conductor removed (replaced by OTMM/MicroTx Workflow)
 
-# 0.0.11 - TBA
+# 0.0.11 - Apr 16, 2026
 
 AppVersion: 2.1.0-build.10
 
@@ -90,3 +90,6 @@ AppVersion: 2.1.0-build.10
 - Busybox updated to version 1.37
 - Signoz updated to verion 0.113
 
+# 0.0.12 - TBA
+
+AppVersion: 2.1.0-build.11
