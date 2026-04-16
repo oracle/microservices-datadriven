@@ -21,5 +21,6 @@ Oracle Backend for Microservices and AI ships with a fully integrated observabil
 | [Metrics, Logs and Traces](./metricslogstraces.md) | Navigate metrics, logs, and traces in the SigNoz dashboard |
 | [Pre-installed Dashboards](./dashboards.md) | Catalog of 20+ ready-to-use dashboards (Spring Boot, Kafka, Kubernetes, Oracle DB, and more) |
 | [Configure Applications for SigNoz](./configure.md) | Add OpenTelemetry and Micrometer dependencies to your application |
+| [Customize Java Instrumentation](./java-instrumentation) | Pass custom environment variables to the OpenTelemetry Java agent through Helm values or CLI overrides |
 | [Oracle Database Metrics Exporter](./dbexporter.md) | Database-level metrics collection and Grafana integration |
 | [Customization](./customizations.md) | Configure Online and Cold Storage |

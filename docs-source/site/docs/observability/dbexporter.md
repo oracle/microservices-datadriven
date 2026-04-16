@@ -1,6 +1,6 @@
 ---
 title: Oracle Database Metrics Exporter 
-sidebar_position: 7
+sidebar_position: 8
 ---
 
 Oracle Database Metrics Exporter aims to provide observability for the Oracle Database so that users can understand performance and diagnose issues easily across applications and the database. Oracle Database Metrics Exporter delivers functionality to support both cloud and on-premises databases, including those running in Kubernetes and containers.

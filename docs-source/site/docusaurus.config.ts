@@ -51,6 +51,7 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
+          lastVersion: '2.0.0',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           // editUrl:
