@@ -90,6 +90,12 @@ AppVersion: 2.1.0-build.10
 - Busybox updated to version 1.37
 - Signoz updated to verion 0.113
 
-# 0.0.12 - TBA
+# 0.0.12 - Apr 20, 2026
 
 AppVersion: 2.1.0-build.11
+
+- Allow custom Java env vars in Instrumentation CR
+
+# 0.0.13 - TBA
+
+AppVersion: 2.1.0-build.12
