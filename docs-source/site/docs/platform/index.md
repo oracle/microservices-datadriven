@@ -11,7 +11,7 @@ Oracle Backend for Microservices and AI includes a set of pre-integrated platfor
 |---------|-------------|
 | [Apache APISIX](./apacheapisix.md) | Cloud-native API gateway for routing, traffic management, and rate limiting |
 | [Spring Boot Eureka Server](./eureka.md) | Service registry for automatic discovery between microservices |
-| [Envoy Gateway](./envoygateway.md) | CNCF graduated implementation of the [Kubernetes Gateway API |
+| [Envoy Gateway](./envoygateway.md) | CNCF graduated implementation of the Kubernetes Gateway API |
 
 ## Messaging & Event Streaming
 

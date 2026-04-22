@@ -6,7 +6,7 @@ sidebar_position: 1
 
 Before installing Oracle Backend for Microservices and AI (OBaaS), ensure your environment meets all prerequisites. Installing without meeting these requirements will result in deployment failures.
 
-:::danger Warning
+:::danger[Warning]
 If your environment does not meet the prerequisites, the installation may not succeed. Do not proceed with installation until you have confirmed your environment meets all requirements.
 :::
 
@@ -14,7 +14,7 @@ If your environment does not meet the prerequisites, the installation may not su
 
 ### Oracle OCI
 
-If you are installing into Oracle OCI you need the right [OCI IAM policies](../oci_policies.md) in place.  Plwase review and ensure you have the required policies and permissions before installing.
+If you are installing into Oracle OCI you need the right [OCI IAM policies](../oci_policies.md) in place.  Please review and ensure you have the required policies and permissions before installing.
 
 ### Kubernetes Cluster
 
@@ -42,7 +42,7 @@ You may need extra capacity:
 - For TWO OBaaS instances: double the number of worker nodes
 - Scale worker nodes based on additional application requirements
 
-:::tip Recommended
+:::tip[Recommended]
 Oracle Kubernetes Engine (OKE) "Quick Create/Enhanced" cluster is the recommended platform for OBaaS deployments.
 :::
 
@@ -59,7 +59,7 @@ You must have access to an Oracle Database instance (19c or later). The followin
 |---------|-------------|
 | Oracle Database 19c | Oracle Autonomous Database 26ai ATP |
 
-:::info AI Features
+:::info[AI Features]
 To use OBaaS AI capabilities, you must use Oracle Database 26ai or later. Earlier versions do not support AI features.
 :::
 
@@ -73,7 +73,6 @@ To use OBaaS AI capabilities, you must use Oracle Database 26ai or later. Earlie
 
 - ADMIN or SYSTEM credentials (required for schema creation)
 - Connection details: host, port, and service name
-
 
 ### Private Image Repository (Optional)
 

@@ -54,7 +54,7 @@ The deployment uses a two-chart architecture. The charts are separated because t
 - **strimzi-kafka-operator** - Kafka cluster operator
 - **oraoperator** - Oracle Database Operator for Kubernetes
 
-:::danger Warning
+:::danger[Warning]
 Attempting to install the obaas-prereqs chart multiple times will cause CRD version conflicts, duplicate operator controllers, and resource contention.
 :::
 
@@ -138,13 +138,13 @@ Other platform components (Eureka, Admin Server, MicroTx Workflow) connect to th
 
 </details>
 
-:::tip Bring Your Own Application User
+:::tip[Bring Your Own Application User]
 To use a pre-existing database user instead of the auto-generated OBAAS_USER, create a Secret with your credentials and reference it via `database.authN.secretName`. The init script will skip user creation if the named user already exists in `DBA_USERS`.
 :::
 
 ### Prerequisites
 
-:::warning Important
+:::warning[Important]
 Ensure all [prerequisites](./prereqs.md) are met before starting the deployment.
 :::
 
@@ -207,7 +207,7 @@ helm install \
 
 #### Step 2: Install Prerequisites (Once Per Cluster)
 
-:::warning Cluster-Scoped Installation
+:::warning[Cluster-Scoped Installation]
 Only install prerequisites once per cluster. Installing multiple times will cause CRD conflicts and duplicate operator controllers.
 :::
 
@@ -239,7 +239,7 @@ Monitor the installation:
 kubectl get pods -n <application-namespace> -w
 ```
 
-:::tip First Deployment
+:::tip[First Deployment]
 It may take 5-10 additional minutes for all pods to reach Running state.
 :::
 
@@ -287,7 +287,7 @@ helm upgrade --install <app-release> obaas/obaas -f examples/values-default.yaml
 
 #### SIDB-FREE Database (`values-sidb-free.yaml`)
 
-:::warning Important
+:::warning[Important]
 If you use SIDB, you may need more ephemeral storage on your nodes.  Please refer to [prerequisites](./prereqs.md) for details.
 :::
 
@@ -317,7 +317,6 @@ Connects to an existing OCI Autonomous Database (ADB-S) instead of deploying a d
    ```
 
    `<config-file>` is the location of your OCI configuration file, e.g., `/home/user/.oci/config`
-   
    `<profile>` is the profile in your config file to use, if not `DEFAULT`
 
    :::note
@@ -593,7 +592,7 @@ signoz:
 
 To remove OBaaS from your cluster:
 
-:::warning Data Loss
+:::warning[Data Loss]
 Uninstalling will delete all resources. Ensure you have backups of any important data before proceeding.
 :::
 
@@ -617,7 +616,7 @@ kubectl delete namespace <application-namespace> <tenant1-namespace> <tenant2-na
 helm uninstall <prereqs-release> -n <platform-system-namespace>
 ```
 
-:::danger Warning
+:::danger[Warning]
 Uninstalling prerequisites will affect **all** OBaaS instances in the cluster. Only do this if you're removing OBaaS completely.
 :::
 

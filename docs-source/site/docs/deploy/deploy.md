@@ -153,6 +153,7 @@ mvn clean package k8s:build k8s:push \
   -pl service1,service2,service3 \
   -Dimage.registry=$REGISTRY
 ```
+
 :::
 
 ## Step 3: Create Database Secrets
@@ -192,8 +193,9 @@ kubectl -n <namespace> create secret generic <dbname>-<service>-db-authn \
   --from-literal=service=<dbname>_tp
 ```
 
-:::info Oracle Password Requirements
+:::info[Oracle Password Requirements]
 Oracle database passwords must meet the following rules:
+
 - 12–30 characters
 - At least two uppercase letters, two lowercase letters, two digits, and two special characters (`#` or `_`)
 - Cannot start with a digit or special character

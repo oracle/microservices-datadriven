@@ -7,7 +7,7 @@ sidebar_position: 3
 
 The following policies need to be in place to install Oracle Backend for Microservices and AI.
 
-:::tip Use names or OCIDs
+:::tip[Use names or OCIDs]
 You can use OCIDs instead of names by replacing the `<group-name>` or `<comparment-name>` with the word `id` followed by the OCID.  Use of OCIDs may be required for some kinds of identity domains.
 :::
 
@@ -86,21 +86,3 @@ Allow group <group-name> to manage orm-work-requests in compartment <compartment
 Allow group <group-name> to use cloud-shell-public-network in tenancy
 Allow group <group-name> to use cloud-shell in tenancy
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
