@@ -75,7 +75,7 @@ To run against a local Oracle Docker container, simply:
 1. **Start Oracle Database container:**
    ```bash
    docker run -d --name oracle-db -p 1521:1521 \
-       -e ORACLE_PWD=Welcome12345 \
+       -e ORACLE_PWD=YourSecurePassword1! \
        container-registry.oracle.com/database/free:latest
    ```
    Then you need to create a `customer` user:
