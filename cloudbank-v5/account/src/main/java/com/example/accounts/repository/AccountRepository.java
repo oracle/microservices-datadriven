@@ -6,7 +6,9 @@ package com.example.accounts.repository;
 import java.util.List;
 
 import com.example.accounts.model.Account;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
@@ -14,5 +16,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     List<Account> findAccountsByAccountNameContains(String accountName);
 
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     Account findByAccountId(long accountId);
 }

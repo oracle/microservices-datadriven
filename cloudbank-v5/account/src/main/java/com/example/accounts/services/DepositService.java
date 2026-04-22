@@ -13,6 +13,7 @@ import com.oracle.microtx.springboot.lra.annotation.ParticipantStatus;
 import com.oracle.microtx.springboot.lra.annotation.Status;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -38,6 +39,7 @@ public class DepositService {
      */
     @PostMapping
     @LRA(value = LRA.Type.MANDATORY, end = false)
+    @Transactional
     public ResponseEntity<String> deposit(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId,
                             @RequestParam("accountId") long accountId,
                             @RequestParam("amount") long depositAmount) {
@@ -72,9 +74,10 @@ public class DepositService {
     /**
      * Increase balance amount as recorded in journal during deposit call.
      * Update LRA state to ParticipantStatus.Completed.
-     */
+    */
     @PutMapping("/complete")
     @Complete
+    @Transactional
     public ResponseEntity<String> completeWork(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) throws Exception {
         log.info("deposit complete called for LRA : " + lraId);
     

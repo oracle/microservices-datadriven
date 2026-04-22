@@ -13,6 +13,7 @@ import com.oracle.microtx.springboot.lra.annotation.ParticipantStatus;
 import com.oracle.microtx.springboot.lra.annotation.Status;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -38,6 +39,7 @@ public class WithdrawService {
     */
     @PostMapping
     @LRA(value = LRA.Type.MANDATORY, end = false)
+    @Transactional
     public ResponseEntity<String> withdraw(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId,
             @RequestParam("accountId") long accountId,
             @RequestParam("amount") long withdrawAmount) {
@@ -98,6 +100,7 @@ public class WithdrawService {
     */
     @PutMapping("/compensate")
     @Compensate
+    @Transactional
     public ResponseEntity<String> compensateWork(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) 
         throws Exception {
         log.info("Account withdraw compensate() called for LRA : " + lraId);
