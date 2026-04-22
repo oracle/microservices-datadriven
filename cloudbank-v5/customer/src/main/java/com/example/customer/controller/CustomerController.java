@@ -6,10 +6,12 @@ package com.example.customer.controller;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import com.example.customer.model.Customers;
 import com.example.customer.repository.CustomersRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,6 +29,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequestMapping("/api/v1")
 @Slf4j
 public class CustomerController {
+    private static final Pattern BCRYPT_PATTERN =
+            Pattern.compile("^\\$2[aby]\\$\\d{2}\\$[./A-Za-z0-9]{53}$");
+
     final CustomersRepository customersRepository;
 
     public CustomerController(CustomersRepository customersRepository) {
@@ -90,7 +95,8 @@ public class CustomerController {
                         customer.getCustomerId(),
                         customer.getCustomerName(),
                         customer.getCustomerEmail(),
-                        customer.getCustomerOtherDetails()));
+                        customer.getCustomerOtherDetails(),
+                        encodePasswordIfNeeded(customer.getCustomerPassword())));
 
                 URI location = ServletUriComponentsBuilder
                         .fromCurrentRequest()
@@ -122,6 +128,9 @@ public class CustomerController {
                 updCustomer.setCustomerName(customer.getCustomerName());
                 updCustomer.setCustomerEmail(customer.getCustomerEmail());
                 updCustomer.setCustomerOtherDetails(customer.getCustomerOtherDetails());
+                if (customer.getCustomerPassword() != null) {
+                    updCustomer.setCustomerPassword(encodePasswordIfNeeded(customer.getCustomerPassword()));
+                }
                 return new ResponseEntity<>(customersRepository.save(updCustomer), HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -165,5 +174,12 @@ public class CustomerController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private String encodePasswordIfNeeded(String customerPassword) {
+        if (customerPassword == null || BCRYPT_PATTERN.matcher(customerPassword).matches()) {
+            return customerPassword;
+        }
+        return BCrypt.hashpw(customerPassword, BCrypt.gensalt());
     }
 }

@@ -116,7 +116,7 @@ public class Customer {
         this.customerOtherDetails = customerOtherDetails;
     }
     
-    @Column(name = "PASSWORD")
+    @Column(name = "PASSWORD", length = 60)
     public String getCustomerPassword() {
         return customerPassword;
     }

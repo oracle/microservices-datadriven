@@ -4,6 +4,7 @@ package com.example;
 
 import java.util.List;
 import java.net.URI;
+import java.util.regex.Pattern;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -24,6 +25,7 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.UriInfo;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  * Helidon MP Customer REST Resource
@@ -33,6 +35,8 @@ import java.util.logging.Level;
 public class CustomerResource {
 
     private static final Logger LOGGER = Logger.getLogger(CustomerResource.class.getName());
+    private static final Pattern BCRYPT_PATTERN =
+            Pattern.compile("^\\$2[aby]\\$\\d{2}\\$[./A-Za-z0-9]{53}$");
 
     @PersistenceContext(unitName = "customer")
     private EntityManager entityManager;
@@ -145,6 +149,7 @@ public class CustomerResource {
             Customer existingCustomer = entityManager.find(Customer.class, customer.getCustomerId());
 
             if (existingCustomer == null) {
+                customer.setCustomerPassword(encodePasswordIfNeeded(customer.getCustomerPassword()));
                 entityManager.persist(customer);
                 entityManager.flush(); // Ensure the entity is persisted
 
@@ -184,6 +189,9 @@ public class CustomerResource {
                 existingCustomer.setCustomerName(customer.getCustomerName());
                 existingCustomer.setCustomerEmail(customer.getCustomerEmail());
                 existingCustomer.setCustomerOtherDetails(customer.getCustomerOtherDetails());
+                if (customer.getCustomerPassword() != null) {
+                    existingCustomer.setCustomerPassword(encodePasswordIfNeeded(customer.getCustomerPassword()));
+                }
 
                 Customer updatedCustomer = entityManager.merge(existingCustomer);
                 return Response.ok(updatedCustomer).build();
@@ -243,5 +251,12 @@ public class CustomerResource {
             LOGGER.log(Level.SEVERE, "Error processing loan application for amount: " + amount, e);
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    private String encodePasswordIfNeeded(String customerPassword) {
+        if (customerPassword == null || BCRYPT_PATTERN.matcher(customerPassword).matches()) {
+            return customerPassword;
+        }
+        return BCrypt.hashpw(customerPassword, BCrypt.gensalt());
     }
 }

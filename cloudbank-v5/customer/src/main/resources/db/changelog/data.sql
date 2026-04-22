@@ -4,11 +4,11 @@
 TRUNCATE TABLE CUSTOMER.CUSTOMERS;
 
 INSERT INTO CUSTOMER.CUSTOMERS (CUSTOMER_ID,CUSTOMER_NAME,CUSTOMER_EMAIL,CUSTOMER_OTHER_DETAILS,PASSWORD,ROLE) 
-VALUES ('qwertysdwr','Andy','andy@andy.com','Somekind of Info','SuperSecret','USER_ROLE');
+VALUES ('qwertysdwr','Andy','andy@andy.com','Somekind of Info','$2b$12$SNhCo//PcC0HpaZX8M1TKOPhXjy28A0lN5HKUBgT8znHkvI4BosGy','USER_ROLE');
 INSERT INTO CUSTOMER.CUSTOMERS (CUSTOMER_ID,CUSTOMER_NAME,CUSTOMER_EMAIL,CUSTOMER_OTHER_DETAILS,PASSWORD,ROLE) 
-VALUES ('aerg45sffd','Sanjay','sanjay@sanjay.com','Information','Welcome','USER_ROLE');
+VALUES ('aerg45sffd','Sanjay','sanjay@sanjay.com','Information','$2b$12$KlHm8qlWiQVav0YnqQeymO/Y0LHcRj7umC05BVimHUzSlpKXEqiMu','USER_ROLE');
 INSERT INTO CUSTOMER.CUSTOMERS (CUSTOMER_ID,CUSTOMER_NAME,CUSTOMER_EMAIL,CUSTOMER_OTHER_DETAILS,PASSWORD,ROLE) 
-VALUES ('bkzLp8cozi','Mark','mark@mark.com','Important Info','Secret','USER_ROLE');
+VALUES ('bkzLp8cozi','Mark','mark@mark.com','Important Info','$2b$12$y5QVFyOzj7cM6dpwdS9DneX0Vzj647pjO6Sr0vlpK4vFaVCOScqdO','USER_ROLE');
 COMMIT;
 
 --rollback DELETE FROM CUSTOMER.CUSTOMERS;

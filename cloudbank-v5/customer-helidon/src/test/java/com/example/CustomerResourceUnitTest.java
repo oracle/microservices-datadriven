@@ -17,6 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Collections;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -228,7 +230,7 @@ public class CustomerResourceUnitTest {
     @DisplayName("Should create customer successfully")
     void testCreateCustomer_Success() {
         // Arrange
-        Customer newCustomer = new Customer("CUST004", "New Customer", "new@example.com", "Details");
+        Customer newCustomer = new Customer("CUST004", "New Customer", "new@example.com", "Details", "Welcome123");
         when(entityManager.find(Customer.class, newCustomer.getCustomerId())).thenReturn(null);
 
         // Act
@@ -236,6 +238,9 @@ public class CustomerResourceUnitTest {
 
         // Assert
         assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
+        assertNotNull(newCustomer.getCustomerPassword());
+        assertNotEquals("Welcome123", newCustomer.getCustomerPassword());
+        assertTrue(BCrypt.checkpw("Welcome123", newCustomer.getCustomerPassword()));
         
         verify(entityManager).persist(newCustomer);
         verify(entityManager).flush();
@@ -281,8 +286,10 @@ public class CustomerResourceUnitTest {
     void testUpdateCustomer_Success() {
         // Arrange
         String customerId = "CUST001";
-        Customer updatedData = new Customer(customerId, "John Doe Updated", "john.updated@example.com", "Updated details");
-        Customer existingCustomer = new Customer(customerId, "John Doe", "john.doe@example.com", "Original details");
+        Customer updatedData = new Customer(customerId, "John Doe Updated", "john.updated@example.com",
+                "Updated details", "UpdatedPassword");
+        Customer existingCustomer = new Customer(customerId, "John Doe", "john.doe@example.com",
+                "Original details", "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy");
         
         when(entityManager.find(Customer.class, customerId)).thenReturn(existingCustomer);
         when(entityManager.merge(existingCustomer)).thenReturn(existingCustomer);
@@ -298,6 +305,7 @@ public class CustomerResourceUnitTest {
         assertEquals("John Doe Updated", existingCustomer.getCustomerName());
         assertEquals("john.updated@example.com", existingCustomer.getCustomerEmail());
         assertEquals("Updated details", existingCustomer.getCustomerOtherDetails());
+        assertTrue(BCrypt.checkpw("UpdatedPassword", existingCustomer.getCustomerPassword()));
         
         verify(entityManager).merge(existingCustomer);
     }

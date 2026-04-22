@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
@@ -19,6 +20,7 @@ import org.hibernate.annotations.GenerationTime;
 @Table(name = "CUSTOMERS")
 @Data
 @NoArgsConstructor
+@ToString(exclude = "customerPassword")
 public class Customers {
 
     @Id
@@ -38,7 +40,7 @@ public class Customers {
     @Column(name = "CUSTOMER_OTHER_DETAILS")
     private String customerOtherDetails;
 
-    @Column(name = "PASSWORD")
+    @Column(name = "PASSWORD", length = 60)
     private String customerPassword;
 
 
@@ -54,5 +56,19 @@ public class Customers {
         this.customerName = customerName;
         this.customerEmail = customerEmail;
         this.customerOtherDetails = customerOtherDetails;
+    }
+
+    /**
+     * Creates a Customers object with a password.
+     * @param customerId The Customer ID
+     * @param customerName The Customer Name
+     * @param customerEmail The Customer Email
+     * @param customerOtherDetails Other details about the customer
+     * @param customerPassword The Customer password
+     */
+    public Customers(String customerId, String customerName, String customerEmail, String customerOtherDetails,
+            String customerPassword) {
+        this(customerId, customerName, customerEmail, customerOtherDetails);
+        this.customerPassword = customerPassword;
     }
 }
