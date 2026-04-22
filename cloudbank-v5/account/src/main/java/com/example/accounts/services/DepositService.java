@@ -43,6 +43,9 @@ public class DepositService {
     public ResponseEntity<String> deposit(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId,
                             @RequestParam("accountId") long accountId,
                             @RequestParam("amount") long depositAmount) {
+        if (depositAmount <= 0) {
+            return ResponseEntity.badRequest().body("deposit failed: amount must be positive");
+        }
         log.info("...deposit " + depositAmount + " in account:" + accountId 
             + " (lraId:" + lraId + ") finished (in pending state)");
         Account account = AccountTransferDAO.instance().getAccountForAccountId(accountId);

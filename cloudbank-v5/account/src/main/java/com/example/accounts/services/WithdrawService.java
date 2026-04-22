@@ -43,6 +43,9 @@ public class WithdrawService {
     public ResponseEntity<String> withdraw(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId,
             @RequestParam("accountId") long accountId,
             @RequestParam("amount") long withdrawAmount) {
+        if (withdrawAmount <= 0) {
+            return ResponseEntity.badRequest().body("withdraw failed: amount must be positive");
+        }
         log.info("withdraw " + withdrawAmount + " in account:" + accountId + " (lraId:" + lraId + ")...");
         Account account = AccountTransferDAO.instance().getAccountForAccountId(accountId);
         if (account == null) {
