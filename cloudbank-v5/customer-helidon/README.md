@@ -78,8 +78,17 @@ To run against a local Oracle Docker container, simply:
        -e ORACLE_PWD=Welcome12345 \
        container-registry.oracle.com/database/free:latest
    ```
+   Then you need to create a `customer` user:
+   ```sql
+   -- Connect as a privileged user (SYS or SYSTEM)
+   CREATE USER customer IDENTIFIED BY "YourSecurePassword1!"
+   DEFAULT TABLESPACE users
+   TEMPORARY TABLESPACE temp;
+   GRANT DB_DEVELOPER_ROLE TO customer;
+   ALTER USER customer QUOTA UNLIMITED ON users;
+   ```
 
-2. **Uncomment database configuration** in `src/main/resources/application.yaml`:
+2. **Uncomment database configuration** in `META-INF/microprofile-config.properties`:
    ```yaml
    javax.sql.DataSource.customer.URL = jdbc:oracle:thin:@//localhost:1521/freepdb1
    javax.sql.DataSource.customer.user = customer
