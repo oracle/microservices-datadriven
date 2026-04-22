@@ -196,4 +196,4 @@ You can check the APISIX pod log to confirm the plugin was executed, in this exa
 :::note
  Note that you do not need to list your custom plugins in the `apisix.apisix.plugins` list in the `values.yaml` for the `obaas` Helm chart, APISIX will automatically
  add your custom plugins to its configuration.
-::: 
+:::
