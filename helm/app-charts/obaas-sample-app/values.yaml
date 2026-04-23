@@ -41,6 +41,7 @@ service:
 resources:
   requests:
     cpu: 100m
+env: []
 
 # -----------------------
 # -- Database Configuration

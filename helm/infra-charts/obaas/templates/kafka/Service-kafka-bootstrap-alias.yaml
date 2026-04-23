@@ -1,0 +1,15 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+{{- if .Values.kafka.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-bootstrap
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Release.Name }}
+    app.kubernetes.io/component: kafka-bridge
+spec:
+  type: ExternalName
+  externalName: {{ .Release.Name }}-kafka-cluster-kafka-bootstrap.{{ .Release.Namespace }}.svc.cluster.local
+{{- end }}
