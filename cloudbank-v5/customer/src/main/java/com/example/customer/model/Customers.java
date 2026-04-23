@@ -3,6 +3,7 @@
 
 package com.example.customer.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
 
 import jakarta.persistence.Column;
@@ -39,6 +40,7 @@ public class Customers {
     private String customerOtherDetails;
 
     @Column(name = "PASSWORD")
+    @JsonIgnore
     private String customerPassword;
 
 

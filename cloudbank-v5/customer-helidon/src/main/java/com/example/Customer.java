@@ -4,6 +4,7 @@ package com.example;
 
 import java.util.Date;
 import org.hibernate.annotations.CreationTimestamp;
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Access;
 import jakarta.persistence.AccessType;
 import jakarta.persistence.Column;
@@ -117,6 +118,7 @@ public class Customer {
     }
     
     @Column(name = "PASSWORD")
+    @JsonbTransient
     public String getCustomerPassword() {
         return customerPassword;
     }
