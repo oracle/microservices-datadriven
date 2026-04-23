@@ -91,8 +91,8 @@ public class SimpleSQLTicketStore implements TicketStore {
 
     @Override
     public void deleteAll() {
-        jdbcClient.sql("truncate table related_ticket");
-        jdbcClient.sql("truncate table support_ticket");
+        jdbcClient.sql("truncate table related_ticket").update();
+        jdbcClient.sql("truncate table support_ticket").update();
     }
 
     private void insertRelatedTickets(Connection conn, SupportTicket ticket) {

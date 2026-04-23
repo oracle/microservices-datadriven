@@ -67,7 +67,7 @@ public class JSONTicketStore implements TicketStore {
 
     @Override
     public void deleteAll() {
-        jdbcClient.sql("truncate table related_ticket");
-        jdbcClient.sql("truncate table support_ticket");
+        jdbcClient.sql("truncate table related_ticket").update();
+        jdbcClient.sql("truncate table support_ticket").update();
     }
 }
