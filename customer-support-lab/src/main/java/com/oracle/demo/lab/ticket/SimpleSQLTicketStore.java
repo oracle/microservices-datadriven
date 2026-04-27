@@ -1,3 +1,6 @@
+// Copyright (c) 2026, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
 package com.oracle.demo.lab.ticket;
 
 import oracle.jdbc.OracleType;
@@ -91,8 +94,8 @@ public class SimpleSQLTicketStore implements TicketStore {
 
     @Override
     public void deleteAll() {
-        jdbcClient.sql("truncate table related_ticket");
-        jdbcClient.sql("truncate table support_ticket");
+        jdbcClient.sql("truncate table related_ticket").update();
+        jdbcClient.sql("truncate table support_ticket").update();
     }
 
     private void insertRelatedTickets(Connection conn, SupportTicket ticket) {

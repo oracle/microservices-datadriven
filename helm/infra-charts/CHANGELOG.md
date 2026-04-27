@@ -96,6 +96,12 @@ AppVersion: 2.1.0-build.11
 
 - Allow custom Java env vars in Instrumentation CR
 
-# 0.0.13 - TBA
+# 0.0.13 - Apr 27, 2026
 
 AppVersion: 2.1.0-build.12
+
+- Add Kafka metrics
+
+# 0.0.14 - TBA
+
+AppVersion: 2.1.0-build.13

@@ -57,6 +57,20 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+          {{- /* ==================== OTEL Configuration ==================== */}}
+          {{- if .Values.otel.enabled }}
+            {{- $hasOtelServiceName := false }}
+            {{- range .Values.env }}
+              {{- if eq .name "OTEL_SERVICE_NAME" }}
+                {{- $hasOtelServiceName = true }}
+              {{- end }}
+            {{- end }}
+            {{- if not $hasOtelServiceName }}
+            - name: OTEL_SERVICE_NAME
+              value: {{ include "obaas-app.fullname" . | quote }}
+            {{- end }}
+          {{- end }}
+
           {{- /* ==================== Database Configuration ==================== */}}
           {{- $dbAuthNSecret := include "obaas.database.authN.secretName" . }}
           {{- if $dbAuthNSecret }}
@@ -104,10 +118,6 @@ spec:
               value: {{ include "obaas.configServer.endpoint" . | quote }}
           {{- end }}
 
-          {{- /* OTEL */}}
-          {{- if .Values.otel.enabled }}
-            # OTEL handled by the OpenTelemetry Operator.
-          {{- end }}
 
           {{- /* Spring Profiles */}}
             - name: SPRING_PROFILES_ACTIVE
@@ -149,13 +159,6 @@ spec:
           {{- /* ==================== Helidon Configuration ==================== */}}
           {{- else if eq (.Values.obaas.framework | upper) "HELIDON" }}
 
-          {{- /* OTEL */}}
-          {{- if .Values.otel.enabled }}
-            # OTEL Traces/Metrics handled by Operator
-            # Setting explicit configuration here for logs-to-traces correlation
-            - name: OTEL_SERVICE_NAME
-              value: {{ include "obaas-app.fullname" . | quote }}
-          {{- end }}
 
           {{- /* Eureka */}}
           {{- if .Values.eureka.enabled }}
@@ -198,6 +201,9 @@ spec:
               value: {{ $helidonMetrics.virtual_threads_enabled | default false | quote }}
             - name: metrics.app-name
               value: {{ include "obaas-app.fullname" . | quote }}
+          {{- end }}
+          {{- with .Values.env }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
 
           ports:
