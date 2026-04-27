@@ -42,7 +42,7 @@ If you plan to use the in-cluster (Single instance) deployment option, be aware 
 
 ## Choose cluster access option
 
-Kubernetes has deprecated the Ingress API and is moving to the Gateway API as its replacement.  At this time, both are supported, but it is important to consider your migration stragegy.
+Kubernetes has deprecated the Ingress API and is moving to the Gateway API as its replacement.  At this time, both are supported, but it is important to consider your migration strategy.
 
 OBaaS 2.1.0 includes both NGINX Ingress Controller (which works with the Ingress API) and Envoy Gateway (which works with the Gateway API).  You should choose which of these you wish to install, and update the `values.yaml` for the `obaas` Helm chart to reflect your choice.  You can choose which is installed by setting the appropriate `enabled` field to `true` or `false`.  Note that there are additional configuration options for each.
 
@@ -62,7 +62,7 @@ Additional resources are likely to be available from your Kubernetes provider.  
 
 ## Choose components
 
-OBaaS contains a number of components, and you may choose which components you wish to install.  Each component has it's own section in the `values.yaml` file for either the `obaas` or `obaas-prereqs` Helm chart.  Note that the components in the `obaas-prereqs` Helm chart are cluster-wide deployments that can only be installed once per cluster.
+OBaaS contains a number of components, and you may choose which components you wish to install.  Each component has its own section in the `values.yaml` file for either the `obaas` or `obaas-prereqs` Helm chart.  Note that the components in the `obaas-prereqs` Helm chart are cluster-wide deployments that can only be installed once per cluster.
 
 You may opt out of installing any component by setting its `enabled` field to `false`.  For example, if you do not want to install the Strimzi Kafka Operator, you would update the `values.yaml` for the `obaas` Helm chart as follows:
 

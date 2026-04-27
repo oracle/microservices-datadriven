@@ -62,6 +62,9 @@ public class TransferService {
             @RequestParam("toAccount") long toAccount,
             @RequestParam("amount") long amount,
             @RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) {
+        if (amount <= 0) {
+            return ResponseEntity.badRequest().body("transfer failed: amount must be positive");
+        }
         if (lraId == null) {
             return new ResponseEntity<>("Failed to create LRA", HttpStatus.INTERNAL_SERVER_ERROR);
         }

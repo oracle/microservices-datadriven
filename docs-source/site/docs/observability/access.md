@@ -11,7 +11,7 @@ SigNoz is the observability platform included with OBaaS that provides metrics, 
 - kubectl configured with access to your cluster
 - Your OBaaS namespace name (referred to as `<namespace>` below)
 
-:::tip Finding Your Namespace
+:::tip[Finding Your Namespace]
 If you deployed with Terraform, your namespace is typically your `label_prefix` value.
 If you deployed with Helm, it's the namespace you specified during installation (e.g., `obaas-prod`, `tenant1`, etc.).
 :::
@@ -38,7 +38,7 @@ kubectl -n <namespace> get secret <namespace>-signoz \
 
 Expose the SigNoz UI using kubectl port-forward:
 
-:::note About the Service Name
+:::note[About the Service Name]
 `obaas` is the default Helm release name used when installing the SigNoz chart. The service name follows the pattern `<release-name>-signoz`. If you used a different release name during installation replace `<release-name>` with your release name:
 
 ```bash
