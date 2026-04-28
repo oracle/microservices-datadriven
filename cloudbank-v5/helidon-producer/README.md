@@ -68,9 +68,9 @@ docker build -t REGION.ocir.io/tenancy/cloudbank-v5/helidon-producer:5.0-SNAPSHO
 *(Ensure you push the image to your container registry if running on a remote cluster).*
 
 ### 2. Deploy using Helm
-Deploy the service using the published OBaaS sample app chart:
+Deploy the service using the **local** OBaaS sample app chart to ensure the OpenTelemetry injection logic is applied correctly:
 ```bash
-helm upgrade --install helidon-producer obaas/obaas-sample-app \
+helm upgrade --install helidon-producer ../../helm/app-charts/obaas-sample-app \
   -f values.yaml \
   -n obaas
 ```
