@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.helidon.applications</groupId>
+        <artifactId>helidon-mp</artifactId>
+        <version>4.4.1</version>
+        <relativePath/>
+    </parent>
+    <groupId>com.example</groupId>
+    <artifactId>helidon-producer</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <helidon-maven-plugin.version>4.0.14</helidon-maven-plugin.version>
+        <jkube.version>1.16.2</jkube.version>
+        <image.registry>localhost</image.registry>
+        <image.tag>${project.version}</image.tag>
+        <jkube.generator.name>${image.registry}/${project.artifactId}:${image.tag}</jkube.generator.name>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.helidon.microprofile.bundles</groupId>
+            <artifactId>helidon-microprofile-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.helidon.microprofile.messaging</groupId>
+            <artifactId>helidon-microprofile-messaging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.helidon.messaging.kafka</groupId>
+            <artifactId>helidon-messaging-kafka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.helidon.microprofile.openapi</groupId>
+            <artifactId>helidon-microprofile-openapi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.helidon.microprofile.health</groupId>
+            <artifactId>helidon-microprofile-health</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.helidon.microprofile.metrics</groupId>
+            <artifactId>helidon-microprofile-metrics</artifactId>
+        </dependency>
+        
+        <!-- Logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.9</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.4.14</version>
+        </dependency>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>7.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.helidon.microprofile.testing</groupId>
+            <artifactId>helidon-microprofile-testing-junit5</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-libs</id>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>io.smallrye</groupId>
+                <artifactId>jandex-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>make-index</id>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Explicitly set the correct main class for Helidon MP -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>libs/</classpathPrefix>
+                            <mainClass>io.helidon.microprofile.cdi.Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <!-- Helidon Maven Plugin -->
+            <plugin>
+                <groupId>io.helidon.build-tools</groupId>
+                <artifactId>helidon-maven-plugin</artifactId>
+                <version>${helidon-maven-plugin.version}</version>
+            </plugin>
+            <!-- Eclipse JKube for container image building -->
+            <plugin>
+                <groupId>org.eclipse.jkube</groupId>
+                <artifactId>kubernetes-maven-plugin</artifactId>
+                <version>${jkube.version}</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -1,0 +1,33 @@
+# 1st stage, build the app
+FROM container-registry.oracle.com/java/jdk-no-fee-term:21 as build
+
+# Install maven
+WORKDIR /usr/share
+RUN set -x && \
+    curl -O https://archive.apache.org/dist/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz && \
+    tar -xvf apache-maven-*-bin.tar.gz && \
+    rm apache-maven-*-bin.tar.gz && \
+    mv apache-maven-* maven && \
+    ln -s /usr/share/maven/bin/mvn /bin/
+
+WORKDIR /helidon
+
+# Cache Maven dependencies
+ADD pom.xml .
+RUN mvn dependency:go-offline
+
+# Build the application
+ADD src src
+RUN mvn package -DskipTests
+
+# 2nd stage, build the runtime image
+FROM ghcr.io/oracle/openjdk-image-obaas:21
+WORKDIR /helidon
+
+# Copy the application JAR and libs
+COPY --from=build /helidon/target/*.jar app.jar
+COPY --from=build /helidon/target/libs libs
+
+# Simple fat JAR execution
+CMD ["java", "-jar", "app.jar"]
+EXPOSE 8080
