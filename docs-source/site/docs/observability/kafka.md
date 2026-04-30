@@ -13,16 +13,16 @@ Kafka cluster metrics provide deep visibility into the health and performance of
 
 Kafka infrastructure monitoring is an "opt-in" feature provided as a platform extension. It uses the native OpenTelemetry `kafkametrics` receiver to scrape metadata directly from the Kafka bootstrap service.
 
-To enable cluster metrics, include the `kafka-metrics.yaml` extension during your platform installation or upgrade:
+To enable cluster metrics, include the `kafka-metrics.yaml` extension from the source repository during your platform installation or upgrade:
 
 ```bash
-helm upgrade obaas ./helm/infra-charts/obaas \
+helm upgrade obaas obaas/obaas \
   -n obaas \
-  -f extensions/kafka-metrics.yaml \
+  -f helm/infra-charts/obaas/extensions/kafka-metrics.yaml \
   --reuse-values
 ```
 
-### Behind the Scenes: Platform Automation
+### Platform Automation for Infrastructure Metrics
 
 The OBaaS platform automates several complex tasks to ensure Kafka metrics flow correctly:
 
@@ -42,7 +42,7 @@ Once enabled, the **Kafka Server Monitoring Dashboard** automatically populates 
 
 ## Producer and Consumer Metrics
 
-OBaaS provides "zero-touch" instrumentation for any Java microservice using the OpenTelemetry Java Agent.
+OBaaS provides "zero-touch" instrumentation for any Java microservice using the [OpenTelemetry Java Agent](./java-instrumentation.mdx).
 
 ### Reference Examples
 
@@ -62,7 +62,7 @@ env:
     value: "true"
 ```
 
-### Behind the Scenes: Agent Injection
+### Automated Instrumentation and Configuration
 
 When you deploy a microservice using the OBaaS sample app chart, the platform handles the following automatically:
 - **Agent Injection**: The OpenTelemetry Java Agent is automatically injected into your pod as an init container.
