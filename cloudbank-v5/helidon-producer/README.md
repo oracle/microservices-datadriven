@@ -93,3 +93,14 @@ End-to-end trace context propagation showing the REST HTTP request wrapping the 
 Direct visualization of the OpenTelemetry Kafka Producer metrics (e.g., `kafka.producer.request_latency_max`) grouped by `service_name`.
 
 ![Kafka Producer Metric](docs/kafka-producer-metric.png)
+
+## Log-Trace Correlation
+
+This project is configured for full **Log-Trace Correlation** in SigNoz, allowing you to jump from a specific log message directly to the trace that generated it.
+
+### Implementation Details:
+*   **Structured JSON Logging**: The application uses `logback.xml` with the `LogstashEncoder` to output logs as structured JSON instead of plain text.
+*   **JUL-to-SLF4J Bridge**: We use the `jul-to-slf4j` bridge and the `ProducerApplication` class to intercept Helidon's internal `java.util.logging` calls. This ensures that even internal Helidon logs follow our JSON format.
+*   **Automatic Context Injection**: The OpenTelemetry Java Agent automatically injects the active `trace_id` and `span_id` into the Logback Mapped Diagnostic Context (MDC) for every log entry.
+*   **SigNoz Integration**: SigNoz parses these JSON fields and automatically provides a "View Trace" button in the log details view, enabling seamless navigation between your logs and distributed traces.
+
