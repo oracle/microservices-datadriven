@@ -11,6 +11,7 @@ Oracle Backend for Microservices and AI ships with a fully integrated observabil
 - **Logs** — Centralized log aggregation with filtering and search
 - **Traces** — Distributed tracing across microservices with request correlation
 - **Database Monitoring** — Oracle Database metrics via the built-in database exporter
+- **Kafka Monitoring** — End-to-end visibility for Kafka clusters, producers, and consumers
 
 ### Guides
 
@@ -21,6 +22,7 @@ Oracle Backend for Microservices and AI ships with a fully integrated observabil
 | [Metrics, Logs and Traces](./metricslogstraces.md) | Navigate metrics, logs, and traces in the SigNoz dashboard |
 | [Pre-installed Dashboards](./dashboards.md) | Catalog of 20+ ready-to-use dashboards (Spring Boot, Kafka, Kubernetes, Oracle DB, and more) |
 | [Configure Applications for SigNoz](./configure.md) | Add OpenTelemetry and Micrometer dependencies to your application |
+| [Kafka Observability](./kafka.md) | Monitor Kafka clusters, producers, and consumers |
 | [Customize Java Instrumentation](./java-instrumentation) | Pass custom environment variables to the OpenTelemetry Java agent through Helm values or CLI overrides |
 | [Oracle Database Metrics Exporter](./dbexporter.md) | Database-level metrics collection and Grafana integration |
 | [Common Customizations](./customizations.md) | Configure Online and Cold Storage |
