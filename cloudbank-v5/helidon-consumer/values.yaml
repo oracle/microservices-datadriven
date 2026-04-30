@@ -3,7 +3,7 @@ fullnameOverride: "helidon-consumer"
 
 image:
   # Registry should be provided during deployment
-  repository: "us-ashburn-1.ocir.io/maacloud/cloudbank-v5/helidon-consumer"
+  repository: "REGION.ocir.io/tenancy/cloudbank-v5/helidon-consumer"
   tag: "5.0-SNAPSHOT"
 
 obaas:
