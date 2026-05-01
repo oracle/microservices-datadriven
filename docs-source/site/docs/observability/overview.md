@@ -28,3 +28,4 @@ With Oracle Backend for Microservices and AI, you can choose to install [Oracle 
 - [Access SigNoz](./access.md) — Retrieve credentials and connect to the SigNoz UI
 - [Configure your applications](./configure.md) — Add OpenTelemetry and Micrometer to your services
 - [Explore dashboards](./dashboards.md) — Browse the 20+ pre-installed dashboards
+- [Kafka Observability](./kafka.md) — Monitor Kafka clusters, producers, and consumers

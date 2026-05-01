@@ -152,7 +152,7 @@ Application Performance overview for all deployed services in terms of request e
 
 ## Kafka Server Monitoring Dashboard
 
-Details about Kafka brokers, topics, partitions, and consumers.
+Details about Kafka brokers, topics, partitions, and consumers. For more details on Kafka monitoring configuration and metrics, see the [Kafka Observability Guide](./kafka.md).
 
 ![Kafka Dashboard](images/kafka-dashboard.png)
 
