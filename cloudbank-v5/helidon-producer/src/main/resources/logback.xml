@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
-            <fieldNames>
-                <timestamp>timestamp</timestamp>
-                <message>message</message>
-                <logger>logger_name</logger>
-                <thread>thread_name</thread>
-                <level>level</level>
-            </fieldNames>
-        </encoder>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
     </appender>
 
     <root level="INFO">
