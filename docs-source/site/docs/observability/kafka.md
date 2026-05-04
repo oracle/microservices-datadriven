@@ -47,8 +47,8 @@ OBaaS provides "zero-touch" instrumentation for any Java microservice using the 
 ### Reference Examples
 
 For a practical implementation, see the following projects in the `cloudbank-v5` directory:
-- **[helidon-producer](../../../../cloudbank-v5/helidon-producer/README.md)**: Demonstrates producing messages using MicroProfile Reactive Messaging.
-- **[helidon-consumer](../../../../cloudbank-v5/helidon-consumer/README.md)**: Demonstrates consuming messages with automatic trace propagation.
+- **[helidon-producer](https://github.com/oracle/microservices-backend/tree/main/cloudbank-v5/helidon-producer/README.md)**: Demonstrates producing messages using MicroProfile Reactive Messaging.
+- **[helidon-consumer](https://github.com/oracle/microservices-backend/tree/main/cloudbank-v5/helidon-consumer/README.md)**: Demonstrates consuming messages with automatic trace propagation.
 
 Both services illustrate how to configure OTLP metrics by simply setting the `OTEL_INSTRUMENTATION_KAFKA_METRICS_ENABLED` flag.
 
