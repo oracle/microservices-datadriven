@@ -11,6 +11,8 @@ This guide tells an AI agent how to plan, prepare, install, and verify Oracle Ba
 - Do not infer installation behavior from unrelated repository directories.
 - Treat the public docs entry point as the same content represented locally under `docs-source/site/docs/intro.md` and the setup pages under `docs-source/site/docs/setup/helm/`.
 - Treat Helm chart defaults and examples under `helm/infra-charts` as the source of truth for chart value names and installable optional components.
+- For the currently in-development OBaaS version, install, render, lint, and test with the local chart paths under `helm/infra-charts`, not with public Helm repository references, unless the public Helm repository has already published charts whose `APP VERSION` or `appVersion` matches the target version.
+- OBaaS 2.1.0 is currently an in-development target in this repository. Its local charts are `helm/infra-charts/obaas-prereqs` and `helm/infra-charts/obaas`; do not install `obaas/obaas-prereqs` or `obaas/obaas` from the public repository for a 2.1.0 test while the public repository still advertises an older application version such as 2.0.0.
 
 ## Before You Start
 
@@ -233,7 +235,7 @@ helm/infra-charts/obaas-prereqs/examples/
 helm/infra-charts/obaas/examples/
 ```
 
-When installing from the public Helm repository, copy or reference prepared local values files. The `examples/...` paths only work from a checkout or environment where those files exist.
+If the target version has been published and installing from the public Helm repository is appropriate, copy or reference prepared local values files. The `examples/...` paths only work from a checkout or environment where those files exist.
 
 ### AKS-Specific Planning
 
@@ -286,10 +288,10 @@ OBaaS uses two Helm charts.
 
 ### Choose And Layer Values Files
 
-Start from the closest example and add only the overrides needed for the environment:
+Start from the closest example and add only the overrides needed for the environment. For an in-development version such as the current 2.1.0 work, use the local chart path:
 
 ```bash
-helm upgrade --install <app-release> obaas/obaas \
+helm upgrade --install <app-release> helm/infra-charts/obaas \
   -n <application-namespace> \
   --create-namespace \
   -f <base-values-file> \
@@ -298,12 +300,12 @@ helm upgrade --install <app-release> obaas/obaas \
 
 Later values files override earlier files. Keep secrets out of committed files unless the operator explicitly uses a secure secret-management workflow.
 
-Before installing, render or lint the chart when feasible. Use local chart paths for `helm lint`; use either local chart paths or the public repository references for `helm template`:
+Before installing, render or lint the chart when feasible. For in-development versions, use local chart paths for both `helm lint` and `helm template`:
 
 ```bash
 helm lint helm/infra-charts/obaas-prereqs -f <prereqs-values-file>
 helm lint helm/infra-charts/obaas -f <app-values-file>
-helm template <app-release> obaas/obaas -n <application-namespace> -f <app-values-file> >/tmp/obaas-rendered.yaml
+helm template <app-release> helm/infra-charts/obaas -n <application-namespace> -f <app-values-file> >/tmp/obaas-rendered.yaml
 ```
 
 ### Database Values
@@ -654,24 +656,37 @@ kubectl get pods -A | grep -E 'external-secrets|metrics-server|kube-state-metric
 
 Install `obaas-prereqs` only once per cluster.
 
-### Step 2: Add The Helm Repository
+### Step 2: Check Chart Source Availability
+
+For in-development releases, first compare the target local chart `appVersion` with the public Helm repository metadata:
 
 ```bash
+grep '^appVersion:' helm/infra-charts/obaas/Chart.yaml
+grep '^appVersion:' helm/infra-charts/obaas-prereqs/Chart.yaml
 helm repo add obaas https://oracle.github.io/microservices-backend/helm
 helm repo update
 helm search repo obaas/obaas --versions
 helm search repo obaas/obaas-prereqs --versions
 ```
 
-Use the chart version that corresponds to OBaaS 2.1.0. In this repository snapshot, the charts have `appVersion: 2.1.0-build.12` and chart `version: 0.0.13`.
+Use the local chart paths when the public repository does not show the target application version:
 
-Where strict pinning is required, add:
+```text
+helm/infra-charts/obaas-prereqs
+helm/infra-charts/obaas
+```
+
+For the current 2.1.0 development stream, the local charts have `appVersion: 2.1.0-build.12` and chart `version: 0.0.13`. If the public Helm repository still reports `APP VERSION` as 2.0.0 or any other non-2.1.0 value, do not install or test with `obaas/obaas-prereqs` or `obaas/obaas`; use the local chart paths above.
+
+Once the public repository publishes charts whose `APP VERSION` matches the target version, public chart references may be used. Use the chart version that corresponds to the target OBaaS application version.
+
+For local chart installs, pin the repository checkout or commit and verify the `version` and `appVersion` fields in each local `Chart.yaml`. For public repository installs, where strict pinning is required after the target version has been published, add:
 
 ```bash
 --version 0.0.13
 ```
 
-to the `obaas/obaas-prereqs` and `obaas/obaas` install commands.
+to the public chart install commands.
 
 ### Step 3: Install cert-manager If Needed
 
@@ -699,11 +714,10 @@ kubectl wait --for=condition=Available deployment --all -n cert-manager --timeou
 Generic install:
 
 ```bash
-helm upgrade --install <prereqs-release> obaas/obaas-prereqs \
+helm upgrade --install <prereqs-release> helm/infra-charts/obaas-prereqs \
   -n <platform-system-namespace> \
   --create-namespace \
-  -f <prereqs-values-file> \
-  --version 0.0.13
+  -f <prereqs-values-file>
 ```
 
 If no custom prerequisites values are needed, omit `-f <prereqs-values-file>`.
@@ -711,21 +725,19 @@ If no custom prerequisites values are needed, omit `-f <prereqs-values-file>`.
 Private registry example:
 
 ```bash
-helm upgrade --install <prereqs-release> obaas/obaas-prereqs \
+helm upgrade --install <prereqs-release> helm/infra-charts/obaas-prereqs \
   -n <platform-system-namespace> \
   --create-namespace \
-  -f helm/infra-charts/obaas-prereqs/examples/values-private-registry.yaml \
-  --version 0.0.13
+  -f helm/infra-charts/obaas-prereqs/examples/values-private-registry.yaml
 ```
 
 AKS example:
 
 ```bash
-helm upgrade --install <prereqs-release> obaas/obaas-prereqs \
+helm upgrade --install <prereqs-release> helm/infra-charts/obaas-prereqs \
   -n <platform-system-namespace> \
   --create-namespace \
-  -f helm/infra-charts/obaas-prereqs/examples/values-aks.yaml \
-  --version 0.0.13
+  -f helm/infra-charts/obaas-prereqs/examples/values-aks.yaml
 ```
 
 For AKS, review `metrics-server.enabled` before running this command. If AKS already manages `metrics-server`, set it to `false` in your prerequisite values. Also review whether `oracle-database-operator.enabled` should remain enabled for the selected database mode.
@@ -784,44 +796,40 @@ kubectl get secrets -n <application-namespace>
 Generic install:
 
 ```bash
-helm upgrade --install <app-release> obaas/obaas \
+helm upgrade --install <app-release> helm/infra-charts/obaas \
   -n <application-namespace> \
   --create-namespace \
-  -f <app-values-file> \
-  --version 0.0.13
+  -f <app-values-file>
 ```
 
 Minimal/default example from a checkout:
 
 ```bash
-helm upgrade --install <app-release> obaas/obaas \
+helm upgrade --install <app-release> helm/infra-charts/obaas \
   -n <application-namespace> \
   --create-namespace \
-  -f helm/infra-charts/obaas/examples/values-default.yaml \
-  --version 0.0.13
+  -f helm/infra-charts/obaas/examples/values-default.yaml
 ```
 
 SIDB-FREE example:
 
 ```bash
-helm upgrade --install <app-release> obaas/obaas \
+helm upgrade --install <app-release> helm/infra-charts/obaas \
   -n <application-namespace> \
   --create-namespace \
-  -f helm/infra-charts/obaas/examples/values-sidb-free.yaml \
-  --version 0.0.13
+  -f helm/infra-charts/obaas/examples/values-sidb-free.yaml
 ```
 
 Existing ADB example:
 
 ```bash
-helm upgrade --install <app-release> obaas/obaas \
+helm upgrade --install <app-release> helm/infra-charts/obaas \
   -n <application-namespace> \
   --create-namespace \
   -f helm/infra-charts/obaas/examples/values-existing-adb.yaml \
   --set database.oci.ocid=<adb-ocid> \
   --set database.privAuthN.secretName=<admin-user-secret> \
-  --set database.authN.secretName=<app-user-secret> \
-  --version 0.0.13
+  --set database.authN.secretName=<app-user-secret>
 ```
 
 If no pre-created application user secret is used, omit `--set database.authN.secretName=<app-user-secret>`.
@@ -829,21 +837,19 @@ If no pre-created application user secret is used, omit `--set database.authN.se
 Existing non-ADB database example:
 
 ```bash
-helm upgrade --install <app-release> obaas/obaas \
+helm upgrade --install <app-release> helm/infra-charts/obaas \
   -n <application-namespace> \
   --create-namespace \
-  -f helm/infra-charts/obaas/examples/values-byodb.yaml \
-  --version 0.0.13
+  -f helm/infra-charts/obaas/examples/values-byodb.yaml
 ```
 
 AKS example:
 
 ```bash
-helm upgrade --install <app-release> obaas/obaas \
+helm upgrade --install <app-release> helm/infra-charts/obaas \
   -n <application-namespace> \
   --create-namespace \
-  -f helm/infra-charts/obaas/examples/values-aks.yaml \
-  --version 0.0.13
+  -f helm/infra-charts/obaas/examples/values-aks.yaml
 ```
 
 On AKS, review the `managed-csi` storage class values and the access strategy in the values file before installing.
@@ -851,28 +857,25 @@ On AKS, review the `managed-csi` storage class values and the access strategy in
 Multi-tenant example:
 
 ```bash
-helm upgrade --install <tenant1-release> obaas/obaas \
+helm upgrade --install <tenant1-release> helm/infra-charts/obaas \
   -n <tenant1-namespace> \
   --create-namespace \
-  -f helm/infra-charts/obaas/examples/values-tenant1.yaml \
-  --version 0.0.13
+  -f helm/infra-charts/obaas/examples/values-tenant1.yaml
 
-helm upgrade --install <tenant2-release> obaas/obaas \
+helm upgrade --install <tenant2-release> helm/infra-charts/obaas \
   -n <tenant2-namespace> \
   --create-namespace \
-  -f helm/infra-charts/obaas/examples/values-tenant2.yaml \
-  --version 0.0.13
+  -f helm/infra-charts/obaas/examples/values-tenant2.yaml
 ```
 
 Layered example for private registry plus tenant overrides:
 
 ```bash
-helm upgrade --install <tenant1-release> obaas/obaas \
+helm upgrade --install <tenant1-release> helm/infra-charts/obaas \
   -n <tenant1-namespace> \
   --create-namespace \
   -f helm/infra-charts/obaas/examples/values-tenant1.yaml \
-  -f helm/infra-charts/obaas/examples/values-private-registry.yaml \
-  --version 0.0.13
+  -f helm/infra-charts/obaas/examples/values-private-registry.yaml
 ```
 
 Monitor rollout:
