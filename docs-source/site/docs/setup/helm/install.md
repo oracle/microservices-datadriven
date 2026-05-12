@@ -343,6 +343,16 @@ Connects to an existing OCI Autonomous Database (ADB-S) instead of deploying a d
 
 </details>
 
+**Get the OCID for the existing ADB Database**
+
+There is a script that can provide the OCID for an existing adb called `get-adb-ocid.sh`. The OCID is need for the `helm` command.
+
+  ```bash
+  python3 tools/get-adb-ocid.sh --namespace <application-namespace> [--config <config-file>] [--profile <profile-name>]
+  ```
+
+The usage for the script is tools/get-adb-ocid.sh -r <region> (-c <compartment-name> | --compartment-ocid <ocid>) -dbname <adb-display-name> [options]`
+
 **Installation:**
 
 The `--set database.authN.secretName=<app-user-secret>` argument is optional.
