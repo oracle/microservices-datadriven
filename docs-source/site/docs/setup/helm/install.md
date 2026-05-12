@@ -301,11 +301,11 @@ Uses Oracle Database Free as an in-cluster container. This is the default databa
 helm upgrade --install <app-release> obaas/obaas -f examples/values-sidb-free.yaml -n <application-namespace> --create-namespace [--debug]
 ```
 
-#### Existing ADB Configuration (`values-existing-adb.yaml`)
+#### Existing Oracle AI Autonomous Database Configuration (`values-existing-adb.yaml`)
 
 Connects to an existing OCI Autonomous Database (ADB-S) instead of deploying a database container.
 
-**Use case:** Production deployments using a pre-provisioned OCI Autonomous Database
+**Use case:** Production deployments using a pre-provisioned OCI Oracle Autonomous AI Database
 
 <details open>
 <summary>Prerequisites: Create required secrets before installing</summary>
@@ -343,15 +343,38 @@ Connects to an existing OCI Autonomous Database (ADB-S) instead of deploying a d
 
 </details>
 
-**Get the OCID for the existing ADB Database**
+## Get the OCID for an Existing Oracle AI Autonomous Database
 
-There is a script that can provide the OCID for an existing adb called `get-adb-ocid.sh`. The OCID is need for the `helm` command.
+Before installing OBaaS with an existing Oracle AI Autonomous Database (ADB), you must get the database OCID. The OCID is required as an input parameter for the `helm` installation command.
 
-  ```bash
-  python3 tools/get-adb-ocid.sh --namespace <application-namespace> [--config <config-file>] [--profile <profile-name>]
-  ```
+A helper script, `get-adb-ocid.sh`, is provided to retrieve the OCID of an existing Oracle AI Autonomous Database. Alternatively, you can locate the OCID manually in the Oracle Cloud Infrastructure (OCI) Console.
 
-The usage for the script is tools/get-adb-ocid.sh -r <region> (-c <compartment-name> | --compartment-ocid <ocid>) -dbname <adb-display-name> [options]`
+### Script Usage
+
+```bash
+tools/get-adb-ocid.sh -r <region> (-c <compartment-name> | --compartment-ocid <ocid>) -dbname <adb-display-name> [options]
+```
+
+### Parameters
+
+| Parameter | Description                                                  |
+|---|--------------------------------------------------------------|
+| `-r <region>` | OCI region where the Oracle AI Autonomous Database is deployed |
+| `-c <compartment-name>` | Name of the OCI compartment containing the database          |
+| `--compartment-ocid <ocid>` | OCID of the OCI compartment containing the database          |
+| `-dbname <adb-display-name>` | Display name of the existing Oracle AI Autonomous Database   |
+| `[options]` | Additional optional parameters supported by the script       |
+
+### Example
+
+```bash
+tools/get-adb-ocid.sh \
+  -r us-ashburn-1 \
+  -c my-compartment \
+  -dbname my-existing-adb
+```
+
+The script returns the OCID for the specified Autonomous Database, which can then be used during the OBaaS installation process.
 
 **Installation:**
 
@@ -367,7 +390,7 @@ helm upgrade --install <app-release> obaas/obaas \
   [--debug]
 ```
 
-#### Other Existing Database (`values-byodb.yaml`)
+#### Other Existing Oracle AI Database (`values-byodb.yaml`)
 
 Connects to an existing Oracle AI Database using a connect string and user credentials.
 Do not use this option for an Oracle Autonomous Database.  This is a good option for
