@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# Copyright (c) 2026, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+
 set -euo pipefail
 
 # Print CLI usage. Kept in the script so --help stays accurate as options evolve.
