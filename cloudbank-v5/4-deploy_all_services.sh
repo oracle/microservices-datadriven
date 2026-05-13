@@ -280,6 +280,9 @@ deploy_service() {
     helm_command+=" --namespace $NAMESPACE"
     helm_command+=" --set image.repository=$image_repository"
     helm_command+=" --set image.tag=$IMAGE_TAG"
+    if [[ "$final_registry" == localhost/* || "$final_registry" == localhost:* ]]; then
+        helm_command+=" --set image.pullPolicy=Never"
+    fi
     helm_command+=" --set obaas.releaseName=$OBAAS_RELEASE"
     helm_command+=" --set database.name=$DB_NAME"
     helm_command+=" --set database.authN.secretName=$db_secret_name"
