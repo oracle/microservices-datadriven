@@ -194,17 +194,17 @@ check_prerequisites() {
 
     # Check kubectl and cluster connection
     if ! prereq_check_kubectl; then
-        ((errors++))
+        ((++errors))
     fi
 
     # Check helm
     if ! prereq_check_helm; then
-        ((errors++))
+        ((++errors))
     fi
 
     # Check namespace exists
     if ! prereq_check_namespace "$NAMESPACE"; then
-        ((errors++))
+        ((++errors))
     fi
 
     # Check helm chart exists
@@ -212,11 +212,11 @@ check_prerequisites() {
         print_success "Helm chart found: $APP_CHART"
     elif [[ "$APP_CHART" == "obaas/obaas-sample-app" ]]; then
         if ! prereq_check_helm_chart; then
-            ((errors++))
+            ((++errors))
         fi
     else
         print_error "Helm chart not found: $APP_CHART"
-        ((errors++))
+        ((++errors))
     fi
 
     if [[ $errors -gt 0 ]]; then
@@ -338,8 +338,15 @@ deploy_service() {
     print_step "Deploying $service_name..."
     print_info "Image: $image_repository:$IMAGE_TAG"
 
-    # Verify image exists before deploying
-    if ! docker manifest inspect "$image_repository:$IMAGE_TAG" &>/dev/null; then
+    # Verify image exists before deploying. Local test registries are loaded
+    # directly into Docker/Rancher Desktop rather than pushed to a registry.
+    if [[ "$final_registry" == localhost/* || "$final_registry" == localhost:* ]]; then
+        if ! docker image inspect "$image_repository:$IMAGE_TAG" &>/dev/null; then
+            print_error "Local image not found: $image_repository:$IMAGE_TAG"
+            print_info "Build local images first: ./2-images_build_push.sh --skip-push"
+            return 1
+        fi
+    elif ! docker manifest inspect "$image_repository:$IMAGE_TAG" &>/dev/null; then
         print_error "Image not found: $image_repository:$IMAGE_TAG"
         print_info "Build and push images first: ./2-images_build_push.sh"
         return 1
@@ -389,7 +396,7 @@ deploy_all_services() {
     local service_index=0
 
     for service in "${SERVICE_LIST[@]}"; do
-        ((service_index++))
+        ((++service_index))
         local is_last_service=false
         if [[ $service_index -eq $total_services ]]; then
             is_last_service=true
@@ -397,10 +404,10 @@ deploy_all_services() {
 
         if deploy_service "$service" "$final_registry" "$is_last_service"; then
             if [[ "$DRY_RUN" != true ]]; then
-                ((deployed_count++))
+                ((++deployed_count))
             fi
         else
-            ((failed_count++))
+            ((++failed_count))
             # Stop on first failure
             print_error "Stopping deployment due to failure"
             break

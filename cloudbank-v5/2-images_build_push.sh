@@ -337,7 +337,7 @@ verify_images() {
         local image_name="$registry/$service:$IMAGE_TAG"
         if docker images --format "{{.Repository}}:{{.Tag}}" | grep -q "$registry/$service"; then
             print_success "$service image found"
-            ((image_count++))
+            ((++image_count))
         else
             print_warning "$service image not found locally"
         fi
