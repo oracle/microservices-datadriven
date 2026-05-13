@@ -24,6 +24,7 @@
     <modules>
         <module>buildtools</module>
         <module>common</module>
+        <module>azn-server</module>
         <module>account</module>
         <module>checks</module>
         <module>customer</module>

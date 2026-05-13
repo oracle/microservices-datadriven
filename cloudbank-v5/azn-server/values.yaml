@@ -1,0 +1,55 @@
+## Copyright (c) 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+
+# CloudBank Authorization Server - Helm Values
+#
+# Install with (from this directory):
+#   helm install azn-server ../../helm/app-charts/obaas-sample-app -f values.yaml -n <namespace>
+#
+# Upgrade with:
+#   helm upgrade azn-server ../../helm/app-charts/obaas-sample-app -f values.yaml -n <namespace>
+#
+# Uninstall with:
+#   helm uninstall azn-server -n <namespace>
+
+# -----------------------
+# -- Required Configuration
+fullnameOverride: "azn-server"
+
+image:
+  repository: ""  # e.g., us-phoenix-1.ocir.io/mytenancy/cloudbank-v5/azn-server
+  tag: ""         # e.g., 0.0.1-SNAPSHOT
+
+obaas:
+  releaseName: "" # OBaaS platform release name (run: helm list -n <obaas-namespace>)
+  framework: "SPRING_BOOT"
+
+database:
+  aq:
+    enabled: false
+
+
+# -----------------------
+# -- Feature Toggles
+
+eureka:
+  enabled: true
+
+otel:
+  enabled: true
+
+otmm:
+  enabled: false
+
+env:
+  - name: EUREKA_CLIENT_ENABLED
+    value: "true"
+
+# Add deployment-specific secrets before installing:
+#   AZN_USER_REPO_PASSWORD
+#   ORACTL_ADMIN_PASSWORD
+#   ORACTL_USER_PASSWORD
+#   azn.authorization-server.default-client.secret, if the local default client is enabled
+
+# imagePullSecrets:
+#   - name: ocir
