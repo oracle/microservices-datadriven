@@ -14,6 +14,7 @@
 #   -s, --priv-secret SECRET     Privileged secret name (default: {dbname}-db-priv-authn)
 #   --delete                     Delete existing secrets before creating
 #   --dry-run                    Show what would be created without creating
+#   --show-passwords             Print generated plaintext passwords (unsafe for shared terminals/logs)
 #   -h, --help                   Show this help message
 #
 # Prerequisites:
@@ -49,10 +50,12 @@ DB_SERVICE=""
 PRIV_SECRET=""
 DELETE_EXISTING=false
 DRY_RUN=false
+SHOW_PASSWORDS=false
 
 # Service accounts to create
 # Format: "name:description"
 declare -a SERVICE_ACCOUNT_LIST=(
+    "azn-server:azn-server authorization data"
     "account:account, checks, testrunner"
     "customer:customer"
     "transfer:transfer"
@@ -154,6 +157,10 @@ parse_args() {
                 DRY_RUN=true
                 shift
                 ;;
+            --show-passwords)
+                SHOW_PASSWORDS=true
+                shift
+                ;;
             -h|--help)
                 show_help
                 exit 0
@@ -183,6 +190,7 @@ Options:
   -s, --priv-secret SECRET     Privileged secret name (default: {dbname}-db-priv-authn)
   --delete                     Delete existing secrets before creating
   --dry-run                    Show what would be created without creating
+  --show-passwords             Print generated plaintext passwords (unsafe for shared terminals/logs)
   -h, --help                   Show this help message
 
 Prerequisites:
@@ -198,6 +206,8 @@ Prerequisites:
       --from-literal=service=mydb_tp
 
 Secrets created:
+  {dbname}-azn-server-db-authn  - azn-server USER_REPO credentials
+  {dbname}-azn-server-auth      - azn-server bootstrap and OAuth client secrets
   {dbname}-account-db-authn     - account, checks, testrunner
   {dbname}-customer-db-authn    - customer
   {dbname}-transfer-db-authn    - transfer
@@ -208,6 +218,7 @@ Example:
   ./3-k8s_db_secrets.sh -n obaas-dev -d mydb -s my-custom-secret
   ./3-k8s_db_secrets.sh -n obaas-dev -d mydb --delete
   ./3-k8s_db_secrets.sh -n obaas-dev -d mydb --dry-run
+  ./3-k8s_db_secrets.sh -n obaas-dev -d mydb --show-passwords
 EOF
 }
 
@@ -309,6 +320,29 @@ delete_secret() {
     fi
 }
 
+display_secret_value() {
+    local value="$1"
+
+    if [[ "$SHOW_PASSWORDS" == true ]]; then
+        echo "$value"
+    else
+        echo "<hidden>"
+    fi
+}
+
+get_db_username_for_account() {
+    local account_name="$1"
+
+    case "$account_name" in
+        azn-server)
+            echo "USER_REPO"
+            ;;
+        *)
+            echo "$account_name"
+            ;;
+    esac
+}
+
 create_secret() {
     local secret_name="$1"
     local username="$2"
@@ -322,7 +356,7 @@ create_secret() {
     if [[ "$DRY_RUN" == true ]]; then
         print_success "Would create: $secret_name"
         print_info "  username: $upper_username"
-        print_info "  password: $password"
+        print_info "  password: $(display_secret_value "$password")"
         print_info "  service:  $DB_SERVICE"
         print_info "  used by:  $description"
         return 0
@@ -345,6 +379,39 @@ create_secret() {
         &> /dev/null
 
     print_success "Created: $secret_name ($description)"
+}
+
+create_auth_server_secret() {
+    local secret_name="$1"
+    local admin_password="$2"
+    local user_password="$3"
+    local client_secret="$4"
+
+    if [[ "$DRY_RUN" == true ]]; then
+        print_success "Would create: $secret_name"
+        print_info "  admin-password: $(display_secret_value "$admin_password")"
+        print_info "  user-password:  $(display_secret_value "$user_password")"
+        print_info "  client-secret:  $(display_secret_value "$client_secret")"
+        print_info "  used by: azn-server bootstrap users and default OAuth client"
+        return 0
+    fi
+
+    if kubectl get secret "$secret_name" -n "$NAMESPACE" &> /dev/null; then
+        if [[ "$DELETE_EXISTING" == true ]]; then
+            delete_secret "$secret_name"
+        else
+            print_warning "Secret '$secret_name' already exists (use --delete to replace)"
+            return 0
+        fi
+    fi
+
+    kubectl -n "$NAMESPACE" create secret generic "$secret_name" \
+        --from-literal=admin-password="$admin_password" \
+        --from-literal=user-password="$user_password" \
+        --from-literal=client-secret="$client_secret" \
+        &> /dev/null
+
+    print_success "Created: $secret_name (azn-server bootstrap users and default OAuth client)"
 }
 
 # =============================================================================
@@ -382,6 +449,10 @@ main() {
     echo "  TNS Service:  $DB_SERVICE"
     echo "  Dry Run:      $DRY_RUN"
     echo "  Delete First: $DELETE_EXISTING"
+    echo "  Show Secrets: $SHOW_PASSWORDS"
+    if [[ "$SHOW_PASSWORDS" != true ]]; then
+        print_info "Generated plaintext passwords will be hidden. Use --show-passwords only on a private terminal."
+    fi
 
     # Generate passwords and create secrets
     print_header "Generating Passwords"
@@ -403,6 +474,14 @@ main() {
         print_success "Generated password for: $account_name"
     done
 
+    local azn_admin_password
+    local azn_user_password
+    local azn_client_secret
+    azn_admin_password=$(generate_oracle_password)
+    azn_user_password=$(generate_oracle_password)
+    azn_client_secret=$(generate_oracle_password)
+    print_success "Generated azn-server bootstrap and OAuth client secrets"
+
     # Create secrets
     print_header "Creating Secrets"
 
@@ -415,11 +494,16 @@ main() {
     local index
     for ((index=0; index<${#password_names[@]}; index++)); do
         local name="${password_names[$index]}"
+        local username
+        username=$(get_db_username_for_account "$name")
         local password="${password_values[$index]}"
         local description="${password_descriptions[$index]}"
         local secret_name="${DB_NAME}-${name}-db-authn"
-        create_secret "$secret_name" "$name" "$password" "$description"
+        create_secret "$secret_name" "$username" "$password" "$description"
     done
+
+    create_auth_server_secret "${DB_NAME}-azn-server-auth" \
+        "$azn_admin_password" "$azn_user_password" "$azn_client_secret"
 
     # Summary
     print_header "Summary"
@@ -440,15 +524,22 @@ main() {
 
     # Print password summary (useful for reference)
     print_header "Generated Credentials"
-    print_info "Retrieve later: kubectl get secret SECRET_NAME -n $NAMESPACE -o jsonpath='{.data.password}' | base64 -d"
+    print_info "Retrieve database passwords later: kubectl get secret SECRET_NAME -n $NAMESPACE -o jsonpath='{.data.password}' | base64 -d"
+    print_info "Retrieve azn-server auth values later: kubectl get secret ${DB_NAME}-azn-server-auth -n $NAMESPACE -o jsonpath='{.data.KEY}' | base64 -d"
     echo ""
     printf "  %-35s %-15s %s\n" "SECRET" "USERNAME" "PASSWORD"
     printf "  %-35s %-15s %s\n" "-----------------------------------" "---------------" "--------------------"
     for ((index=0; index<${#password_names[@]}; index++)); do
         local name="${password_names[$index]}"
+        local username
+        username=$(get_db_username_for_account "$name")
+        local upper_username
+        upper_username=$(echo "$username" | tr '[:lower:]' '[:upper:]')
         local password="${password_values[$index]}"
-        printf "  %-35s %-15s %s\n" "${DB_NAME}-${name}-db-authn" "$name" "$password"
+        printf "  %-35s %-15s %s\n" "${DB_NAME}-${name}-db-authn" "$upper_username" "$(display_secret_value "$password")"
     done
+    printf "  %-35s %-15s %s\n" "${DB_NAME}-azn-server-auth" "bootstrap" "$(display_secret_value "$azn_admin_password")"
+    printf "  %-35s %-15s %s\n" "${DB_NAME}-azn-server-auth" "default-client" "$(display_secret_value "$azn_client_secret")"
     echo ""
     echo "Next step:"
     echo "  Deploys all CloudBank microservices: ./4-deploy_all_services.sh -n <namespace> -d <dbname> -p <prefix>"

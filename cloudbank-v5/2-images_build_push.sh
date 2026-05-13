@@ -55,6 +55,7 @@ PARALLEL_THREADS="1C"  # 1 thread per CPU core, or set to specific number like "
 
 # Services to build
 SERVICES=(
+    "azn-server"
     "account"
     "customer"
     "transfer"
@@ -149,7 +150,7 @@ Prerequisites:
   - Logged into container registry: docker login <registry>
 
 Services built:
-  account, customer, transfer, checks, creditscore, testrunner
+  azn-server, account, customer, transfer, checks, creditscore, testrunner
 
 Example:
   ./2-images_build_push.sh                                        # Auto-detect OCIR from OCI CLI

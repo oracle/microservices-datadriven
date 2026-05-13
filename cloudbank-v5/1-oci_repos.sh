@@ -54,6 +54,7 @@ COMPARTMENT_OCID=""
 
 # Services that need repositories
 SERVICES=(
+    "azn-server"
     "account"
     "customer"
     "transfer"
@@ -137,7 +138,7 @@ Note:
   Repositories will be created in the region configured in ~/.oci/config.
 
 Services:
-  account, customer, transfer, checks, creditscore, testrunner
+  azn-server, account, customer, transfer, checks, creditscore, testrunner
 
 Example:
   ./1-oci_repos.sh -c my-compartment -p cloudbank-v5

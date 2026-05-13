@@ -15,6 +15,7 @@
 #   -r, --registry REGISTRY      Full container registry path (auto-detected from OCI CLI if not provided)
 #   -p, --prefix PREFIX          Repository prefix for OCIR auto-detection (default: cloudbank-v5)
 #   -t, --tag TAG                Image tag (default: 0.0.1-SNAPSHOT)
+#   --app-chart CHART            obaas-sample-app chart path/name (default: local repo chart if present)
 #   --dry-run                    Show what would be deployed without deploying
 #   -h, --help                   Show this help message
 #
@@ -50,18 +51,12 @@ REGISTRY=""
 REPO_PREFIX="cloudbank-v5"
 IMAGE_TAG="0.0.1-SNAPSHOT"
 DRY_RUN=false
-
-# Add Helm repo if not already added
-print_step "Checking obaas Helm repo..."
-if ! helm repo list | grep -q "^obaas"; then
-    print_info "Adding obaas Helm repo..."
-    helm repo add obaas https://oracle.github.io/microservices-backend/helm
-else
-    print_info "obaas Helm repo already exists, skipping add"
-fi
+APP_CHART=""
+DEFAULT_APP_CHART_PATH="$(cd "${SCRIPT_DIR}/.." && pwd)/helm/app-charts/obaas-sample-app"
 
 # Services to deploy
 SERVICE_LIST=(
+    "azn-server"
     "account"
     "customer"
     "creditscore"
@@ -100,6 +95,10 @@ parse_args() {
                 IMAGE_TAG="$2"
                 shift 2
                 ;;
+            --app-chart)
+                APP_CHART="$2"
+                shift 2
+                ;;
             --dry-run)
                 DRY_RUN=true
                 shift
@@ -133,6 +132,8 @@ Options:
   -r, --registry REGISTRY      Full container registry path (auto-detected from OCI CLI if not provided)
   -p, --prefix PREFIX          Repository prefix for OCIR auto-detection (default: cloudbank-v5)
   -t, --tag TAG                Image tag (default: 0.0.1-SNAPSHOT)
+  --app-chart CHART            obaas-sample-app chart path/name
+                               (default: local repo chart if present, otherwise obaas/obaas-sample-app)
   --dry-run                    Show what would be deployed without deploying
   -h, --help                   Show this help message
 
@@ -144,7 +145,7 @@ Prerequisites:
   - Container images pushed to registry (see 2-images_build_push.sh)
 
 Services deployed:
-  account, customer, creditscore, transfer, checks, testrunner
+  azn-server, account, customer, creditscore, transfer, checks, testrunner
 
 Example:
   ./4-deploy_all_services.sh -n obaas-dev -d mydb
@@ -207,7 +208,14 @@ check_prerequisites() {
     fi
 
     # Check helm chart exists
-    if ! prereq_check_helm_chart; then
+    if [[ -d "$APP_CHART" || -f "$APP_CHART/Chart.yaml" ]]; then
+        print_success "Helm chart found: $APP_CHART"
+    elif [[ "$APP_CHART" == "obaas/obaas-sample-app" ]]; then
+        if ! prereq_check_helm_chart; then
+            ((errors++))
+        fi
+    else
+        print_error "Helm chart not found: $APP_CHART"
         ((errors++))
     fi
 
@@ -225,6 +233,9 @@ get_db_user_for_service() {
     local service_name="$1"
     # Map services to their database user (matches 3-k8s_db_secrets.sh SERVICE_ACCOUNTS)
     case "$service_name" in
+        azn-server)
+            echo "azn-server"
+            ;;
         account|checks|testrunner)
             echo "account"
             ;;
@@ -264,7 +275,7 @@ deploy_service() {
     local db_secret_name="${DB_NAME}-${db_user}-db-authn"
 
     # Build helm command
-    local helm_command="helm upgrade --install $service_name obaas/obaas-sample-app"
+    local helm_command="helm upgrade --install $service_name $APP_CHART"
     helm_command+=" -f $values_file_path"
     helm_command+=" --namespace $NAMESPACE"
     helm_command+=" --set image.repository=$image_repository"
@@ -272,6 +283,26 @@ deploy_service() {
     helm_command+=" --set obaas.releaseName=$OBAAS_RELEASE"
     helm_command+=" --set database.name=$DB_NAME"
     helm_command+=" --set database.authN.secretName=$db_secret_name"
+
+    if [[ "$service_name" == "azn-server" ]]; then
+        local azn_secret_name="${DB_NAME}-azn-server-auth"
+        helm_command+=" --set env[0].name=EUREKA_CLIENT_ENABLED"
+        helm_command+=" --set-string env[0].value=true"
+        helm_command+=" --set env[1].name=AZN_USER_REPO_PASSWORD"
+        helm_command+=" --set env[1].valueFrom.secretKeyRef.name=$db_secret_name"
+        helm_command+=" --set env[1].valueFrom.secretKeyRef.key=password"
+        helm_command+=" --set env[2].name=ORACTL_ADMIN_PASSWORD"
+        helm_command+=" --set env[2].valueFrom.secretKeyRef.name=$azn_secret_name"
+        helm_command+=" --set env[2].valueFrom.secretKeyRef.key=admin-password"
+        helm_command+=" --set env[3].name=ORACTL_USER_PASSWORD"
+        helm_command+=" --set env[3].valueFrom.secretKeyRef.name=$azn_secret_name"
+        helm_command+=" --set env[3].valueFrom.secretKeyRef.key=user-password"
+        helm_command+=" --set env[4].name=AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_ENABLED"
+        helm_command+=" --set-string env[4].value=true"
+        helm_command+=" --set env[5].name=AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_SECRET"
+        helm_command+=" --set env[5].valueFrom.secretKeyRef.name=$azn_secret_name"
+        helm_command+=" --set env[5].valueFrom.secretKeyRef.key=client-secret"
+    fi
 
     if [[ "$DRY_RUN" == true ]]; then
         print_info "[DRY-RUN] Would run: $helm_command"
@@ -372,6 +403,24 @@ main() {
     # Parse command line arguments
     parse_args "$@"
 
+    if [[ -z "$APP_CHART" ]]; then
+        if [[ -f "$DEFAULT_APP_CHART_PATH/Chart.yaml" ]]; then
+            APP_CHART="$DEFAULT_APP_CHART_PATH"
+        else
+            APP_CHART="obaas/obaas-sample-app"
+        fi
+    fi
+
+    if [[ "$APP_CHART" == "obaas/obaas-sample-app" ]]; then
+        print_step "Checking obaas Helm repo..."
+        if ! helm repo list | grep -q "^obaas"; then
+            print_info "Adding obaas Helm repo..."
+            helm repo add obaas https://oracle.github.io/microservices-backend/helm
+        else
+            print_info "obaas Helm repo already exists, skipping add"
+        fi
+    fi
+
     # Prompt for missing required values
     if [[ -z "$NAMESPACE" ]] || [[ -z "$DB_NAME" ]]; then
         echo "Please provide the following configuration values."
@@ -423,11 +472,15 @@ main() {
     print_step "Checking database secrets..."
     if ! prereq_check_db_app_secrets "$NAMESPACE" "$DB_NAME"; then
         print_warning "Some database secrets are missing. Services may fail to start."
-        echo ""
-        read -p "Continue anyway? [y/N]: " confirm
-        if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
-            echo "Deployment cancelled."
-            exit 0
+        if [[ "$DRY_RUN" == true ]]; then
+            print_info "Continuing dry-run so the planned deployment commands can be reviewed."
+        else
+            echo ""
+            read -p "Continue anyway? [y/N]: " confirm
+            if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+                echo "Deployment cancelled."
+                exit 0
+            fi
         fi
     fi
 
@@ -438,6 +491,7 @@ main() {
     echo "  Database:      $DB_NAME"
     echo "  Registry:      $final_registry"
     echo "  Image Tag:     $IMAGE_TAG"
+    echo "  App Chart:     $APP_CHART"
     echo "  Dry Run:       $DRY_RUN"
     echo ""
     echo "  Services:      ${SERVICE_LIST[*]}"
