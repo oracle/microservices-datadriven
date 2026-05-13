@@ -149,9 +149,10 @@ public class CloudBankSecurityAutoConfiguration {
         authorize
             .requestMatchers(HttpMethod.POST, "/api/v1/account/journal").hasAuthority(scope)
             .requestMatchers(HttpMethod.POST, "/api/v1/account/journal/*/clear").hasAuthority(scope)
-            .requestMatchers("/deposit", "/deposit/**", "/withdraw", "/withdraw/**").hasAuthority(scope)
+            .requestMatchers(HttpMethod.POST, "/deposit", "/withdraw").hasAuthority(scope)
             .requestMatchers(HttpMethod.POST, "/confirm", "/cancel", "/processconfirm", "/processcancel")
-            .hasAuthority(scope);
+            .hasAuthority(scope)
+            .requestMatchers("/deposit/**", "/withdraw/**").permitAll();
     }
 
     private static void permitInternalEndpoints(
