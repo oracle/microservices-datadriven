@@ -6,6 +6,7 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.util.Arrays;
 import java.util.UUID;
 
 import com.nimbusds.jose.jwk.JWKSet;
@@ -36,7 +37,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
-import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
@@ -55,6 +55,11 @@ import org.springframework.util.StringUtils;
 @EnableMethodSecurity
 @Slf4j
 public class SecurityConfig {
+
+    private static final String DEFAULT_CLIENT_ID = "cloudbank-client";
+    private static final String DEFAULT_CLIENT_SCOPES = "openid,cloudbank.read,cloudbank.write,cloudbank.admin,"
+            + "cloudbank.transfer,cloudbank.internal,cloudbank.test,azn.users.read,azn.users.write,"
+            + "azn.users.admin,actuator.read";
 
     public static final String ROLE_HIERARCHY = "ROLE_ADMIN > ROLE_USER\n"
             + "ROLE_ADMIN > ROLE_CONFIG_EDITOR\n"
@@ -201,7 +206,10 @@ public class SecurityConfig {
      * Spring Boot's authorization-server client properties.
      *
      * @param passwordEncoder password encoder for the client secret.
+     * @param clientId configured client id.
      * @param clientSecret configured client secret.
+     * @param redirectUri configured authorization-code redirect URI.
+     * @param clientScopes comma-delimited OAuth scopes granted to the default client.
      * @return a local RegisteredClientRepository.
      */
     @Bean
@@ -209,24 +217,32 @@ public class SecurityConfig {
     @ConditionalOnProperty(prefix = "azn.authorization-server.default-client", name = "enabled",
             havingValue = "true")
     public RegisteredClientRepository localRegisteredClientRepository(PasswordEncoder passwordEncoder,
-            @Value("${azn.authorization-server.default-client.secret:}") String clientSecret) {
+            @Value("${azn.authorization-server.default-client.id:" + DEFAULT_CLIENT_ID + "}") String clientId,
+            @Value("${azn.authorization-server.default-client.secret:}") String clientSecret,
+            @Value("${azn.authorization-server.default-client.redirect-uri:"
+                    + "http://127.0.0.1:8080/login/oauth2/code/" + DEFAULT_CLIENT_ID + "}") String redirectUri,
+            @Value("${azn.authorization-server.default-client.scopes:" + DEFAULT_CLIENT_SCOPES + "}")
+                    String clientScopes) {
         if (!StringUtils.hasText(clientSecret)) {
             throw new IllegalStateException("azn.authorization-server.default-client.secret must be set when "
                     + "azn.authorization-server.default-client.enabled=true");
         }
-        RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("azn-local-client")
+        RegisteredClient.Builder registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
+                .clientId(clientId)
                 .clientSecret(passwordEncoder.encode(clientSecret))
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .redirectUri("http://127.0.0.1:8080/login/oauth2/code/azn-local-client")
-                .scope(OidcScopes.OPENID)
-                .scope("user.read")
-                .clientSettings(ClientSettings.builder().requireProofKey(true).build())
-                .build();
-        return new InMemoryRegisteredClientRepository(registeredClient);
+                .redirectUri(redirectUri)
+                .clientSettings(ClientSettings.builder().requireProofKey(true).build());
+
+        Arrays.stream(clientScopes.split(","))
+                .map(String::trim)
+                .filter(StringUtils::hasText)
+                .forEach(registeredClient::scope);
+
+        return new InMemoryRegisteredClientRepository(registeredClient.build());
     }
 
     /**

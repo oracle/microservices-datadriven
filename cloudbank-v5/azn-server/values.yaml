@@ -49,7 +49,8 @@ env:
 #   AZN_USER_REPO_PASSWORD
 #   ORACTL_ADMIN_PASSWORD
 #   ORACTL_USER_PASSWORD
-#   azn.authorization-server.default-client.secret, if the local default client is enabled
+#   AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_SECRET, if the local default client is enabled
+# The default client id is cloudbank-client unless AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_ID overrides it.
 
 # imagePullSecrets:
 #   - name: ocir

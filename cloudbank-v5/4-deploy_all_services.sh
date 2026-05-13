@@ -275,7 +275,7 @@ deploy_service() {
     local db_secret_name="${DB_NAME}-${db_user}-db-authn"
 
     # Build helm command
-    local helm_command="helm upgrade --install $service_name $APP_CHART"
+    local helm_command="helm upgrade --install $service_name $APP_CHART --reset-values"
     helm_command+=" -f $values_file_path"
     helm_command+=" --namespace $NAMESPACE"
     helm_command+=" --set image.repository=$image_repository"
@@ -299,9 +299,11 @@ deploy_service() {
         helm_command+=" --set env[3].valueFrom.secretKeyRef.key=user-password"
         helm_command+=" --set env[4].name=AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_ENABLED"
         helm_command+=" --set-string env[4].value=true"
-        helm_command+=" --set env[5].name=AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_SECRET"
-        helm_command+=" --set env[5].valueFrom.secretKeyRef.name=$azn_secret_name"
-        helm_command+=" --set env[5].valueFrom.secretKeyRef.key=client-secret"
+        helm_command+=" --set env[5].name=AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_ID"
+        helm_command+=" --set-string env[5].value=cloudbank-client"
+        helm_command+=" --set env[6].name=AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_SECRET"
+        helm_command+=" --set env[6].valueFrom.secretKeyRef.name=$azn_secret_name"
+        helm_command+=" --set env[6].valueFrom.secretKeyRef.key=client-secret"
     fi
 
     if [[ "$DRY_RUN" == true ]]; then
