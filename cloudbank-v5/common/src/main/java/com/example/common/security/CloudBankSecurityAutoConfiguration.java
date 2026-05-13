@@ -2,23 +2,32 @@
 
 package com.example.common.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import feign.RequestInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication.Type;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.client.RestTemplateCustomizer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.client.RestClient;
 
 @AutoConfiguration
 @ConditionalOnClass(SecurityFilterChain.class)
 @ConditionalOnWebApplication(type = Type.SERVLET)
+@EnableConfigurationProperties(CloudBankServiceTokenProperties.class)
 public class CloudBankSecurityAutoConfiguration {
 
     private static final String READ_SCOPE = "SCOPE_cloudbank.read";
@@ -84,6 +93,53 @@ public class CloudBankSecurityAutoConfiguration {
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
 
         return http.build();
+    }
+
+    /**
+     * Creates the shared service-token provider.
+     *
+     * @param properties service-token properties.
+     * @param restClientBuilder builder used for token endpoint calls.
+     * @param objectMapper JSON parser.
+     * @return service-token provider.
+     */
+    @Bean
+    @ConditionalOnProperty(prefix = "cloudbank.security.service-token", name = "enabled", havingValue = "true")
+    @ConditionalOnMissingBean
+    public CloudBankServiceTokenProvider cloudBankServiceTokenProvider(
+            CloudBankServiceTokenProperties properties, RestClient.Builder restClientBuilder,
+            ObjectMapper objectMapper) {
+        return new CloudBankServiceTokenProvider(properties, restClientBuilder, objectMapper);
+    }
+
+    /**
+     * Adds service-token authorization to managed RestTemplate clients.
+     *
+     * @param tokenProvider service-token provider.
+     * @return RestTemplate customizer.
+     */
+    @Bean
+    @ConditionalOnBean(CloudBankServiceTokenProvider.class)
+    public RestTemplateCustomizer cloudBankServiceTokenRestTemplateCustomizer(
+            CloudBankServiceTokenProvider tokenProvider) {
+        return restTemplate -> restTemplate.getInterceptors().add((request, body, execution) -> {
+            request.getHeaders().set(HttpHeaders.AUTHORIZATION, tokenProvider.getAuthorizationHeader());
+            return execution.execute(request, body);
+        });
+    }
+
+    /**
+     * Adds service-token authorization to Feign clients.
+     *
+     * @param tokenProvider service-token provider.
+     * @return Feign request interceptor.
+     */
+    @Bean
+    @ConditionalOnClass(RequestInterceptor.class)
+    @ConditionalOnBean(CloudBankServiceTokenProvider.class)
+    public RequestInterceptor cloudBankServiceTokenFeignRequestInterceptor(
+            CloudBankServiceTokenProvider tokenProvider) {
+        return template -> template.header(HttpHeaders.AUTHORIZATION, tokenProvider.getAuthorizationHeader());
     }
 
     private static void authorizeInternalEndpoints(

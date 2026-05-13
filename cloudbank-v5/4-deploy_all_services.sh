@@ -308,13 +308,26 @@ deploy_service() {
         helm_command+=" --set env[6].valueFrom.secretKeyRef.name=$azn_secret_name"
         helm_command+=" --set env[6].valueFrom.secretKeyRef.key=client-secret"
     else
+        local azn_secret_name="${DB_NAME}-azn-server-auth"
         local azn_jwk_set_uri="http://azn-server.${NAMESPACE}.svc.cluster.local:8080/oauth2/jwks"
+        local azn_token_uri="http://azn-server.${NAMESPACE}.svc.cluster.local:8080/oauth2/token"
         helm_command+=" --set env[0].name=CLOUDBANK_SECURITY_ENABLED"
         helm_command+=" --set-string env[0].value=true"
         helm_command+=" --set env[1].name=SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI"
         helm_command+=" --set-string env[1].value=$azn_jwk_set_uri"
         helm_command+=" --set env[2].name=CLOUDBANK_SECURITY_REQUIRE_INTERNAL_TOKEN"
         helm_command+=" --set-string env[2].value=false"
+        helm_command+=" --set env[3].name=CLOUDBANK_SECURITY_SERVICE_TOKEN_ENABLED"
+        helm_command+=" --set-string env[3].value=true"
+        helm_command+=" --set env[4].name=CLOUDBANK_SECURITY_SERVICE_TOKEN_TOKEN_URI"
+        helm_command+=" --set-string env[4].value=$azn_token_uri"
+        helm_command+=" --set env[5].name=CLOUDBANK_SECURITY_SERVICE_TOKEN_CLIENT_ID"
+        helm_command+=" --set-string env[5].value=cloudbank-client"
+        helm_command+=" --set env[6].name=CLOUDBANK_SECURITY_SERVICE_TOKEN_CLIENT_SECRET"
+        helm_command+=" --set env[6].valueFrom.secretKeyRef.name=$azn_secret_name"
+        helm_command+=" --set env[6].valueFrom.secretKeyRef.key=client-secret"
+        helm_command+=" --set env[7].name=CLOUDBANK_SECURITY_SERVICE_TOKEN_SCOPE"
+        helm_command+=" --set-string env[7].value=cloudbank.internal"
     fi
 
     if [[ "$DRY_RUN" == true ]]; then
