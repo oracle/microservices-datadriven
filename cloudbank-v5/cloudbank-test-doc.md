@@ -136,6 +136,13 @@ Execute the following command to retrieve all accounts:
 curl -s -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/accounts | jq
 ```
 
+Choose two valid account IDs from this response for later deposit and transfer tests:
+
+```shell
+FROM_ACCOUNT_ID=<account-id-with-positive-balance>
+TO_ACCOUNT_ID=<another-account-id>
+```
+
 **2.1.2 Verify the Response:**
 
 You should receive a JSON array containing account objects. Each account includes details such as account ID, customer ID, account type, balance, and opening date:
@@ -251,11 +258,11 @@ Initiate a check deposit for an existing account:
 ```shell
 curl -i -X POST -H 'Content-Type: application/json' \
   -H "Authorization: Bearer $TEST_TOKEN" \
-  -d '{"accountId": 1, "amount": 256}' \
+  -d "{\"accountId\": ${TO_ACCOUNT_ID}, \"amount\": 256}" \
   http://$IP/api/v1/testrunner/deposit
 ```
 
-**Important:** Replace `1` with an actual account ID from your environment.
+**Important:** Set `TO_ACCOUNT_ID` to an actual account ID from your environment.
 
 **Expected Response:**
 
@@ -287,10 +294,10 @@ Received deposit <CheckDeposit(accountId=1, amount=256)>
 View the journal entries for the account to see the pending deposit:
 
 ```shell
-curl -i -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/account/1/journal
+curl -i -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/account/${TO_ACCOUNT_ID}/journal
 ```
 
-Replace `1` with your account number.
+Replace `TO_ACCOUNT_ID` with your account number if you are not using the shell variable.
 
 **Expected Response:**
 
@@ -348,7 +355,7 @@ Received clearance <Clearance(journalId=1)>
 Check the journal entries again to confirm the deposit has been completed:
 
 ```shell
-curl -i -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/account/1/journal
+curl -i -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/account/${TO_ACCOUNT_ID}/journal
 ```
 
 **Expected Response:**
@@ -375,8 +382,8 @@ Long Running Actions provide distributed transaction coordination across microse
 Before performing the transfer, record the initial balances of both accounts:
 
 ```shell
-curl -s -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/account/1 | jq
-curl -s -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/account/2 | jq
+curl -s -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/account/${TO_ACCOUNT_ID} | jq
+curl -s -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/account/${FROM_ACCOUNT_ID} | jq
 ```
 
 **Note:** Account numbers may differ in your environment. Adjust the account IDs as needed.
@@ -413,10 +420,10 @@ Execute a transfer of funds from one account to another:
 
 ```shell
 curl -X POST -H "Authorization: Bearer $TRANSFER_TOKEN" \
-  "http://$IP/transfer?fromAccount=2&toAccount=1&amount=100"
+  "http://$IP/transfer?fromAccount=${FROM_ACCOUNT_ID}&toAccount=${TO_ACCOUNT_ID}&amount=100"
 ```
 
-Adjust the account numbers and amount as needed.
+Adjust the account IDs and amount as needed.
 
 **Expected Response:**
 
@@ -431,8 +438,8 @@ This indicates that both the withdrawal from the source account and the deposit 
 Check both accounts again to confirm the transfer was applied correctly:
 
 ```shell
-curl -s -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/account/1 | jq
-curl -s -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/account/2 | jq
+curl -s -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/account/${TO_ACCOUNT_ID} | jq
+curl -s -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/account/${FROM_ACCOUNT_ID} | jq
 ```
 
 **Expected Output:**
@@ -477,9 +484,9 @@ kubectl logs -n $NAMESPACE svc/transfer
 
 ```text
 2023-12-26T16:50:45.138Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : Started new LRA/transfer Id: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/ea98ebae-2358-4dd1-9d7c-09f4550d7567
-2023-12-26T16:50:45.139Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : withdraw accountId = 2, amount = 100
+2023-12-26T16:50:45.139Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : withdraw accountId = <fromAccount>, amount = 100
 2023-12-26T16:50:45.183Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : withdraw succeeded
-2023-12-26T16:50:45.183Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : deposit accountId = 1, amount = 100
+2023-12-26T16:50:45.183Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : deposit accountId = <toAccount>, amount = 100
 2023-12-26T16:50:45.216Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : withdraw succeeded deposit succeeded
 2023-12-26T16:50:45.216Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : LRA/transfer action will be confirm
 2023-12-26T16:50:45.226Z  INFO 1 --- [transfer] [nio-8080-exec-1] [] com.example.transfer.TransferService     : Received confirm for transfer

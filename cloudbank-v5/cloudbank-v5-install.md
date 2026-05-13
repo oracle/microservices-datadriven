@@ -91,12 +91,16 @@ OBaaS 2.1.0-build.12 uses Java agent auto-injection for CloudBank telemetry. The
 export DOCKER_HOST=unix:///Users/$USER/.rd/docker.sock  # Rancher Desktop
 docker login <region>.ocir.io -u '<tenancy>/<username>'
 ./2-images_build_push.sh -p <prefix>
+# For automation:
+./2-images_build_push.sh -p <prefix> --yes
 
 # Step 3: Create database secrets (can run while Step 2 is building)
 ./3-k8s_db_secrets.sh -n <namespace> -d <dbname>
 
 # Step 4: Deploy services
 ./4-deploy_all_services.sh -n <namespace> -d <dbname> -p <prefix>
+# For automation:
+./4-deploy_all_services.sh -n <namespace> -d <dbname> -p <prefix> --yes
 
 # Step 5: Create APISIX routes
 ./5-apisix_create_routes.sh -n <namespace> -d <dbname>
@@ -202,6 +206,7 @@ docker login -u <username>
 ```
 
 Use `-j 4` for parallel builds on multi-core machines.
+Use `--yes` for non-interactive automation.
 
 ---
 
@@ -373,8 +378,10 @@ export TRANSFER_TOKEN=$(curl -s -u "$CLIENT_ID:$CLIENT_SECRET" \
 # Public authorization-server metadata
 curl -s http://$IP/.well-known/oauth-authorization-server | jq
 
-# Account service
-curl -s -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/account | jq
+# Account service. Pick valid IDs from this list for deposit/transfer tests.
+curl -s -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/accounts | jq
+FROM_ACCOUNT_ID=<account-id-with-positive-balance>
+TO_ACCOUNT_ID=<another-account-id>
 
 # Customer service
 curl -s -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/customer | jq
@@ -385,12 +392,12 @@ curl -s -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/creditscore | j
 # Test runner AQ workflow
 curl -s -X POST -H "Authorization: Bearer $TEST_TOKEN" \
   -H "Content-Type: application/json" \
-  -d '{"accountId":23,"amount":1}' \
+  -d "{\"accountId\":${TO_ACCOUNT_ID},\"amount\":1}" \
   http://$IP/api/v1/testrunner/deposit | jq
 
 # Transfer
 curl -s -X POST -H "Authorization: Bearer $TRANSFER_TOKEN" \
-  "http://$IP/transfer?fromAccount=22&toAccount=23&amount=1"
+  "http://$IP/transfer?fromAccount=${FROM_ACCOUNT_ID}&toAccount=${TO_ACCOUNT_ID}&amount=1"
 ```
 
 ### Check Eureka Registration

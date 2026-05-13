@@ -15,6 +15,7 @@
 #   -r, --registry REGISTRY      Full container registry path (auto-detected from OCI CLI if not provided)
 #   -p, --prefix PREFIX          Repository prefix for OCIR auto-detection (default: cloudbank-v5)
 #   -t, --tag TAG                Image tag (default: 0.0.1-SNAPSHOT)
+#   -y, --yes                    Do not prompt before deployment
 #   --app-chart CHART            obaas-sample-app chart path/name (default: local repo chart if present)
 #   --dry-run                    Show what would be deployed without deploying
 #   -h, --help                   Show this help message
@@ -51,8 +52,10 @@ REGISTRY=""
 REPO_PREFIX="cloudbank-v5"
 IMAGE_TAG="0.0.1-SNAPSHOT"
 DRY_RUN=false
+ASSUME_YES=false
 APP_CHART=""
 DEFAULT_APP_CHART_PATH="$(cd "${SCRIPT_DIR}/.." && pwd)/helm/app-charts/obaas-sample-app"
+ROLLOUT_ID=""
 
 # Services to deploy
 SERVICE_LIST=(
@@ -95,6 +98,10 @@ parse_args() {
                 IMAGE_TAG="$2"
                 shift 2
                 ;;
+            -y|--yes)
+                ASSUME_YES=true
+                shift
+                ;;
             --app-chart)
                 APP_CHART="$2"
                 shift 2
@@ -132,6 +139,7 @@ Options:
   -r, --registry REGISTRY      Full container registry path (auto-detected from OCI CLI if not provided)
   -p, --prefix PREFIX          Repository prefix for OCIR auto-detection (default: cloudbank-v5)
   -t, --tag TAG                Image tag (default: 0.0.1-SNAPSHOT)
+  -y, --yes                    Do not prompt before deployment
   --app-chart CHART            obaas-sample-app chart path/name
                                (default: local repo chart if present, otherwise obaas/obaas-sample-app)
   --dry-run                    Show what would be deployed without deploying
@@ -152,6 +160,7 @@ Example:
   ./4-deploy_all_services.sh -n obaas-dev -d mydb -o obaas
   ./4-deploy_all_services.sh -n obaas-dev -d mydb -r docker.io/myuser/cloudbank
   ./4-deploy_all_services.sh -n obaas-dev -d mydb --dry-run
+  ./4-deploy_all_services.sh -n obaas-dev -d mydb --yes
 EOF
 }
 
@@ -286,6 +295,7 @@ deploy_service() {
     helm_command+=" --set obaas.releaseName=$OBAAS_RELEASE"
     helm_command+=" --set database.name=$DB_NAME"
     helm_command+=" --set database.authN.secretName=$db_secret_name"
+    helm_command+=" --set-string podAnnotations.cloudbank-restarted-at=$ROLLOUT_ID"
 
     if [[ "$service_name" == "azn-server" ]]; then
         local azn_secret_name="${DB_NAME}-azn-server-auth"
@@ -435,6 +445,7 @@ main() {
 
     # Parse command line arguments
     parse_args "$@"
+    ROLLOUT_ID="$(date -u +%Y%m%dT%H%M%SZ)"
 
     if [[ -z "$APP_CHART" ]]; then
         if [[ -f "$DEFAULT_APP_CHART_PATH/Chart.yaml" ]]; then
@@ -507,6 +518,8 @@ main() {
         print_warning "Some database secrets are missing. Services may fail to start."
         if [[ "$DRY_RUN" == true ]]; then
             print_info "Continuing dry-run so the planned deployment commands can be reviewed."
+        elif [[ "$ASSUME_YES" == true ]]; then
+            print_warning "Continuing because --yes was specified."
         else
             echo ""
             read -p "Continue anyway? [y/N]: " confirm
@@ -530,7 +543,7 @@ main() {
     echo "  Services:      ${SERVICE_LIST[*]}"
     echo ""
 
-    if [[ "$DRY_RUN" != true ]]; then
+    if [[ "$DRY_RUN" != true && "$ASSUME_YES" != true ]]; then
         read -p "Continue with deployment? [y/N]: " confirm
         if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
             echo "Deployment cancelled."

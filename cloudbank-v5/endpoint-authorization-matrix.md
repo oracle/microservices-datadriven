@@ -105,7 +105,7 @@ Use OAuth scopes for API authorization. Keep roles mainly as convenient user/cli
 | Service | Method | Application path | Gateway route | Endpoint type | Required role/scope | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
 | transfer | GET | `/hello` | Current route docs use `/api/v1/transfer*` | Health/sample | `SCOPE_cloudbank.read` or remove | Prefer removing from public docs if not needed. |
-| transfer | POST | `/transfer` | Current route docs use `/api/v1/transfer*` | Transfer write | `SCOPE_cloudbank.transfer` | Starts transfer LRA workflow. Gateway path should be reconciled with app path. |
+| transfer | POST | `/transfer` | `/transfer` | Transfer write | `SCOPE_cloudbank.transfer` | Starts transfer LRA workflow. Use valid account IDs from `/api/v1/accounts`. |
 | transfer | POST | `/processconfirm` | Not currently public route | LRA callback | `SCOPE_cloudbank.internal` | Internal process confirmation callback. |
 | transfer | POST | `/processcancel` | Not currently public route | LRA callback | `SCOPE_cloudbank.internal` | Internal process cancellation callback. |
 | transfer | POST | `/confirm` | Not currently public route | LRA callback | `SCOPE_cloudbank.internal` | MicroTx completion callback; calls `/processconfirm`. |
@@ -164,6 +164,6 @@ These endpoints come from the planned `azn-server` based on `SPRING_BOOT_3.X`.
 | Scope names | Examples: `cloudbank.read`, `cloudbank.write`, `cloudbank.admin`, `cloudbank.internal`, `cloudbank.test`, `azn.users.admin`. | TBD |
 | Role names | Examples: `ROLE_USER`, `ROLE_ADMIN`, `ROLE_CONFIG_EDITOR`, `ROLE_ACTUATOR`, service roles. | TBD |
 | LRA callback policy | Permit callback paths by path/header only, require service token, or both. Must not break MicroTx callbacks. | TBD |
-| Transfer gateway path | Current transfer app paths are `/transfer`, `/confirm`, etc.; current APISIX docs/scripts use `/api/v1/transfer*`. Decide whether to rewrite routes or change controller paths. | TBD |
+| Transfer gateway path | APISIX exposes the transfer workflow at `/transfer`, matching the Spring controller. | Done |
 | Testrunner exposure | Decide whether `testrunner` remains externally reachable or becomes admin/test-only. | TBD |
 | Auth-server user API exposure | Decide whether `/user/api/v1*` is externally routed or cluster/admin-only. | TBD |
