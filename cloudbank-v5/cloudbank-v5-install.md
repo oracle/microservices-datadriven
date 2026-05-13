@@ -105,7 +105,10 @@ docker login <region>.ocir.io -u '<tenancy>/<username>'
 # Step 5: Create APISIX routes
 ./5-apisix_create_routes.sh -n <namespace> -d <dbname>
 
-# Verify
+# Step 6: Run secured service smoke tests
+./6-smoke_test_secure_services.sh -n <namespace> -d <dbname>
+
+# Verify pods directly if needed
 kubectl get pods -n <namespace>
 ```
 
@@ -333,6 +336,16 @@ kubectl get pods -n <namespace> -w
 ---
 
 ## Step 6: Verify Installation
+
+### Automated Smoke Test
+
+Run the secured smoke-test script first. It verifies public authorization metadata, token issuance, protected-route authentication, scope-based authorization, account lookup, check deposit, and transfer through APISIX.
+
+```bash
+./6-smoke_test_secure_services.sh -n <namespace> -d <dbname>
+```
+
+Use `--read-only` to skip the mutating deposit and transfer checks.
 
 ### Get Gateway Address
 
