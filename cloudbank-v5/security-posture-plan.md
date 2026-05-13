@@ -71,10 +71,10 @@
 ## Scanner Findings To Address
 
 - Trivy was run against `cloudbank-v5` with HIGH/CRITICAL vulnerability, secret, and misconfiguration scanners.
-- Current CloudBank dependencies show HIGH/CRITICAL findings driven by the existing Spring Boot `3.4.13` line and transitive Tomcat, Netty, Spring Boot, Bouncycastle, XStream, and Commons FileUpload versions.
-- The old observability dependencies contribute to dependency surface area and compatibility risk on OBaaS 2.1.0-build.12; the implementation should remove them as part of the new Java agent injection migration.
-- Generated Spring service Dockerfiles under `target/` show non-root-user findings. Since those files are generated, fix this through CloudBank service Helm values and/or JKube build configuration under `cloudbank-v5`, not by editing generated `target` files.
-- Helidon Dockerfile findings are out of scope for this round.
+- Initial CloudBank dependency findings were resolved by moving to the Spring Boot 3.5 line, removing old application-managed OpenTelemetry dependencies, overriding Bouncycastle to `1.84`, overriding Netty to `4.1.133.Final`, and excluding unused native epoll from the MicroTx path.
+- Current Trivy rerun shows zero HIGH/CRITICAL vulnerability findings and zero secret findings.
+- Current remaining Trivy findings are HIGH `DS-0002` non-root-user findings in generated Spring service Dockerfiles under `target/`, the generated parent Dockerfile under `target/`, and Helidon manual Dockerfiles.
+- Helidon Dockerfile findings are out of scope for this round. Generated Spring Dockerfile findings should be handled through CloudBank service Helm values and/or JKube build configuration under `cloudbank-v5`, not by editing generated `target` files.
 
 ## Tests And Verification
 
