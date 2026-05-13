@@ -2,7 +2,7 @@
 
 ## Overview
 
-CloudBank v5 is a reference application demonstrating cloud-native microservices architecture using Oracle Backend as a Service (OBaaS). It consists of six interconnected services:
+CloudBank v5 is a reference application demonstrating cloud-native microservices architecture using Oracle Backend as a Service (OBaaS). It consists of seven interconnected Spring services:
 
 | Service | Purpose |
 |---------|---------|
@@ -12,8 +12,9 @@ CloudBank v5 is a reference application demonstrating cloud-native microservices
 | **checks** | Processes check deposits asynchronously (Oracle AQ, JMS) |
 | **creditscore** | Provides credit scoring (stateless REST) |
 | **testrunner** | Test harness for workflows (AQ producer) |
+| **azn-server** | Spring Authorization Server for CloudBank OAuth2/JWT tokens |
 
-**Technology Stack:** Spring Boot 3.4, Oracle ADB, MicroTx, Oracle AQ, OpenTelemetry
+**Technology Stack:** Spring Boot 3.5, Spring Security, Spring Authorization Server, Oracle Database, MicroTx, Oracle AQ, OBaaS Java auto-instrumentation
 
 ---
 
@@ -27,7 +28,7 @@ The installation process consists of five main steps:
 | 2 | `2-images_build_push.sh` | Build and push microservice container images |
 | 3 | `3-k8s_db_secrets.sh` | Create Kubernetes secrets for database credentials |
 | 4 | `4-deploy_all_services.sh` | Deploy all services using Helm |
-| 5 | `5-apisix_create_routes.sh` | Create APISIX API Gateway routes |
+| 5 | `5-apisix_create_routes.sh` | Create secured APISIX API Gateway routes |
 
 Each step must be completed in order, as later steps depend on earlier ones.
 
@@ -52,6 +53,7 @@ Each step must be completed in order, as later steps depend on earlier ones.
 - **Java 21**, **Maven 3.6+**
 - **kubectl** connected to your cluster
 - **Docker** or compatible runtime (Rancher Desktop, Docker Desktop)
+- **jq** for the verification commands
 - **OCI CLI** configured (if using OCI Registry)
 
 ### Verify Prerequisites
@@ -71,7 +73,9 @@ oci --version           # If using OCI Registry
 
 ### Important Assumptions
 
-CloudBank must be installed in the **same namespace** as OBaaS. Services require access to OBaaS components (Eureka, APISIX, database secrets) within the same namespace.
+CloudBank must be installed in the **same namespace** as OBaaS. Services require access to OBaaS components (Eureka, APISIX, database secrets, and the OBaaS OpenTelemetry instrumentation resource) within the same namespace.
+
+OBaaS 2.1.0-build.12 uses Java agent auto-injection for CloudBank telemetry. The CloudBank services enable this through their `values.yaml` files; tracing/exporter dependencies are not packaged into the applications.
 
 ---
 
@@ -95,7 +99,7 @@ docker login <region>.ocir.io -u '<tenancy>/<username>'
 ./4-deploy_all_services.sh -n <namespace> -d <dbname> -p <prefix>
 
 # Step 5: Create APISIX routes
-./5-apisix_create_routes.sh -n <namespace>
+./5-apisix_create_routes.sh -n <namespace> -d <dbname>
 
 # Verify
 kubectl get pods -n <namespace>
@@ -122,7 +126,7 @@ kubectl get pods -n <namespace>
 - Validates OCI CLI is configured
 - Looks up the compartment OCID from the compartment name
 - Retrieves the tenancy namespace from OCI
-- Creates 6 container repositories (account, customer, transfer, checks, creditscore, testrunner)
+- Creates 7 container repositories (azn-server, account, customer, transfer, checks, creditscore, testrunner)
 - Repositories are public by default (use `--private` for private repos)
 - Use `--delete` to remove repositories during cleanup
 
@@ -152,7 +156,7 @@ oci artifacts container repository list --compartment-id <OCID> \
 - Validates prerequisites (Java, Maven, Docker, registry connectivity)
 - Auto-detects OCI Registry from OCI CLI configuration (or uses provided registry)
 - Builds shared dependencies (buildtools, parent pom, common module)
-- Builds all 6 microservice JARs using Maven
+- Builds all 7 service JARs using Maven
 - Creates container images using JKube
 - Pushes images to the container registry
 - Supports parallel builds with `-j` flag
@@ -211,6 +215,8 @@ Use `-j 4` for parallel builds on multi-core machines.
 - Generates Oracle-compatible passwords for each service account
 - Creates Kubernetes secrets with username, password, and service keys
 - Usernames are uppercase (Oracle requirement)
+- Creates the azn-server bootstrap and OAuth client secret used by secured services and APISIX
+- Hides generated plaintext passwords by default; use `--show-passwords` only on a private terminal
 
 **Prerequisite:** The privileged secret `<dbname>-db-priv-authn` must exist (created during OBaaS setup). If your secret has a different name, use the `-s` flag to specify it.
 
@@ -224,6 +230,8 @@ kubectl get secret <dbname>-db-priv-authn -n <namespace>
 ./3-k8s_db_secrets.sh -n <namespace> -d <dbname>
 # Or with a custom privileged secret name:
 ./3-k8s_db_secrets.sh -n <namespace> -d <dbname> -s <secret-name>
+# Optional unsafe display of generated values:
+./3-k8s_db_secrets.sh -n <namespace> -d <dbname> --show-passwords
 ```
 
 **Example:**
@@ -236,6 +244,8 @@ kubectl get secret <dbname>-db-priv-authn -n <namespace>
 
 | Secret | Used By |
 |--------|---------|
+| `<dbname>-azn-server-db-authn` | azn-server database user |
+| `<dbname>-azn-server-auth` | azn-server bootstrap users, default OAuth client, APISIX OIDC client |
 | `<dbname>-account-db-authn` | account, checks, testrunner |
 | `<dbname>-customer-db-authn` | customer |
 | `<dbname>-transfer-db-authn` | transfer |
@@ -252,7 +262,9 @@ kubectl get secret <dbname>-db-priv-authn -n <namespace>
 - Auto-detects OBaaS release name and container registry
 - Verifies database secrets exist
 - Verifies container images exist in registry
-- Deploys all 6 services using the shared `obaas-sample-app` Helm chart
+- Deploys all 7 services using the shared `obaas-sample-app` Helm chart
+- Deploys `azn-server` before the protected resource-server services
+- Passes JWT resource-server and service-token settings to the protected services
 - Each service uses its own `values.yaml` file
 - Uses `helm upgrade --install` with `--wait` flag
 - The db-init job automatically creates database users on first deployment
@@ -272,7 +284,7 @@ kubectl get secret <dbname>-db-priv-authn -n <namespace>
 kubectl get pods -n <namespace> -w
 ```
 
-**Expected:** All 6 pods show `1/1 Running` within 2-3 minutes.
+**Expected:** All 7 pods show `1/1 Running` within 2-3 minutes.
 
 ---
 
@@ -283,30 +295,35 @@ kubectl get pods -n <namespace> -w
 **What this script does:**
 - Auto-detects OBaaS release name
 - Retrieves APISIX admin key from the configmap
+- Reads the CloudBank OAuth client secret from `<dbname>-azn-server-auth`
 - Creates a port-forward to the APISIX admin service
-- Creates routes for all CloudBank services using the APISIX Admin API
+- Creates public authorization-server routes and protected CloudBank API routes using the APISIX Admin API
+- Adds APISIX `openid-connect` bearer-token validation to protected routes and forwards the access token to backend services
 - Routes use Eureka service discovery
 - Cleans up port-forward on completion
 
 **Command:**
 ```bash
-./5-apisix_create_routes.sh -n <namespace>
+./5-apisix_create_routes.sh -n <namespace> -d <dbname>
 ```
 
 **Example:**
 ```bash
-./5-apisix_create_routes.sh -n obaas-dev
+./5-apisix_create_routes.sh -n obaas-dev -d cbankdb
 ```
 
 **Routes created:**
 
-| Route | URI Pattern | Service |
-|-------|-------------|---------|
-| 1000 | `/api/v1/account*` | ACCOUNT |
-| 1001 | `/api/v1/creditscore*` | CREDITSCORE |
-| 1002 | `/api/v1/customer*` | CUSTOMER |
-| 1003 | `/api/v1/testrunner*` | TESTRUNNER |
-| 1004 | `/api/v1/transfer*` | TRANSFER |
+| Route | URI Pattern | Service | APISIX Scope |
+|-------|-------------|---------|--------------|
+| 1000 | `/api/v1/account*` | ACCOUNT | `cloudbank.read` |
+| 1001 | `/api/v1/creditscore*` | CREDITSCORE | `cloudbank.read` |
+| 1002 | `/api/v1/customer*` | CUSTOMER | `cloudbank.read` |
+| 1003 | `/api/v1/testrunner*` | TESTRUNNER | `cloudbank.test` |
+| 1004 | `/transfer` | TRANSFER | `cloudbank.transfer` |
+| 1010 | `/.well-known/*` | AZN-SERVER | Public |
+| 1011 | `/oauth2/*` | AZN-SERVER | Public |
+| 1012 | `/user/api/v1*` | AZN-SERVER | Public route; azn-server enforces endpoint security |
 
 ---
 
@@ -321,36 +338,73 @@ export IP=<EXTERNAL-IP>
 
 For local testing without external IP:
 ```bash
-kubectl port-forward -n <namespace> svc/apisix-gateway 8080:80 &
+kubectl port-forward -n <namespace> svc/<obaas-release>-apisix-gateway 8080:80 &
 export IP=localhost:8080
+```
+
+### Get Access Tokens
+
+Protected CloudBank APIs require bearer tokens. The default sample client is created by `3-k8s_db_secrets.sh`.
+
+```bash
+export CLIENT_ID=cloudbank-client
+export CLIENT_SECRET=$(kubectl get secret <dbname>-azn-server-auth -n <namespace> \
+  -o jsonpath='{.data.client-secret}' | base64 -d)
+
+export READ_TOKEN=$(curl -s -u "$CLIENT_ID:$CLIENT_SECRET" \
+  -X POST "http://$IP/oauth2/token" \
+  -d grant_type=client_credentials \
+  -d scope=cloudbank.read | jq -r .access_token)
+
+export TEST_TOKEN=$(curl -s -u "$CLIENT_ID:$CLIENT_SECRET" \
+  -X POST "http://$IP/oauth2/token" \
+  -d grant_type=client_credentials \
+  -d scope=cloudbank.test | jq -r .access_token)
+
+export TRANSFER_TOKEN=$(curl -s -u "$CLIENT_ID:$CLIENT_SECRET" \
+  -X POST "http://$IP/oauth2/token" \
+  -d grant_type=client_credentials \
+  -d scope=cloudbank.transfer | jq -r .access_token)
 ```
 
 ### Test Services
 
 ```bash
+# Public authorization-server metadata
+curl -s http://$IP/.well-known/oauth-authorization-server | jq
+
 # Account service
-curl -s http://$IP/api/v1/account | jq
+curl -s -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/account | jq
 
 # Customer service
-curl -s http://$IP/api/v1/customer | jq
+curl -s -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/customer | jq
 
 # Credit score service
-curl -s http://$IP/api/v1/creditscore | jq
+curl -s -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/creditscore | jq
 
-# Transfer (account 2 → account 1)
-curl -X POST "http://$IP/transfer?fromAccount=2&toAccount=1&amount=100"
+# Test runner AQ workflow
+curl -s -X POST -H "Authorization: Bearer $TEST_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"accountId":23,"amount":1}' \
+  http://$IP/api/v1/testrunner/deposit | jq
+
+# Transfer
+curl -s -X POST -H "Authorization: Bearer $TRANSFER_TOKEN" \
+  "http://$IP/transfer?fromAccount=22&toAccount=23&amount=1"
 ```
 
 ### Check Eureka Registration
 
 ```bash
 kubectl port-forward -n <namespace> svc/eureka 8761 &
-# Open http://localhost:8761 - all 6 services should be registered
+# Open http://localhost:8761 - all 7 services should be registered
 ```
 
 ---
 
 ## Observability
+
+CloudBank uses the OBaaS Java instrumentation auto-injection model. The service Helm values set `otel.enabled: true`, which causes OBaaS to inject the Java agent with the namespace `traces-instrumentation` resource. Tune Java agent settings in OBaaS values, not in CloudBank application POMs.
 
 ### Eureka (Service Discovery)
 ```bash
@@ -360,14 +414,14 @@ kubectl port-forward -n <namespace> svc/eureka 8761
 
 ### Spring Boot Admin
 ```bash
-kubectl port-forward -n <namespace> svc/admin-server 8989
+kubectl port-forward -n <namespace> svc/<obaas-release>-admin-server 8989
 # http://localhost:8989
 ```
 
 ### SigNoz (Tracing)
 ```bash
-kubectl port-forward -n <namespace> svc/obaas-signoz-frontend 3301
-# http://localhost:3301
+kubectl port-forward -n <namespace> svc/<obaas-release>-signoz 8080
+# http://localhost:8080
 # Credentials: kubectl get secret signoz-authn -n <namespace> -o jsonpath='{.data.email}' | base64 -d
 ```
 
@@ -410,7 +464,10 @@ kubectl logs -n <namespace> -l app.kubernetes.io/name=account -f
 |---------|----------|
 | Can't find configmap | Verify OBaaS release: `helm list -n <namespace>`. Use `-o <release>` flag. |
 | Routes not working | Check Eureka registration. Verify gateway has external IP. |
-| Plugin errors | Ensure OBaaS APISIX has opentelemetry plugin enabled. |
+| Plugin errors | Ensure OBaaS APISIX has `opentelemetry`, `prometheus`, and `openid-connect` plugins enabled. |
+| Protected APIs return `401` | Get a token from `/oauth2/token` and pass `Authorization: Bearer <token>`. |
+| Protected APIs return `403` | Request the scope required by the route, such as `cloudbank.read`, `cloudbank.test`, or `cloudbank.transfer`. |
+| Token requests fail | Verify `<dbname>-azn-server-auth` exists and that `azn-server` is running. |
 
 ### Common Commands
 
@@ -441,12 +498,13 @@ kubectl logs job/<service>-db-init -n <namespace>
 
 ### Uninstall Services
 ```bash
-helm uninstall account customer transfer checks creditscore testrunner -n <namespace>
+helm uninstall azn-server account customer transfer checks creditscore testrunner -n <namespace>
 ```
 
 ### Delete Secrets
 ```bash
-kubectl delete secret <dbname>-account-db-authn <dbname>-customer-db-authn \
+kubectl delete secret <dbname>-azn-server-db-authn <dbname>-azn-server-auth \
+  <dbname>-account-db-authn <dbname>-customer-db-authn \
   <dbname>-transfer-db-authn <dbname>-creditscore-db-authn -n <namespace>
 ```
 
@@ -455,7 +513,7 @@ kubectl delete secret <dbname>-account-db-authn <dbname>-customer-db-authn \
 kubectl port-forward -n <namespace> svc/<obaas-release>-apisix-admin 9180 &
 export APISIX_KEY=$(kubectl -n <namespace> get configmap <obaas-release>-apisix \
   -o jsonpath='{.data.config\.yaml}' | grep -A2 'name.*admin' | grep key | awk '{print $2}')
-for id in 1000 1001 1002 1003 1004; do
+for id in 1000 1001 1002 1003 1004 1010 1011 1012; do
   curl -X DELETE "http://localhost:9180/apisix/admin/routes/$id" -H "X-API-KEY: $APISIX_KEY"
 done
 ```
@@ -471,7 +529,9 @@ done
 
 - CloudBank must be installed in the **same namespace** as OBaaS
 - CloudBank v5 has only been tested with Java 21
-- All microservices use Spring Boot 3.4.6 with Spring Cloud 2024.0.1
+- All Spring services use Spring Boot 3.5.x with Spring Cloud 2025.x
+- Secured APIs validate JWTs from `azn-server`; APISIX also validates and forwards bearer tokens for externally routed CloudBank APIs
+- OBaaS 2.1.0-build.12 supplies Java telemetry through auto-injected instrumentation
 - Database migrations for account and customer services are managed by Liquibase
 - Distributed transactions use Oracle MicroTx LRA (Long Running Actions) pattern
 - Event-driven workflows use Oracle Advanced Queuing (AQ) with JMS
