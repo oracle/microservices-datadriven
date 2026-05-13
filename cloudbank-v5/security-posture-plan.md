@@ -74,7 +74,7 @@
 - Initial CloudBank dependency findings were resolved by moving to the Spring Boot 3.5 line, removing old application-managed OpenTelemetry dependencies, overriding Bouncycastle to `1.84`, overriding Netty to `4.1.133.Final`, and excluding unused native epoll from the MicroTx path.
 - Current Trivy rerun shows zero HIGH/CRITICAL vulnerability findings and zero secret findings.
 - Current remaining Trivy findings are HIGH `DS-0002` non-root-user findings in generated Spring service Dockerfiles under `target/`, the generated parent Dockerfile under `target/`, and Helidon manual Dockerfiles.
-- Helidon Dockerfile findings are out of scope for this round. Generated Spring Dockerfile findings should be handled through CloudBank service Helm values and/or JKube build configuration under `cloudbank-v5`, not by editing generated `target` files.
+- Helidon Dockerfile findings are out of scope for this round. Generated Spring Dockerfile findings are not edited directly; the in-scope Spring services now set non-root runtime `podSecurityContext` and container `securityContext` values through CloudBank Helm values.
 
 ## Tests And Verification
 
