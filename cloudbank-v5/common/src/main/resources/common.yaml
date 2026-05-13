@@ -11,8 +11,8 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.OracleDialect
-        format_sql: true
-    show-sql: true
+        format_sql: false
+    show-sql: false
 
 eureka:
   instance:
@@ -71,3 +71,8 @@ jdbc:
 request:
   logging:
     shouldLog: false
+    include-query-string: false
+    include-payload: false
+    max-payload-length: 0
+    include-headers: false
+    include-client-info: false
