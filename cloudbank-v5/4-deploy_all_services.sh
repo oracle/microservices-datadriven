@@ -304,6 +304,14 @@ deploy_service() {
         helm_command+=" --set env[6].name=AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_SECRET"
         helm_command+=" --set env[6].valueFrom.secretKeyRef.name=$azn_secret_name"
         helm_command+=" --set env[6].valueFrom.secretKeyRef.key=client-secret"
+    else
+        local azn_jwk_set_uri="http://azn-server.${NAMESPACE}.svc.cluster.local:8080/oauth2/jwks"
+        helm_command+=" --set env[0].name=CLOUDBANK_SECURITY_ENABLED"
+        helm_command+=" --set-string env[0].value=true"
+        helm_command+=" --set env[1].name=SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI"
+        helm_command+=" --set-string env[1].value=$azn_jwk_set_uri"
+        helm_command+=" --set env[2].name=CLOUDBANK_SECURITY_REQUIRE_INTERNAL_TOKEN"
+        helm_command+=" --set-string env[2].value=false"
     fi
 
     if [[ "$DRY_RUN" == true ]]; then
