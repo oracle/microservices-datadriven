@@ -52,8 +52,8 @@ spring:
 
 azn:
   bootstrap-users:
-    admin-password: ${ORACTL_ADMIN_PASSWORD:}
-    user-password: ${ORACTL_USER_PASSWORD:}
+    admin-password: ${OBAAS_ADMIN_PASSWORD:}
+    user-password: ${OBAAS_USER_PASSWORD:}
 
 management:
   endpoint:
