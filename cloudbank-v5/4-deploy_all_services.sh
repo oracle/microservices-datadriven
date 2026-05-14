@@ -340,6 +340,12 @@ deploy_service() {
         helm_command+=" --set env[15].name=AZN_AUTHORIZATION_SERVER_ADMIN_CLIENT_SECRET"
         helm_command+=" --set env[15].valueFrom.secretKeyRef.name=$azn_secret_name"
         helm_command+=" --set env[15].valueFrom.secretKeyRef.key=admin-client-secret"
+        helm_command+=" --set env[16].name=AZN_BOOTSTRAP_USERS_ADMIN_PASSWORD"
+        helm_command+=" --set env[16].valueFrom.secretKeyRef.name=$azn_secret_name"
+        helm_command+=" --set env[16].valueFrom.secretKeyRef.key=admin-password"
+        helm_command+=" --set env[17].name=AZN_BOOTSTRAP_USERS_USER_PASSWORD"
+        helm_command+=" --set env[17].valueFrom.secretKeyRef.name=$azn_secret_name"
+        helm_command+=" --set env[17].valueFrom.secretKeyRef.key=user-password"
         helm_command+=" --set volumeMounts[0].name=azn-server-signing-key"
         helm_command+=" --set volumeMounts[0].mountPath=/etc/azn-server/signing"
         helm_command+=" --set volumeMounts[0].readOnly=true"
@@ -367,6 +373,22 @@ deploy_service() {
         helm_command+=" --set env[6].valueFrom.secretKeyRef.key=service-client-secret"
         helm_command+=" --set env[7].name=CLOUDBANK_SECURITY_SERVICE_TOKEN_SCOPE"
         helm_command+=" --set-string env[7].value=cloudbank.internal"
+        if [[ "$service_name" == "transfer" ]]; then
+            local account_base_url="http://account.${NAMESPACE}.svc.cluster.local:8080"
+            local transfer_base_url="http://transfer.${NAMESPACE}.svc.cluster.local:8080"
+            helm_command+=" --set env[8].name=ACCOUNT_DEPOSIT_URL"
+            helm_command+=" --set-string env[8].value=$account_base_url/deposit"
+            helm_command+=" --set env[9].name=ACCOUNT_WITHDRAW_URL"
+            helm_command+=" --set-string env[9].value=$account_base_url/withdraw"
+            helm_command+=" --set env[10].name=TRANSFER_CANCEL_URL"
+            helm_command+=" --set-string env[10].value=$transfer_base_url/cancel"
+            helm_command+=" --set env[11].name=TRANSFER_CANCEL_PROCESS_URL"
+            helm_command+=" --set-string env[11].value=$transfer_base_url/processcancel"
+            helm_command+=" --set env[12].name=TRANSFER_CONFIRM_URL"
+            helm_command+=" --set-string env[12].value=$transfer_base_url/confirm"
+            helm_command+=" --set env[13].name=TRANSFER_CONFIRM_PROCESS_URL"
+            helm_command+=" --set-string env[13].value=$transfer_base_url/processconfirm"
+        fi
     fi
 
     if [[ "$DRY_RUN" == true ]]; then
