@@ -2,7 +2,17 @@
 
 package oracle.obaas.aznserver.securityconfig;
 
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.util.Base64;
+
+import com.nimbusds.jose.jwk.JWKMatcher;
+import com.nimbusds.jose.jwk.JWKSelector;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
@@ -10,6 +20,9 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SecurityConfigTest {
+
+    @TempDir
+    private Path tempDir;
 
     @Test
     void defaultClientUsesCloudBankClientAndScopes() {
@@ -29,5 +42,34 @@ class SecurityConfigTest {
                 "cloudbank.internal",
                 "cloudbank.test",
                 "azn.users.admin");
+    }
+
+    @Test
+    void persistentJwkSourceLoadsMountedPemKeys() throws Exception {
+        SecurityConfig securityConfig = new SecurityConfig();
+        KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
+        generator.initialize(2048);
+        KeyPair keyPair = generator.generateKeyPair();
+        Path privateKey = tempDir.resolve("private.pem");
+        Path publicKey = tempDir.resolve("public.pem");
+
+        Files.writeString(privateKey, pem("PRIVATE KEY", keyPair.getPrivate().getEncoded()),
+                StandardCharsets.UTF_8);
+        Files.writeString(publicKey, pem("PUBLIC KEY", keyPair.getPublic().getEncoded()),
+                StandardCharsets.UTF_8);
+
+        JWKSelector selector = new JWKSelector(new JWKMatcher.Builder()
+                .keyID("test-key")
+                .build());
+
+        assertThat(securityConfig.persistentJwkSource(privateKey.toString(), publicKey.toString(), "test-key")
+                .get(selector, null))
+                .hasSize(1);
+    }
+
+    private static String pem(String type, byte[] encoded) {
+        return "-----BEGIN " + type + "-----\n"
+                + Base64.getMimeEncoder(64, "\n".getBytes(StandardCharsets.UTF_8)).encodeToString(encoded)
+                + "\n-----END " + type + "-----\n";
     }
 }

@@ -318,6 +318,20 @@ run_smoke_tests() {
         "${GATEWAY_URL}/.well-known/oauth-authorization-server")
     record_result "Authorization metadata without token" "200" "$status_code"
 
+    status_code=$(request_status /tmp/cloudbank-smoke-jwks.json \
+        "${GATEWAY_URL}/oauth2/jwks")
+    record_result "Authorization JWK set without token" "200" "$status_code"
+    if [[ "$status_code" == "200" ]]; then
+        local signing_key_id
+        signing_key_id=$(jq -r '.keys[0].kid // empty' /tmp/cloudbank-smoke-jwks.json)
+        if [[ -n "$signing_key_id" ]]; then
+            print_success "Authorization JWK set exposes a signing key id"
+        else
+            print_error "Authorization JWK set did not expose a signing key id"
+            ((++FAILURES))
+        fi
+    fi
+
     status_code=$(request_status /tmp/cloudbank-smoke-creditscore-anon.json \
         "${GATEWAY_URL}/api/v1/creditscore")
     record_result "Creditscore without token" "401" "$status_code"

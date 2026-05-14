@@ -511,6 +511,7 @@ prereq_check_db_app_secrets() {
     local secrets=(
         "${db_name}-azn-server-db-authn"
         "${db_name}-azn-server-auth"
+        "${db_name}-azn-server-signing-key"
         "${db_name}-account-db-authn"
         "${db_name}-customer-db-authn"
         "${db_name}-transfer-db-authn"

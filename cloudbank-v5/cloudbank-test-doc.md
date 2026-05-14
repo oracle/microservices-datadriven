@@ -14,6 +14,7 @@ Before beginning these tests, ensure you have:
 - `jq` for parsing JSON responses
 - Access to the Kubernetes cluster where CloudBank is deployed
 - Access to the CloudBank OAuth client secret created by `3-k8s_db_secrets.sh`
+- The azn-server signing-key secret created by `3-k8s_db_secrets.sh`
 
 ## Step 1: Getting Started
 
@@ -110,6 +111,7 @@ Verify the authorization server metadata endpoint is public:
 
 ```shell
 curl -s http://$IP/.well-known/oauth-authorization-server | jq
+curl -s http://$IP/oauth2/jwks | jq '.keys[].kid'
 ```
 
 ---

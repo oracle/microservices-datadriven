@@ -25,6 +25,7 @@
   - `ORACTL_ADMIN_PASSWORD`
   - `ORACTL_USER_PASSWORD`
   - default OAuth client secret for `cloudbank-client`
+  - persistent RSA signing-key material used by `azn-server` for OAuth access tokens
 - Harden secret handling in `3-k8s_db_secrets.sh`:
   - do not print generated plaintext passwords by default;
   - print retrieval commands and secret names instead;
@@ -49,8 +50,8 @@
 - Update CloudBank scripts only:
   - `1-oci_repos.sh`: include an `azn-server` image repository when the script creates or verifies service repositories.
   - `2-images_build_push.sh`: add `azn-server` to the Spring image build list.
-  - `3-k8s_db_secrets.sh`: create or document required azn-server runtime, Liquibase/bootstrap, and OAuth client secrets alongside the existing service database secrets.
-  - `4-deploy_all_services.sh`: deploy `azn-server` before secured services and pass auth-related environment values.
+  - `3-k8s_db_secrets.sh`: create or document required azn-server runtime, Liquibase/bootstrap, OAuth client, and persistent signing-key secrets alongside the existing service database secrets.
+  - `4-deploy_all_services.sh`: deploy `azn-server` before secured services, pass auth-related environment values, and mount the persistent signing-key secret.
   - `5-apisix_create_routes.sh`: add auth-server routes for `/.well-known/*` and `/oauth2/*`, keep `/user/api/v1*` cluster-internal, and add APISIX authentication/token-forwarding plugin configuration to CloudBank routes as required by `endpoint-authorization-matrix.md`.
   - `check_prereqs.sh`: update prerequisite checks if new auth-server, token, or observability validation needs reusable helper functions.
 - Update CloudBank values files only:
@@ -86,11 +87,12 @@
   - `checks` can still call `account`;
   - `transfer` can still complete and compensate its workflow;
   - `azn-server` exposes metadata, JWKs, and token issuance.
+  - `azn-server` keeps the same JWK key id across a pod restart when the signing-key secret is mounted.
 - Run deployment dry-runs:
   - `1-oci_repos.sh --dry-run` or equivalent output includes `azn-server` when repositories are managed;
   - `2-images_build_push.sh --skip-push` or dry-run-equivalent verification includes `azn-server`;
-  - `3-k8s_db_secrets.sh --dry-run` shows the new azn-server-related secrets without exposing real credentials in committed files;
-  - `4-deploy_all_services.sh --dry-run` deploys `azn-server` before resource-server services and passes auth/observability env values;
+  - `3-k8s_db_secrets.sh --dry-run` shows the new azn-server-related secrets, including the signing-key secret, without exposing real credentials in committed files;
+  - `4-deploy_all_services.sh --dry-run` deploys `azn-server` before resource-server services and passes auth/observability/signing-key env values;
   - `5-apisix_create_routes.sh --dry-run` includes auth-server routes, existing CloudBank routes, and the expected APISIX authentication/token-forwarding plugin configuration;
   - image build list includes `azn-server`;
   - service deployment includes seven Spring services total;
@@ -114,8 +116,8 @@
 - In `cloudbank-v5-install.md`, update every step that refers to top-level shell scripts so the documented workflow matches script behavior:
   - repository creation includes `azn-server`;
   - image build/push includes `azn-server`;
-  - database/secret preparation includes azn-server and OAuth client secrets;
-  - service deployment order installs `azn-server` before protected services;
+  - database/secret preparation includes azn-server, OAuth client, and signing-key secrets;
+  - service deployment order installs `azn-server` before protected services and mounts the signing-key secret;
   - APISIX route creation includes authorization-server endpoints and authentication configuration for protected CloudBank routes;
   - verification commands use bearer tokens for protected CloudBank APIs;
   - observability notes explain that OBaaS 2.1.0-build.12 uses Java agent auto-injection instead of application-packaged OpenTelemetry dependencies.
@@ -125,6 +127,6 @@
 
 - `azn-server` is the authorization server and issuer for CloudBank's sample deployment.
 - The default sample OAuth client is named `cloudbank-client` and supports client credentials for automation and internal service calls.
-- The default user/bootstrap setup is acceptable for sample/demo use; production hardening for persistent signing keys and external client registration storage is documented as follow-up unless the implementation can reuse an existing branch feature with minimal changes.
+- The default user/bootstrap setup is acceptable for sample/demo use; persistent signing keys are now automated for the demo, while production external client registration storage remains follow-up hardening.
 - APISIX authentication is a gateway hardening layer for externally exposed routes; service-side JWT validation remains the required security boundary for this pass.
 - APISIX plugin selection must use what is available in the installed OBaaS 2.1.0-build.12 APISIX configuration. If a desired plugin is unavailable, preserve token forwarding and document the gap rather than weakening service-side enforcement.

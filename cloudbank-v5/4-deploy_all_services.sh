@@ -299,6 +299,7 @@ deploy_service() {
 
     if [[ "$service_name" == "azn-server" ]]; then
         local azn_secret_name="${DB_NAME}-azn-server-auth"
+        local signing_secret_name="${DB_NAME}-azn-server-signing-key"
         helm_command+=" --set env[0].name=EUREKA_CLIENT_ENABLED"
         helm_command+=" --set-string env[0].value=true"
         helm_command+=" --set env[1].name=AZN_USER_REPO_PASSWORD"
@@ -317,6 +318,19 @@ deploy_service() {
         helm_command+=" --set env[6].name=AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_SECRET"
         helm_command+=" --set env[6].valueFrom.secretKeyRef.name=$azn_secret_name"
         helm_command+=" --set env[6].valueFrom.secretKeyRef.key=client-secret"
+        helm_command+=" --set env[7].name=AZN_AUTHORIZATION_SERVER_SIGNING_KEY_PRIVATE_KEY_PATH"
+        helm_command+=" --set-string env[7].value=/etc/azn-server/signing/private.pem"
+        helm_command+=" --set env[8].name=AZN_AUTHORIZATION_SERVER_SIGNING_KEY_PUBLIC_KEY_PATH"
+        helm_command+=" --set-string env[8].value=/etc/azn-server/signing/public.pem"
+        helm_command+=" --set env[9].name=AZN_AUTHORIZATION_SERVER_SIGNING_KEY_KEY_ID"
+        helm_command+=" --set env[9].valueFrom.secretKeyRef.name=$signing_secret_name"
+        helm_command+=" --set env[9].valueFrom.secretKeyRef.key=key-id"
+        helm_command+=" --set volumeMounts[0].name=azn-server-signing-key"
+        helm_command+=" --set volumeMounts[0].mountPath=/etc/azn-server/signing"
+        helm_command+=" --set volumeMounts[0].readOnly=true"
+        helm_command+=" --set volumes[0].name=azn-server-signing-key"
+        helm_command+=" --set volumes[0].secret.secretName=$signing_secret_name"
+        helm_command+=" --set volumes[0].secret.defaultMode=288"
     else
         local azn_secret_name="${DB_NAME}-azn-server-auth"
         local azn_jwk_set_uri="http://azn-server.${NAMESPACE}.svc.cluster.local:8080/oauth2/jwks"

@@ -2,11 +2,18 @@
 
 package oracle.obaas.aznserver.securityconfig;
 
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.UUID;
 
 import com.nimbusds.jose.jwk.JWKSet;
@@ -255,6 +262,33 @@ public class SecurityConfig {
     }
 
     /**
+     * Provide persistent signing keys when a deployment mounts key material.
+     *
+     * @param privateKeyPath path to a PKCS#8 PEM-encoded RSA private key.
+     * @param publicKeyPath path to an X.509 PEM-encoded RSA public key.
+     * @param keyId stable key id to publish in the JWK set and token headers.
+     * @return the JWK source.
+     */
+    @Bean
+    @ConditionalOnProperty(prefix = "azn.authorization-server.signing-key", name = "private-key-path")
+    public JWKSource<SecurityContext> persistentJwkSource(
+            @Value("${azn.authorization-server.signing-key.private-key-path}") String privateKeyPath,
+            @Value("${azn.authorization-server.signing-key.public-key-path:}") String publicKeyPath,
+            @Value("${azn.authorization-server.signing-key.key-id:cloudbank-v5}") String keyId) {
+        if (!StringUtils.hasText(publicKeyPath)) {
+            throw new IllegalStateException("azn.authorization-server.signing-key.public-key-path must be set when "
+                    + "azn.authorization-server.signing-key.private-key-path is set");
+        }
+        if (!StringUtils.hasText(keyId)) {
+            throw new IllegalStateException("azn.authorization-server.signing-key.key-id must not be blank");
+        }
+
+        RSAKey rsaKey = loadRsa(privateKeyPath, publicKeyPath, keyId);
+        log.info("Using persistent RSA signing key with key id '{}'", keyId);
+        return jwkSourceFor(rsaKey);
+    }
+
+    /**
      * Provide process-local signing keys for development and tests.
      *
      * Production deployments should replace this bean with persistent key material
@@ -268,8 +302,7 @@ public class SecurityConfig {
         log.warn("Using process-local generated RSA signing keys. Configure a persistent JWKSource bean for "
                 + "production so issued tokens remain verifiable across restarts and rolling deploys.");
         RSAKey rsaKey = generateRsa();
-        JWKSet jwkSet = new JWKSet(rsaKey);
-        return (jwkSelector, securityContext) -> jwkSelector.select(jwkSet);
+        return jwkSourceFor(rsaKey);
     }
 
     @Bean
@@ -291,6 +324,49 @@ public class SecurityConfig {
                 .privateKey(privateKey)
                 .keyID(UUID.randomUUID().toString())
                 .build();
+    }
+
+    private static RSAKey loadRsa(String privateKeyPath, String publicKeyPath, String keyId) {
+        return new RSAKey.Builder(readRsaPublicKey(publicKeyPath))
+                .privateKey(readRsaPrivateKey(privateKeyPath))
+                .keyID(keyId)
+                .build();
+    }
+
+    private static RSAPrivateKey readRsaPrivateKey(String privateKeyPath) {
+        try {
+            byte[] keyBytes = readPem(privateKeyPath);
+            return (RSAPrivateKey) KeyFactory.getInstance("RSA")
+                    .generatePrivate(new PKCS8EncodedKeySpec(keyBytes));
+        } catch (Exception exception) {
+            throw new IllegalStateException("Unable to load authorization server RSA private key from "
+                    + privateKeyPath, exception);
+        }
+    }
+
+    private static RSAPublicKey readRsaPublicKey(String publicKeyPath) {
+        try {
+            byte[] keyBytes = readPem(publicKeyPath);
+            return (RSAPublicKey) KeyFactory.getInstance("RSA")
+                    .generatePublic(new X509EncodedKeySpec(keyBytes));
+        } catch (Exception exception) {
+            throw new IllegalStateException("Unable to load authorization server RSA public key from "
+                    + publicKeyPath, exception);
+        }
+    }
+
+    private static byte[] readPem(String keyPath) throws Exception {
+        String pem = Files.readString(Path.of(keyPath), StandardCharsets.UTF_8);
+        String base64Key = pem
+                .replaceAll("-----BEGIN [A-Z ]+-----", "")
+                .replaceAll("-----END [A-Z ]+-----", "")
+                .replaceAll("\\s", "");
+        return Base64.getDecoder().decode(base64Key);
+    }
+
+    private static JWKSource<SecurityContext> jwkSourceFor(RSAKey rsaKey) {
+        JWKSet jwkSet = new JWKSet(rsaKey);
+        return (jwkSelector, securityContext) -> jwkSelector.select(jwkSet);
     }
 
     private static KeyPair generateRsaKeyPair() {

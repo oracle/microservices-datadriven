@@ -82,7 +82,9 @@ env:
 #   ORACTL_ADMIN_PASSWORD
 #   ORACTL_USER_PASSWORD
 #   AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_SECRET, if the local default client is enabled
+#   AZN_AUTHORIZATION_SERVER_SIGNING_KEY_* values for a mounted persistent signing-key secret
 # The default client id is cloudbank-client unless AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_ID overrides it.
+# The CloudBank deployment script mounts <dbname>-azn-server-signing-key at /etc/azn-server/signing.
 
 # imagePullSecrets:
 #   - name: ocir

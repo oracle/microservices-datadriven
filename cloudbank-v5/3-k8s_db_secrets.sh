@@ -26,6 +26,7 @@
 # Secret naming convention:
 #   {dbname}-{service}-db-authn  - Application database credentials (per service)
 #   {dbname}-db-priv-authn       - Privileged credentials (must exist)
+#   {dbname}-azn-server-signing-key - azn-server persistent OAuth signing key
 #
 # Example:
 #   ./3-k8s_db_secrets.sh -n obaas-dev -d mydb
@@ -208,6 +209,7 @@ Prerequisites:
 Secrets created:
   {dbname}-azn-server-db-authn  - azn-server USER_REPO credentials
   {dbname}-azn-server-auth      - azn-server bootstrap and OAuth client secrets
+  {dbname}-azn-server-signing-key - azn-server persistent OAuth signing key
   {dbname}-account-db-authn     - account, checks, testrunner
   {dbname}-customer-db-authn    - customer
   {dbname}-transfer-db-authn    - transfer
@@ -266,6 +268,21 @@ check_prerequisites() {
     # Check namespace exists
     if ! prereq_check_namespace "$NAMESPACE"; then
         return 1
+    fi
+
+    if [[ "$DRY_RUN" != true ]]; then
+        local signing_secret_name="${DB_NAME}-azn-server-signing-key"
+        local needs_signing_key_generation=false
+        if [[ "$DELETE_EXISTING" == true ]]; then
+            needs_signing_key_generation=true
+        elif ! kubectl get secret "$signing_secret_name" -n "$NAMESPACE" &> /dev/null; then
+            needs_signing_key_generation=true
+        fi
+        if [[ "$needs_signing_key_generation" == true ]]; then
+            if ! prereq_check_command openssl "OpenSSL" "required"; then
+                return 1
+            fi
+        fi
     fi
 
     # Check privileged secret exists
@@ -414,6 +431,65 @@ create_auth_server_secret() {
     print_success "Created: $secret_name (azn-server bootstrap users and default OAuth client)"
 }
 
+create_signing_key_secret() {
+    local secret_name="$1"
+
+    if [[ "$DRY_RUN" == true ]]; then
+        print_success "Would create: $secret_name"
+        print_info "  private.pem: <generated RSA private key>"
+        print_info "  public.pem:  <generated RSA public key>"
+        print_info "  key-id:      <generated stable key id>"
+        print_info "  used by: azn-server OAuth token signing"
+        return 0
+    fi
+
+    if kubectl get secret "$secret_name" -n "$NAMESPACE" &> /dev/null; then
+        if [[ "$DELETE_EXISTING" == true ]]; then
+            delete_secret "$secret_name"
+        else
+            print_warning "Secret '$secret_name' already exists (use --delete to rotate signing keys)"
+            return 0
+        fi
+    fi
+
+    local temp_dir
+    temp_dir=$(mktemp -d)
+    local private_key_file="${temp_dir}/private.pem"
+    local public_key_file="${temp_dir}/public.pem"
+    local key_id
+
+    if ! openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:3072 -out "$private_key_file" &> /dev/null; then
+        rm -rf "$temp_dir"
+        print_error "Failed to generate azn-server RSA private key"
+        return 1
+    fi
+
+    if ! openssl rsa -pubout -in "$private_key_file" -out "$public_key_file" &> /dev/null; then
+        rm -rf "$temp_dir"
+        print_error "Failed to derive azn-server RSA public key"
+        return 1
+    fi
+
+    if command -v uuidgen &> /dev/null; then
+        key_id=$(uuidgen)
+    else
+        key_id=$(openssl rand -hex 16)
+    fi
+
+    if ! kubectl -n "$NAMESPACE" create secret generic "$secret_name" \
+        --from-file=private.pem="$private_key_file" \
+        --from-file=public.pem="$public_key_file" \
+        --from-literal=key-id="$key_id" \
+        &> /dev/null; then
+        rm -rf "$temp_dir"
+        print_error "Failed to create azn-server signing key secret: $secret_name"
+        return 1
+    fi
+
+    rm -rf "$temp_dir"
+    print_success "Created: $secret_name (azn-server persistent OAuth signing key)"
+}
+
 # =============================================================================
 # Main
 # =============================================================================
@@ -504,6 +580,7 @@ main() {
 
     create_auth_server_secret "${DB_NAME}-azn-server-auth" \
         "$azn_admin_password" "$azn_user_password" "$azn_client_secret"
+    create_signing_key_secret "${DB_NAME}-azn-server-signing-key"
 
     # Summary
     print_header "Summary"
@@ -516,7 +593,7 @@ main() {
         print_success "All secrets created successfully!"
         echo ""
         echo "Verify with:"
-        echo "  kubectl get secrets -n $NAMESPACE | grep -E '${DB_NAME}.*db-authn'"
+        echo "  kubectl get secrets -n $NAMESPACE | grep -E '${DB_NAME}.*(db-authn|azn-server)'"
         echo ""
         echo "View a secret's keys (not values):"
         echo "  kubectl describe secret ${DB_NAME}-account-db-authn -n $NAMESPACE"
@@ -540,6 +617,7 @@ main() {
     done
     printf "  %-35s %-15s %s\n" "${DB_NAME}-azn-server-auth" "bootstrap" "$(display_secret_value "$azn_admin_password")"
     printf "  %-35s %-15s %s\n" "${DB_NAME}-azn-server-auth" "default-client" "$(display_secret_value "$azn_client_secret")"
+    printf "  %-35s %-15s %s\n" "${DB_NAME}-azn-server-signing-key" "OAuth signing" "<private key hidden>"
     echo ""
     echo "Next step:"
     echo "  Deploys all CloudBank microservices: ./4-deploy_all_services.sh -n <namespace> -d <dbname> -p <prefix>"

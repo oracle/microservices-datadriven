@@ -224,6 +224,7 @@ Use `--yes` for non-interactive automation.
 - Creates Kubernetes secrets with username, password, and service keys
 - Usernames are uppercase (Oracle requirement)
 - Creates the azn-server bootstrap and OAuth client secret used by secured services and APISIX
+- Creates the azn-server persistent OAuth signing-key secret
 - Hides generated plaintext passwords by default; use `--show-passwords` only on a private terminal
 
 **Prerequisite:** The privileged secret `<dbname>-db-priv-authn` must exist (created during OBaaS setup). If your secret has a different name, use the `-s` flag to specify it.
@@ -254,10 +255,13 @@ kubectl get secret <dbname>-db-priv-authn -n <namespace>
 |--------|---------|
 | `<dbname>-azn-server-db-authn` | azn-server database user |
 | `<dbname>-azn-server-auth` | azn-server bootstrap users, default OAuth client, APISIX OIDC client |
+| `<dbname>-azn-server-signing-key` | azn-server persistent OAuth token signing key |
 | `<dbname>-account-db-authn` | account, checks, testrunner |
 | `<dbname>-customer-db-authn` | customer |
 | `<dbname>-transfer-db-authn` | transfer |
 | `<dbname>-creditscore-db-authn` | creditscore |
+
+Rerunning the script preserves the existing signing-key secret. Use `--delete` only when you intentionally want to rotate the demo signing key; existing access tokens become invalid after rotation.
 
 ---
 
@@ -273,6 +277,7 @@ kubectl get secret <dbname>-db-priv-authn -n <namespace>
 - Deploys all 7 services using the shared `obaas-sample-app` Helm chart
 - Deploys `azn-server` before the protected resource-server services
 - Passes JWT resource-server and service-token settings to the protected services
+- Mounts `<dbname>-azn-server-signing-key` into `azn-server` so issued tokens remain verifiable across pod restarts
 - Each service uses its own `values.yaml` file
 - Uses `helm upgrade --install` with `--wait` flag
 - The db-init job automatically creates database users on first deployment
@@ -340,7 +345,7 @@ The `azn-server` user-management API (`/user/api/v1*`) is intentionally not rout
 
 ### Automated Smoke Test
 
-Run the secured smoke-test script first. It verifies public authorization metadata, token issuance, protected-route authentication, scope-based authorization, account lookup, check deposit, and transfer through APISIX.
+Run the secured smoke-test script first. It verifies public authorization metadata/JWKs, token issuance, protected-route authentication, scope-based authorization, account lookup, check deposit, and transfer through APISIX.
 
 ```bash
 ./6-smoke_test_secure_services.sh -n <namespace> -d <dbname>
