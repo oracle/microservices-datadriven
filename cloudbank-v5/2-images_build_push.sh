@@ -190,7 +190,7 @@ prompt_value() {
     while true; do
         read -p "$full_prompt: " value
         if [[ -n "$value" ]]; then
-            eval "$var_name=\"$value\""
+            printf -v "$var_name" '%s' "$value"
             return 0
         else
             print_error "Value is required. Please enter a value."
