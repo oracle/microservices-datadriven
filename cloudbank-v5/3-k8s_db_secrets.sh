@@ -13,7 +13,9 @@
 #   -d, --db-name DB_NAME        Database name (e.g., mydb)
 #   -s, --priv-secret SECRET     Privileged secret name (default: {dbname}-db-priv-authn)
 #   --delete                     Delete existing secrets before creating
+#   --rotate-db-passwords        Generate new database passwords when replacing existing DB auth secrets
 #   --dry-run                    Show what would be created without creating
+#   --show-passwords             Print generated plaintext passwords (unsafe for shared terminals/logs)
 #   -h, --help                   Show this help message
 #
 # Prerequisites:
@@ -25,6 +27,7 @@
 # Secret naming convention:
 #   {dbname}-{service}-db-authn  - Application database credentials (per service)
 #   {dbname}-db-priv-authn       - Privileged credentials (must exist)
+#   {dbname}-azn-server-signing-key - azn-server persistent OAuth signing key
 #
 # Example:
 #   ./3-k8s_db_secrets.sh -n obaas-dev -d mydb
@@ -48,11 +51,14 @@ DB_NAME=""
 DB_SERVICE=""
 PRIV_SECRET=""
 DELETE_EXISTING=false
+ROTATE_DB_PASSWORDS=false
 DRY_RUN=false
+SHOW_PASSWORDS=false
 
 # Service accounts to create
 # Format: "name:description"
 declare -a SERVICE_ACCOUNT_LIST=(
+    "azn-server:azn-server authorization data"
     "account:account, checks, testrunner"
     "customer:customer"
     "transfer:transfer"
@@ -62,6 +68,20 @@ declare -a SERVICE_ACCOUNT_LIST=(
 # =============================================================================
 # Password Generation
 # =============================================================================
+random_index() {
+    local max="$1"
+    local random_hex
+    random_hex=$(openssl rand -hex 2)
+    echo $((16#$random_hex % max))
+}
+
+random_char() {
+    local chars="$1"
+    local index
+    index=$(random_index "${#chars}")
+    echo "${chars:index:1}"
+}
+
 generate_oracle_password() {
     # Oracle password requirements:
     # - 12-30 characters (we'll use 20)
@@ -83,20 +103,20 @@ generate_oracle_password() {
     local all_chars="${upper_chars}${lower_chars}${digit_chars}${special_chars}"
 
     # Start with an uppercase letter (Oracle requirement: can't start with digit/special)
-    generated_password+="${upper_chars:RANDOM % ${#upper_chars}:1}"
+    generated_password+="$(random_char "$upper_chars")"
 
     # Ensure we have at least 2 of each required type
-    generated_password+="${upper_chars:RANDOM % ${#upper_chars}:1}"
-    generated_password+="${lower_chars:RANDOM % ${#lower_chars}:1}"
-    generated_password+="${lower_chars:RANDOM % ${#lower_chars}:1}"
-    generated_password+="${digit_chars:RANDOM % ${#digit_chars}:1}"
-    generated_password+="${digit_chars:RANDOM % ${#digit_chars}:1}"
-    generated_password+="${special_chars:RANDOM % ${#special_chars}:1}"
-    generated_password+="${special_chars:RANDOM % ${#special_chars}:1}"
+    generated_password+="$(random_char "$upper_chars")"
+    generated_password+="$(random_char "$lower_chars")"
+    generated_password+="$(random_char "$lower_chars")"
+    generated_password+="$(random_char "$digit_chars")"
+    generated_password+="$(random_char "$digit_chars")"
+    generated_password+="$(random_char "$special_chars")"
+    generated_password+="$(random_char "$special_chars")"
 
     # Fill remaining length with random characters from all sets
     for ((index=8; index<password_length; index++)); do
-        generated_password+="${all_chars:RANDOM % ${#all_chars}:1}"
+        generated_password+="$(random_char "$all_chars")"
     done
 
     # Shuffle positions 2-end using Fisher-Yates (keep first char as uppercase)
@@ -113,7 +133,8 @@ generate_oracle_password() {
 
     # Fisher-Yates shuffle
     for ((index=rest_length-1; index>0; index--)); do
-        local random_index=$((RANDOM % (index + 1)))
+        local random_index
+        random_index=$(random_index $((index + 1)))
         local temp_char="${char_array[index]}"
         char_array[index]="${char_array[random_index]}"
         char_array[random_index]="$temp_char"
@@ -150,8 +171,16 @@ parse_args() {
                 DELETE_EXISTING=true
                 shift
                 ;;
+            --rotate-db-passwords)
+                ROTATE_DB_PASSWORDS=true
+                shift
+                ;;
             --dry-run)
                 DRY_RUN=true
+                shift
+                ;;
+            --show-passwords)
+                SHOW_PASSWORDS=true
                 shift
                 ;;
             -h|--help)
@@ -182,7 +211,9 @@ Options:
   -d, --db-name DB_NAME        Database name (required, e.g., mydb)
   -s, --priv-secret SECRET     Privileged secret name (default: {dbname}-db-priv-authn)
   --delete                     Delete existing secrets before creating
+  --rotate-db-passwords        Generate new database passwords when replacing existing DB auth secrets
   --dry-run                    Show what would be created without creating
+  --show-passwords             Print generated plaintext passwords (unsafe for shared terminals/logs)
   -h, --help                   Show this help message
 
 Prerequisites:
@@ -198,6 +229,9 @@ Prerequisites:
       --from-literal=service=mydb_tp
 
 Secrets created:
+  {dbname}-azn-server-db-authn  - azn-server USER_REPO credentials
+  {dbname}-azn-server-auth      - azn-server bootstrap and scoped OAuth client secrets
+  {dbname}-azn-server-signing-key - azn-server persistent OAuth signing key
   {dbname}-account-db-authn     - account, checks, testrunner
   {dbname}-customer-db-authn    - customer
   {dbname}-transfer-db-authn    - transfer
@@ -207,7 +241,9 @@ Example:
   ./3-k8s_db_secrets.sh -n obaas-dev -d mydb
   ./3-k8s_db_secrets.sh -n obaas-dev -d mydb -s my-custom-secret
   ./3-k8s_db_secrets.sh -n obaas-dev -d mydb --delete
+  ./3-k8s_db_secrets.sh -n obaas-dev -d mydb --delete --rotate-db-passwords
   ./3-k8s_db_secrets.sh -n obaas-dev -d mydb --dry-run
+  ./3-k8s_db_secrets.sh -n obaas-dev -d mydb --show-passwords
 EOF
 }
 
@@ -255,6 +291,25 @@ check_prerequisites() {
     # Check namespace exists
     if ! prereq_check_namespace "$NAMESPACE"; then
         return 1
+    fi
+
+    if ! prereq_check_command openssl "OpenSSL" "required"; then
+        return 1
+    fi
+
+    if [[ "$DRY_RUN" != true ]]; then
+        local signing_secret_name="${DB_NAME}-azn-server-signing-key"
+        local needs_signing_key_generation=false
+        if [[ "$DELETE_EXISTING" == true ]]; then
+            needs_signing_key_generation=true
+        elif ! kubectl get secret "$signing_secret_name" -n "$NAMESPACE" &> /dev/null; then
+            needs_signing_key_generation=true
+        fi
+        if [[ "$needs_signing_key_generation" == true ]]; then
+            if ! prereq_check_command openssl "OpenSSL" "required"; then
+                return 1
+            fi
+        fi
     fi
 
     # Check privileged secret exists
@@ -309,6 +364,37 @@ delete_secret() {
     fi
 }
 
+display_secret_value() {
+    local value="$1"
+
+    if [[ "$SHOW_PASSWORDS" == true ]]; then
+        echo "$value"
+    else
+        echo "<hidden>"
+    fi
+}
+
+get_db_username_for_account() {
+    local account_name="$1"
+
+    case "$account_name" in
+        azn-server)
+            echo "USER_REPO"
+            ;;
+        *)
+            echo "$account_name"
+            ;;
+    esac
+}
+
+read_secret_value() {
+    local secret_name="$1"
+    local key="$2"
+
+    kubectl get secret "$secret_name" -n "$NAMESPACE" \
+        -o "jsonpath={.data.${key}}" 2>/dev/null | base64 --decode
+}
+
 create_secret() {
     local secret_name="$1"
     local username="$2"
@@ -322,7 +408,7 @@ create_secret() {
     if [[ "$DRY_RUN" == true ]]; then
         print_success "Would create: $secret_name"
         print_info "  username: $upper_username"
-        print_info "  password: $password"
+        print_info "  password: $(display_secret_value "$password")"
         print_info "  service:  $DB_SERVICE"
         print_info "  used by:  $description"
         return 0
@@ -345,6 +431,119 @@ create_secret() {
         &> /dev/null
 
     print_success "Created: $secret_name ($description)"
+}
+
+create_auth_server_secret() {
+    local secret_name="$1"
+    local admin_password="$2"
+    local user_password="$3"
+    local client_secret="$4"
+    local service_client_secret="$5"
+    local test_client_secret="$6"
+    local admin_client_secret="$7"
+
+    if [[ "$DRY_RUN" == true ]]; then
+        print_success "Would create: $secret_name"
+        print_info "  admin-password: $(display_secret_value "$admin_password")"
+        print_info "  user-password:  $(display_secret_value "$user_password")"
+        print_info "  client-secret:  $(display_secret_value "$client_secret")"
+        print_info "  service-client-secret: $(display_secret_value "$service_client_secret")"
+        print_info "  test-client-secret:    $(display_secret_value "$test_client_secret")"
+        print_info "  admin-client-secret:   $(display_secret_value "$admin_client_secret")"
+        print_info "  used by: azn-server bootstrap users and scoped OAuth clients"
+        return 0
+    fi
+
+    if kubectl get secret "$secret_name" -n "$NAMESPACE" &> /dev/null; then
+        if [[ "$DELETE_EXISTING" == true ]]; then
+            delete_secret "$secret_name"
+        else
+            local missing_keys=0
+            for key in admin-password user-password client-secret service-client-secret test-client-secret admin-client-secret; do
+                if [[ -z "$(kubectl get secret "$secret_name" -n "$NAMESPACE" \
+                    -o "jsonpath={.data.${key}}" 2>/dev/null)" ]]; then
+                    print_error "Secret '$secret_name' exists but is missing key '$key'"
+                    ((++missing_keys))
+                fi
+            done
+            if [[ $missing_keys -gt 0 ]]; then
+                print_info "Recreate the auth secret with: ./3-k8s_db_secrets.sh -n $NAMESPACE -d $DB_NAME --delete"
+                return 1
+            fi
+            print_warning "Secret '$secret_name' already exists (use --delete to rotate auth secrets)"
+            return 0
+        fi
+    fi
+
+    kubectl -n "$NAMESPACE" create secret generic "$secret_name" \
+        --from-literal=admin-password="$admin_password" \
+        --from-literal=user-password="$user_password" \
+        --from-literal=client-secret="$client_secret" \
+        --from-literal=service-client-secret="$service_client_secret" \
+        --from-literal=test-client-secret="$test_client_secret" \
+        --from-literal=admin-client-secret="$admin_client_secret" \
+        &> /dev/null
+
+    print_success "Created: $secret_name (azn-server bootstrap users and scoped OAuth clients)"
+}
+
+create_signing_key_secret() {
+    local secret_name="$1"
+
+    if [[ "$DRY_RUN" == true ]]; then
+        print_success "Would create: $secret_name"
+        print_info "  private.pem: <generated RSA private key>"
+        print_info "  public.pem:  <generated RSA public key>"
+        print_info "  key-id:      <generated stable key id>"
+        print_info "  used by: azn-server OAuth token signing"
+        return 0
+    fi
+
+    if kubectl get secret "$secret_name" -n "$NAMESPACE" &> /dev/null; then
+        if [[ "$DELETE_EXISTING" == true ]]; then
+            delete_secret "$secret_name"
+        else
+            print_warning "Secret '$secret_name' already exists (use --delete to rotate signing keys)"
+            return 0
+        fi
+    fi
+
+    local temp_dir
+    temp_dir=$(mktemp -d)
+    local private_key_file="${temp_dir}/private.pem"
+    local public_key_file="${temp_dir}/public.pem"
+    local key_id
+
+    if ! openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:3072 -out "$private_key_file" &> /dev/null; then
+        rm -rf "$temp_dir"
+        print_error "Failed to generate azn-server RSA private key"
+        return 1
+    fi
+
+    if ! openssl rsa -pubout -in "$private_key_file" -out "$public_key_file" &> /dev/null; then
+        rm -rf "$temp_dir"
+        print_error "Failed to derive azn-server RSA public key"
+        return 1
+    fi
+
+    if command -v uuidgen &> /dev/null; then
+        key_id=$(uuidgen)
+    else
+        key_id=$(openssl rand -hex 16)
+    fi
+
+    if ! kubectl -n "$NAMESPACE" create secret generic "$secret_name" \
+        --from-file=private.pem="$private_key_file" \
+        --from-file=public.pem="$public_key_file" \
+        --from-literal=key-id="$key_id" \
+        &> /dev/null; then
+        rm -rf "$temp_dir"
+        print_error "Failed to create azn-server signing key secret: $secret_name"
+        return 1
+    fi
+
+    rm -rf "$temp_dir"
+    print_success "Created: $secret_name (azn-server persistent OAuth signing key)"
 }
 
 # =============================================================================
@@ -382,6 +581,11 @@ main() {
     echo "  TNS Service:  $DB_SERVICE"
     echo "  Dry Run:      $DRY_RUN"
     echo "  Delete First: $DELETE_EXISTING"
+    echo "  Rotate DB Passwords: $ROTATE_DB_PASSWORDS"
+    echo "  Show Secrets: $SHOW_PASSWORDS"
+    if [[ "$SHOW_PASSWORDS" != true ]]; then
+        print_info "Generated plaintext passwords will be hidden. Use --show-passwords only on a private terminal."
+    fi
 
     # Generate passwords and create secrets
     print_header "Generating Passwords"
@@ -403,6 +607,20 @@ main() {
         print_success "Generated password for: $account_name"
     done
 
+    local azn_admin_password
+    local azn_user_password
+    local azn_client_secret
+    local azn_service_client_secret
+    local azn_test_client_secret
+    local azn_admin_client_secret
+    azn_admin_password=$(generate_oracle_password)
+    azn_user_password=$(generate_oracle_password)
+    azn_client_secret=$(generate_oracle_password)
+    azn_service_client_secret=$(generate_oracle_password)
+    azn_test_client_secret=$(generate_oracle_password)
+    azn_admin_client_secret=$(generate_oracle_password)
+    print_success "Generated azn-server bootstrap and scoped OAuth client secrets"
+
     # Create secrets
     print_header "Creating Secrets"
 
@@ -415,11 +633,36 @@ main() {
     local index
     for ((index=0; index<${#password_names[@]}; index++)); do
         local name="${password_names[$index]}"
+        local username
+        username=$(get_db_username_for_account "$name")
         local password="${password_values[$index]}"
         local description="${password_descriptions[$index]}"
         local secret_name="${DB_NAME}-${name}-db-authn"
-        create_secret "$secret_name" "$name" "$password" "$description"
+
+        if [[ "$DELETE_EXISTING" == true && "$ROTATE_DB_PASSWORDS" != true ]] \
+            && kubectl get secret "$secret_name" -n "$NAMESPACE" &> /dev/null; then
+            local existing_username
+            local existing_password
+            existing_username=$(read_secret_value "$secret_name" "username" || true)
+            existing_password=$(read_secret_value "$secret_name" "password" || true)
+
+            if [[ -n "$existing_username" && -n "$existing_password" ]]; then
+                username="$existing_username"
+                password="$existing_password"
+                password_values[$index]="$password"
+                print_warning "Preserving existing database password for: $secret_name"
+            else
+                print_warning "Existing secret '$secret_name' is missing username/password; generating a new database password"
+            fi
+        fi
+
+        create_secret "$secret_name" "$username" "$password" "$description"
     done
+
+    create_auth_server_secret "${DB_NAME}-azn-server-auth" \
+        "$azn_admin_password" "$azn_user_password" "$azn_client_secret" \
+        "$azn_service_client_secret" "$azn_test_client_secret" "$azn_admin_client_secret"
+    create_signing_key_secret "${DB_NAME}-azn-server-signing-key"
 
     # Summary
     print_header "Summary"
@@ -432,7 +675,7 @@ main() {
         print_success "All secrets created successfully!"
         echo ""
         echo "Verify with:"
-        echo "  kubectl get secrets -n $NAMESPACE | grep -E '${DB_NAME}.*db-authn'"
+        echo "  kubectl get secrets -n $NAMESPACE | grep -E '${DB_NAME}.*(db-authn|azn-server)'"
         echo ""
         echo "View a secret's keys (not values):"
         echo "  kubectl describe secret ${DB_NAME}-account-db-authn -n $NAMESPACE"
@@ -440,15 +683,26 @@ main() {
 
     # Print password summary (useful for reference)
     print_header "Generated Credentials"
-    print_info "Retrieve later: kubectl get secret SECRET_NAME -n $NAMESPACE -o jsonpath='{.data.password}' | base64 -d"
+    print_info "Retrieve database passwords later: kubectl get secret SECRET_NAME -n $NAMESPACE -o jsonpath='{.data.password}' | base64 -d"
+    print_info "Retrieve azn-server auth values later: kubectl get secret ${DB_NAME}-azn-server-auth -n $NAMESPACE -o jsonpath='{.data.KEY}' | base64 -d"
     echo ""
     printf "  %-35s %-15s %s\n" "SECRET" "USERNAME" "PASSWORD"
     printf "  %-35s %-15s %s\n" "-----------------------------------" "---------------" "--------------------"
     for ((index=0; index<${#password_names[@]}; index++)); do
         local name="${password_names[$index]}"
+        local username
+        username=$(get_db_username_for_account "$name")
+        local upper_username
+        upper_username=$(echo "$username" | tr '[:lower:]' '[:upper:]')
         local password="${password_values[$index]}"
-        printf "  %-35s %-15s %s\n" "${DB_NAME}-${name}-db-authn" "$name" "$password"
+        printf "  %-35s %-15s %s\n" "${DB_NAME}-${name}-db-authn" "$upper_username" "$(display_secret_value "$password")"
     done
+    printf "  %-35s %-15s %s\n" "${DB_NAME}-azn-server-auth" "bootstrap" "$(display_secret_value "$azn_admin_password")"
+    printf "  %-35s %-15s %s\n" "${DB_NAME}-azn-server-auth" "default-client" "$(display_secret_value "$azn_client_secret")"
+    printf "  %-35s %-15s %s\n" "${DB_NAME}-azn-server-auth" "service-client" "$(display_secret_value "$azn_service_client_secret")"
+    printf "  %-35s %-15s %s\n" "${DB_NAME}-azn-server-auth" "test-client" "$(display_secret_value "$azn_test_client_secret")"
+    printf "  %-35s %-15s %s\n" "${DB_NAME}-azn-server-auth" "admin-client" "$(display_secret_value "$azn_admin_client_secret")"
+    printf "  %-35s %-15s %s\n" "${DB_NAME}-azn-server-signing-key" "OAuth signing" "<private key hidden>"
     echo ""
     echo "Next step:"
     echo "  Deploys all CloudBank microservices: ./4-deploy_all_services.sh -n <namespace> -d <dbname> -p <prefix>"

@@ -10,6 +10,7 @@ import com.oracle.microtx.springboot.lra.annotation.Complete;
 import com.oracle.microtx.springboot.lra.annotation.LRA;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -37,6 +38,12 @@ public class TransferService {
     @Value("${transfer.cancel.process.url}") URI transferProcessCancelUri;
     @Value("${transfer.confirm.url}") URI transferConfirmUri;
     @Value("${transfer.confirm.process.url}") URI transferProcessConfirmUri;
+
+    private final RestTemplate restTemplate;
+
+    public TransferService(RestTemplateBuilder restTemplateBuilder) {
+        this.restTemplate = restTemplateBuilder.build();
+    }
 
     /**
      * Ping method.
@@ -89,7 +96,6 @@ public class TransferService {
         log.info("LRA/transfer action will be " + (isCompensate ? "cancel" : "confirm"));
 
         // call complete or cancel based on outcome of previous actions
-        RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);
         headers.set(TRANSFER_ID, lraId);
@@ -114,7 +120,6 @@ public class TransferService {
             .queryParam("accountId", accountId)
             .queryParam("amount", amount);
 
-        RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);
         headers.set(LRA_HTTP_CONTEXT_HEADER, lraId.toString());
@@ -136,7 +141,6 @@ public class TransferService {
             .queryParam("accountId", accountId)
             .queryParam("amount", amount);
 
-        RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);
         headers.set(LRA_HTTP_CONTEXT_HEADER, lraId.toString());
@@ -175,7 +179,6 @@ public class TransferService {
     public ResponseEntity<String> confirm(@RequestHeader(TRANSFER_ID) String transferId) {
         log.info("Received confirm for transfer : " + transferId);
 
-        RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);
         headers.set(LRA_HTTP_CONTEXT_HEADER, transferId);
@@ -200,7 +203,6 @@ public class TransferService {
     public ResponseEntity<String> cancel(@RequestHeader(TRANSFER_ID) String transferId) {
         log.info("Received cancel for transfer : " + transferId);
 
-        RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);
         headers.set(LRA_HTTP_CONTEXT_HEADER, transferId);

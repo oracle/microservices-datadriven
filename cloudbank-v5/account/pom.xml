@@ -36,6 +36,12 @@
 			<groupId>com.oracle.microtx.lra</groupId>
 			<artifactId>microtx-lra-spring-boot-starter</artifactId>
 			<version>${oracle-microtx-starter.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>io.netty</groupId>
+					<artifactId>netty-transport-native-epoll</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
         <dependency>
 			<groupId>com.example</groupId>

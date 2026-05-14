@@ -21,7 +21,7 @@ https://oss.oracle.com/licenses/upl. -->
         <dependency>
             <groupId>com.oracle.database.spring</groupId>
             <artifactId>oracle-spring-boot-starter-aqjms</artifactId>
-            <version>${oracle-springboot-starter.version}</version>
+            <version>${oracle-springboot-aqjms-starter.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

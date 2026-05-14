@@ -13,6 +13,7 @@
 #                                If not provided, auto-detects from OCI CLI with cloudbank-v5 prefix
 #   -p, --prefix PREFIX          Repository prefix for OCIR auto-detection (default: cloudbank-v5)
 #   -t, --tag TAG                Image tag (default: 0.0.1-SNAPSHOT)
+#   -y, --yes                    Do not prompt before building
 #   --run-tests                  Run tests during build (default: tests are skipped)
 #   --skip-push                  Build images but don't push to registry
 #   -h, --help                   Show this help message
@@ -51,10 +52,12 @@ SKIP_TESTS=true
 SKIP_PUSH=false
 SKIP_PREREQS=false
 CLEAN_BUILD=false
+ASSUME_YES=false
 PARALLEL_THREADS="1C"  # 1 thread per CPU core, or set to specific number like "4"
 
 # Services to build
 SERVICES=(
+    "azn-server"
     "account"
     "customer"
     "transfer"
@@ -80,6 +83,10 @@ parse_args() {
             -t|--tag)
                 IMAGE_TAG="$2"
                 shift 2
+                ;;
+            -y|--yes)
+                ASSUME_YES=true
+                shift
                 ;;
             --run-tests)
                 SKIP_TESTS=false
@@ -136,6 +143,7 @@ Options:
   -t, --tag TAG                Image tag (default: 0.0.1-SNAPSHOT)
   -j, --parallel THREADS       Number of parallel build threads (default: 1C = 1 per CPU core)
                                Use "1" to disable parallel builds
+  -y, --yes                    Do not prompt before building
   --run-tests                  Run tests during build (default: tests are skipped)
   --skip-push                  Build images but don't push to registry
   --clean                      Clean build: remove cached artifacts and rebuild from scratch
@@ -149,7 +157,7 @@ Prerequisites:
   - Logged into container registry: docker login <registry>
 
 Services built:
-  account, customer, transfer, checks, creditscore, testrunner
+  azn-server, account, customer, transfer, checks, creditscore, testrunner
 
 Example:
   ./2-images_build_push.sh                                        # Auto-detect OCIR from OCI CLI
@@ -157,6 +165,7 @@ Example:
   ./2-images_build_push.sh -r us-phoenix-1.ocir.io/ns/cloudbank   # Explicit OCIR path
   ./2-images_build_push.sh -r docker.io/myuser/cloudbank          # Docker Hub
   ./2-images_build_push.sh --skip-push                            # Build only, don't push
+  ./2-images_build_push.sh --skip-push --yes                      # Build only, non-interactive
 EOF
 }
 
@@ -320,7 +329,11 @@ build_and_push() {
         print_success "  $service done"
     done
 
-    print_success "All images built and pushed successfully"
+    if [[ "$SKIP_PUSH" == true ]]; then
+        print_success "All images built successfully"
+    else
+        print_success "All images built and pushed successfully"
+    fi
 }
 
 verify_images() {
@@ -336,7 +349,7 @@ verify_images() {
         local image_name="$registry/$service:$IMAGE_TAG"
         if docker images --format "{{.Repository}}:{{.Tag}}" | grep -q "$registry/$service"; then
             print_success "$service image found"
-            ((image_count++))
+            ((++image_count))
         else
             print_warning "$service image not found locally"
         fi
@@ -358,6 +371,8 @@ main() {
 
     # Parse command line arguments
     parse_args "$@"
+
+    cd "$SCRIPT_DIR"
 
     # Check prerequisites (unless skipped)
     if [[ "$SKIP_PREREQS" != true ]]; then
@@ -412,10 +427,12 @@ main() {
     echo "  Services:    ${SERVICES[*]}"
     echo ""
 
-    read -p "Continue with build? [y/N]: " confirm
-    if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
-        echo "Build cancelled."
-        exit 0
+    if [[ "$ASSUME_YES" != true ]]; then
+        read -p "Continue with build? [y/N]: " confirm
+        if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+            echo "Build cancelled."
+            exit 0
+        fi
     fi
 
     # Clean artifacts if requested
@@ -438,9 +455,17 @@ main() {
 
     # Summary
     print_header "Summary"
-    print_success "Images built and pushed successfully!"
+    if [[ "$SKIP_PUSH" == true ]]; then
+        print_success "Images built successfully!"
+    else
+        print_success "Images built and pushed successfully!"
+    fi
     echo ""
-    echo "Images pushed to:"
+    if [[ "$SKIP_PUSH" == true ]]; then
+        echo "Images built:"
+    else
+        echo "Images pushed to:"
+    fi
     for service in "${SERVICES[@]}"; do
         echo "  $final_registry/$service:$IMAGE_TAG"
     done

@@ -11,6 +11,7 @@
 # Options:
 #   -n, --namespace NAMESPACE    Kubernetes namespace (required)
 #   -o, --obaas-release RELEASE  OBaaS platform release name (auto-detected if not provided)
+#   -d, --database DBNAME        OBaaS database name/prefix for azn-server auth secret
 #   --dry-run                    Show what would be done without doing it
 #   -h, --help                   Show this help message
 #
@@ -33,8 +34,12 @@ source "${SCRIPT_DIR}/check_prereqs.sh"
 # =============================================================================
 NAMESPACE=""
 OBAAS_RELEASE=""
+DB_NAME=""
 DRY_RUN=false
 port_forward_pid=""
+APISIX_ADMIN_KEY=""
+OIDC_CLIENT_ID="cloudbank-client"
+OIDC_CLIENT_SECRET=""
 
 # =============================================================================
 # Parse Arguments
@@ -48,6 +53,10 @@ parse_args() {
                 ;;
             -o|--obaas-release)
                 OBAAS_RELEASE="$2"
+                shift 2
+                ;;
+            -d|--database)
+                DB_NAME="$2"
                 shift 2
                 ;;
             --dry-run)
@@ -79,12 +88,14 @@ Usage:
 Options:
   -n, --namespace NAMESPACE    Kubernetes namespace (required)
   -o, --obaas-release RELEASE  OBaaS platform release name (auto-detected if not provided)
+  -d, --database DBNAME        OBaaS database name/prefix for azn-server auth secret
   --dry-run                    Show what would be done without doing it
   -h, --help                   Show this help message
 
 Example:
   ./5-apisix_create_routes.sh -n obaas-dev
   ./5-apisix_create_routes.sh -n obaas-dev -o obaas
+  ./5-apisix_create_routes.sh -n obaas-dev -o obaas -d obaas
 EOF
 }
 
@@ -184,9 +195,9 @@ start_port_forward() {
 
     # Wait for port-forward to be ready
     local attempt_count=0
-    while ! curl -s http://localhost:9180 &>/dev/null; do
+    while ! curl --noproxy '*' -s http://localhost:9180 &>/dev/null; do
         sleep 1
-        ((attempt_count++))
+        ((++attempt_count))
         if [[ $attempt_count -ge 30 ]]; then
             print_error "Port-forward failed to start after 30 seconds"
             return 1
@@ -197,15 +208,76 @@ start_port_forward() {
     return 0
 }
 
+get_oidc_client_secret() {
+    local auth_secret_name="${DB_NAME}-azn-server-auth"
+
+    print_step "Getting OAuth client secret from secret $auth_secret_name..."
+
+    OIDC_CLIENT_SECRET=$(kubectl get secret "$auth_secret_name" -n "$NAMESPACE" \
+        -o jsonpath='{.data.client-secret}' 2>/dev/null | base64 -d)
+
+    if [[ -z "$OIDC_CLIENT_SECRET" ]]; then
+        print_error "Could not read client-secret from secret $auth_secret_name"
+        return 1
+    fi
+
+    print_success "OAuth client secret retrieved"
+    return 0
+}
+
+oidc_plugin() {
+    local required_scope="$1"
+
+    cat << EOF
+        "openid-connect": {
+            "client_id": "$OIDC_CLIENT_ID",
+            "client_secret": "$OIDC_CLIENT_SECRET",
+            "discovery": "http://azn-server.${NAMESPACE}.svc.cluster.local:8080/.well-known/openid-configuration",
+            "scope": "$required_scope",
+            "required_scopes": [
+                "$required_scope"
+            ],
+            "bearer_only": true,
+            "unauth_action": "deny",
+            "ssl_verify": false,
+            "set_access_token_header": true,
+            "access_token_in_authorization_header": true,
+            "set_id_token_header": false,
+            "set_userinfo_header": false,
+            "set_refresh_token_header": false
+        }
+EOF
+}
+
+methods_json() {
+    local json="["
+    local delimiter=""
+    local method
+
+    for method in "$@"; do
+        json+="${delimiter}\"${method}\""
+        delimiter=","
+    done
+
+    json+="]"
+    echo "$json"
+}
+
 create_route() {
     local route_id="$1"
     local route_name="$2"
     local uri_pattern="$3"
     local service_name="$4"
     local description="$5"
+    local extra_plugins="${6:-}"
+    local route_methods="${7:-[\"GET\",\"POST\",\"PUT\",\"DELETE\",\"OPTIONS\",\"HEAD\"]}"
 
     if [[ "$DRY_RUN" == true ]]; then
-        print_info "[DRY-RUN] Would create route: $route_name ($uri_pattern -> $service_name)"
+        if [[ -n "$extra_plugins" ]]; then
+            print_info "[DRY-RUN] Would create protected route: $route_name ($route_methods $uri_pattern -> $service_name)"
+        else
+            print_info "[DRY-RUN] Would create public route: $route_name ($route_methods $uri_pattern -> $service_name)"
+        fi
         return 0
     fi
 
@@ -213,7 +285,22 @@ create_route() {
     temp_response_file=$(mktemp)
 
     local response_code
-    response_code=$(curl -s -w "%{http_code}" -o "$temp_response_file" "http://localhost:9180/apisix/admin/routes/$route_id" \
+    local plugins_json
+    plugins_json="        \"opentelemetry\": {
+           \"sampler\": {
+               \"name\": \"always_on\"
+           }
+        },
+        \"prometheus\": {
+            \"prefer_name\": true
+        }"
+
+    if [[ -n "$extra_plugins" ]]; then
+        plugins_json="$plugins_json,
+$extra_plugins"
+    fi
+
+    response_code=$(curl --noproxy '*' -s -w "%{http_code}" -o "$temp_response_file" "http://localhost:9180/apisix/admin/routes/$route_id" \
         -H "X-API-KEY: $APISIX_ADMIN_KEY" \
         -H "Content-Type: application/json" \
         -X PUT \
@@ -224,28 +311,14 @@ create_route() {
     },
     \"desc\": \"$description\",
     \"uri\": \"$uri_pattern\",
-    \"methods\": [
-        \"GET\",
-        \"POST\",
-        \"PUT\",
-        \"DELETE\",
-        \"OPTIONS\",
-        \"HEAD\"
-    ],
+    \"methods\": $route_methods,
     \"upstream\": {
         \"service_name\": \"$service_name\",
         \"type\": \"roundrobin\",
         \"discovery_type\": \"eureka\"
     },
     \"plugins\": {
-        \"opentelemetry\": {
-           \"sampler\": {
-               \"name\": \"always_on\"
-           }
-        },
-        \"prometheus\": {
-            \"prefer_name\": true
-        }
+$plugins_json
     }
 }")
 
@@ -255,6 +328,36 @@ create_route() {
         return 0
     else
         print_error "Failed to create route: $route_name (HTTP $response_code)"
+        print_error "Response: $(cat "$temp_response_file")"
+        rm -f "$temp_response_file"
+        return 1
+    fi
+}
+
+delete_route_if_present() {
+    local route_id="$1"
+    local route_name="$2"
+
+    if [[ "$DRY_RUN" == true ]]; then
+        print_info "[DRY-RUN] Would remove route if present: $route_name"
+        return 0
+    fi
+
+    local temp_response_file
+    temp_response_file=$(mktemp)
+
+    local response_code
+    response_code=$(curl --noproxy '*' -s -w "%{http_code}" -o "$temp_response_file" \
+        "http://localhost:9180/apisix/admin/routes/$route_id" \
+        -H "X-API-KEY: $APISIX_ADMIN_KEY" \
+        -X DELETE)
+
+    if [[ "$response_code" == "200" || "$response_code" == "202" || "$response_code" == "404" ]]; then
+        print_success "Removed route if present: $route_name"
+        rm -f "$temp_response_file"
+        return 0
+    else
+        print_error "Failed to remove route: $route_name (HTTP $response_code)"
         print_error "Response: $(cat "$temp_response_file")"
         rm -f "$temp_response_file"
         return 1
@@ -271,12 +374,30 @@ create_all_routes() {
 
     local errors=0
 
-    # Define routes: id, name, uri_pattern, service_name, description
-    create_route 1000 "accounts" "/api/v1/account*" "ACCOUNT" "ACCOUNT Service" || ((errors++))
-    create_route 1001 "creditscore" "/api/v1/creditscore*" "CREDITSCORE" "CREDITSCORE Service" || ((errors++))
-    create_route 1002 "customer" "/api/v1/customer*" "CUSTOMER" "CUSTOMER Service" || ((errors++))
-    create_route 1003 "testrunner" "/api/v1/testrunner*" "TESTRUNNER" "TESTRUNNER Service" || ((errors++))
-    create_route 1004 "transfer" "/api/v1/transfer*" "TRANSFER" "TRANSFER Service" || ((errors++))
+    # Define routes: id, name, uri_pattern, service_name, description, optional plugin JSON, optional methods JSON.
+    create_route 999 "account-internal-journal-block" "/api/v1/account/journal*" "ACCOUNT" \
+        "Block external access to internal account journal endpoints" "$(oidc_plugin cloudbank.external-denied)" || ((++errors))
+    create_route 1000 "accounts-read" "/api/v1/account*" "ACCOUNT" "ACCOUNT read APIs" \
+        "$(oidc_plugin cloudbank.read)" "$(methods_json GET HEAD)" || ((++errors))
+    create_route 1001 "creditscore-read" "/api/v1/creditscore*" "CREDITSCORE" "CREDITSCORE read APIs" \
+        "$(oidc_plugin cloudbank.read)" "$(methods_json GET HEAD)" || ((++errors))
+    create_route 1002 "customer-read" "/api/v1/customer*" "CUSTOMER" "CUSTOMER read APIs" \
+        "$(oidc_plugin cloudbank.read)" "$(methods_json GET HEAD)" || ((++errors))
+    create_route 1003 "testrunner" "/api/v1/testrunner*" "TESTRUNNER" "TESTRUNNER Service" \
+        "$(oidc_plugin cloudbank.test)" "$(methods_json POST)" || ((++errors))
+    create_route 1004 "transfer" "/transfer" "TRANSFER" "TRANSFER Service" \
+        "$(oidc_plugin cloudbank.transfer)" "$(methods_json POST)" || ((++errors))
+    create_route 1005 "account-write" "/api/v1/account" "ACCOUNT" "ACCOUNT write APIs" \
+        "$(oidc_plugin cloudbank.write)" "$(methods_json POST)" || ((++errors))
+    create_route 1006 "account-admin" "/api/v1/account*" "ACCOUNT" "ACCOUNT admin APIs" \
+        "$(oidc_plugin cloudbank.admin)" "$(methods_json DELETE)" || ((++errors))
+    create_route 1007 "customer-write" "/api/v1/customer*" "CUSTOMER" "CUSTOMER write APIs" \
+        "$(oidc_plugin cloudbank.write)" "$(methods_json POST PUT)" || ((++errors))
+    create_route 1008 "customer-admin" "/api/v1/customer*" "CUSTOMER" "CUSTOMER admin APIs" \
+        "$(oidc_plugin cloudbank.admin)" "$(methods_json DELETE)" || ((++errors))
+    create_route 1010 "azn-metadata" "/.well-known/*" "AZN-SERVER" "Authorization Server Metadata" || ((++errors))
+    create_route 1011 "azn-oauth2" "/oauth2/*" "AZN-SERVER" "Authorization Server OAuth2 Endpoints" || ((++errors))
+    delete_route_if_present 1012 "azn-user-api" || ((++errors))
 
     if [[ $errors -gt 0 ]]; then
         print_error "$errors route(s) failed to create"
@@ -323,6 +444,10 @@ main() {
         fi
     fi
 
+    if [[ -z "$DB_NAME" ]]; then
+        DB_NAME="$OBAAS_RELEASE"
+    fi
+
     # Get APISIX admin key
     if ! get_apisix_admin_key; then
         exit 1
@@ -332,8 +457,15 @@ main() {
     print_header "Configuration"
     echo "  Namespace:     $NAMESPACE"
     echo "  OBaaS Release: $OBAAS_RELEASE"
+    echo "  Database:      $DB_NAME"
     echo "  Dry Run:       $DRY_RUN"
     echo ""
+
+    if [[ "$DRY_RUN" != true ]]; then
+        if ! get_oidc_client_secret; then
+            exit 1
+        fi
+    fi
 
     # Start port-forward (unless dry-run)
     if [[ "$DRY_RUN" != true ]]; then
@@ -355,7 +487,8 @@ main() {
         print_success "All routes created successfully!"
         echo ""
         echo "Test with:"
-        echo "  curl -s http://<apisix-gateway>/api/v1/testrunner/ping"
+        echo "  curl -s http://<apisix-gateway>/.well-known/oauth-authorization-server"
+        echo "  curl -s -H 'Authorization: Bearer <token>' http://<apisix-gateway>/api/v1/creditscore"
     fi
 }
 

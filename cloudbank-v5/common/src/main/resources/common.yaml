@@ -11,8 +11,8 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.OracleDialect
-        format_sql: true
-    show-sql: true
+        format_sql: false
+    show-sql: false
 
 eureka:
   instance:
@@ -28,12 +28,12 @@ eureka:
 management:
   endpoint:
     health:
-      show-details: always
-      show-components: always
+      show-details: when_authorized
+      show-components: when_authorized
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: health,info,prometheus
   metrics:
     tags:
       application: ${spring.application.name}
@@ -47,19 +47,13 @@ management:
   health:
     probes:
       enabled: true
-  tracing:
-    sampling:
-      probability: 1.0
   info:
     os:
-      enabled: true
+      enabled: false
     env:
-      enabled: true
+      enabled: false
     java:
-      enabled: true
-  observations:
-    key-values:
-      app: ${spring.application.name}
+      enabled: false
 
 logging:
   level:
@@ -70,10 +64,15 @@ logging:
 jdbc:
   datasource-proxy:
     query:
-      enable-logging: true
+      enable-logging: false
       log-level: INFO
-    include-parameter-values: true
+    include-parameter-values: false
 
 request:
   logging:
-    shouldLog: true
+    shouldLog: false
+    include-query-string: false
+    include-payload: false
+    max-payload-length: 0
+    include-headers: false
+    include-client-info: false

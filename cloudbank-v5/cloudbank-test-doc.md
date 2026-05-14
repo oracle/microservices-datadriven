@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide walks you through testing your CloudBank microservices deployment in an Oracle Backend as a Service (OBaaS) environment. You'll verify that all services are functioning correctly, test the distributed transaction capabilities using Long Running Actions (LRA), and explore the observability features built into the platform.
+This guide walks you through testing your secured CloudBank microservices deployment in an Oracle Backend as a Service (OBaaS) environment. You'll verify that the authorization server and protected services are functioning correctly, test the distributed transaction capabilities using Long Running Actions (LRA), and explore the observability features built into the platform.
 
 ## Prerequisites
 
@@ -11,55 +11,123 @@ Before beginning these tests, ensure you have:
 - A running OBaaS environment with CloudBank services deployed
 - `kubectl` command-line tool installed and configured
 - `curl` command-line tool for making HTTP requests
-- `jq` for parsing JSON responses (optional but recommended)
+- `jq` for parsing JSON responses
 - Access to the Kubernetes cluster where CloudBank is deployed
+- Access to the CloudBank OAuth client secrets created by `3-k8s_db_secrets.sh`
+- The azn-server signing-key secret created by `3-k8s_db_secrets.sh`
 
 ## Step 1: Getting Started
 
-### 1.1 Retrieving the External IP Address
+### 1.1 Set Environment Variables
 
-First, you need to obtain the external IP address of your ingress controller. This IP address will be used as the base URL for all API requests.
+Set the namespace, OBaaS release, and database prefix used during installation:
 
-**1.1.1 Get the ingress controller information:**
+```shell
+export NAMESPACE=<namespace>
+export OBAAS_RELEASE=<obaas-release>
+export DB_NAME=<dbname>
+```
 
-**NOTE:** This is only for OCI installations.
+Example:
+
+```shell
+export NAMESPACE=obaas-dev
+export OBAAS_RELEASE=obaas
+export DB_NAME=cbankdb
+```
+
+### 1.2 Retrieving the Gateway Address
+
+First, obtain the APISIX gateway address. This address will be used as the base URL for all API requests.
+
+**1.2.1 Get the APISIX gateway service:**
+
+This works in local and non-ingress environments:
 
 Run the following command:
 
    ```shell
-   kubectl get ingress -n <namespace where OBaaS is installed>
+   kubectl get svc -n $NAMESPACE | grep apisix-gateway
    ```
 
-**1.1.2 Review the output:**
-
-You should see output similar to this:
-
-   ```text
-  NAME           CLASS    HOSTS   ADDRESS           PORTS   AGE
-  obaas-apisix   <none>   *       167.234.211.216   80      19h
-   ```
-
-**1.1.3 Create an environment variable:**
-
-**NOTE:** This is only for OCI installations.
-
-Use the following command to automatically extract and set the external IP address:
+If the service has an external address, set:
 
    ```shell
-   export IP=$(kubectl get ingress obaas-apisix -n <namespace where OBaaS is installed> -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+   export IP=<external-ip-or-host>
    ```
 
-You can verify the IP was set correctly by running:
+For local testing, use a port-forward:
 
    ```shell
-   echo $IP
+   kubectl port-forward -n $NAMESPACE svc/$OBAAS_RELEASE-apisix-gateway 8080:80
    ```
 
-This should display the external IP address (e.g., `146.235.207.230`).
+Then in another terminal:
+
+   ```shell
+   export IP=localhost:8080
+   ```
+
+**1.2.2 OCI ingress option:**
+
+If your environment exposes APISIX through an ingress, you can use:
+
+   ```shell
+   kubectl get ingress -n $NAMESPACE
+   export IP=$(kubectl get ingress $OBAAS_RELEASE-apisix -n $NAMESPACE -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+   ```
+
+### 1.3 Get Access Tokens
+
+Protected CloudBank APIs require OAuth2 bearer tokens from `azn-server`. Use `http://localhost` only with a local port-forward; use HTTPS for any external gateway URL so client secrets and tokens are not sent over plaintext network links.
+
+```shell
+export CLIENT_ID=cloudbank-client
+export CLIENT_SECRET=$(kubectl get secret $DB_NAME-azn-server-auth -n $NAMESPACE \
+  -o jsonpath='{.data.client-secret}' | base64 -d)
+export TEST_CLIENT_ID=cloudbank-test-client
+export TEST_CLIENT_SECRET=$(kubectl get secret $DB_NAME-azn-server-auth -n $NAMESPACE \
+  -o jsonpath='{.data.test-client-secret}' | base64 -d)
+
+export READ_TOKEN=$(curl -s -u "$CLIENT_ID:$CLIENT_SECRET" \
+  -X POST "http://$IP/oauth2/token" \
+  -d grant_type=client_credentials \
+  -d scope=cloudbank.read | jq -r .access_token)
+
+export WRITE_TOKEN=$(curl -s -u "$CLIENT_ID:$CLIENT_SECRET" \
+  -X POST "http://$IP/oauth2/token" \
+  -d grant_type=client_credentials \
+  -d scope="cloudbank.read cloudbank.write" | jq -r .access_token)
+
+export TEST_TOKEN=$(curl -s -u "$TEST_CLIENT_ID:$TEST_CLIENT_SECRET" \
+  -X POST "http://$IP/oauth2/token" \
+  -d grant_type=client_credentials \
+  -d scope=cloudbank.test | jq -r .access_token)
+
+export TRANSFER_TOKEN=$(curl -s -u "$CLIENT_ID:$CLIENT_SECRET" \
+  -X POST "http://$IP/oauth2/token" \
+  -d grant_type=client_credentials \
+  -d scope=cloudbank.transfer | jq -r .access_token)
+```
+
+Verify the authorization server metadata endpoint is public:
+
+```shell
+curl -s http://$IP/.well-known/oauth-authorization-server | jq
+curl -s http://$IP/oauth2/jwks | jq '.keys[].kid'
+```
 
 ---
 
 ## Step 2: Testing Core Services
+
+All API calls in this section go through APISIX and the Spring resource servers. A request without a bearer token should be rejected:
+
+```shell
+curl -i http://$IP/api/v1/creditscore
+```
+
+Expected result: HTTP `401 Unauthorized`.
 
 ### 2.1 Account Service
 
@@ -70,7 +138,14 @@ The Account service manages customer bank accounts including checking and credit
 Execute the following command to retrieve all accounts:
 
 ```shell
-curl -s http://$IP/api/v1/accounts | jq
+curl -s -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/accounts | jq
+```
+
+Choose two valid account IDs from this response for later deposit and transfer tests:
+
+```shell
+FROM_ACCOUNT_ID=<account-id-with-positive-balance>
+TO_ACCOUNT_ID=<another-account-id>
 ```
 
 **2.1.2 Verify the Response:**
@@ -113,7 +188,7 @@ The Customer service handles customer information and profile management.
 To view all customers in the system:
 
 ```shell
-curl -s http://$IP/api/v1/customer | jq
+curl -s -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/customer | jq
 ```
 
 **Expected Response:**
@@ -125,7 +200,6 @@ curl -s http://$IP/api/v1/customer | jq
     "customerId": "qwertysdwr",
     "customerName": "Andy",
     "customerOtherDetails": "Somekind of Info",
-    "customerPassword": "SuperSecret",
     "dateBecameCustomer": "2023-11-02T17:30:12.000+00:00"
   }
 ]
@@ -137,6 +211,7 @@ To create a new customer, send a POST request with customer details:
 
 ```shell
 curl -i -X POST -H 'Content-Type: application/json' \
+  -H "Authorization: Bearer $WRITE_TOKEN" \
   -d '{"customerId": "bobsmith", "customerName": "Bob Smith", "customerEmail": "bob@smith.com"}' \
   http://$IP/api/v1/customer
 ```
@@ -163,7 +238,7 @@ The Credit Score service provides credit scoring information for customers.
 Retrieve the current credit score data:
 
 ```shell
-curl -s http://$IP/api/v1/creditscore | jq
+curl -s -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/creditscore | jq
 ```
 
 **Expected Response:**
@@ -187,11 +262,12 @@ Initiate a check deposit for an existing account:
 
 ```shell
 curl -i -X POST -H 'Content-Type: application/json' \
-  -d '{"accountId": 1, "amount": 256}' \
+  -H "Authorization: Bearer $TEST_TOKEN" \
+  -d "{\"accountId\": ${TO_ACCOUNT_ID}, \"amount\": 256}" \
   http://$IP/api/v1/testrunner/deposit
 ```
 
-**Important:** Replace `1` with an actual account ID from your environment.
+**Important:** Set `TO_ACCOUNT_ID` to an actual account ID from your environment.
 
 **Expected Response:**
 
@@ -209,7 +285,7 @@ Date: Thu, 02 Nov 2023 18:02:06 GMT
 Confirm the deposit was received by checking the service logs:
 
 ```shell
-kubectl logs -n application svc/checks
+kubectl logs -n $NAMESPACE svc/checks
 ```
 
 **Expected Log Entry:**
@@ -223,10 +299,10 @@ Received deposit <CheckDeposit(accountId=1, amount=256)>
 View the journal entries for the account to see the pending deposit:
 
 ```shell
-curl -i http://$IP/api/v1/account/1/journal
+curl -i -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/account/${TO_ACCOUNT_ID}/journal
 ```
 
-Replace `1` with your account number.
+Replace `TO_ACCOUNT_ID` with your account number if you are not using the shell variable.
 
 **Expected Response:**
 
@@ -247,6 +323,7 @@ Process the check clearance using the journal ID from the previous step:
 
 ```shell
 curl -i -X POST -H 'Content-Type: application/json' \
+  -H "Authorization: Bearer $TEST_TOKEN" \
   -d '{"journalId": 1}' \
   http://$IP/api/v1/testrunner/clear
 ```
@@ -269,7 +346,7 @@ Date: Thu, 02 Nov 2023 18:09:17 GMT
 Check the service logs again to confirm clearance was processed:
 
 ```shell
-kubectl logs -n application svc/checks
+kubectl logs -n $NAMESPACE svc/checks
 ```
 
 **Expected Log Entry:**
@@ -283,7 +360,7 @@ Received clearance <Clearance(journalId=1)>
 Check the journal entries again to confirm the deposit has been completed:
 
 ```shell
-curl -i http://$IP/api/v1/account/1/journal
+curl -i -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/account/${TO_ACCOUNT_ID}/journal
 ```
 
 **Expected Response:**
@@ -310,8 +387,8 @@ Long Running Actions provide distributed transaction coordination across microse
 Before performing the transfer, record the initial balances of both accounts:
 
 ```shell
-curl -s http://$IP/api/v1/account/1 | jq
-curl -s http://$IP/api/v1/account/2 | jq
+curl -s -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/account/${TO_ACCOUNT_ID} | jq
+curl -s -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/account/${FROM_ACCOUNT_ID} | jq
 ```
 
 **Note:** Account numbers may differ in your environment. Adjust the account IDs as needed.
@@ -347,10 +424,11 @@ curl -s http://$IP/api/v1/account/2 | jq
 Execute a transfer of funds from one account to another:
 
 ```shell
-curl -X POST "http://$IP/transfer?fromAccount=2&toAccount=1&amount=100"
+curl -X POST -H "Authorization: Bearer $TRANSFER_TOKEN" \
+  "http://$IP/transfer?fromAccount=${FROM_ACCOUNT_ID}&toAccount=${TO_ACCOUNT_ID}&amount=100"
 ```
 
-Adjust the account numbers and amount as needed.
+Adjust the account IDs and amount as needed.
 
 **Expected Response:**
 
@@ -365,8 +443,8 @@ This indicates that both the withdrawal from the source account and the deposit 
 Check both accounts again to confirm the transfer was applied correctly:
 
 ```shell
-curl -s http://$IP/api/v1/account/1 | jq
-curl -s http://$IP/api/v1/account/2 | jq
+curl -s -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/account/${TO_ACCOUNT_ID} | jq
+curl -s -H "Authorization: Bearer $READ_TOKEN" http://$IP/api/v1/account/${FROM_ACCOUNT_ID} | jq
 ```
 
 **Expected Output:**
@@ -404,16 +482,16 @@ Account 2 balance should have decreased by 100:
 Examine the detailed LRA coordination logs:
 
 ```shell
-kubectl logs -n application svc/transfer
+kubectl logs -n $NAMESPACE svc/transfer
 ```
 
 **Expected Log Output:**
 
 ```text
 2023-12-26T16:50:45.138Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : Started new LRA/transfer Id: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/ea98ebae-2358-4dd1-9d7c-09f4550d7567
-2023-12-26T16:50:45.139Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : withdraw accountId = 2, amount = 100
+2023-12-26T16:50:45.139Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : withdraw accountId = <fromAccount>, amount = 100
 2023-12-26T16:50:45.183Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : withdraw succeeded
-2023-12-26T16:50:45.183Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : deposit accountId = 1, amount = 100
+2023-12-26T16:50:45.183Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : deposit accountId = <toAccount>, amount = 100
 2023-12-26T16:50:45.216Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : withdraw succeeded deposit succeeded
 2023-12-26T16:50:45.216Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : LRA/transfer action will be confirm
 2023-12-26T16:50:45.226Z  INFO 1 --- [transfer] [nio-8080-exec-1] [] com.example.transfer.TransferService     : Received confirm for transfer
@@ -426,7 +504,7 @@ These logs show the complete LRA lifecycle: initiation, withdrawal, deposit, and
 
 ## Step 4: Observability and Monitoring
 
-OBaaS includes several built-in observability tools to help you monitor and troubleshoot your microservices.
+OBaaS includes several built-in observability tools to help you monitor and troubleshoot your microservices. CloudBank uses the OBaaS 2.1.0 Java auto-instrumentation model; the Java agent is injected by the platform instead of being packaged as application tracing/exporter dependencies.
 
 ### 4.1 Eureka Service Registry
 
@@ -437,7 +515,7 @@ Eureka provides service discovery, showing all registered microservices.
 Create a port forward to the Eureka service:
 
 ```shell
-kubectl -n eureka port-forward svc/eureka 8761
+kubectl -n $NAMESPACE port-forward svc/eureka 8761
 ```
 
 **4.1.2 Access the Dashboard:**
@@ -450,7 +528,7 @@ http://localhost:8761
 
 **4.1.3 Verify Service Registration:**
 
-The dashboard displays all registered services, their health status, and instance information. Verify that all CloudBank services (account, customer, check, transfer, etc.) appear in the registry.
+The dashboard displays all registered services, their health status, and instance information. Verify that all CloudBank services (`azn-server`, account, customer, checks, creditscore, testrunner, and transfer) appear in the registry.
 
 ---
 
@@ -463,7 +541,7 @@ The Admin Server provides detailed management and monitoring capabilities for Sp
 Create a port forward to the Admin Server:
 
 ```shell
-kubectl port-forward -n admin-server svc/admin-server 8989
+kubectl port-forward -n $NAMESPACE svc/$OBAAS_RELEASE-admin-server 8989
 ```
 
 **4.2.2 Access the Dashboard:**
@@ -489,8 +567,8 @@ SigNoz provides comprehensive observability including distributed tracing, metri
 Get the admin email and password:
 
 ```shell
-kubectl -n observability get secret signoz-authn -o jsonpath='{.data.email}' | base64 -d
-kubectl -n observability get secret signoz-authn -o jsonpath='{.data.password}' | base64 -d
+kubectl -n $NAMESPACE get secret signoz-authn -o jsonpath='{.data.email}' | base64 -d
+kubectl -n $NAMESPACE get secret signoz-authn -o jsonpath='{.data.password}' | base64 -d
 ```
 
 **4.3.2 Create a Port Forward:**
@@ -498,7 +576,7 @@ kubectl -n observability get secret signoz-authn -o jsonpath='{.data.password}' 
 Create a port forward to the SigNoz frontend:
 
 ```shell
-kubectl -n observability port-forward svc/obaas-signoz-frontend 3301:3301
+kubectl -n $NAMESPACE port-forward svc/$OBAAS_RELEASE-signoz 8080:8080
 ```
 
 **4.3.3 Access the Login Page:**
@@ -506,7 +584,7 @@ kubectl -n observability port-forward svc/obaas-signoz-frontend 3301:3301
 Open your browser and navigate to:
 
 ```
-http://localhost:3301/login
+http://localhost:8080/login
 ```
 
 Log in using the email and password retrieved in step 4.3.1.
@@ -537,9 +615,9 @@ To view application logs:
 
 ## Troubleshooting Tips
 
-- **Service Not Responding:** Check that all pods are running using `kubectl get pods -n application`
+- **Service Not Responding:** Check that all pods are running using `kubectl get pods -n $NAMESPACE`
 - **Connection Refused:** Verify the external IP is correct and accessible
-- **401/403 Errors:** Ensure you're using the correct authentication credentials
+- **401/403 Errors:** Ensure you're using a bearer token with the required scope for the route
 - **Transaction Failures:** Review service logs for detailed error messages
 - **Port Forward Issues:** Ensure no other process is using the specified port
 

@@ -509,6 +509,9 @@ prereq_check_db_app_secrets() {
     fi
 
     local secrets=(
+        "${db_name}-azn-server-db-authn"
+        "${db_name}-azn-server-auth"
+        "${db_name}-azn-server-signing-key"
         "${db_name}-account-db-authn"
         "${db_name}-customer-db-authn"
         "${db_name}-transfer-db-authn"
@@ -519,6 +522,15 @@ prereq_check_db_app_secrets() {
     for secret in "${secrets[@]}"; do
         if kubectl get secret "$secret" -n "$namespace" &> /dev/null; then
             print_success "Secret '$secret' exists"
+            if [[ "$secret" == "${db_name}-azn-server-auth" ]]; then
+                for key in client-secret service-client-secret test-client-secret admin-client-secret; do
+                    if [[ -z "$(kubectl get secret "$secret" -n "$namespace" \
+                        -o "jsonpath={.data.${key}}" 2>/dev/null)" ]]; then
+                        print_warning "Secret '$secret' is missing key '$key'"
+                        ((errors++))
+                    fi
+                done
+            fi
         else
             print_warning "Secret '$secret' not found"
             ((errors++))

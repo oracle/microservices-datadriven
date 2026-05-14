@@ -1,0 +1,93 @@
+## Copyright (c) 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+
+# CloudBank Authorization Server - Helm Values
+#
+# Install with (from this directory):
+#   helm install azn-server ../../helm/app-charts/obaas-sample-app -f values.yaml -n <namespace>
+#
+# Upgrade with:
+#   helm upgrade azn-server ../../helm/app-charts/obaas-sample-app -f values.yaml -n <namespace>
+#
+# Uninstall with:
+#   helm uninstall azn-server -n <namespace>
+
+# -----------------------
+# -- Required Configuration
+fullnameOverride: "azn-server"
+
+image:
+  repository: ""  # e.g., us-phoenix-1.ocir.io/mytenancy/cloudbank-v5/azn-server
+  tag: ""         # e.g., 0.0.1-SNAPSHOT
+
+obaas:
+  releaseName: "" # OBaaS platform release name (run: helm list -n <obaas-namespace>)
+  framework: "SPRING_BOOT"
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 10001
+  runAsGroup: 10001
+  fsGroup: 10001
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+
+livenessProbe:
+  httpGet:
+    path: /actuator/health/liveness
+    port: 8080
+  initialDelaySeconds: 90
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 6
+
+readinessProbe:
+  httpGet:
+    path: /actuator/health/readiness
+    port: 8080
+  initialDelaySeconds: 20
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 12
+
+database:
+  aq:
+    enabled: false
+
+
+# -----------------------
+# -- Feature Toggles
+
+eureka:
+  enabled: true
+
+otel:
+  enabled: true
+
+otmm:
+  enabled: false
+
+env:
+  - name: EUREKA_CLIENT_ENABLED
+    value: "true"
+
+# Add deployment-specific secrets before installing:
+#   AZN_USER_REPO_PASSWORD
+#   OBAAS_ADMIN_PASSWORD
+#   OBAAS_USER_PASSWORD
+#   AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_SECRET, if the local default client is enabled
+#   AZN_AUTHORIZATION_SERVER_SERVICE_CLIENT_SECRET, for service-to-service tokens
+#   AZN_AUTHORIZATION_SERVER_TEST_CLIENT_SECRET, for smoke-test tokens
+#   AZN_AUTHORIZATION_SERVER_ADMIN_CLIENT_SECRET, for admin-scope tokens
+#   AZN_AUTHORIZATION_SERVER_SIGNING_KEY_* values for a mounted persistent signing-key secret
+# The default client id is cloudbank-client unless AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_ID overrides it.
+# The CloudBank deployment script mounts <dbname>-azn-server-signing-key at /etc/azn-server/signing.
+
+# imagePullSecrets:
+#   - name: ocir

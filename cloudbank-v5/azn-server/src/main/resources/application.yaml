@@ -1,0 +1,90 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: azn-server
+  cloud:
+    config:
+      import-check:
+        enabled: false
+    # Discovery is opt-in so local runs and tests do not attempt to register.
+    discovery:
+      enabled: ${EUREKA_CLIENT_ENABLED:false}
+  threads:
+    virtual:
+      enabled: true
+
+  datasource:
+    # Runtime connections authenticate directly as the application schema user.
+    url: ${AZN_DATASOURCE_URL:${SPRING_DATASOURCE_URL:}}
+    username: ${AZN_USER_REPO_USERNAME:USER_REPO}
+    password: ${AZN_USER_REPO_PASSWORD}
+    driver-class-name: oracle.jdbc.OracleDriver
+    type: oracle.ucp.jdbc.PoolDataSource
+    oracleucp:
+      connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
+      connection-pool-name: AznServerConnectionPool
+      initial-pool-size: 2
+      min-pool-size: 1
+      max-pool-size: 8
+
+  jpa:
+    # Keep database access inside service/controller methods, not view rendering.
+    open-in-view: false
+    hibernate:
+      # Liquibase owns schema changes; Hibernate only validates the result.
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: false
+
+  liquibase:
+    # Liquibase uses the admin account directly so it can create USER_REPO.
+    change-log: classpath:db/changelog/controller.yaml
+    url: ${AZN_LIQUIBASE_URL:${LIQUIBASE_DATASOURCE_URL:${AZN_DATASOURCE_URL:${SPRING_DATASOURCE_URL:}}}}
+    user: ${AZN_LIQUIBASE_USERNAME:${LIQUIBASE_DATASOURCE_USERNAME:${AZN_DATASOURCE_USERNAME:${SPRING_LIQUIBASE_USER:${SPRING_DATASOURCE_USERNAME:}}}}}
+    password: ${AZN_LIQUIBASE_PASSWORD:${LIQUIBASE_DATASOURCE_PASSWORD:${AZN_DATASOURCE_PASSWORD:${SPRING_LIQUIBASE_PASSWORD:${SPRING_DATASOURCE_PASSWORD:}}}}}
+    parameters:
+      userRepoPassword: ${AZN_USER_REPO_PASSWORD}
+    enabled: ${RUN_LIQUIBASE:true}
+
+azn:
+  bootstrap-users:
+    admin-password: ${OBAAS_ADMIN_PASSWORD:}
+    user-password: ${OBAAS_USER_PASSWORD:}
+
+management:
+  endpoint:
+    health:
+      show-details: when_authorized
+      roles: ACTUATOR
+  endpoints:
+    web:
+      exposure:
+        # Keep actuator surface small; SecurityConfig protects non-health/info endpoints.
+        include: health,info,prometheus
+  health:
+    probes:
+      enabled: true
+
+eureka:
+  instance:
+    hostname: ${spring.application.name}
+    preferIpAddress: true
+  client:
+    # Supported for deployments, disabled by default for local/test startup.
+    service-url:
+      defaultZone: ${EUREKA_SERVER_ADDRESS:http://localhost:8761/eureka/}
+    fetch-registry: true
+    register-with-eureka: true
+    enabled: ${EUREKA_CLIENT_ENABLED:false}
+
+
+# Logging
+logging:
+  level:
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+    oracle.obaas.aznserver: INFO
