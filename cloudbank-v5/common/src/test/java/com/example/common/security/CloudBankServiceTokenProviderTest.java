@@ -25,7 +25,7 @@ class CloudBankServiceTokenProviderTest {
         MockRestServiceServer server = MockRestServiceServer.bindTo(restClientBuilder).build();
         server.expect(once(), requestTo("http://azn-server/oauth2/token"))
                 .andExpect(method(HttpMethod.POST))
-                .andExpect(header(HttpHeaders.AUTHORIZATION, "Basic Y2xvdWRiYW5rLWNsaWVudDpzZWNyZXQ="))
+                .andExpect(header(HttpHeaders.AUTHORIZATION, "Basic Y2xvdWRiYW5rLXNlcnZpY2UtY2xpZW50OnNlY3JldA=="))
                 .andRespond(withSuccess("""
                         {"access_token":"service-token","expires_in":300,"token_type":"Bearer"}
                         """, MediaType.APPLICATION_JSON));
@@ -41,7 +41,7 @@ class CloudBankServiceTokenProviderTest {
     private static CloudBankServiceTokenProperties properties() {
         CloudBankServiceTokenProperties properties = new CloudBankServiceTokenProperties();
         properties.setTokenUri("http://azn-server/oauth2/token");
-        properties.setClientId("cloudbank-client");
+        properties.setClientId("cloudbank-service-client");
         properties.setClientSecret("secret");
         properties.setScope("cloudbank.internal");
         return properties;

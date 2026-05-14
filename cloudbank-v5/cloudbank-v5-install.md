@@ -223,7 +223,7 @@ Use `--yes` for non-interactive automation.
 - Generates Oracle-compatible passwords for each service account
 - Creates Kubernetes secrets with username, password, and service keys
 - Usernames are uppercase (Oracle requirement)
-- Creates the azn-server bootstrap and OAuth client secret used by secured services and APISIX
+- Creates the azn-server bootstrap and scoped OAuth client secrets used by secured services, tests, and APISIX
 - Creates the azn-server persistent OAuth signing-key secret
 - Hides generated plaintext passwords by default; use `--show-passwords` only on a private terminal
 
@@ -254,7 +254,7 @@ kubectl get secret <dbname>-db-priv-authn -n <namespace>
 | Secret | Used By |
 |--------|---------|
 | `<dbname>-azn-server-db-authn` | azn-server database user |
-| `<dbname>-azn-server-auth` | azn-server bootstrap users, default OAuth client, APISIX OIDC client |
+| `<dbname>-azn-server-auth` | azn-server bootstrap users, scoped OAuth clients, APISIX OIDC client |
 | `<dbname>-azn-server-signing-key` | azn-server persistent OAuth token signing key |
 | `<dbname>-account-db-authn` | account, checks, testrunner |
 | `<dbname>-customer-db-authn` | customer |
@@ -262,6 +262,8 @@ kubectl get secret <dbname>-db-priv-authn -n <namespace>
 | `<dbname>-creditscore-db-authn` | creditscore |
 
 Rerunning the script preserves the existing signing-key secret. Use `--delete` only when you intentionally want to rotate the demo signing key; existing access tokens become invalid after rotation.
+
+If you are upgrading an existing secure CloudBank demo that already has `<dbname>-azn-server-auth`, rerun step 3 with `--delete` so the secret includes the scoped client keys `service-client-secret`, `test-client-secret`, and `admin-client-secret`.
 
 ---
 
@@ -308,7 +310,7 @@ kubectl get pods -n <namespace> -w
 **What this script does:**
 - Auto-detects OBaaS release name
 - Retrieves APISIX admin key from the configmap
-- Reads the CloudBank OAuth client secret from `<dbname>-azn-server-auth`
+- Reads the normal API OAuth client secret from `<dbname>-azn-server-auth`
 - Creates a port-forward to the APISIX admin service
 - Creates public authorization-server routes and protected CloudBank API routes using the APISIX Admin API
 - Adds APISIX `openid-connect` bearer-token validation to protected routes and forwards the access token to backend services
@@ -368,19 +370,22 @@ export IP=localhost:8080
 
 ### Get Access Tokens
 
-Protected CloudBank APIs require bearer tokens. The default sample client is created by `3-k8s_db_secrets.sh`.
+Protected CloudBank APIs require bearer tokens. `3-k8s_db_secrets.sh` creates scoped sample clients. Use `http://localhost` only with a local port-forward; use HTTPS for any external gateway URL so client secrets and tokens are not sent over plaintext network links.
 
 ```bash
 export CLIENT_ID=cloudbank-client
 export CLIENT_SECRET=$(kubectl get secret <dbname>-azn-server-auth -n <namespace> \
   -o jsonpath='{.data.client-secret}' | base64 -d)
+export TEST_CLIENT_ID=cloudbank-test-client
+export TEST_CLIENT_SECRET=$(kubectl get secret <dbname>-azn-server-auth -n <namespace> \
+  -o jsonpath='{.data.test-client-secret}' | base64 -d)
 
 export READ_TOKEN=$(curl -s -u "$CLIENT_ID:$CLIENT_SECRET" \
   -X POST "http://$IP/oauth2/token" \
   -d grant_type=client_credentials \
   -d scope=cloudbank.read | jq -r .access_token)
 
-export TEST_TOKEN=$(curl -s -u "$CLIENT_ID:$CLIENT_SECRET" \
+export TEST_TOKEN=$(curl -s -u "$TEST_CLIENT_ID:$TEST_CLIENT_SECRET" \
   -X POST "http://$IP/oauth2/token" \
   -d grant_type=client_credentials \
   -d scope=cloudbank.test | jq -r .access_token)

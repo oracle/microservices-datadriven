@@ -28,6 +28,182 @@ This guide covers:
 - LRA distributed transaction testing (transfer service)
 - Observability and tracing verification
 
+## Security Architecture
+
+CloudBank v5 is secured by a Spring Authorization Server service named `azn-server`, APISIX gateway route protection, and Spring Security resource-server checks in every in-scope Spring service. APISIX is a first line of defense for externally routed traffic, but the services still validate JWTs themselves.
+
+```mermaid
+flowchart LR
+    user[External API client or demo tester]
+    apisix[OBaaS APISIX gateway\nopenid-connect plugin]
+    azn[azn-server\nSpring Authorization Server]
+    jwks[Public JWKS endpoint\n/oauth2/jwks]
+    account[account\nresource server]
+    customer[customer\nresource server]
+    credit[creditscore\nresource server]
+    transfer[transfer\nresource server]
+    checks[checks\nresource server]
+    testrunner[testrunner\nresource server]
+    db[(Oracle Database\nservice schemas + USER_REPO)]
+    k8s[(Kubernetes Secrets\nsame namespace as CloudBank)]
+    signing[azn-server signing-key Secret\nprivate.pem public.pem key-id]
+    apisixAdmin[OBaaS APISIX ConfigMap\nadmin API key]
+
+    user -->|HTTPS or local port-forward| apisix
+    user -->|client credentials grant| apisix
+    apisix -->|/oauth2/token and /.well-known/*| azn
+    apisix -->|validate bearer token and required route scope| jwks
+    apisix -->|forward bearer token| account
+    apisix -->|forward bearer token| customer
+    apisix -->|forward bearer token| credit
+    apisix -->|forward bearer token| transfer
+    apisix -->|forward bearer token| checks
+    apisix -->|forward bearer token| testrunner
+
+    azn -->|publishes public keys| jwks
+    azn -->|reads and writes users, password hashes, OTP hashes| db
+    account --> db
+    customer --> db
+    credit --> db
+    transfer --> db
+    checks --> db
+    testrunner --> db
+
+    k8s -->|env vars for DB and OAuth client secrets| azn
+    k8s -->|env vars for DB and service OAuth secret| account
+    k8s -->|env vars for DB and service OAuth secret| customer
+    k8s -->|env vars for DB and service OAuth secret| credit
+    k8s -->|env vars for DB and service OAuth secret| transfer
+    k8s -->|env vars for DB and service OAuth secret| checks
+    k8s -->|env vars for DB and service OAuth secret| testrunner
+    signing -->|read-only volume mount| azn
+    apisixAdmin -->|read by route script only| apisix
+```
+
+### Security Components
+
+| Component | Security responsibility |
+|-----------|-------------------------|
+| `azn-server` | Issues OAuth2 access tokens, publishes authorization metadata and JWKS, stores demo users in `USER_REPO`, and signs JWTs with the persistent signing key. |
+| APISIX | Exposes public OAuth metadata/token routes, validates bearer tokens on CloudBank API routes, enforces route-level scopes, and forwards the bearer token to services. |
+| Spring resource servers | Validate JWTs from `azn-server` and enforce service-side scopes. This remains the hard authorization boundary. |
+| `common` module | Provides shared Spring Security auto-configuration and a service-token provider for internal service-to-service calls. |
+| Kubernetes Secrets | Store database passwords, OAuth client secrets, bootstrap passwords, and persistent signing-key material. |
+| Oracle Database | Stores application data and `USER_REPO.USERS`, including BCrypt password hashes and BCrypt OTP hashes. |
+
+### Secrets
+
+All CloudBank application secrets are Kubernetes Secrets in the CloudBank namespace. They are created by `3-k8s_db_secrets.sh` and consumed by `4-deploy_all_services.sh`.
+
+```mermaid
+flowchart TD
+    operator[Operator runs\n3-k8s_db_secrets.sh]
+    priv[Existing privileged DB Secret\n&lt;dbname&gt;-db-priv-authn]
+    generated[Generated with OpenSSL randomness\nDB passwords + OAuth client secrets]
+    rsa[Generated RSA signing key\nprivate.pem public.pem key-id]
+    appSecrets[Kubernetes Secrets\n&lt;dbname&gt;-*-db-authn]
+    aznAuth[Kubernetes Secret\n&lt;dbname&gt;-azn-server-auth]
+    signingSecret[Kubernetes Secret\n&lt;dbname&gt;-azn-server-signing-key]
+    deploy[Operator runs\n4-deploy_all_services.sh]
+    pods[CloudBank pods]
+    aznPod[azn-server pod]
+
+    priv -->|TNS service name read| operator
+    operator --> generated
+    operator --> rsa
+    generated --> appSecrets
+    generated --> aznAuth
+    rsa --> signingSecret
+
+    appSecrets -->|database env vars| deploy
+    aznAuth -->|bootstrap and OAuth env vars| deploy
+    signingSecret -->|signing-key volume values| deploy
+    deploy --> pods
+    deploy --> aznPod
+    signingSecret -->|read-only mount at /etc/azn-server/signing| aznPod
+```
+
+| Secret | Key material | Used by | Update behavior |
+|--------|--------------|---------|-----------------|
+| `<dbname>-db-priv-authn` | Existing privileged DB username, password, service name | Secret-generation prerequisites and database bootstrap | Created outside this script. Rotate according to the database/admin process. |
+| `<dbname>-azn-server-db-authn` | `USER_REPO` database password and service name | `azn-server` runtime database access | Recreated with `3-k8s_db_secrets.sh --delete`. |
+| `<dbname>-account-db-authn` and other service DB secrets | Per-service DB password and service name | Runtime database access for each service | Recreated with `3-k8s_db_secrets.sh --delete`. |
+| `<dbname>-azn-server-auth` | `admin-password`, `user-password`, `client-secret`, `service-client-secret`, `test-client-secret`, `admin-client-secret` | `azn-server`, APISIX route setup, service-token provider, smoke tests | Recreated with `3-k8s_db_secrets.sh --delete`. Existing installs must recreate this secret if scoped client keys are missing. |
+| `<dbname>-azn-server-signing-key` | `private.pem`, `public.pem`, `key-id` | JWT signing by `azn-server` | Preserved on normal reruns. Rotate intentionally with `--delete`; existing tokens become invalid. |
+| `<obaas-release>-apisix` ConfigMap | APISIX admin API key | `5-apisix_create_routes.sh` | Managed by OBaaS, read by the route script to create/update APISIX routes. |
+
+### Authentication And Authorization
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Client as API client
+    participant APISIX as APISIX gateway
+    participant Azn as azn-server
+    participant Service as CloudBank service
+    participant DB as Oracle Database
+
+    Client->>APISIX: POST /oauth2/token with client credentials
+    APISIX->>Azn: Forward token request
+    Azn->>Azn: Authenticate OAuth client secret
+    Azn->>Azn: Sign JWT with mounted RSA private key
+    Azn-->>Client: access_token
+
+    Client->>APISIX: API request with Bearer token
+    APISIX->>Azn: Discover metadata and JWKS as needed
+    APISIX->>APISIX: Validate token and required route scope
+    APISIX->>Service: Forward request with Authorization header
+    Service->>Azn: Read JWKS as needed
+    Service->>Service: Validate JWT and enforce service-side scope
+    Service->>DB: Execute authorized operation
+    Service-->>Client: API response
+```
+
+The demo uses scoped OAuth clients instead of one all-powerful client:
+
+| OAuth client | Secret key in `<dbname>-azn-server-auth` | Intended scopes |
+|--------------|------------------------------------------|-----------------|
+| `cloudbank-client` | `client-secret` | `cloudbank.read`, `cloudbank.write`, `cloudbank.transfer` |
+| `cloudbank-service-client` | `service-client-secret` | `cloudbank.internal` |
+| `cloudbank-test-client` | `test-client-secret` | `cloudbank.test` |
+| `cloudbank-admin-client` | `admin-client-secret` | `cloudbank.admin` |
+
+APISIX enforces route-level scopes for externally routed APIs. Services enforce the same or stricter policy internally. Internal service calls use `cloudbank-service-client` to obtain `cloudbank.internal` tokens, and APISIX blocks external access to internal account journal routes with a deny-style route that requires an unissued scope.
+
+### Forgot Password Flow
+
+The forgot-password endpoints are not exposed through APISIX. They are cluster-internal and require `ROLE_ADMIN` basic authentication on `azn-server`. The flow is intentionally admin-assisted for the demo because there is no external email/SMS delivery service.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Admin as Admin operator
+    participant Azn as azn-server /user/api/v1/forgot
+    participant UserRepo as USER_REPO.USERS
+
+    Admin->>Azn: GET /user/api/v1/forgot?username=... with ROLE_ADMIN basic auth
+    Azn->>UserRepo: Find user by username or email
+    UserRepo-->>Azn: username + email, no password or OTP
+    Azn-->>Admin: UserInfoDto
+
+    Admin->>Azn: POST /user/api/v1/forgot with username + one-time password
+    Azn->>Azn: BCrypt-hash the OTP
+    Azn->>UserRepo: Store OTP hash
+    Azn-->>Admin: 200 OK
+
+    Admin->>Azn: PUT /user/api/v1/forgot with username + OTP + new password
+    Azn->>Azn: Validate password complexity
+    Azn->>UserRepo: Load stored password hash and OTP hash
+    Azn->>Azn: Verify OTP and reject password reuse
+    Azn->>UserRepo: Clear OTP and store new BCrypt password hash
+    Azn-->>Admin: Password successfully changed
+```
+
+Important boundaries:
+- `/user/api/v1*` is not routed externally by `5-apisix_create_routes.sh`.
+- Passwords and OTPs are never returned by the API and are stored only as BCrypt hashes.
+- The reset flow should remain admin-only unless a real out-of-band OTP delivery service is added.
+
 ## Project Structure
 
 ```

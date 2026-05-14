@@ -67,9 +67,9 @@ Use OAuth scopes for API authorization. Keep roles mainly as convenient user/cli
 | account | GET | `/api/v1/account/getAccounts/{customerId}` | `/api/v1/account*` | Account read | `SCOPE_cloudbank.read` | Read accounts by customer id. |
 | account | DELETE | `/api/v1/account/{accountId}` | `/api/v1/account*` | Account admin/write | `SCOPE_cloudbank.admin` | Delete account. |
 | account | GET | `/api/v1/account/{accountId}/transactions` | `/api/v1/account*` | Account read | `SCOPE_cloudbank.read` | Read account transactions. |
-| account | POST | `/api/v1/account/journal` | `/api/v1/account*` | Internal write | `SCOPE_cloudbank.internal` | Called by `checks`; service-to-service only. |
+| account | POST | `/api/v1/account/journal` | `/api/v1/account/journal*` block route | Internal write | `SCOPE_cloudbank.internal` | Called by `checks`; service-to-service only. APISIX blocks external access with an unissued scope. |
 | account | GET | `/api/v1/account/{accountId}/journal` | `/api/v1/account*` | Account read | `SCOPE_cloudbank.read` | Read journal entries. |
-| account | POST | `/api/v1/account/journal/{journalId}/clear` | `/api/v1/account*` | Internal write | `SCOPE_cloudbank.internal` | Called by `checks`; service-to-service only. |
+| account | POST | `/api/v1/account/journal/{journalId}/clear` | `/api/v1/account/journal*` block route | Internal write | `SCOPE_cloudbank.internal` | Called by `checks`; service-to-service only. APISIX blocks external access with an unissued scope. |
 | account | POST | `/deposit` | Not currently public route | LRA participant | `SCOPE_cloudbank.internal` | Called by `transfer`; requires LRA header. |
 | account | PUT | `/deposit/complete` | Not currently public route | LRA callback | `SCOPE_cloudbank.internal` | MicroTx completion callback. |
 | account | PUT | `/deposit/compensate` | Not currently public route | LRA callback | `SCOPE_cloudbank.internal` | MicroTx compensation callback. |
@@ -139,9 +139,9 @@ These endpoints come from the planned `azn-server` based on `SPRING_BOOT_3.X`.
 | azn-server | GET/POST | `/oauth2/authorize` | `/oauth2/*` | Auth Server authorize | Authenticated user | Used by authorization-code flows if enabled. |
 | azn-server | GET/POST | `/login` | Optional route TBD | Auth Server login | Public form entry | Spring Security form login for browser flows. Verify whether this should be externally exposed. |
 | azn-server | GET | `/user/api/v1/ping` | Not externally routed | User API health/sample | Cluster-internal only | Explicitly permitted in service config, so do not expose through APISIX. |
-| azn-server | GET | `/user/api/v1/forgot` | Not externally routed | Password reset | Cluster-internal only | Finds user/email details for reset flow; do not expose through APISIX. |
-| azn-server | POST | `/user/api/v1/forgot` | Not externally routed | Password reset | Cluster-internal only | Saves one-time password hash; do not expose through APISIX. |
-| azn-server | PUT | `/user/api/v1/forgot` | Not externally routed | Password reset | Cluster-internal only | Resets password with OTP; do not expose through APISIX. |
+| azn-server | GET | `/user/api/v1/forgot` | Not externally routed | Password reset | `ROLE_ADMIN` basic auth | Finds user/email details for reset flow; do not expose through APISIX. |
+| azn-server | POST | `/user/api/v1/forgot` | Not externally routed | Password reset | `ROLE_ADMIN` basic auth | Saves one-time password hash; do not expose through APISIX. |
+| azn-server | PUT | `/user/api/v1/forgot` | Not externally routed | Password reset | `ROLE_ADMIN` basic auth | Resets password with OTP; do not expose through APISIX. |
 | azn-server | GET | `/user/api/v1/connect` | Not externally routed | User API | Cluster-internal only | Reference requires any of `ADMIN`, `USER`, or `CONFIG_EDITOR`. |
 | azn-server | GET | `/user/api/v1/findUser` | Not externally routed | User admin | Cluster-internal only | Reference requires `ADMIN`. |
 | azn-server | POST | `/user/api/v1/createUser` | Not externally routed | User admin | Cluster-internal only | Reference requires `ADMIN`. |

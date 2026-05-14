@@ -30,18 +30,32 @@ class SecurityConfigTest {
         RegisteredClientRepository repository = securityConfig.localRegisteredClientRepository(
                 new BCryptPasswordEncoder(), "cloudbank-client", "TestClientSecret123!",
                 "http://127.0.0.1:8080/login/oauth2/code/cloudbank-client",
-                "openid,cloudbank.read,cloudbank.transfer,cloudbank.internal,cloudbank.test,azn.users.admin");
+                "openid,cloudbank.read,cloudbank.transfer",
+                "cloudbank-service-client", "ServiceClientSecret123!", "cloudbank.internal",
+                "cloudbank-test-client", "TestOnlyClientSecret123!", "cloudbank.test",
+                "cloudbank-admin-client", "AdminClientSecret123!", "cloudbank.admin");
 
         RegisteredClient client = repository.findByClientId("cloudbank-client");
+        RegisteredClient serviceClient = repository.findByClientId("cloudbank-service-client");
+        RegisteredClient testClient = repository.findByClientId("cloudbank-test-client");
+        RegisteredClient adminClient = repository.findByClientId("cloudbank-admin-client");
 
         assertThat(client).isNotNull();
         assertThat(client.getScopes()).contains(
                 "openid",
                 "cloudbank.read",
-                "cloudbank.transfer",
+                "cloudbank.transfer");
+        assertThat(client.getScopes()).doesNotContain(
+                "cloudbank.admin",
                 "cloudbank.internal",
                 "cloudbank.test",
                 "azn.users.admin");
+        assertThat(serviceClient).isNotNull();
+        assertThat(serviceClient.getScopes()).containsExactlyInAnyOrder("cloudbank.internal");
+        assertThat(testClient).isNotNull();
+        assertThat(testClient.getScopes()).containsExactlyInAnyOrder("cloudbank.test");
+        assertThat(adminClient).isNotNull();
+        assertThat(adminClient.getScopes()).containsExactlyInAnyOrder("cloudbank.admin");
     }
 
     @Test

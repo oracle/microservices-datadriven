@@ -13,7 +13,7 @@ Before beginning these tests, ensure you have:
 - `curl` command-line tool for making HTTP requests
 - `jq` for parsing JSON responses
 - Access to the Kubernetes cluster where CloudBank is deployed
-- Access to the CloudBank OAuth client secret created by `3-k8s_db_secrets.sh`
+- Access to the CloudBank OAuth client secrets created by `3-k8s_db_secrets.sh`
 - The azn-server signing-key secret created by `3-k8s_db_secrets.sh`
 
 ## Step 1: Getting Started
@@ -79,12 +79,15 @@ If your environment exposes APISIX through an ingress, you can use:
 
 ### 1.3 Get Access Tokens
 
-Protected CloudBank APIs require OAuth2 bearer tokens from `azn-server`.
+Protected CloudBank APIs require OAuth2 bearer tokens from `azn-server`. Use `http://localhost` only with a local port-forward; use HTTPS for any external gateway URL so client secrets and tokens are not sent over plaintext network links.
 
 ```shell
 export CLIENT_ID=cloudbank-client
 export CLIENT_SECRET=$(kubectl get secret $DB_NAME-azn-server-auth -n $NAMESPACE \
   -o jsonpath='{.data.client-secret}' | base64 -d)
+export TEST_CLIENT_ID=cloudbank-test-client
+export TEST_CLIENT_SECRET=$(kubectl get secret $DB_NAME-azn-server-auth -n $NAMESPACE \
+  -o jsonpath='{.data.test-client-secret}' | base64 -d)
 
 export READ_TOKEN=$(curl -s -u "$CLIENT_ID:$CLIENT_SECRET" \
   -X POST "http://$IP/oauth2/token" \
@@ -96,7 +99,7 @@ export WRITE_TOKEN=$(curl -s -u "$CLIENT_ID:$CLIENT_SECRET" \
   -d grant_type=client_credentials \
   -d scope="cloudbank.read cloudbank.write" | jq -r .access_token)
 
-export TEST_TOKEN=$(curl -s -u "$CLIENT_ID:$CLIENT_SECRET" \
+export TEST_TOKEN=$(curl -s -u "$TEST_CLIENT_ID:$TEST_CLIENT_SECRET" \
   -X POST "http://$IP/oauth2/token" \
   -d grant_type=client_credentials \
   -d scope=cloudbank.test | jq -r .access_token)

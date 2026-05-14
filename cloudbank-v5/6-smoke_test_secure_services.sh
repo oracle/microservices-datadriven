@@ -30,6 +30,8 @@ FROM_ACCOUNT_ID=""
 TO_ACCOUNT_ID=""
 CLIENT_ID="cloudbank-client"
 CLIENT_SECRET=""
+TEST_CLIENT_ID="cloudbank-test-client"
+TEST_CLIENT_SECRET=""
 READ_TOKEN=""
 TEST_TOKEN=""
 TRANSFER_TOKEN=""
@@ -213,23 +215,31 @@ start_gateway_port_forward() {
 get_client_secret() {
     local auth_secret_name="${DB_NAME}-azn-server-auth"
 
-    print_step "Reading OAuth client secret from $auth_secret_name..."
+    print_step "Reading OAuth client secrets from $auth_secret_name..."
     CLIENT_SECRET=$(kubectl get secret "$auth_secret_name" -n "$NAMESPACE" \
         -o jsonpath='{.data.client-secret}' 2>/dev/null | base64 -d)
+    TEST_CLIENT_SECRET=$(kubectl get secret "$auth_secret_name" -n "$NAMESPACE" \
+        -o jsonpath='{.data.test-client-secret}' 2>/dev/null | base64 -d)
 
     if [[ -z "$CLIENT_SECRET" ]]; then
         print_error "Could not read client-secret from secret $auth_secret_name"
         return 1
     fi
+    if [[ -z "$TEST_CLIENT_SECRET" ]]; then
+        print_error "Could not read test-client-secret from secret $auth_secret_name"
+        return 1
+    fi
 
-    print_success "OAuth client secret is available"
+    print_success "OAuth client secrets are available"
 }
 
 get_token() {
     local scope="$1"
+    local client_id="${2:-$CLIENT_ID}"
+    local client_secret="${3:-$CLIENT_SECRET}"
     local token
 
-    token=$(curl --noproxy '*' -s -u "${CLIENT_ID}:${CLIENT_SECRET}" \
+    token=$(curl --noproxy '*' -s -u "${client_id}:${client_secret}" \
         -X POST "${GATEWAY_URL}/oauth2/token" \
         -d grant_type=client_credentials \
         -d "scope=${scope}" | jq -r '.access_token // empty')
@@ -245,7 +255,7 @@ get_token() {
 get_tokens() {
     print_step "Requesting scoped OAuth tokens..."
     READ_TOKEN=$(get_token "cloudbank.read")
-    TEST_TOKEN=$(get_token "cloudbank.test")
+    TEST_TOKEN=$(get_token "cloudbank.test" "$TEST_CLIENT_ID" "$TEST_CLIENT_SECRET")
     TRANSFER_TOKEN=$(get_token "cloudbank.transfer")
     print_success "Scoped OAuth tokens issued"
 }
@@ -344,6 +354,14 @@ run_smoke_tests() {
     status_code=$(request_status /tmp/cloudbank-smoke-user-api.json \
         "${GATEWAY_URL}/user/api/v1/ping")
     record_result "Azn-server user API not externally routed" "404" "$status_code"
+
+    status_code=$(request_status /tmp/cloudbank-smoke-internal-journal.json \
+        -X POST \
+        -H "Authorization: Bearer ${READ_TOKEN}" \
+        -H "Content-Type: application/json" \
+        -d '{"journalId":999999999,"accountId":1,"journalType":"DEPOSIT","journalAmount":1}' \
+        "${GATEWAY_URL}/api/v1/account/journal")
+    record_result "Internal account journal route with read token" "403" "$status_code"
 
     discover_account_ids || true
 

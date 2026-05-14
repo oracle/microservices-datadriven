@@ -367,6 +367,8 @@ create_all_routes() {
     local errors=0
 
     # Define routes: id, name, uri_pattern, service_name, description, optional plugin JSON.
+    create_route 999 "account-internal-journal-block" "/api/v1/account/journal*" "ACCOUNT" \
+        "Block external access to internal account journal endpoints" "$(oidc_plugin cloudbank.external-denied)" || ((++errors))
     create_route 1000 "accounts" "/api/v1/account*" "ACCOUNT" "ACCOUNT Service" "$(oidc_plugin cloudbank.read)" || ((++errors))
     create_route 1001 "creditscore" "/api/v1/creditscore*" "CREDITSCORE" "CREDITSCORE Service" "$(oidc_plugin cloudbank.read)" || ((++errors))
     create_route 1002 "customer" "/api/v1/customer*" "CUSTOMER" "CUSTOMER Service" "$(oidc_plugin cloudbank.read)" || ((++errors))

@@ -496,6 +496,7 @@ public class DbUserRepoController {
      * @return A UserInfoDto object containing username and email
      *         for the user.
      */
+    @PreAuthorize(isAdminUser)
     @GetMapping("/forgot")
     public ResponseEntity<UserInfoDto> getUsernameEmailAndOTP(@RequestParam(required = false) String username,
             @RequestParam(required = false) String email) {
@@ -534,6 +535,7 @@ public class DbUserRepoController {
      *               password.
      * @return HTTP status 200 (OK) if successful or 500/422 for other errors.
      */
+    @PreAuthorize(isAdminUser)
     @PostMapping("/forgot")
     public ResponseEntity<UserInfoDto> createOTP(@RequestBody(required = true) User inUser) {
         if (StringUtils.isNotEmpty(inUser.getUsername()) && StringUtils.isNotEmpty(inUser.getOtp())) {
@@ -570,6 +572,7 @@ public class DbUserRepoController {
      *               updated password.
      * @return HTTP status 200 (OK) if successful or 500/422/409 for other errors.
      */
+    @PreAuthorize(isAdminUser)
     @PutMapping("/forgot")
     public ResponseEntity<?> reset(@RequestBody(required = true) User inUser) {
         if (StringUtils.isNotEmpty(inUser.getUsername()) && StringUtils.isNotEmpty(inUser.getOtp())

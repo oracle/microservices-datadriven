@@ -24,7 +24,7 @@
   - `AZN_USER_REPO_PASSWORD`
   - `ORACTL_ADMIN_PASSWORD`
   - `ORACTL_USER_PASSWORD`
-  - default OAuth client secret for `cloudbank-client`
+  - scoped OAuth client secrets for `cloudbank-client`, `cloudbank-service-client`, `cloudbank-test-client`, and `cloudbank-admin-client`
   - persistent RSA signing-key material used by `azn-server` for OAuth access tokens
 - Harden secret handling in `3-k8s_db_secrets.sh`:
   - do not print generated plaintext passwords by default;
@@ -141,7 +141,7 @@ Completed verification in this pass:
 ## Assumptions
 
 - `azn-server` is the authorization server and issuer for CloudBank's sample deployment.
-- The default sample OAuth client is named `cloudbank-client` and supports client credentials for automation and internal service calls.
+- The default sample OAuth client is named `cloudbank-client` and supports normal API client credentials. Service-to-service, test, and admin scopes use separate sample clients.
 - The default user/bootstrap setup is acceptable for sample/demo use; persistent signing keys are now automated for the demo, while production external client registration storage remains follow-up hardening.
 - APISIX authentication is a gateway hardening layer for externally exposed routes; service-side JWT validation remains the required security boundary for this pass.
 - APISIX plugin selection must use what is available in the installed OBaaS 2.1.0-build.12 APISIX configuration. If a desired plugin is unavailable, preserve token forwarding and document the gap rather than weakening service-side enforcement.

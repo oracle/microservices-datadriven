@@ -12,8 +12,10 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
 import java.util.UUID;
 
 import com.nimbusds.jose.jwk.JWKSet;
@@ -64,9 +66,13 @@ import org.springframework.util.StringUtils;
 public class SecurityConfig {
 
     private static final String DEFAULT_CLIENT_ID = "cloudbank-client";
-    private static final String DEFAULT_CLIENT_SCOPES = "openid,cloudbank.read,cloudbank.write,cloudbank.admin,"
-            + "cloudbank.transfer,cloudbank.internal,cloudbank.test,azn.users.read,azn.users.write,"
-            + "azn.users.admin,actuator.read";
+    private static final String DEFAULT_CLIENT_SCOPES = "openid,cloudbank.read,cloudbank.write,cloudbank.transfer";
+    private static final String DEFAULT_SERVICE_CLIENT_ID = "cloudbank-service-client";
+    private static final String DEFAULT_SERVICE_CLIENT_SCOPES = "cloudbank.internal";
+    private static final String DEFAULT_TEST_CLIENT_ID = "cloudbank-test-client";
+    private static final String DEFAULT_TEST_CLIENT_SCOPES = "cloudbank.test";
+    private static final String DEFAULT_ADMIN_CLIENT_ID = "cloudbank-admin-client";
+    private static final String DEFAULT_ADMIN_CLIENT_SCOPES = "cloudbank.admin";
 
     public static final String ROLE_HIERARCHY = "ROLE_ADMIN > ROLE_USER\n"
             + "ROLE_ADMIN > ROLE_CONFIG_EDITOR\n"
@@ -162,7 +168,6 @@ public class SecurityConfig {
             .authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers("/error/**").permitAll()
                 .requestMatchers("/user/api/v1/ping").permitAll()
-                .requestMatchers("/user/api/v1/forgot").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session ->
@@ -217,6 +222,15 @@ public class SecurityConfig {
      * @param clientSecret configured client secret.
      * @param redirectUri configured authorization-code redirect URI.
      * @param clientScopes comma-delimited OAuth scopes granted to the default client.
+     * @param serviceClientId service-to-service OAuth client id.
+     * @param serviceClientSecret service-to-service OAuth client secret.
+     * @param serviceClientScopes comma-delimited OAuth scopes granted to the service client.
+     * @param testClientId test OAuth client id.
+     * @param testClientSecret test OAuth client secret.
+     * @param testClientScopes comma-delimited OAuth scopes granted to the test client.
+     * @param adminClientId admin OAuth client id.
+     * @param adminClientSecret admin OAuth client secret.
+     * @param adminClientScopes comma-delimited OAuth scopes granted to the admin client.
      * @return a local RegisteredClientRepository.
      */
     @Bean
@@ -229,11 +243,25 @@ public class SecurityConfig {
             @Value("${azn.authorization-server.default-client.redirect-uri:"
                     + "http://127.0.0.1:8080/login/oauth2/code/" + DEFAULT_CLIENT_ID + "}") String redirectUri,
             @Value("${azn.authorization-server.default-client.scopes:" + DEFAULT_CLIENT_SCOPES + "}")
-                    String clientScopes) {
+                    String clientScopes,
+            @Value("${azn.authorization-server.service-client.id:" + DEFAULT_SERVICE_CLIENT_ID + "}")
+                    String serviceClientId,
+            @Value("${azn.authorization-server.service-client.secret:}") String serviceClientSecret,
+            @Value("${azn.authorization-server.service-client.scopes:" + DEFAULT_SERVICE_CLIENT_SCOPES + "}")
+                    String serviceClientScopes,
+            @Value("${azn.authorization-server.test-client.id:" + DEFAULT_TEST_CLIENT_ID + "}") String testClientId,
+            @Value("${azn.authorization-server.test-client.secret:}") String testClientSecret,
+            @Value("${azn.authorization-server.test-client.scopes:" + DEFAULT_TEST_CLIENT_SCOPES + "}")
+                    String testClientScopes,
+            @Value("${azn.authorization-server.admin-client.id:" + DEFAULT_ADMIN_CLIENT_ID + "}") String adminClientId,
+            @Value("${azn.authorization-server.admin-client.secret:}") String adminClientSecret,
+            @Value("${azn.authorization-server.admin-client.scopes:" + DEFAULT_ADMIN_CLIENT_SCOPES + "}")
+                    String adminClientScopes) {
         if (!StringUtils.hasText(clientSecret)) {
             throw new IllegalStateException("azn.authorization-server.default-client.secret must be set when "
                     + "azn.authorization-server.default-client.enabled=true");
         }
+        List<RegisteredClient> registeredClients = new ArrayList<>();
         RegisteredClient.Builder registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId(clientId)
                 .clientSecret(passwordEncoder.encode(clientSecret))
@@ -248,8 +276,16 @@ public class SecurityConfig {
                 .map(String::trim)
                 .filter(StringUtils::hasText)
                 .forEach(registeredClient::scope);
+        registeredClients.add(registeredClient.build());
 
-        return new InMemoryRegisteredClientRepository(registeredClient.build());
+        addClientCredentialsClient(registeredClients, passwordEncoder,
+                serviceClientId, serviceClientSecret, serviceClientScopes);
+        addClientCredentialsClient(registeredClients, passwordEncoder,
+                testClientId, testClientSecret, testClientScopes);
+        addClientCredentialsClient(registeredClients, passwordEncoder,
+                adminClientId, adminClientSecret, adminClientScopes);
+
+        return new InMemoryRegisteredClientRepository(registeredClients);
     }
 
     /**
@@ -314,6 +350,26 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    private static void addClientCredentialsClient(List<RegisteredClient> registeredClients,
+            PasswordEncoder passwordEncoder, String clientId, String clientSecret, String clientScopes) {
+        if (!StringUtils.hasText(clientSecret)) {
+            return;
+        }
+
+        RegisteredClient.Builder registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
+                .clientId(clientId)
+                .clientSecret(passwordEncoder.encode(clientSecret))
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS);
+
+        Arrays.stream(clientScopes.split(","))
+                .map(String::trim)
+                .filter(StringUtils::hasText)
+                .forEach(registeredClient::scope);
+
+        registeredClients.add(registeredClient.build());
     }
 
     private static RSAKey generateRsa() {

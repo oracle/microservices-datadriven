@@ -66,6 +66,20 @@ declare -a SERVICE_ACCOUNT_LIST=(
 # =============================================================================
 # Password Generation
 # =============================================================================
+random_index() {
+    local max="$1"
+    local random_hex
+    random_hex=$(openssl rand -hex 2)
+    echo $((16#$random_hex % max))
+}
+
+random_char() {
+    local chars="$1"
+    local index
+    index=$(random_index "${#chars}")
+    echo "${chars:index:1}"
+}
+
 generate_oracle_password() {
     # Oracle password requirements:
     # - 12-30 characters (we'll use 20)
@@ -87,20 +101,20 @@ generate_oracle_password() {
     local all_chars="${upper_chars}${lower_chars}${digit_chars}${special_chars}"
 
     # Start with an uppercase letter (Oracle requirement: can't start with digit/special)
-    generated_password+="${upper_chars:RANDOM % ${#upper_chars}:1}"
+    generated_password+="$(random_char "$upper_chars")"
 
     # Ensure we have at least 2 of each required type
-    generated_password+="${upper_chars:RANDOM % ${#upper_chars}:1}"
-    generated_password+="${lower_chars:RANDOM % ${#lower_chars}:1}"
-    generated_password+="${lower_chars:RANDOM % ${#lower_chars}:1}"
-    generated_password+="${digit_chars:RANDOM % ${#digit_chars}:1}"
-    generated_password+="${digit_chars:RANDOM % ${#digit_chars}:1}"
-    generated_password+="${special_chars:RANDOM % ${#special_chars}:1}"
-    generated_password+="${special_chars:RANDOM % ${#special_chars}:1}"
+    generated_password+="$(random_char "$upper_chars")"
+    generated_password+="$(random_char "$lower_chars")"
+    generated_password+="$(random_char "$lower_chars")"
+    generated_password+="$(random_char "$digit_chars")"
+    generated_password+="$(random_char "$digit_chars")"
+    generated_password+="$(random_char "$special_chars")"
+    generated_password+="$(random_char "$special_chars")"
 
     # Fill remaining length with random characters from all sets
     for ((index=8; index<password_length; index++)); do
-        generated_password+="${all_chars:RANDOM % ${#all_chars}:1}"
+        generated_password+="$(random_char "$all_chars")"
     done
 
     # Shuffle positions 2-end using Fisher-Yates (keep first char as uppercase)
@@ -117,7 +131,8 @@ generate_oracle_password() {
 
     # Fisher-Yates shuffle
     for ((index=rest_length-1; index>0; index--)); do
-        local random_index=$((RANDOM % (index + 1)))
+        local random_index
+        random_index=$(random_index $((index + 1)))
         local temp_char="${char_array[index]}"
         char_array[index]="${char_array[random_index]}"
         char_array[random_index]="$temp_char"
@@ -208,7 +223,7 @@ Prerequisites:
 
 Secrets created:
   {dbname}-azn-server-db-authn  - azn-server USER_REPO credentials
-  {dbname}-azn-server-auth      - azn-server bootstrap and OAuth client secrets
+  {dbname}-azn-server-auth      - azn-server bootstrap and scoped OAuth client secrets
   {dbname}-azn-server-signing-key - azn-server persistent OAuth signing key
   {dbname}-account-db-authn     - account, checks, testrunner
   {dbname}-customer-db-authn    - customer
@@ -267,6 +282,10 @@ check_prerequisites() {
 
     # Check namespace exists
     if ! prereq_check_namespace "$NAMESPACE"; then
+        return 1
+    fi
+
+    if ! prereq_check_command openssl "OpenSSL" "required"; then
         return 1
     fi
 
@@ -384,6 +403,18 @@ create_secret() {
         if [[ "$DELETE_EXISTING" == true ]]; then
             delete_secret "$secret_name"
         else
+            local missing_keys=0
+            for key in client-secret service-client-secret test-client-secret admin-client-secret; do
+                if [[ -z "$(kubectl get secret "$secret_name" -n "$NAMESPACE" \
+                    -o "jsonpath={.data.${key}}" 2>/dev/null)" ]]; then
+                    print_error "Secret '$secret_name' exists but is missing key '$key'"
+                    ((++missing_keys))
+                fi
+            done
+            if [[ $missing_keys -gt 0 ]]; then
+                print_info "Recreate the auth secret with: ./3-k8s_db_secrets.sh -n $NAMESPACE -d $DB_NAME --delete"
+                return 1
+            fi
             print_warning "Secret '$secret_name' already exists (use --delete to replace)"
             return 0
         fi
@@ -403,13 +434,19 @@ create_auth_server_secret() {
     local admin_password="$2"
     local user_password="$3"
     local client_secret="$4"
+    local service_client_secret="$5"
+    local test_client_secret="$6"
+    local admin_client_secret="$7"
 
     if [[ "$DRY_RUN" == true ]]; then
         print_success "Would create: $secret_name"
         print_info "  admin-password: $(display_secret_value "$admin_password")"
         print_info "  user-password:  $(display_secret_value "$user_password")"
         print_info "  client-secret:  $(display_secret_value "$client_secret")"
-        print_info "  used by: azn-server bootstrap users and default OAuth client"
+        print_info "  service-client-secret: $(display_secret_value "$service_client_secret")"
+        print_info "  test-client-secret:    $(display_secret_value "$test_client_secret")"
+        print_info "  admin-client-secret:   $(display_secret_value "$admin_client_secret")"
+        print_info "  used by: azn-server bootstrap users and scoped OAuth clients"
         return 0
     fi
 
@@ -426,9 +463,12 @@ create_auth_server_secret() {
         --from-literal=admin-password="$admin_password" \
         --from-literal=user-password="$user_password" \
         --from-literal=client-secret="$client_secret" \
+        --from-literal=service-client-secret="$service_client_secret" \
+        --from-literal=test-client-secret="$test_client_secret" \
+        --from-literal=admin-client-secret="$admin_client_secret" \
         &> /dev/null
 
-    print_success "Created: $secret_name (azn-server bootstrap users and default OAuth client)"
+    print_success "Created: $secret_name (azn-server bootstrap users and scoped OAuth clients)"
 }
 
 create_signing_key_secret() {
@@ -553,10 +593,16 @@ main() {
     local azn_admin_password
     local azn_user_password
     local azn_client_secret
+    local azn_service_client_secret
+    local azn_test_client_secret
+    local azn_admin_client_secret
     azn_admin_password=$(generate_oracle_password)
     azn_user_password=$(generate_oracle_password)
     azn_client_secret=$(generate_oracle_password)
-    print_success "Generated azn-server bootstrap and OAuth client secrets"
+    azn_service_client_secret=$(generate_oracle_password)
+    azn_test_client_secret=$(generate_oracle_password)
+    azn_admin_client_secret=$(generate_oracle_password)
+    print_success "Generated azn-server bootstrap and scoped OAuth client secrets"
 
     # Create secrets
     print_header "Creating Secrets"
@@ -579,7 +625,8 @@ main() {
     done
 
     create_auth_server_secret "${DB_NAME}-azn-server-auth" \
-        "$azn_admin_password" "$azn_user_password" "$azn_client_secret"
+        "$azn_admin_password" "$azn_user_password" "$azn_client_secret" \
+        "$azn_service_client_secret" "$azn_test_client_secret" "$azn_admin_client_secret"
     create_signing_key_secret "${DB_NAME}-azn-server-signing-key"
 
     # Summary
@@ -617,6 +664,9 @@ main() {
     done
     printf "  %-35s %-15s %s\n" "${DB_NAME}-azn-server-auth" "bootstrap" "$(display_secret_value "$azn_admin_password")"
     printf "  %-35s %-15s %s\n" "${DB_NAME}-azn-server-auth" "default-client" "$(display_secret_value "$azn_client_secret")"
+    printf "  %-35s %-15s %s\n" "${DB_NAME}-azn-server-auth" "service-client" "$(display_secret_value "$azn_service_client_secret")"
+    printf "  %-35s %-15s %s\n" "${DB_NAME}-azn-server-auth" "test-client" "$(display_secret_value "$azn_test_client_secret")"
+    printf "  %-35s %-15s %s\n" "${DB_NAME}-azn-server-auth" "admin-client" "$(display_secret_value "$azn_admin_client_secret")"
     printf "  %-35s %-15s %s\n" "${DB_NAME}-azn-server-signing-key" "OAuth signing" "<private key hidden>"
     echo ""
     echo "Next step:"

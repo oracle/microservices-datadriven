@@ -79,12 +79,18 @@ class UserApiOracleIT extends OracleIntegrationTestSupport {
                 "roles", "ROLE_USER",
                 "email", "reset-user@example.com"), String.class);
 
-        ResponseEntity<String> createOtpResponse = restTemplate.postForEntity(url("/user/api/v1/forgot"), Map.of(
+        ResponseEntity<String> anonymousCreateOtpResponse = restTemplate.postForEntity(
+                url("/user/api/v1/forgot"),
+                Map.of(
+                        "username", "reset-user",
+                        "otp", "123456"),
+                String.class);
+        ResponseEntity<String> createOtpResponse = admin.postForEntity(url("/user/api/v1/forgot"), Map.of(
                 "username", "reset-user",
                 "otp", "123456"), String.class);
-        ResponseEntity<String> forgotResponse = restTemplate.getForEntity(
+        ResponseEntity<String> forgotResponse = admin.getForEntity(
                 url("/user/api/v1/forgot?username=reset-user"), String.class);
-        ResponseEntity<String> resetResponse = restTemplate.exchange(url("/user/api/v1/forgot"),
+        ResponseEntity<String> resetResponse = admin.exchange(url("/user/api/v1/forgot"),
                 HttpMethod.PUT,
                 new HttpEntity<>(Map.of(
                         "username", "reset-user",
@@ -94,6 +100,7 @@ class UserApiOracleIT extends OracleIntegrationTestSupport {
         ResponseEntity<String> connectResponse = restTemplate.withBasicAuth("reset-user", "ResetPass123!")
                 .getForEntity(url("/user/api/v1/connect"), String.class);
 
+        assertThat(anonymousCreateOtpResponse.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
         assertThat(createOtpResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(forgotResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(forgotResponse.getBody())
