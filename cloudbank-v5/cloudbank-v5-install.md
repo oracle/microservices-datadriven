@@ -494,6 +494,7 @@ kubectl logs -n <namespace> -l app.kubernetes.io/name=account -f
 | Protected APIs return `401` | Get a token from `/oauth2/token` and pass `Authorization: Bearer <token>`. |
 | Protected APIs return `403` | Request the scope required by the route, such as `cloudbank.read`, `cloudbank.test`, or `cloudbank.transfer`. |
 | Token requests fail | Verify `<dbname>-azn-server-auth` exists and that `azn-server` is running. |
+| Tokens fail after `azn-server` restart | Verify `<dbname>-azn-server-signing-key` exists and was not rotated with `--delete`. |
 
 ### Common Commands
 
@@ -511,7 +512,7 @@ kubectl logs <pod> -n <namespace>
 kubectl logs <pod> -n <namespace> --previous
 
 # Check secrets
-kubectl get secrets -n <namespace> | grep db-authn
+kubectl get secrets -n <namespace> | grep -E 'db-authn|azn-server'
 
 # Check db-init job
 kubectl get jobs -n <namespace> | grep db-init
@@ -530,6 +531,7 @@ helm uninstall azn-server account customer transfer checks creditscore testrunne
 ### Delete Secrets
 ```bash
 kubectl delete secret <dbname>-azn-server-db-authn <dbname>-azn-server-auth \
+  <dbname>-azn-server-signing-key \
   <dbname>-account-db-authn <dbname>-customer-db-authn \
   <dbname>-transfer-db-authn <dbname>-creditscore-db-authn -n <namespace>
 ```

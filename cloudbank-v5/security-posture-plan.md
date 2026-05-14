@@ -71,13 +71,28 @@
 
 ## Scanner Findings To Address
 
-- Trivy was run against `cloudbank-v5` with HIGH/CRITICAL vulnerability, secret, and misconfiguration scanners.
+- Trivy `0.69.2` was run against `cloudbank-v5` with HIGH/CRITICAL vulnerability, secret, and misconfiguration scanners on May 13, 2026:
+  - `trivy fs --scanners vuln,secret,misconfig --severity HIGH,CRITICAL --ignore-unfixed --cache-dir /tmp/trivy-cache cloudbank-v5`
+  - Result: zero HIGH/CRITICAL dependency vulnerability findings and zero secret findings.
+  - Residual result: HIGH `DS-0002` non-root-user misconfiguration findings in generated JKube Dockerfiles under `target/`, the generated parent Dockerfile under `target/`, and the out-of-scope Helidon manual Dockerfiles.
+- The in-scope source scan was also run with generated `target/` directories and Helidon service directories excluded:
+  - `trivy fs --scanners vuln,secret,misconfig --severity HIGH,CRITICAL --ignore-unfixed --cache-dir /tmp/trivy-cache --skip-dirs ... cloudbank-v5`
+  - Result: zero HIGH/CRITICAL vulnerability, secret, or misconfiguration findings for the in-scope source tree.
 - Initial CloudBank dependency findings were resolved by moving to the Spring Boot 3.5 line, removing old application-managed OpenTelemetry dependencies, overriding Bouncycastle to `1.84`, overriding Netty to `4.1.133.Final`, and excluding unused native epoll from the MicroTx path.
-- Current Trivy rerun shows zero HIGH/CRITICAL vulnerability findings and zero secret findings.
-- Current remaining Trivy findings are HIGH `DS-0002` non-root-user findings in generated Spring service Dockerfiles under `target/`, the generated parent Dockerfile under `target/`, and Helidon manual Dockerfiles.
-- Helidon Dockerfile findings are out of scope for this round. Generated Spring Dockerfile findings are not edited directly; the in-scope Spring services now set non-root runtime `podSecurityContext` and container `securityContext` values through CloudBank Helm values.
+- Residual `DS-0002` acceptance: generated Dockerfiles under `target/` are build output, not source files edited in this pass. The deployed in-scope Spring services set non-root runtime `podSecurityContext` and container `securityContext` values through CloudBank Helm values. Helidon Dockerfile findings remain out of scope per the explicit "do not touch Helidon services" requirement.
 
 ## Tests And Verification
+
+Completed verification in this pass:
+
+- `mvn -pl azn-server -Dtest=SecurityConfigTest test` passed.
+- `bash -n` passed for the updated CloudBank shell scripts.
+- `3-k8s_db_secrets.sh --dry-run` showed the new `azn-server` auth and signing-key secrets without printing plaintext values.
+- `4-deploy_all_services.sh --dry-run` showed `azn-server` deployed before resource-server services with signing-key env vars and the signing-key Secret mount.
+- `5-apisix_create_routes.sh` applied routes in `obaas-dev`; auth-server metadata/OAuth routes are public, CloudBank routes are protected, and `/user/api/v1*` is not externally routed.
+- `6-smoke_test_secure_services.sh` passed in `obaas-dev`, including public JWKS, unauthenticated `401`, scoped `403`, successful scoped calls, and the APISIX `404` for `azn-server` user-management API.
+- `azn-server` was restarted in `obaas-dev`; the JWK `kid` stayed unchanged before and after restart when the signing-key Secret was mounted.
+- Trivy full and in-scope scans were run as described above.
 
 - Run Maven tests for the updated parent, `common`, `azn-server`, and the six secured Spring services.
 - Add or update tests proving:

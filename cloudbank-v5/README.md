@@ -11,8 +11,10 @@ This guide covers:
 - Database setup with Oracle AI Autonomous Database
 - Kubernetes deployment with Helm
 - Spring Authorization Server and database secret setup
+- Persistent `azn-server` signing-key setup for stable JWT verification across restarts
 - Secured APISIX API gateway configuration
 - OBaaS Java auto-instrumentation for observability
+- Security scan status and residual findings in `security-posture-plan.md`
 
 ### 🧪 Testing Guide
 
