@@ -13,6 +13,7 @@
 #   -d, --db-name DB_NAME        Database name (e.g., mydb)
 #   -s, --priv-secret SECRET     Privileged secret name (default: {dbname}-db-priv-authn)
 #   --delete                     Delete existing secrets before creating
+#   --rotate-db-passwords        Generate new database passwords when replacing existing DB auth secrets
 #   --dry-run                    Show what would be created without creating
 #   --show-passwords             Print generated plaintext passwords (unsafe for shared terminals/logs)
 #   -h, --help                   Show this help message
@@ -50,6 +51,7 @@ DB_NAME=""
 DB_SERVICE=""
 PRIV_SECRET=""
 DELETE_EXISTING=false
+ROTATE_DB_PASSWORDS=false
 DRY_RUN=false
 SHOW_PASSWORDS=false
 
@@ -169,6 +171,10 @@ parse_args() {
                 DELETE_EXISTING=true
                 shift
                 ;;
+            --rotate-db-passwords)
+                ROTATE_DB_PASSWORDS=true
+                shift
+                ;;
             --dry-run)
                 DRY_RUN=true
                 shift
@@ -205,6 +211,7 @@ Options:
   -d, --db-name DB_NAME        Database name (required, e.g., mydb)
   -s, --priv-secret SECRET     Privileged secret name (default: {dbname}-db-priv-authn)
   --delete                     Delete existing secrets before creating
+  --rotate-db-passwords        Generate new database passwords when replacing existing DB auth secrets
   --dry-run                    Show what would be created without creating
   --show-passwords             Print generated plaintext passwords (unsafe for shared terminals/logs)
   -h, --help                   Show this help message
@@ -234,6 +241,7 @@ Example:
   ./3-k8s_db_secrets.sh -n obaas-dev -d mydb
   ./3-k8s_db_secrets.sh -n obaas-dev -d mydb -s my-custom-secret
   ./3-k8s_db_secrets.sh -n obaas-dev -d mydb --delete
+  ./3-k8s_db_secrets.sh -n obaas-dev -d mydb --delete --rotate-db-passwords
   ./3-k8s_db_secrets.sh -n obaas-dev -d mydb --dry-run
   ./3-k8s_db_secrets.sh -n obaas-dev -d mydb --show-passwords
 EOF
@@ -379,6 +387,14 @@ get_db_username_for_account() {
     esac
 }
 
+read_secret_value() {
+    local secret_name="$1"
+    local key="$2"
+
+    kubectl get secret "$secret_name" -n "$NAMESPACE" \
+        -o "jsonpath={.data.${key}}" 2>/dev/null | base64 --decode
+}
+
 create_secret() {
     local secret_name="$1"
     local username="$2"
@@ -403,18 +419,6 @@ create_secret() {
         if [[ "$DELETE_EXISTING" == true ]]; then
             delete_secret "$secret_name"
         else
-            local missing_keys=0
-            for key in client-secret service-client-secret test-client-secret admin-client-secret; do
-                if [[ -z "$(kubectl get secret "$secret_name" -n "$NAMESPACE" \
-                    -o "jsonpath={.data.${key}}" 2>/dev/null)" ]]; then
-                    print_error "Secret '$secret_name' exists but is missing key '$key'"
-                    ((++missing_keys))
-                fi
-            done
-            if [[ $missing_keys -gt 0 ]]; then
-                print_info "Recreate the auth secret with: ./3-k8s_db_secrets.sh -n $NAMESPACE -d $DB_NAME --delete"
-                return 1
-            fi
             print_warning "Secret '$secret_name' already exists (use --delete to replace)"
             return 0
         fi
@@ -454,7 +458,19 @@ create_auth_server_secret() {
         if [[ "$DELETE_EXISTING" == true ]]; then
             delete_secret "$secret_name"
         else
-            print_warning "Secret '$secret_name' already exists (use --delete to replace)"
+            local missing_keys=0
+            for key in admin-password user-password client-secret service-client-secret test-client-secret admin-client-secret; do
+                if [[ -z "$(kubectl get secret "$secret_name" -n "$NAMESPACE" \
+                    -o "jsonpath={.data.${key}}" 2>/dev/null)" ]]; then
+                    print_error "Secret '$secret_name' exists but is missing key '$key'"
+                    ((++missing_keys))
+                fi
+            done
+            if [[ $missing_keys -gt 0 ]]; then
+                print_info "Recreate the auth secret with: ./3-k8s_db_secrets.sh -n $NAMESPACE -d $DB_NAME --delete"
+                return 1
+            fi
+            print_warning "Secret '$secret_name' already exists (use --delete to rotate auth secrets)"
             return 0
         fi
     fi
@@ -565,6 +581,7 @@ main() {
     echo "  TNS Service:  $DB_SERVICE"
     echo "  Dry Run:      $DRY_RUN"
     echo "  Delete First: $DELETE_EXISTING"
+    echo "  Rotate DB Passwords: $ROTATE_DB_PASSWORDS"
     echo "  Show Secrets: $SHOW_PASSWORDS"
     if [[ "$SHOW_PASSWORDS" != true ]]; then
         print_info "Generated plaintext passwords will be hidden. Use --show-passwords only on a private terminal."
@@ -621,6 +638,24 @@ main() {
         local password="${password_values[$index]}"
         local description="${password_descriptions[$index]}"
         local secret_name="${DB_NAME}-${name}-db-authn"
+
+        if [[ "$DELETE_EXISTING" == true && "$ROTATE_DB_PASSWORDS" != true ]] \
+            && kubectl get secret "$secret_name" -n "$NAMESPACE" &> /dev/null; then
+            local existing_username
+            local existing_password
+            existing_username=$(read_secret_value "$secret_name" "username" || true)
+            existing_password=$(read_secret_value "$secret_name" "password" || true)
+
+            if [[ -n "$existing_username" && -n "$existing_password" ]]; then
+                username="$existing_username"
+                password="$existing_password"
+                password_values[$index]="$password"
+                print_warning "Preserving existing database password for: $secret_name"
+            else
+                print_warning "Existing secret '$secret_name' is missing username/password; generating a new database password"
+            fi
+        fi
+
         create_secret "$secret_name" "$username" "$password" "$description"
     done
 
