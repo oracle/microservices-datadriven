@@ -25,18 +25,11 @@ import java.sql.Connection;
 
 public class CreateTxEventQ {
 
-    private static final String username = "testuser";
-    private static final String url = "jdbc:oracle:thin:@//localhost:1521/freepdb1";
-    private static final String password = "Welcome12345";
-    private static final String topicName = "my_jms_teq";
-
     public static void main(String[] args) throws AQException, SQLException, JMSException {
+        TeqConfig config = TeqConfig.fromEnvironment();
 
         // Create DB connection
-        OracleDataSource ds = new OracleDataSource();
-        ds.setURL(url);
-        ds.setUser(username);
-        ds.setPassword(password);
+        OracleDataSource ds = config.createDataSource();
         Connection con = ds.getConnection();
         if (con != null) {
             System.out.println("Connected!");
@@ -54,7 +47,7 @@ public class CreateTxEventQ {
         props.setPayloadType("SYS.AQ$_JMS_TEXT_MESSAGE");
 
         // create queue table, topic and start it
-        Destination myTeq = session.createJMSTransactionalEventQueue(topicName, true);
+        Destination myTeq = session.createJMSTransactionalEventQueue(config.topicName(), true);
         ((AQjmsDestination) myTeq).start(session, true, true);
 
         if (con != null && !con.isClosed()) {

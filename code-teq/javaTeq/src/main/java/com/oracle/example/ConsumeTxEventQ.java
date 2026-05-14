@@ -24,18 +24,11 @@ import oracle.jdbc.pool.OracleDataSource;
 
 public class ConsumeTxEventQ {
 
-    private static final String username = "testuser";
-    private static final String url = "jdbc:oracle:thin:@//localhost:1521/freepdb1";
-    private static final String password = "Welcome12345";
-    private static final String topicName = "my_jms_teq";
-
     public static void main(String[] args) throws AQException, SQLException, JMSException {
+        TeqConfig config = TeqConfig.fromEnvironment();
 
         // Create DB connection
-        OracleDataSource ds = new OracleDataSource();
-        ds.setURL(url);
-        ds.setUser(username);
-        ds.setPassword(password);
+        OracleDataSource ds = config.createDataSource();
         Connection con = ds.getConnection();
         if (con != null) {
             System.out.println("Connected!");
@@ -48,7 +41,7 @@ public class ConsumeTxEventQ {
         var session = (AQjmsSession) conn.createSession(true, Session.AUTO_ACKNOWLEDGE);
 
         // create a subscriber on the topic
-        Topic topic = session.getTopic(username, topicName);
+        Topic topic = session.getTopic(config.username(), config.topicName());
         AQjmsTopicSubscriber subscriber = 
            (AQjmsTopicSubscriber) session.createDurableSubscriber(topic, "my_subscriber");
 
