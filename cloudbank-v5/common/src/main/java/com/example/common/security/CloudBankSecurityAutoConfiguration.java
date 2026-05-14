@@ -123,7 +123,9 @@ public class CloudBankSecurityAutoConfiguration {
     public RestTemplateCustomizer cloudBankServiceTokenRestTemplateCustomizer(
             CloudBankServiceTokenProvider tokenProvider) {
         return restTemplate -> restTemplate.getInterceptors().add((request, body, execution) -> {
-            request.getHeaders().set(HttpHeaders.AUTHORIZATION, tokenProvider.getAuthorizationHeader());
+            if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
+                request.getHeaders().set(HttpHeaders.AUTHORIZATION, tokenProvider.getAuthorizationHeader());
+            }
             return execution.execute(request, body);
         });
     }
@@ -139,7 +141,11 @@ public class CloudBankSecurityAutoConfiguration {
     @ConditionalOnBean(CloudBankServiceTokenProvider.class)
     public RequestInterceptor cloudBankServiceTokenFeignRequestInterceptor(
             CloudBankServiceTokenProvider tokenProvider) {
-        return template -> template.header(HttpHeaders.AUTHORIZATION, tokenProvider.getAuthorizationHeader());
+        return template -> {
+            if (!template.headers().containsKey(HttpHeaders.AUTHORIZATION)) {
+                template.header(HttpHeaders.AUTHORIZATION, tokenProvider.getAuthorizationHeader());
+            }
+        };
     }
 
     private static void authorizeInternalEndpoints(

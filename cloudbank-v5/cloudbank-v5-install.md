@@ -261,7 +261,7 @@ kubectl get secret <dbname>-db-priv-authn -n <namespace>
 | `<dbname>-transfer-db-authn` | transfer |
 | `<dbname>-creditscore-db-authn` | creditscore |
 
-Rerunning the script preserves the existing signing-key secret. Use `--delete` only when you intentionally want to rotate the demo signing key; existing access tokens become invalid after rotation.
+Rerunning the script preserves existing database-password secrets and the existing signing-key secret. With `--delete`, database auth secrets are recreated but existing database usernames/passwords are reused unless `--rotate-db-passwords` is also supplied. Use `--delete` only when you intentionally want to rotate the demo auth secrets and signing key; existing access tokens become invalid after signing-key rotation.
 
 If you are upgrading an existing secure CloudBank demo that already has `<dbname>-azn-server-auth`, rerun step 3 with `--delete` so the secret includes the scoped client keys `service-client-secret`, `test-client-secret`, and `admin-client-secret`.
 
@@ -329,15 +329,20 @@ kubectl get pods -n <namespace> -w
 
 **Routes created:**
 
-| Route | URI Pattern | Service | APISIX Scope |
-|-------|-------------|---------|--------------|
-| 1000 | `/api/v1/account*` | ACCOUNT | `cloudbank.read` |
-| 1001 | `/api/v1/creditscore*` | CREDITSCORE | `cloudbank.read` |
-| 1002 | `/api/v1/customer*` | CUSTOMER | `cloudbank.read` |
-| 1003 | `/api/v1/testrunner*` | TESTRUNNER | `cloudbank.test` |
-| 1004 | `/transfer` | TRANSFER | `cloudbank.transfer` |
-| 1010 | `/.well-known/*` | AZN-SERVER | Public |
-| 1011 | `/oauth2/*` | AZN-SERVER | Public |
+| Route | Methods | URI Pattern | Service | APISIX Scope |
+|-------|---------|-------------|---------|--------------|
+| 999 | All | `/api/v1/account/journal*` | ACCOUNT | `cloudbank.external-denied` |
+| 1000 | GET, HEAD | `/api/v1/account*` | ACCOUNT | `cloudbank.read` |
+| 1001 | GET, HEAD | `/api/v1/creditscore*` | CREDITSCORE | `cloudbank.read` |
+| 1002 | GET, HEAD | `/api/v1/customer*` | CUSTOMER | `cloudbank.read` |
+| 1003 | POST | `/api/v1/testrunner*` | TESTRUNNER | `cloudbank.test` |
+| 1004 | POST | `/transfer` | TRANSFER | `cloudbank.transfer` |
+| 1005 | POST | `/api/v1/account` | ACCOUNT | `cloudbank.write` |
+| 1006 | DELETE | `/api/v1/account*` | ACCOUNT | `cloudbank.admin` |
+| 1007 | POST, PUT | `/api/v1/customer*` | CUSTOMER | `cloudbank.write` |
+| 1008 | DELETE | `/api/v1/customer*` | CUSTOMER | `cloudbank.admin` |
+| 1010 | All | `/.well-known/*` | AZN-SERVER | Public |
+| 1011 | All | `/oauth2/*` | AZN-SERVER | Public |
 
 The `azn-server` user-management API (`/user/api/v1*`) is intentionally not routed through APISIX. It is for cluster-internal or administrative access only.
 
@@ -487,7 +492,7 @@ kubectl logs -n <namespace> -l app.kubernetes.io/name=account -f
 |---------|----------|
 | Connection refused | Verify secrets exist: `kubectl get secrets -n <namespace> \| grep db-authn` |
 | User doesn't exist | Check db-init job: `kubectl logs job/<service>-db-init -n <namespace>` |
-| Wrong password | Recreate secrets: `./3-k8s_db_secrets.sh -n <namespace> -d <dbname> --delete`. This also rotates the demo signing key, so request fresh tokens afterwards. |
+| Wrong password | First verify the database user password matches the Kubernetes secret. If you intentionally need new demo database passwords, recreate secrets with `./3-k8s_db_secrets.sh -n <namespace> -d <dbname> --delete --rotate-db-passwords`, then redeploy. This also rotates demo auth secrets and the signing key, so request fresh tokens afterwards. |
 
 ### APISIX Issues
 
@@ -546,7 +551,7 @@ kubectl delete secret <dbname>-azn-server-db-authn <dbname>-azn-server-auth \
 kubectl port-forward -n <namespace> svc/<obaas-release>-apisix-admin 9180 &
 export APISIX_KEY=$(kubectl -n <namespace> get configmap <obaas-release>-apisix \
   -o jsonpath='{.data.config\.yaml}' | grep -A2 'name.*admin' | grep key | awk '{print $2}')
-for id in 1000 1001 1002 1003 1004 1010 1011; do
+for id in 999 1000 1001 1002 1003 1004 1005 1006 1007 1008 1010 1011; do
   curl -X DELETE "http://localhost:9180/apisix/admin/routes/$id" -H "X-API-KEY: $APISIX_KEY"
 done
 ```

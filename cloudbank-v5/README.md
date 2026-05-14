@@ -126,8 +126,8 @@ flowchart TD
 | Secret | Key material | Used by | Update behavior |
 |--------|--------------|---------|-----------------|
 | `<dbname>-db-priv-authn` | Existing privileged DB username, password, service name | Secret-generation prerequisites and database bootstrap | Created outside this script. Rotate according to the database/admin process. |
-| `<dbname>-azn-server-db-authn` | `USER_REPO` database password and service name | `azn-server` runtime database access | Recreated with `3-k8s_db_secrets.sh --delete`. |
-| `<dbname>-account-db-authn` and other service DB secrets | Per-service DB password and service name | Runtime database access for each service | Recreated with `3-k8s_db_secrets.sh --delete`. |
+| `<dbname>-azn-server-db-authn` | `USER_REPO` database password and service name | `azn-server` runtime database access | Preserved on normal reruns. With `--delete`, the secret is recreated but the existing username/password are reused unless `--rotate-db-passwords` is also supplied. |
+| `<dbname>-account-db-authn` and other service DB secrets | Per-service DB password and service name | Runtime database access for each service | Preserved on normal reruns. With `--delete`, secrets are recreated but existing usernames/passwords are reused unless `--rotate-db-passwords` is also supplied. |
 | `<dbname>-azn-server-auth` | `admin-password`, `user-password`, `client-secret`, `service-client-secret`, `test-client-secret`, `admin-client-secret` | `azn-server`, APISIX route setup, service-token provider, smoke tests | Recreated with `3-k8s_db_secrets.sh --delete`. Existing installs must recreate this secret if scoped client keys are missing. |
 | `<dbname>-azn-server-signing-key` | `private.pem`, `public.pem`, `key-id` | JWT signing by `azn-server` | Preserved on normal reruns. Rotate intentionally with `--delete`; existing tokens become invalid. |
 | `<obaas-release>-apisix` ConfigMap | APISIX admin API key | `5-apisix_create_routes.sh` | Managed by OBaaS, read by the route script to create/update APISIX routes. |
@@ -159,7 +159,7 @@ sequenceDiagram
     Service-->>Client: API response
 ```
 
-APISIX authentication is configured by `5-apisix_create_routes.sh` using the APISIX `openid-connect` plugin in bearer-only mode. A caller first authenticates to `azn-server` at `/oauth2/token` with OAuth client credentials and receives a signed JWT access token. On later API calls, APISIX authenticates the request by validating the `Authorization: Bearer <token>` header against `azn-server` metadata and public keys from `/.well-known/openid-configuration` and `/oauth2/jwks`. APISIX checks the route's required scope, then forwards the same bearer token to the backend service. The backend service validates the JWT again and enforces its own service-side authorization.
+APISIX authentication is configured by `5-apisix_create_routes.sh` using the APISIX `openid-connect` plugin in bearer-only mode. A caller first authenticates to `azn-server` at `/oauth2/token` with OAuth client credentials and receives a signed JWT access token. On later API calls, APISIX authenticates the request by validating the `Authorization: Bearer <token>` header against `azn-server` metadata and public keys from `/.well-known/openid-configuration` and `/oauth2/jwks`. APISIX checks the method-specific route's required scope, then forwards the same bearer token to the backend service. The backend service validates the JWT again and enforces its own service-side authorization.
 
 The demo uses scoped OAuth clients instead of one all-powerful client:
 

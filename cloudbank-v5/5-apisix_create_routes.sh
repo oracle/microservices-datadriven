@@ -249,6 +249,20 @@ oidc_plugin() {
 EOF
 }
 
+methods_json() {
+    local json="["
+    local delimiter=""
+    local method
+
+    for method in "$@"; do
+        json+="${delimiter}\"${method}\""
+        delimiter=","
+    done
+
+    json+="]"
+    echo "$json"
+}
+
 create_route() {
     local route_id="$1"
     local route_name="$2"
@@ -256,12 +270,13 @@ create_route() {
     local service_name="$4"
     local description="$5"
     local extra_plugins="${6:-}"
+    local route_methods="${7:-[\"GET\",\"POST\",\"PUT\",\"DELETE\",\"OPTIONS\",\"HEAD\"]}"
 
     if [[ "$DRY_RUN" == true ]]; then
         if [[ -n "$extra_plugins" ]]; then
-            print_info "[DRY-RUN] Would create protected route: $route_name ($uri_pattern -> $service_name)"
+            print_info "[DRY-RUN] Would create protected route: $route_name ($route_methods $uri_pattern -> $service_name)"
         else
-            print_info "[DRY-RUN] Would create public route: $route_name ($uri_pattern -> $service_name)"
+            print_info "[DRY-RUN] Would create public route: $route_name ($route_methods $uri_pattern -> $service_name)"
         fi
         return 0
     fi
@@ -296,14 +311,7 @@ $extra_plugins"
     },
     \"desc\": \"$description\",
     \"uri\": \"$uri_pattern\",
-    \"methods\": [
-        \"GET\",
-        \"POST\",
-        \"PUT\",
-        \"DELETE\",
-        \"OPTIONS\",
-        \"HEAD\"
-    ],
+    \"methods\": $route_methods,
     \"upstream\": {
         \"service_name\": \"$service_name\",
         \"type\": \"roundrobin\",
@@ -366,14 +374,27 @@ create_all_routes() {
 
     local errors=0
 
-    # Define routes: id, name, uri_pattern, service_name, description, optional plugin JSON.
+    # Define routes: id, name, uri_pattern, service_name, description, optional plugin JSON, optional methods JSON.
     create_route 999 "account-internal-journal-block" "/api/v1/account/journal*" "ACCOUNT" \
         "Block external access to internal account journal endpoints" "$(oidc_plugin cloudbank.external-denied)" || ((++errors))
-    create_route 1000 "accounts" "/api/v1/account*" "ACCOUNT" "ACCOUNT Service" "$(oidc_plugin cloudbank.read)" || ((++errors))
-    create_route 1001 "creditscore" "/api/v1/creditscore*" "CREDITSCORE" "CREDITSCORE Service" "$(oidc_plugin cloudbank.read)" || ((++errors))
-    create_route 1002 "customer" "/api/v1/customer*" "CUSTOMER" "CUSTOMER Service" "$(oidc_plugin cloudbank.read)" || ((++errors))
-    create_route 1003 "testrunner" "/api/v1/testrunner*" "TESTRUNNER" "TESTRUNNER Service" "$(oidc_plugin cloudbank.test)" || ((++errors))
-    create_route 1004 "transfer" "/transfer" "TRANSFER" "TRANSFER Service" "$(oidc_plugin cloudbank.transfer)" || ((++errors))
+    create_route 1000 "accounts-read" "/api/v1/account*" "ACCOUNT" "ACCOUNT read APIs" \
+        "$(oidc_plugin cloudbank.read)" "$(methods_json GET HEAD)" || ((++errors))
+    create_route 1001 "creditscore-read" "/api/v1/creditscore*" "CREDITSCORE" "CREDITSCORE read APIs" \
+        "$(oidc_plugin cloudbank.read)" "$(methods_json GET HEAD)" || ((++errors))
+    create_route 1002 "customer-read" "/api/v1/customer*" "CUSTOMER" "CUSTOMER read APIs" \
+        "$(oidc_plugin cloudbank.read)" "$(methods_json GET HEAD)" || ((++errors))
+    create_route 1003 "testrunner" "/api/v1/testrunner*" "TESTRUNNER" "TESTRUNNER Service" \
+        "$(oidc_plugin cloudbank.test)" "$(methods_json POST)" || ((++errors))
+    create_route 1004 "transfer" "/transfer" "TRANSFER" "TRANSFER Service" \
+        "$(oidc_plugin cloudbank.transfer)" "$(methods_json POST)" || ((++errors))
+    create_route 1005 "account-write" "/api/v1/account" "ACCOUNT" "ACCOUNT write APIs" \
+        "$(oidc_plugin cloudbank.write)" "$(methods_json POST)" || ((++errors))
+    create_route 1006 "account-admin" "/api/v1/account*" "ACCOUNT" "ACCOUNT admin APIs" \
+        "$(oidc_plugin cloudbank.admin)" "$(methods_json DELETE)" || ((++errors))
+    create_route 1007 "customer-write" "/api/v1/customer*" "CUSTOMER" "CUSTOMER write APIs" \
+        "$(oidc_plugin cloudbank.write)" "$(methods_json POST PUT)" || ((++errors))
+    create_route 1008 "customer-admin" "/api/v1/customer*" "CUSTOMER" "CUSTOMER admin APIs" \
+        "$(oidc_plugin cloudbank.admin)" "$(methods_json DELETE)" || ((++errors))
     create_route 1010 "azn-metadata" "/.well-known/*" "AZN-SERVER" "Authorization Server Metadata" || ((++errors))
     create_route 1011 "azn-oauth2" "/oauth2/*" "AZN-SERVER" "Authorization Server OAuth2 Endpoints" || ((++errors))
     delete_route_if_present 1012 "azn-user-api" || ((++errors))
