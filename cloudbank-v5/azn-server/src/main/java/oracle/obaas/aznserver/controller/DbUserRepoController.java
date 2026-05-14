@@ -37,8 +37,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class DbUserRepoController {
 
     public static final String ROLE_ADMIN = "ADMIN";
-    private static final String isAdminUser = "hasRole('ADMIN')";
-    private static final String isUser = "hasRole('USER')";
+    private static final String ADMIN_AUTHORIZATION = "hasRole('ADMIN')";
+    private static final String USER_AUTHORIZATION = "hasRole('USER')";
+    private static final String CONFIG_EDITOR_AUTHORIZATION = "hasRole('CONFIG_EDITOR')";
+    private static final String CONNECT_AUTHORIZATION = "hasAnyRole('ADMIN','USER','CONFIG_EDITOR')";
     private static final Pattern PASSWORD_PATTERN =
             Pattern.compile("^(?=.*[?!$%^*\\-_])(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{12,}$");
 
@@ -64,7 +66,7 @@ public class DbUserRepoController {
      *         response body
      *         in this format: "[ROLE_USER, ROLE_ADMIN, ROLE_CONFIG_EDITOR]".
      */
-    @PreAuthorize("hasAnyRole('ADMIN','USER','CONFIG_EDITOR')")
+    @PreAuthorize(CONNECT_AUTHORIZATION)
     @GetMapping("/connect")
     public ResponseEntity<String> connect() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -93,7 +95,7 @@ public class DbUserRepoController {
      * @return A list of users that match the supplied username, if specified; or
      *         all users if no username is specified.
      */
-    @PreAuthorize(isAdminUser)
+    @PreAuthorize(ADMIN_AUTHORIZATION)
     @GetMapping("/findUser")
     public ResponseEntity<List<User>> getUsers(@RequestParam(required = false) String username) {
 
@@ -137,7 +139,7 @@ public class DbUserRepoController {
      * @return The new user and HTTP status code 201 (created) if successful, 409 if
      *         user exists or 500 if problems.
      */
-    @PreAuthorize(isAdminUser)
+    @PreAuthorize(ADMIN_AUTHORIZATION)
     @PostMapping("/createUser")
     public ResponseEntity<?> createUser(@RequestBody User user) {
 
@@ -196,7 +198,7 @@ public class DbUserRepoController {
      * @return HTTP status 200 (OK) if successful, 403 (Forbidden) if user does
      *         not have necessary permission, or 500 for other errors.
      */
-    @PreAuthorize(isUser)
+    @PreAuthorize(USER_AUTHORIZATION)
     @PutMapping("/updatePassword")
     public ResponseEntity<User> changePassword(@RequestBody UserInfoDto userInfo) {
 
@@ -252,7 +254,7 @@ public class DbUserRepoController {
      * @return HTTP status 200 (OK) if successful, 403 (Forbidden) if user does
      *         not have necessary permission, or 500 for other errors.
      */
-    @PreAuthorize(isAdminUser)
+    @PreAuthorize(ADMIN_AUTHORIZATION)
     @PutMapping("/changeRole")
     public ResponseEntity<User> updateRole(@RequestBody User user) {
 
@@ -292,7 +294,7 @@ public class DbUserRepoController {
      *                 ignoring case
      * @return HTTP status code 200 (OK) if successful, or 500 otherwise.
      */
-    @PreAuthorize(isAdminUser)
+    @PreAuthorize(ADMIN_AUTHORIZATION)
     @DeleteMapping("/deleteUsername")
     public ResponseEntity<Void> deleteUserByUsername(@RequestParam(required = true) String username) {
         try {
@@ -321,7 +323,7 @@ public class DbUserRepoController {
      * @param id Required id, The id of the user to delete.
      * @return HTTP status code 200 (OK) if successful, or 500 otherwise.
      */
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize(ADMIN_AUTHORIZATION)
     @DeleteMapping("/deleteId")
     public ResponseEntity<Void> deleteUserById(@RequestParam(required = true) long id) {
         try {
@@ -344,7 +346,7 @@ public class DbUserRepoController {
      * 
      * @return String with success message
      */
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize(USER_AUTHORIZATION)
     @GetMapping("/pinguser")
     public String pingSecureUser() {
 
@@ -360,7 +362,7 @@ public class DbUserRepoController {
      * 
      * @return String with success message
      */
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize(ADMIN_AUTHORIZATION)
     @GetMapping("/pingadmin")
     public String pingSecureAdmin() {
 
@@ -377,7 +379,7 @@ public class DbUserRepoController {
      * 
      * @return String with success message
      */
-    @PreAuthorize("hasRole('CONFIG_EDITOR')")
+    @PreAuthorize(CONFIG_EDITOR_AUTHORIZATION)
     @GetMapping("/pingceditor")
     public String pingSecureContentEditor() {
 
@@ -441,7 +443,7 @@ public class DbUserRepoController {
      * @return HTTP status 200 (OK) if successful, 403 (Forbidden) if user does
      *         not have necessary permission, or 500 for other errors.
      */
-    @PreAuthorize(isAdminUser)
+    @PreAuthorize(ADMIN_AUTHORIZATION)
     @PutMapping("/changeEmail")
     public ResponseEntity<User> updateEmail(@RequestBody User user) {
 
@@ -496,7 +498,7 @@ public class DbUserRepoController {
      * @return A UserInfoDto object containing username and email
      *         for the user.
      */
-    @PreAuthorize(isAdminUser)
+    @PreAuthorize(ADMIN_AUTHORIZATION)
     @GetMapping("/forgot")
     public ResponseEntity<UserInfoDto> getUsernameEmailAndOTP(@RequestParam(required = false) String username,
             @RequestParam(required = false) String email) {
@@ -535,7 +537,7 @@ public class DbUserRepoController {
      *               password.
      * @return HTTP status 200 (OK) if successful or 500/422 for other errors.
      */
-    @PreAuthorize(isAdminUser)
+    @PreAuthorize(ADMIN_AUTHORIZATION)
     @PostMapping("/forgot")
     public ResponseEntity<UserInfoDto> createOTP(@RequestBody(required = true) User inUser) {
         if (StringUtils.isNotEmpty(inUser.getUsername()) && StringUtils.isNotEmpty(inUser.getOtp())) {
@@ -572,7 +574,7 @@ public class DbUserRepoController {
      *               updated password.
      * @return HTTP status 200 (OK) if successful or 500/422/409 for other errors.
      */
-    @PreAuthorize(isAdminUser)
+    @PreAuthorize(ADMIN_AUTHORIZATION)
     @PutMapping("/forgot")
     public ResponseEntity<?> reset(@RequestBody(required = true) User inUser) {
         if (StringUtils.isNotEmpty(inUser.getUsername()) && StringUtils.isNotEmpty(inUser.getOtp())
