@@ -20,13 +20,13 @@ CloudBank v5 is a reference application demonstrating cloud-native microservices
 
 ## Overview of Installation
 
-The installation process consists of five main steps:
+The installation process consists of five install steps plus verification:
 
 | Step | Script | Description |
 |------|--------|-------------|
 | 1 | `1-oci_repos.sh` | Create container repositories in OCI Registry |
 | 2 | `2-images_build_push.sh` | Build and push microservice container images |
-| 3 | `3-k8s_db_secrets.sh` | Create Kubernetes secrets for database credentials |
+| 3 | `3-k8s_db_secrets.sh` | Create Kubernetes secrets for database credentials, OAuth client credentials, and signing keys |
 | 4 | `4-deploy_all_services.sh` | Deploy all services using Helm |
 | 5 | `5-apisix_create_routes.sh` | Create secured APISIX API Gateway routes |
 
@@ -94,7 +94,7 @@ docker login <region>.ocir.io -u '<tenancy>/<username>'
 # For automation:
 ./2-images_build_push.sh -p <prefix> --yes
 
-# Step 3: Create database secrets (can run while Step 2 is building)
+# Step 3: Create database and authorization secrets (can run while Step 2 is building)
 ./3-k8s_db_secrets.sh -n <namespace> -d <dbname>
 
 # Step 4: Deploy services
@@ -213,7 +213,7 @@ Use `--yes` for non-interactive automation.
 
 ---
 
-## Step 3: Create Database Secrets
+## Step 3: Create Database And Authorization Secrets
 
 **Time estimate:** ~1 minute
 
@@ -297,7 +297,7 @@ Rerunning the script preserves the existing signing-key secret. Use `--delete` o
 kubectl get pods -n <namespace> -w
 ```
 
-**Expected:** All 7 pods show `1/1 Running` within 2-3 minutes.
+**Expected:** All 7 pods show `1/1 Running` within 5-10 minutes. `azn-server` can take longer than the other services during Liquibase and authorization-server startup.
 
 ---
 
@@ -482,14 +482,14 @@ kubectl logs -n <namespace> -l app.kubernetes.io/name=account -f
 |---------|----------|
 | Connection refused | Verify secrets exist: `kubectl get secrets -n <namespace> \| grep db-authn` |
 | User doesn't exist | Check db-init job: `kubectl logs job/<service>-db-init -n <namespace>` |
-| Wrong password | Recreate secrets: `./3-k8s_db_secrets.sh -n <namespace> -d <dbname> --delete` |
+| Wrong password | Recreate secrets: `./3-k8s_db_secrets.sh -n <namespace> -d <dbname> --delete`. This also rotates the demo signing key, so request fresh tokens afterwards. |
 
 ### APISIX Issues
 
 | Problem | Solution |
 |---------|----------|
 | Can't find configmap | Verify OBaaS release: `helm list -n <namespace>`. Use `-o <release>` flag. |
-| Routes not working | Check Eureka registration. Verify gateway has external IP. |
+| Routes not working | Check Eureka registration and verify the gateway has an external IP. If services were just redeployed or restarted, rerun `./5-apisix_create_routes.sh` to refresh APISIX route/discovery state. |
 | Plugin errors | Ensure OBaaS APISIX has `opentelemetry`, `prometheus`, and `openid-connect` plugins enabled. |
 | Protected APIs return `401` | Get a token from `/oauth2/token` and pass `Authorization: Bearer <token>`. |
 | Protected APIs return `403` | Request the scope required by the route, such as `cloudbank.read`, `cloudbank.test`, or `cloudbank.transfer`. |
@@ -568,6 +568,7 @@ done
 
 ## Additional Resources
 
-- [CloudBank README](README.md) - Detailed testing guide
+- [CloudBank README](README.md) - Project overview
+- [CloudBank Testing Guide](cloudbank-test-doc.md) - Detailed testing guide
 - [OBaaS Documentation](https://oracle.github.io/microservices-backend/obaas/)
 - [Report Issues](https://github.com/oracle/microservices-backend/issues)
