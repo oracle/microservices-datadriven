@@ -327,6 +327,10 @@ run_smoke_tests() {
         "${GATEWAY_URL}/api/v1/creditscore")
     record_result "Creditscore with read token" "200" "$status_code"
 
+    status_code=$(request_status /tmp/cloudbank-smoke-user-api.json \
+        "${GATEWAY_URL}/user/api/v1/ping")
+    record_result "Azn-server user API not externally routed" "404" "$status_code"
+
     discover_account_ids || true
 
     if [[ "$READ_ONLY" == true ]]; then

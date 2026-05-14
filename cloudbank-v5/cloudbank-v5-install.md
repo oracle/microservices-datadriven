@@ -331,7 +331,8 @@ kubectl get pods -n <namespace> -w
 | 1004 | `/transfer` | TRANSFER | `cloudbank.transfer` |
 | 1010 | `/.well-known/*` | AZN-SERVER | Public |
 | 1011 | `/oauth2/*` | AZN-SERVER | Public |
-| 1012 | `/user/api/v1*` | AZN-SERVER | Public route; azn-server enforces endpoint security |
+
+The `azn-server` user-management API (`/user/api/v1*`) is intentionally not routed through APISIX. It is for cluster-internal or administrative access only.
 
 ---
 
@@ -533,7 +534,7 @@ kubectl delete secret <dbname>-azn-server-db-authn <dbname>-azn-server-auth \
 kubectl port-forward -n <namespace> svc/<obaas-release>-apisix-admin 9180 &
 export APISIX_KEY=$(kubectl -n <namespace> get configmap <obaas-release>-apisix \
   -o jsonpath='{.data.config\.yaml}' | grep -A2 'name.*admin' | grep key | awk '{print $2}')
-for id in 1000 1001 1002 1003 1004 1010 1011 1012; do
+for id in 1000 1001 1002 1003 1004 1010 1011; do
   curl -X DELETE "http://localhost:9180/apisix/admin/routes/$id" -H "X-API-KEY: $APISIX_KEY"
 done
 ```

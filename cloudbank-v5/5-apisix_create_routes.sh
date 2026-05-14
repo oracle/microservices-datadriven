@@ -326,6 +326,36 @@ $plugins_json
     fi
 }
 
+delete_route_if_present() {
+    local route_id="$1"
+    local route_name="$2"
+
+    if [[ "$DRY_RUN" == true ]]; then
+        print_info "[DRY-RUN] Would remove route if present: $route_name"
+        return 0
+    fi
+
+    local temp_response_file
+    temp_response_file=$(mktemp)
+
+    local response_code
+    response_code=$(curl --noproxy '*' -s -w "%{http_code}" -o "$temp_response_file" \
+        "http://localhost:9180/apisix/admin/routes/$route_id" \
+        -H "X-API-KEY: $APISIX_ADMIN_KEY" \
+        -X DELETE)
+
+    if [[ "$response_code" == "200" || "$response_code" == "202" || "$response_code" == "404" ]]; then
+        print_success "Removed route if present: $route_name"
+        rm -f "$temp_response_file"
+        return 0
+    else
+        print_error "Failed to remove route: $route_name (HTTP $response_code)"
+        print_error "Response: $(cat "$temp_response_file")"
+        rm -f "$temp_response_file"
+        return 1
+    fi
+}
+
 create_all_routes() {
     print_header "Creating APISIX Routes"
 
@@ -344,7 +374,7 @@ create_all_routes() {
     create_route 1004 "transfer" "/transfer" "TRANSFER" "TRANSFER Service" "$(oidc_plugin cloudbank.transfer)" || ((++errors))
     create_route 1010 "azn-metadata" "/.well-known/*" "AZN-SERVER" "Authorization Server Metadata" || ((++errors))
     create_route 1011 "azn-oauth2" "/oauth2/*" "AZN-SERVER" "Authorization Server OAuth2 Endpoints" || ((++errors))
-    create_route 1012 "azn-user-api" "/user/api/v1*" "AZN-SERVER" "Authorization Server User API" || ((++errors))
+    delete_route_if_present 1012 "azn-user-api" || ((++errors))
 
     if [[ $errors -gt 0 ]]; then
         print_error "$errors route(s) failed to create"

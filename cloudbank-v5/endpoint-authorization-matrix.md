@@ -138,21 +138,21 @@ These endpoints come from the planned `azn-server` based on `SPRING_BOOT_3.X`.
 | azn-server | POST | `/oauth2/token` | `/oauth2/*` | Auth Server token | Client auth | Token issuance. Usually client credentials for automation/internal calls. |
 | azn-server | GET/POST | `/oauth2/authorize` | `/oauth2/*` | Auth Server authorize | Authenticated user | Used by authorization-code flows if enabled. |
 | azn-server | GET/POST | `/login` | Optional route TBD | Auth Server login | Public form entry | Spring Security form login for browser flows. Verify whether this should be externally exposed. |
-| azn-server | GET | `/user/api/v1/ping` | `/user/api/v1*` | User API health/sample | Public | Explicitly permitted in reference security config. |
-| azn-server | GET | `/user/api/v1/forgot` | `/user/api/v1*` | Password reset | Public | Finds user/email details for reset flow. Review exposure before production. |
-| azn-server | POST | `/user/api/v1/forgot` | `/user/api/v1*` | Password reset | Public | Saves one-time password hash. Review exposure before production. |
-| azn-server | PUT | `/user/api/v1/forgot` | `/user/api/v1*` | Password reset | Public | Resets password with OTP. Review exposure before production. |
-| azn-server | GET | `/user/api/v1/connect` | `/user/api/v1*` | User API | `SCOPE_azn.users.read` | Reference requires any of `ADMIN`, `USER`, or `CONFIG_EDITOR`. |
-| azn-server | GET | `/user/api/v1/findUser` | `/user/api/v1*` | User admin | `SCOPE_azn.users.read` | Reference requires `ADMIN`. |
-| azn-server | POST | `/user/api/v1/createUser` | `/user/api/v1*` | User admin | `SCOPE_azn.users.write` | Reference requires `ADMIN`. |
-| azn-server | PUT | `/user/api/v1/updatePassword` | `/user/api/v1*` | User self-service/admin | `SCOPE_azn.users.write` | Reference requires `USER`; admin can update others in method logic. |
-| azn-server | PUT | `/user/api/v1/changeRole` | `/user/api/v1*` | User admin | `SCOPE_azn.users.admin` | Reference requires `ADMIN`. |
-| azn-server | PUT | `/user/api/v1/changeEmail` | `/user/api/v1*` | User admin | `SCOPE_azn.users.write` | Reference requires `ADMIN`. |
-| azn-server | DELETE | `/user/api/v1/deleteUsername` | `/user/api/v1*` | User admin | `SCOPE_azn.users.admin` | Reference requires `ADMIN`. |
-| azn-server | DELETE | `/user/api/v1/deleteId` | `/user/api/v1*` | User admin | `SCOPE_azn.users.admin` | Reference requires `ADMIN`. |
-| azn-server | GET | `/user/api/v1/pinguser` | `/user/api/v1*` | User API sample | `SCOPE_azn.users.read` | Reference requires `USER`. |
-| azn-server | GET | `/user/api/v1/pingadmin` | `/user/api/v1*` | User API sample | `SCOPE_azn.users.admin` | Reference requires `ADMIN`. |
-| azn-server | GET | `/user/api/v1/pingceditor` | `/user/api/v1*` | User API sample | `SCOPE_azn.users.write` | Reference requires `CONFIG_EDITOR`. |
+| azn-server | GET | `/user/api/v1/ping` | Not externally routed | User API health/sample | Cluster-internal only | Explicitly permitted in service config, so do not expose through APISIX. |
+| azn-server | GET | `/user/api/v1/forgot` | Not externally routed | Password reset | Cluster-internal only | Finds user/email details for reset flow; do not expose through APISIX. |
+| azn-server | POST | `/user/api/v1/forgot` | Not externally routed | Password reset | Cluster-internal only | Saves one-time password hash; do not expose through APISIX. |
+| azn-server | PUT | `/user/api/v1/forgot` | Not externally routed | Password reset | Cluster-internal only | Resets password with OTP; do not expose through APISIX. |
+| azn-server | GET | `/user/api/v1/connect` | Not externally routed | User API | Cluster-internal only | Reference requires any of `ADMIN`, `USER`, or `CONFIG_EDITOR`. |
+| azn-server | GET | `/user/api/v1/findUser` | Not externally routed | User admin | Cluster-internal only | Reference requires `ADMIN`. |
+| azn-server | POST | `/user/api/v1/createUser` | Not externally routed | User admin | Cluster-internal only | Reference requires `ADMIN`. |
+| azn-server | PUT | `/user/api/v1/updatePassword` | Not externally routed | User self-service/admin | Cluster-internal only | Reference requires `USER`; admin can update others in method logic. |
+| azn-server | PUT | `/user/api/v1/changeRole` | Not externally routed | User admin | Cluster-internal only | Reference requires `ADMIN`. |
+| azn-server | PUT | `/user/api/v1/changeEmail` | Not externally routed | User admin | Cluster-internal only | Reference requires `ADMIN`. |
+| azn-server | DELETE | `/user/api/v1/deleteUsername` | Not externally routed | User admin | Cluster-internal only | Reference requires `ADMIN`. |
+| azn-server | DELETE | `/user/api/v1/deleteId` | Not externally routed | User admin | Cluster-internal only | Reference requires `ADMIN`. |
+| azn-server | GET | `/user/api/v1/pinguser` | Not externally routed | User API sample | Cluster-internal only | Reference requires `USER`. |
+| azn-server | GET | `/user/api/v1/pingadmin` | Not externally routed | User API sample | Cluster-internal only | Reference requires `ADMIN`. |
+| azn-server | GET | `/user/api/v1/pingceditor` | Not externally routed | User API sample | Cluster-internal only | Reference requires `CONFIG_EDITOR`. |
 | azn-server | GET | `/actuator/health` | Usually not externally routed | Operations | Public or Ops TBD | Reference permits health/info. |
 | azn-server | GET | `/actuator/info` | Usually not externally routed | Operations | Public or Ops TBD | Reference permits health/info. |
 | azn-server | GET | `/actuator/prometheus` | Usually not externally routed | Metrics | `SCOPE_actuator.read` or cluster-only public | Reference protects non-health/info actuator endpoints with `ACTUATOR`; decide if SigNoz scraping needs unauthenticated cluster access. |
@@ -166,4 +166,4 @@ These endpoints come from the planned `azn-server` based on `SPRING_BOOT_3.X`.
 | LRA callback policy | Permit callback paths by path/header only, require service token, or both. Must not break MicroTx callbacks. | TBD |
 | Transfer gateway path | APISIX exposes the transfer workflow at `/transfer`, matching the Spring controller. | Done |
 | Testrunner exposure | Decide whether `testrunner` remains externally reachable or becomes admin/test-only. | TBD |
-| Auth-server user API exposure | Decide whether `/user/api/v1*` is externally routed or cluster/admin-only. | TBD |
+| Auth-server user API exposure | Keep `/user/api/v1*` cluster/admin-only; APISIX route script removes stale route `1012` if present. | Done |

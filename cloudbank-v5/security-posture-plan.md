@@ -51,7 +51,7 @@
   - `2-images_build_push.sh`: add `azn-server` to the Spring image build list.
   - `3-k8s_db_secrets.sh`: create or document required azn-server runtime, Liquibase/bootstrap, and OAuth client secrets alongside the existing service database secrets.
   - `4-deploy_all_services.sh`: deploy `azn-server` before secured services and pass auth-related environment values.
-  - `5-apisix_create_routes.sh`: add auth-server routes for `/.well-known/*`, `/oauth2/*`, and `/user/api/v1*`, and add APISIX authentication/token-forwarding plugin configuration to CloudBank routes as required by `endpoint-authorization-matrix.md`.
+  - `5-apisix_create_routes.sh`: add auth-server routes for `/.well-known/*` and `/oauth2/*`, keep `/user/api/v1*` cluster-internal, and add APISIX authentication/token-forwarding plugin configuration to CloudBank routes as required by `endpoint-authorization-matrix.md`.
   - `check_prereqs.sh`: update prerequisite checks if new auth-server, token, or observability validation needs reusable helper functions.
 - Update CloudBank values files only:
   - Add `azn-server/values.yaml`.
