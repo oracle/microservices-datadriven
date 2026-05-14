@@ -159,6 +159,8 @@ sequenceDiagram
     Service-->>Client: API response
 ```
 
+APISIX authentication is configured by `5-apisix_create_routes.sh` using the APISIX `openid-connect` plugin in bearer-only mode. A caller first authenticates to `azn-server` at `/oauth2/token` with OAuth client credentials and receives a signed JWT access token. On later API calls, APISIX authenticates the request by validating the `Authorization: Bearer <token>` header against `azn-server` metadata and public keys from `/.well-known/openid-configuration` and `/oauth2/jwks`. APISIX checks the route's required scope, then forwards the same bearer token to the backend service. The backend service validates the JWT again and enforces its own service-side authorization.
+
 The demo uses scoped OAuth clients instead of one all-powerful client:
 
 | OAuth client | Secret key in `<dbname>-azn-server-auth` | Intended scopes |
