@@ -102,6 +102,9 @@ AppVersion: 2.1.0-build.12
 
 - Add Kafka metrics
 
-# 0.0.14 - TBA
+# 0.0.14 - May 15, 2026
 
 AppVersion: 2.1.0-build.13
+
+- Allow `otelCollectorEndpoint` override in `Instrumentation` resource
+- Update charts to version 0.0.14 and appVersion 2.1.0-build.13
