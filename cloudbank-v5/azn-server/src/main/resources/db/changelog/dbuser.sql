@@ -11,7 +11,16 @@ BEGIN
         EXECUTE IMMEDIATE 'CREATE USER "USER_REPO" IDENTIFIED BY "${userRepoPassword}"';
     END;
 
-    EXECUTE IMMEDIATE 'ALTER USER "USER_REPO" IDENTIFIED BY "${userRepoPassword}" ACCOUNT UNLOCK';
+    BEGIN
+        EXECUTE IMMEDIATE 'ALTER USER "USER_REPO" IDENTIFIED BY "${userRepoPassword}" ACCOUNT UNLOCK';
+    EXCEPTION
+        WHEN OTHERS THEN
+            IF SQLCODE = -28007 THEN
+                EXECUTE IMMEDIATE 'ALTER USER "USER_REPO" ACCOUNT UNLOCK';
+            ELSE
+                RAISE;
+            END IF;
+    END;
 
     SELECT default_tablespace INTO l_tblspace FROM dba_users WHERE username = 'USER_REPO';
 
