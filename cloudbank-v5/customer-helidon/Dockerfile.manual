@@ -17,7 +17,7 @@ ADD pom.xml .
 ADD src/assembly/jib-ready.xml src/assembly/jib-ready.xml
 RUN mvn package -Dmaven.test.skip -Declipselink.weave.skip -DskipOpenApiGenerate
 
-# Do the Maven build with fat JAR!
+# Do the Maven build
 ADD src src
 RUN mvn package -DskipTests
 
