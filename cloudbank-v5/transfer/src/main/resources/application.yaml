@@ -23,7 +23,8 @@ spring:
         enabled: false
   config:
     import: classpath:common.yaml
-    
+
+# Use k8s DNS to lookup the other microservices
 account:
   deposit:
     url: http://account:8080/deposit
