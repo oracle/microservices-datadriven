@@ -15,6 +15,8 @@
 #   -r, --registry REGISTRY      Full container registry path (auto-detected from OCI CLI if not provided)
 #   -p, --prefix PREFIX          Repository prefix for OCIR auto-detection (default: cloudbank-v5)
 #   -t, --tag TAG                Image tag (default: 0.0.1-SNAPSHOT)
+#   --image-pull-secret SECRET   Kubernetes image pull secret for private registries
+#                                (fallback: CLOUDBANK_IMAGE_PULL_SECRET)
 #   -y, --yes                    Do not prompt before deployment
 #   --app-chart CHART            obaas-sample-app chart path/name (default: local repo chart if present)
 #   --dry-run                    Show what would be deployed without deploying
@@ -30,6 +32,7 @@
 # Example:
 #   ./4-deploy_all_services.sh -n obaas-dev -d mydb
 #   ./4-deploy_all_services.sh -n obaas-dev -d mydb -r docker.io/myuser/cloudbank
+#   ./4-deploy_all_services.sh -n obaas-dev -d mydb -r sjc.ocir.io/mytenancy/cloudbank-v5 --image-pull-secret ocir-pull-secret
 
 set -e
 
@@ -54,6 +57,7 @@ IMAGE_TAG="0.0.1-SNAPSHOT"
 DRY_RUN=false
 ASSUME_YES=false
 APP_CHART=""
+IMAGE_PULL_SECRET="${CLOUDBANK_IMAGE_PULL_SECRET:-}"
 DEFAULT_APP_CHART_PATH="$(cd "${SCRIPT_DIR}/.." && pwd)/helm/app-charts/obaas-sample-app"
 ROLLOUT_ID=""
 
@@ -98,6 +102,10 @@ parse_args() {
                 IMAGE_TAG="$2"
                 shift 2
                 ;;
+            --image-pull-secret)
+                IMAGE_PULL_SECRET="$2"
+                shift 2
+                ;;
             -y|--yes)
                 ASSUME_YES=true
                 shift
@@ -139,6 +147,8 @@ Options:
   -r, --registry REGISTRY      Full container registry path (auto-detected from OCI CLI if not provided)
   -p, --prefix PREFIX          Repository prefix for OCIR auto-detection (default: cloudbank-v5)
   -t, --tag TAG                Image tag (default: 0.0.1-SNAPSHOT)
+  --image-pull-secret SECRET   Kubernetes image pull secret for private registries
+                               If omitted, CLOUDBANK_IMAGE_PULL_SECRET is used when set
   -y, --yes                    Do not prompt before deployment
   --app-chart CHART            obaas-sample-app chart path/name
                                (default: local repo chart if present, otherwise obaas/obaas-sample-app)
@@ -159,8 +169,15 @@ Example:
   ./4-deploy_all_services.sh -n obaas-dev -d mydb
   ./4-deploy_all_services.sh -n obaas-dev -d mydb -o obaas
   ./4-deploy_all_services.sh -n obaas-dev -d mydb -r docker.io/myuser/cloudbank
+  ./4-deploy_all_services.sh -n obaas-dev -d mydb -r sjc.ocir.io/mytenancy/cloudbank-v5 --image-pull-secret ocir-pull-secret
   ./4-deploy_all_services.sh -n obaas-dev -d mydb --dry-run
   ./4-deploy_all_services.sh -n obaas-dev -d mydb --yes
+
+Create a pull secret for private registries:
+  kubectl -n <namespace> create secret docker-registry <secret-name> \
+    --docker-server=<registry-host> \
+    --docker-username=<username> \
+    --docker-password=<password>
 EOF
 }
 
@@ -235,6 +252,46 @@ check_prerequisites() {
     return 0
 }
 
+is_local_registry() {
+    local registry="$1"
+    [[ "$registry" == localhost/* || "$registry" == localhost:* ]]
+}
+
+validate_image_pull_secret() {
+    local final_registry="$1"
+
+    if [[ -n "$IMAGE_PULL_SECRET" ]]; then
+        print_step "Checking image pull secret..."
+        if kubectl get secret "$IMAGE_PULL_SECRET" -n "$NAMESPACE" &> /dev/null; then
+            print_success "Image pull secret '$IMAGE_PULL_SECRET' exists in namespace '$NAMESPACE'"
+        else
+            print_error "Image pull secret '$IMAGE_PULL_SECRET' was not found in namespace '$NAMESPACE'"
+            print_info "Create it with:"
+            print_info "  kubectl -n $NAMESPACE create secret docker-registry $IMAGE_PULL_SECRET \\"
+            print_info "    --docker-server=$(echo "$final_registry" | cut -d'/' -f1) \\"
+            print_info "    --docker-username=<username> \\"
+            print_info "    --docker-password=<password>"
+            return 1
+        fi
+    elif ! is_local_registry "$final_registry"; then
+        print_warning "No image pull secret configured."
+        print_info "This is OK for public registries, but private registries may fail with ImagePullBackOff."
+        print_info "Use --image-pull-secret <secret-name> if your registry requires authentication."
+        if [[ "$DRY_RUN" == true ]]; then
+            print_info "Continuing dry-run so the planned deployment commands can be reviewed."
+        elif [[ "$ASSUME_YES" == true ]]; then
+            print_warning "Continuing because --yes was specified."
+        else
+            echo ""
+            read -p "Continue without an image pull secret? [y/N]: " confirm
+            if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+                echo "Deployment cancelled."
+                exit 0
+            fi
+        fi
+    fi
+}
+
 # =============================================================================
 # Deployment
 # =============================================================================
@@ -289,7 +346,10 @@ deploy_service() {
     helm_command+=" --namespace $NAMESPACE"
     helm_command+=" --set image.repository=$image_repository"
     helm_command+=" --set image.tag=$IMAGE_TAG"
-    if [[ "$final_registry" == localhost/* || "$final_registry" == localhost:* ]]; then
+    if [[ -n "$IMAGE_PULL_SECRET" ]]; then
+        helm_command+=" --set imagePullSecrets[0].name=$IMAGE_PULL_SECRET"
+    fi
+    if is_local_registry "$final_registry"; then
         helm_command+=" --set image.pullPolicy=Never"
     fi
     helm_command+=" --set obaas.releaseName=$OBAAS_RELEASE"
@@ -581,6 +641,10 @@ main() {
         fi
     fi
 
+    if ! validate_image_pull_secret "$final_registry"; then
+        exit 1
+    fi
+
     # Show configuration
     print_header "Configuration"
     echo "  Namespace:     $NAMESPACE"
@@ -588,6 +652,7 @@ main() {
     echo "  Database:      $DB_NAME"
     echo "  Registry:      $final_registry"
     echo "  Image Tag:     $IMAGE_TAG"
+    echo "  Pull Secret:   ${IMAGE_PULL_SECRET:-<none>}"
     echo "  App Chart:     $APP_CHART"
     echo "  Dry Run:       $DRY_RUN"
     echo ""

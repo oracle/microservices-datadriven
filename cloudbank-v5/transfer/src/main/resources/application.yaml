@@ -23,18 +23,19 @@ spring:
         enabled: false
   config:
     import: classpath:common.yaml
-    
+
+# Use k8s DNS to lookup the other microservices
 account:
   deposit:
-    url: http://account.obaas-dev:8080/deposit
+    url: http://account:8080/deposit
   withdraw:
-    url: http://account.obaas-dev:8080/withdraw
+    url: http://account:8080/withdraw
 transfer:
   cancel:
-    url: http://transfer.obaas-dev:8080/cancel
+    url: http://transfer:8080/cancel
     process:
-      url: http://transfer.obaas-dev:8080/processcancel
+      url: http://transfer:8080/processcancel
   confirm:
-    url: http://transfer.obaas-dev:8080/confirm
+    url: http://transfer:8080/confirm
     process:
-      url: http://transfer.obaas-dev:8080/processconfirm
+      url: http://transfer:8080/processconfirm
