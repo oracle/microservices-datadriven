@@ -5,7 +5,7 @@
 # Database Initialization Job
 # For container database types the same init steps run inside the database pod;
 # skip this external job to avoid redundant execution.
-{{- if and .Values.database.enabled (ne (include "obaas.database.isContainerDB" .) "true") }}
+{{- if and .Values.database (ne (include "obaas.database.isContainerDB" .) "true") }}
 apiVersion: batch/v1
 kind: Job
 metadata:

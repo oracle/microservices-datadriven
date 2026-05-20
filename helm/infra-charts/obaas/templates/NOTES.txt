@@ -26,7 +26,7 @@ API Gateway & Ingress:
 {{- end }}
 
 Data & State:
-{{- if .Values.database.enabled }}
+{{- if .Values.database }}
   ✓ Database Configuration ({{ .Values.database.type }})
 {{- end }}
 
@@ -34,7 +34,7 @@ Observability:
 {{- if .Values.signoz.enabled }}
   ✓ SigNoz (Observability Platform)
 {{- end }}
-{{- if and (index .Values "oracle-database-exporter").enabled .Values.database.enabled }}
+{{- if and (index .Values "oracle-database-exporter").enabled .Values.database }}
   ✓ Oracle Database Exporter (Database Metrics)
 {{- end }}
 
@@ -93,7 +93,7 @@ SigNoz Observability:
   Credentials: Check secret 'signoz-authn' for email and password
 {{- end }}
 {{- end }}
-{{- if and (index .Values "oracle-database-exporter").enabled .Values.database.enabled }}
+{{- if and (index .Values "oracle-database-exporter").enabled .Values.database }}
 
 Oracle Database Exporter:
   Metrics: http://{{ .Release.Name }}-metrics-exporter.{{ .Release.Namespace }}.svc.cluster.local:9161/metrics
@@ -108,7 +108,7 @@ Config Server:
 ================================================================================
 DATABASE CONFIGURATION
 ================================================================================
-{{- if .Values.database.enabled }}
+{{- if .Values.database }}
 
 Database Type: {{ .Values.database.type }}
 {{- if eq .Values.database.type "ADB-S" }}
@@ -132,26 +132,13 @@ Database Credentials Secret: {{ include "obaas.databaseSecret" . }}
 {{- else }}
   (Auto-generated with random password)
 {{- end }}
-{{- else }}
-
-⚠ Database is not enabled. Some components may not function correctly.
 {{- end }}
 
 ================================================================================
 IMPORTANT NOTES
 ================================================================================
 
-{{- if not .Values.database.enabled }}
-⚠ WARNING: Database is disabled. Services requiring database will not start:
-   - Oracle Database Exporter
-{{- end }}
-
-{{- if and (index .Values "oracle-database-exporter").enabled (not .Values.database.enabled) }}
-⚠ WARNING: Oracle Database Exporter is enabled but database is disabled.
-   Enable database configuration to use the exporter.
-{{- end }}
-
-{{- if and .Values.database.enabled (eq .Values.database.type "ADB-S") }}
+{{- if and .Values.database (eq .Values.database.type "ADB-S") }}
 {{- if not .Values.database.oci_config }}
 ⚠ WARNING: ADB-S database type requires database.oci_config to be set.
 {{- else if and (not .Values.database.oci_config.keySecretName) (not .Values.database.oci_config.oke) }}
@@ -170,7 +157,7 @@ To upgrade this release:
 
 To uninstall this release:
   helm uninstall {{ .Release.Name }} -n {{ .Release.Namespace }}
-{{- if and .Values.database.enabled (eq (include "obaas.database.isContainerDB" .) "true") }}
+{{- if and .Values.database (eq (include "obaas.database.isContainerDB" .) "true") }}
 
 ⚠ WARNING: Uninstalling will PERMANENTLY DELETE the {{ .Values.database.type }} database
   container and ALL its data.

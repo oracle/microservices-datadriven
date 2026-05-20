@@ -10,7 +10,6 @@
 # -----------------------
 # -- Database Configuration
 database:
-  enabled: true
   # SIDB-FREE: Oracle Database Free running as a container in the cluster
   type: "SIDB-FREE"
 

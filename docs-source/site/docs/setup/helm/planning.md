@@ -28,6 +28,8 @@ An Oracle database is a prerequisite for installation, but you may use any kind 
 
 You will need to provide various configuration information to the Helm charts during installation depending on where your database will be deployed.  In each case, you will specify this information in the `database` section of the `values.yaml` file for the `obaas` Helm chart. 
 
+Select the database mode by setting `database.type` to one of the supported values: `SIDB-FREE`, `ADB-FREE`, `ADB-S`, or `OTHER`. Use `SIDB-FREE` or `ADB-FREE` for in-cluster database deployments, `ADB-S` for Autonomous Database deployments, and `OTHER` for non-Autonomous Oracle Database deployments.
+
 | Type of deployment | Information you will need |
 | --- | --- | 
 | Autonomous AI Database (including Globally Distributed) | The OCID of your database, your OCI CLI or SDK configuration details, including your private key, and the password for your `ADMIN` user. | 

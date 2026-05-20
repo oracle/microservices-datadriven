@@ -102,9 +102,13 @@ AppVersion: 2.1.0-build.12
 
 - Add Kafka metrics
 
-# 0.0.14 - May 15, 2026
+# 0.0.14 - May 20, 2026
 
 AppVersion: 2.1.0-build.13
 
 - Allow `otelCollectorEndpoint` override in `Instrumentation` resource
 - Update charts to version 0.0.14 and appVersion 2.1.0-build.13
+- Align `obaas` and `obaas-prereqs` chart `kubeVersion` metadata with the documented Kubernetes 1.34+ minimum requirement.
+- Remove database.enabled parameter; database resources are now controlled by the presence of the database values block
+- Fix Config Server SigNoz metrics scrape path from /metrics to /actuator/prometheus
+- Add template-time validation for database.type, failing fast with a clear error for missing or unsupported database configuration

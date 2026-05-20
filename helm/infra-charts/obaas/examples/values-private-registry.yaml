@@ -191,7 +191,6 @@ oracle-database-exporter:
 database:
   global:
     imagePullSecrets: *imagePullSecrets
-  enabled: true
   # Database type: SIDB-FREE, ADB-FREE, ADB-S, or OTHER
   type: "SIDB-FREE"
   # SQLcl image for database initialization jobs

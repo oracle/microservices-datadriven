@@ -44,7 +44,6 @@
 #
 # =============================================================================
 database:
-  enabled: true
   # Database type: SIDB-FREE, ADB-FREE, ADB-S, or OTHER
   type: "OTHER"
   # SQLcl image for database initialization jobs

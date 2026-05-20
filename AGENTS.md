@@ -310,11 +310,12 @@ helm template <app-release> helm/infra-charts/obaas -n <application-namespace> -
 
 ### Database Values
 
+OBaaS requires database access. Do not set an `enabled` field under `database`; it is not a chart value. Use `database.type` to choose the database mode.
+
 For `SIDB-FREE`:
 
 ```yaml
 database:
-  enabled: true
   type: "SIDB-FREE"
 ```
 
@@ -329,7 +330,6 @@ For `ADB-FREE`:
 
 ```yaml
 database:
-  enabled: true
   type: "ADB-FREE"
 ```
 
@@ -345,7 +345,6 @@ For `ADB-S` and other external Autonomous Database deployments:
 
 ```yaml
 database:
-  enabled: true
   type: "ADB-S"
   privAuthN:
     secretName: "db-priv-authn"
@@ -398,7 +397,6 @@ For `OTHER`:
 
 ```yaml
 database:
-  enabled: true
   type: "OTHER"
   other:
     dsn: ""
@@ -462,7 +460,7 @@ For multi-tenant ingress-nginx installs, each tenant must use unique values for:
 
 ### Optional Component Values
 
-Disable unneeded components by setting their `enabled` field to `false`.
+Disable unneeded optional components by setting their `enabled` field to `false`.
 
 Common options:
 

@@ -39,8 +39,7 @@ otmm:
   enabled: true
 
 # Database (SIDB-FREE by default)
-database:
-  enabled: true
+# Database uses SIDB-FREE by default from values.yaml
 
 oracle-database-exporter:
   enabled: true

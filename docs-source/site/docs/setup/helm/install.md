@@ -273,6 +273,8 @@ Several example configurations are provided for comparison.
 | `values-signoz-cold-storage.yaml` | Long-term observability retention | Depends | Uses S3-compatible object storage |
 | `values-private-registry.yaml` | Air-gapped and private registry installs | Depends | Mirrors images to a private registry |
 
+The OBaaS chart selects the database mode with `database.type`. The supported values are `SIDB-FREE`, `ADB-FREE`, `ADB-S`, and `OTHER`; choose the example values file that matches the database deployment you plan to use.
+
 #### Default Configuration (`values-default.yaml`)
 
 Minimal configuration with no overrides. All subcharts use their default settings.

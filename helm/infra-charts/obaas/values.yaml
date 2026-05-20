@@ -414,7 +414,6 @@ oracle-database-exporter:
 # Database Configuration
 # Supports SIDB-FREE, ADB-FREE, ADB-S (OCI Autonomous Database), or OTHER (external database)
 database:
-  enabled: true
   # Database type: SIDB-FREE, ADB-FREE, ADB-S, or OTHER
   type: "SIDB-FREE"
   # SQLcl image for database initialization jobs

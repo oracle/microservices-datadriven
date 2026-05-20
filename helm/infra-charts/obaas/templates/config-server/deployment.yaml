@@ -26,7 +26,7 @@ spec:
       annotations:
         signoz.io/scrape: "true"
         signoz.io/port: "8080"
-        signoz.io/path: "/metrics"
+        signoz.io/path: "/actuator/prometheus"
       {{- end }}
     spec:
       {{- include "obaas.imagePullSecrets" (dict "local" (index .Values "config-server").imagePullSecrets "global" .Values.global.imagePullSecrets "secretName" .Values.global.imagePullSecretName) | nindent 6 }}

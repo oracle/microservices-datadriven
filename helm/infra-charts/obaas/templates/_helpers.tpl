@@ -369,6 +369,20 @@ Requires either 'dsn' OR all of (host, port, service_name).
 {{- end -}}
 
 {{/*
+Validate that database configuration is present and uses a supported type.
+*/}}
+{{- define "obaas.database.validateType" -}}
+  {{- if not .Values.database -}}
+    {{- fail "database configuration is required. Set database.type to one of: SIDB-FREE, ADB-FREE, ADB-S, OTHER." -}}
+  {{- end -}}
+  {{- $dbType := .Values.database.type | default "" -}}
+  {{- $validTypes := list "SIDB-FREE" "ADB-FREE" "ADB-S" "OTHER" -}}
+  {{- if not (has $dbType $validTypes) -}}
+    {{- fail (printf "database.type must be one of: SIDB-FREE, ADB-FREE, ADB-S, OTHER. Got: %q" $dbType) -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
 Config Server Helper
 This helper is used to check if the Config Server database definitions are needed.
 */}}

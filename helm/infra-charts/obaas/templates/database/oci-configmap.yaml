@@ -2,7 +2,7 @@
 ## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
 # spell-checker: ignore nindent
 
-{{- if .Values.database.oci_config }}
+{{- if and .Values.database .Values.database.oci_config }}
 {{- /* Validate OCI config settings */ -}}
 {{- include "obaas.ociConfig.validate" . }}
 {{- /* Only create ConfigMap if configMapName is not specified (user wants us to create it) */ -}}
