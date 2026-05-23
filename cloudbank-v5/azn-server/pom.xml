@@ -86,7 +86,7 @@
                         <image>
                             <name>${image.registry}/azn-server:${project.version}</name>
                             <build>
-                                <from>ghcr.io/oracle/openjdk-image-obaas:21</from>
+                                <from>ghcr.io/oracle/oracle-jdk-image-obaas:21</from>
                                 <assembly>
                                     <mode>dir</mode>
                                     <targetDir>/deployments</targetDir>

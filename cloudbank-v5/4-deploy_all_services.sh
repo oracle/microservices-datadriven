@@ -12,6 +12,7 @@
 #   -n, --namespace NAMESPACE    Kubernetes namespace (required)
 #   -o, --obaas-release RELEASE  OBaaS platform release name (auto-detected if not provided)
 #   -d, --db-name DB_NAME        Database name (required)
+#   -s, --priv-secret SECRET     Privileged secret name (default: {dbname}-db-priv-authn)
 #   -r, --registry REGISTRY      Full container registry path (auto-detected from OCI CLI if not provided)
 #   -p, --prefix PREFIX          Repository prefix for OCIR auto-detection (default: cloudbank-v5)
 #   -t, --tag TAG                Image tag (default: 0.0.1-SNAPSHOT)
@@ -31,6 +32,7 @@
 #
 # Example:
 #   ./4-deploy_all_services.sh -n obaas-dev -d mydb
+#   ./4-deploy_all_services.sh -n obaas-dev -d mydb -s my-custom-secret
 #   ./4-deploy_all_services.sh -n obaas-dev -d mydb -r docker.io/myuser/cloudbank
 #   ./4-deploy_all_services.sh -n obaas-dev -d mydb -r sjc.ocir.io/mytenancy/cloudbank-v5 --image-pull-secret ocir-pull-secret
 
@@ -51,6 +53,7 @@ source "${SCRIPT_DIR}/check_prereqs.sh"
 NAMESPACE=""
 OBAAS_RELEASE=""
 DB_NAME=""
+PRIV_SECRET=""
 REGISTRY=""
 REPO_PREFIX="cloudbank-v5"
 IMAGE_TAG="0.0.1-SNAPSHOT"
@@ -88,6 +91,10 @@ parse_args() {
                 ;;
             -d|--db-name)
                 DB_NAME="$2"
+                shift 2
+                ;;
+            -s|--priv-secret)
+                PRIV_SECRET="$2"
                 shift 2
                 ;;
             -r|--registry)
@@ -144,6 +151,7 @@ Options:
   -n, --namespace NAMESPACE    Kubernetes namespace (required)
   -o, --obaas-release RELEASE  OBaaS platform release name (auto-detected if not provided)
   -d, --db-name DB_NAME        Database name (required)
+  -s, --priv-secret SECRET     Privileged secret name (default: {dbname}-db-priv-authn)
   -r, --registry REGISTRY      Full container registry path (auto-detected from OCI CLI if not provided)
   -p, --prefix PREFIX          Repository prefix for OCIR auto-detection (default: cloudbank-v5)
   -t, --tag TAG                Image tag (default: 0.0.1-SNAPSHOT)
@@ -168,6 +176,7 @@ Services deployed:
 Example:
   ./4-deploy_all_services.sh -n obaas-dev -d mydb
   ./4-deploy_all_services.sh -n obaas-dev -d mydb -o obaas
+  ./4-deploy_all_services.sh -n obaas-dev -d mydb -s my-custom-secret
   ./4-deploy_all_services.sh -n obaas-dev -d mydb -r docker.io/myuser/cloudbank
   ./4-deploy_all_services.sh -n obaas-dev -d mydb -r sjc.ocir.io/mytenancy/cloudbank-v5 --image-pull-secret ocir-pull-secret
   ./4-deploy_all_services.sh -n obaas-dev -d mydb --dry-run
@@ -355,6 +364,9 @@ deploy_service() {
     helm_command+=" --set obaas.releaseName=$OBAAS_RELEASE"
     helm_command+=" --set database.name=$DB_NAME"
     helm_command+=" --set database.authN.secretName=$db_secret_name"
+    if [[ -n "$PRIV_SECRET" ]]; then
+        helm_command+=" --set database.privAuthN.secretName=$PRIV_SECRET"
+    fi
     helm_command+=" --set-string podAnnotations.cloudbank-restarted-at=$ROLLOUT_ID"
 
     if [[ "$service_name" == "azn-server" ]]; then
@@ -625,6 +637,13 @@ main() {
 
     # Check database secrets exist
     print_step "Checking database secrets..."
+    if ! prereq_check_db_priv_secret "$NAMESPACE" "$DB_NAME" "$PRIV_SECRET"; then
+        if [[ "$DRY_RUN" == true ]]; then
+            print_info "Continuing dry-run so the planned deployment commands can be reviewed."
+        else
+            exit 1
+        fi
+    fi
     if ! prereq_check_db_app_secrets "$NAMESPACE" "$DB_NAME"; then
         print_warning "Some database secrets are missing. Services may fail to start."
         if [[ "$DRY_RUN" == true ]]; then
@@ -650,6 +669,7 @@ main() {
     echo "  Namespace:     $NAMESPACE"
     echo "  OBaaS Release: $OBAAS_RELEASE"
     echo "  Database:      $DB_NAME"
+    echo "  Priv Secret:   ${PRIV_SECRET:-${DB_NAME}-db-priv-authn}"
     echo "  Registry:      $final_registry"
     echo "  Image Tag:     $IMAGE_TAG"
     echo "  Pull Secret:   ${IMAGE_PULL_SECRET:-<none>}"

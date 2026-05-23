@@ -262,8 +262,8 @@ build_dependencies() {
 
 
 pull_base_image() {
-    # CloudBank services use Oracle's OBaaS OpenJDK image as base
-    local base_image_name="ghcr.io/oracle/openjdk-image-obaas:21"
+    # CloudBank services use Oracle's OBaaS JDK image as base
+    local base_image_name="ghcr.io/oracle/oracle-jdk-image-obaas:21"
 
     print_step "Pre-pulling base image: $base_image_name"
     if docker pull "$base_image_name"; then

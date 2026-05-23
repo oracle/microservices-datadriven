@@ -274,7 +274,7 @@ If you are upgrading an existing secure CloudBank demo that already has `<dbname
 **What this script does:**
 - Validates prerequisites (kubectl, Helm, namespace, OBaaS release)
 - Auto-detects OBaaS release name and container registry
-- Verifies database secrets exist
+- Verifies the privileged database secret and application database secrets exist
 - Verifies container images exist in registry
 - Deploys all 7 services using the shared `obaas-sample-app` Helm chart
 - Deploys `azn-server` before the protected resource-server services
@@ -287,11 +287,14 @@ If you are upgrading an existing secure CloudBank demo that already has `<dbname
 **Command:**
 ```bash
 ./4-deploy_all_services.sh -n <namespace> -d <dbname> -p <prefix>
+# Or with a custom privileged secret name:
+./4-deploy_all_services.sh -n <namespace> -d <dbname> -s <secret-name> -p <prefix>
 ```
 
 **Example:**
 ```bash
 ./4-deploy_all_services.sh -n obaas-dev -d cbankdb -p cloudbank-v5
+./4-deploy_all_services.sh -n obaas-dev -d cbankdb -s my-custom-db-secret -p cloudbank-v5
 ```
 
 **Monitor deployment:**
@@ -533,12 +536,155 @@ kubectl logs job/<service>-db-init -n <namespace>
 
 ## Cleanup
 
+Only run cleanup when the CloudBank sample workload and sample data can be removed. Do not uninstall OBaaS as part of CloudBank cleanup.
+
+### Delete APISIX Routes
+
+Delete CloudBank routes first so APISIX no longer routes traffic to services that are being removed:
+
+```bash
+kubectl port-forward -n <namespace> svc/<obaas-release>-apisix-admin 9180 &
+export APISIX_KEY=$(kubectl -n <namespace> get configmap <obaas-release>-apisix \
+  -o jsonpath='{.data.config\.yaml}' | grep -A2 'name.*admin' | grep key | awk '{print $2}')
+for id in 999 1000 1001 1002 1003 1004 1005 1006 1007 1008 1010 1011 1012; do
+  curl --noproxy '*' -X DELETE "http://localhost:9180/apisix/admin/routes/$id" -H "X-API-KEY: $APISIX_KEY"
+done
+```
+
 ### Uninstall Services
+
 ```bash
 helm uninstall azn-server account customer transfer checks creditscore testrunner -n <namespace>
 ```
 
+Verify the releases and pods are gone:
+
+```bash
+helm list -n <namespace> | grep -E 'azn-server|account|customer|creditscore|transfer|checks|testrunner'
+kubectl get pods -n <namespace> | grep -E 'azn-server|account|customer|creditscore|transfer|checks|testrunner'
+```
+
+### Drop Database Users And Liquibase Tables
+
+CloudBank creates these database users:
+
+| User | Used by |
+| --- | --- |
+| `USER_REPO` | `azn-server` |
+| `ACCOUNT` | `account`, `checks`, `testrunner` |
+| `CUSTOMER` | `customer` |
+| `TRANSFER` | `transfer` |
+| `CREDITSCORE` | `creditscore` |
+
+Run database cleanup only when the CloudBank sample data can be destroyed. Use the same privileged secret used during deployment. If you deployed with `-s <priv-secret-name>` or `--priv-secret <priv-secret-name>`, use that secret below. Otherwise use `<dbname>-db-priv-authn`.
+
+`DROP USER ... CASCADE` removes each CloudBank user's objects, including application tables and Liquibase metadata tables in those user schemas. The final block removes CloudBank changelog rows from the privileged schema and drops the privileged schema's `DATABASECHANGELOG` and `DATABASECHANGELOGLOCK` tables only if they are empty afterward.
+
+For ADB wallet-backed environments, replace `<wallet-secret-name>` with the active OBaaS wallet secret, for example `<obaas-release>-adb-tns-admin-<revision>`. If the database does not require a wallet, remove `TNS_ADMIN`, the `volumeMounts`, and the `volumes` block.
+
+```bash
+kubectl apply -f - <<'YAML'
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cloudbank-db-cleanup
+  namespace: <namespace>
+spec:
+  restartPolicy: Never
+  containers:
+  - name: cloudbank-db-cleanup
+    image: container-registry.oracle.com/database/sqlcl:latest
+    command: ["/bin/sh", "-c"]
+    args:
+    - |
+      cat >/tmp/cloudbank-db-cleanup.sql <<SQL
+      connect "$PRIV_USERNAME"/"$PRIV_PASSWORD"@$PRIV_SERVICE
+      WHENEVER SQLERROR EXIT SQL.SQLCODE
+      WHENEVER OSERROR EXIT 1
+
+      DECLARE
+        l_changelog_exists NUMBER;
+        l_changelog_rows   NUMBER := 0;
+
+        PROCEDURE drop_user_if_exists(p_username IN VARCHAR2) IS
+          l_count NUMBER;
+        BEGIN
+          SELECT COUNT(*) INTO l_count FROM dba_users WHERE username = UPPER(p_username);
+          IF l_count > 0 THEN
+            EXECUTE IMMEDIATE 'DROP USER "' || UPPER(p_username) || '" CASCADE';
+          END IF;
+        END;
+
+        PROCEDURE drop_table_if_exists(p_table_name IN VARCHAR2) IS
+          l_exists NUMBER;
+        BEGIN
+          SELECT COUNT(*) INTO l_exists FROM user_tables WHERE table_name = UPPER(p_table_name);
+          IF l_exists > 0 THEN
+            EXECUTE IMMEDIATE 'DROP TABLE "' || UPPER(p_table_name) || '" PURGE';
+          END IF;
+        END;
+      BEGIN
+        drop_user_if_exists('USER_REPO');
+        drop_user_if_exists('ACCOUNT');
+        drop_user_if_exists('CUSTOMER');
+        drop_user_if_exists('TRANSFER');
+        drop_user_if_exists('CREDITSCORE');
+
+        SELECT COUNT(*) INTO l_changelog_exists FROM user_tables WHERE table_name = 'DATABASECHANGELOG';
+        IF l_changelog_exists > 0 THEN
+          EXECUTE IMMEDIATE q'[DELETE FROM "DATABASECHANGELOG" WHERE author IN ('az_admin', 'account', 'customer')]';
+          EXECUTE IMMEDIATE 'SELECT COUNT(*) FROM "DATABASECHANGELOG"' INTO l_changelog_rows;
+        END IF;
+
+        IF l_changelog_rows = 0 THEN
+          drop_table_if_exists('DATABASECHANGELOG');
+          drop_table_if_exists('DATABASECHANGELOGLOCK');
+        END IF;
+
+        COMMIT;
+      END;
+      /
+      SQL
+      sql /nolog @/tmp/cloudbank-db-cleanup.sql
+    env:
+    - name: TNS_ADMIN
+      value: /app/tns_admin
+    - name: PRIV_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: <priv-secret-name>
+          key: username
+    - name: PRIV_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: <priv-secret-name>
+          key: password
+    - name: PRIV_SERVICE
+      valueFrom:
+        secretKeyRef:
+          name: <priv-secret-name>
+          key: service
+    volumeMounts:
+    - name: tns-admin
+      mountPath: /app/tns_admin
+      readOnly: true
+  volumes:
+  - name: tns-admin
+    secret:
+      secretName: <wallet-secret-name>
+YAML
+
+kubectl wait -n <namespace> --for=jsonpath='{.status.phase}'=Succeeded pod/cloudbank-db-cleanup --timeout=10m
+kubectl logs -n <namespace> pod/cloudbank-db-cleanup
+kubectl delete pod -n <namespace> cloudbank-db-cleanup
+```
+
+Do not drop the OBaaS platform database user, the OBaaS namespace, the OBaaS Helm release, or the privileged database secret as part of CloudBank cleanup.
+
 ### Delete Secrets
+
+Delete CloudBank secrets only after DB cleanup succeeds and only when secret removal is intended:
+
 ```bash
 kubectl delete secret <dbname>-azn-server-db-authn <dbname>-azn-server-auth \
   <dbname>-azn-server-signing-key \
@@ -546,17 +692,10 @@ kubectl delete secret <dbname>-azn-server-db-authn <dbname>-azn-server-auth \
   <dbname>-transfer-db-authn <dbname>-creditscore-db-authn -n <namespace>
 ```
 
-### Delete APISIX Routes
-```bash
-kubectl port-forward -n <namespace> svc/<obaas-release>-apisix-admin 9180 &
-export APISIX_KEY=$(kubectl -n <namespace> get configmap <obaas-release>-apisix \
-  -o jsonpath='{.data.config\.yaml}' | grep -A2 'name.*admin' | grep key | awk '{print $2}')
-for id in 999 1000 1001 1002 1003 1004 1005 1006 1007 1008 1010 1011; do
-  curl -X DELETE "http://localhost:9180/apisix/admin/routes/$id" -H "X-API-KEY: $APISIX_KEY"
-done
-```
-
 ### Delete OCI Repositories
+
+Repository deletion is optional and removes stored images whether the repositories were public or private:
+
 ```bash
 ./1-oci_repos.sh -c <compartment_name> -p <prefix> --delete
 ```
