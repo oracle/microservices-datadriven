@@ -9,15 +9,15 @@ export const OBAAS_VERSION = '2.1.0';
 
 The current version of OBaaS is {OBAAS_VERSION}.
 
-This version supports Helidon 4.3.x or later, Spring Boot 3.5.x and Spring Cloud 2025.0.x, Spring Boot 3.4.x and Spring Cloud 2024.0.x, Spring
-Framework 6.2 and 7.x, with limited backwards compatibility for Spring Boot 2.7.x and for earlier versions of Helidon 4.x. 
+This version supports Spring Boot 3.5.x, 4.0.x and 4.1.x and the compatible versions of framework and cloud, with limited backwards compatibility.
 
-Platform services use Java 25, Spring Boot 4.0.3, and Spring Cloud 2025.1.1.
+Platform services use Java 25, Spring Boot 4.0.6, and Spring Cloud 2025.1.1.
 
 ### Additions in this Release
 
 * Envoy Gateway is added to provide external access to the cluster, implementing the new Kubernetes Gateway API.
 * OpenTelemetry Operator is added to provide auto-instrumentation for Java applications.
+* Spring Config Server is added to provide centralized configuration for Spring Boot applications.
 
 ### Deprecations in this Release 
 
