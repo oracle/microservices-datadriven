@@ -112,3 +112,9 @@ AppVersion: 2.1.0-build.13
 - Remove database.enabled parameter; database resources are now controlled by the presence of the database values block
 - Fix Config Server SigNoz metrics scrape path from /metrics to /actuator/prometheus
 - Add template-time validation for database.type, failing fast with a clear error for missing or unsupported database configuration
+
+# 0.0.15 - May 26, 2026
+
+AppVersion: 2.1.0-rc1
+
+- Pick up GA MicroTx images

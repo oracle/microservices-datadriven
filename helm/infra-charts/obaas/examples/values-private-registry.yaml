@@ -161,8 +161,8 @@ otmm:
   enabled: true
   replicas: 1
   image:
-    repository: myregistry.example.com/database/otmm
-    tag: "24.4.1"
+    repository: myregistry.example.com/database/microtx-coorindator
+    tag: "26.1.1"
   # Override default resources if needed (defaults: cpu 250m, memory 1Gi)
   # resources: {}
 
