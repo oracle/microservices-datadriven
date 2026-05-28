@@ -23,7 +23,7 @@ database:
   sqlcl:
     image:
       repository: container-registry.oracle.com/database/sqlcl
-      tag: "25.3.0"
+      tag: "26.1.2"
 
   privAuthN:
     secretName: "db-priv-authn"
