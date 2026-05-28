@@ -530,7 +530,7 @@ signoz:
       image:
         registry: myregistry.example.com
         repository: curlimages/curl
-        tag: "8.17.0"
+        tag: "8.20.0"
     busybox:
       image:
         registry: myregistry.example.com

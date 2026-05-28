@@ -7,10 +7,10 @@ container-registry.oracle.com/obaas/admin-server:2.0.0
 container-registry.oracle.com/obaas/config-server:2.0.0
 container-registry.oracle.com/obaas/service-registry:2.0.0
 container-registry.oracle.com/database/free:latest
-container-registry.oracle.com/database/observability-exporter:2.2.2
+container-registry.oracle.com/database/observability-exporter:2.4.0
 container-registry.oracle.com/database/operator:2.1.0
 container-registry.oracle.com/database/otmm:24.4.1
-container-registry.oracle.com/database/sqlcl:25.3.0
+container-registry.oracle.com/database/sqlcl:26.1.2
 container-registry.oracle.com/middleware/coherence-operator:3.5.6
 container-registry.oracle.com/obaas/dashboards:2.0.0
 docker.io/altinity/clickhouse-operator:0.21.2
@@ -19,7 +19,7 @@ docker.io/apache/apisix:3.14.1-ubuntu
 docker.io/bitnamilegacy/etcd:3.6.1
 docker.io/busybox:1.37
 docker.io/clickhouse/clickhouse-server:25.5.6
-docker.io/curlimages/curl:8.17.0
+docker.io/curlimages/curl:8.20.0
 docker.io/otel/opentelemetry-collector-contrib:0.139.0
 docker.io/signoz/signoz-otel-collector:v0.144.1
 docker.io/signoz/signoz:v0.113.0

@@ -403,7 +403,7 @@ oracle-database-exporter:
   replicas: 1
   image:
     repository: container-registry.oracle.com/database/observability-exporter
-    tag: "2.2.2"
+    tag: "2.4.0"
   # Busybox sidecar for tailing alert.log
   busybox:
     repository: docker.io/busybox
@@ -420,7 +420,7 @@ database:
   sqlcl:
     image:
       repository: container-registry.oracle.com/database/sqlcl
-      tag: "25.3.0"
+      tag: "26.1.2"
 
   # For SIDB-FREE/ADB-FREE: container image configuration (exclude for ADB-S)
   image:
@@ -508,7 +508,7 @@ signoz:
       image:
         registry: docker.io
         repository: curlimages/curl
-        tag: "8.17.0"
+        tag: "8.20.0"
     busybox:
       image:
         registry: docker.io
