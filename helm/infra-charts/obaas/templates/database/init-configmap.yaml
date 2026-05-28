@@ -35,7 +35,8 @@ data:
           ,'GV_\$SYSTEM_WAIT_CLASS' ,'GV_\$ASM_DISKGROUP_STAT' ,'GV_\$DATAFILE'
           ,'GV_\$SYSSTAT' ,'GV_\$PROCESS' ,'GV_\$WAITCLASSMETRIC' ,'GV_\$SESSION'
           ,'GV_\$RESOURCE_LIMIT' ,'GV_\$PARAMETER' ,'GV_\$DATABASE',
-          'GV_\$SQLSTATS' ,'GV_\$SYSMETRIC' ,'GV_\$INSTANCE' ,'V_\$DIAG_ALERT_EXT');
+          'GV_\$SQLSTATS' ,'GV_\$SYSMETRIC' ,'GV_\$CON_SYSMETRIC',
+          'GV_\$INSTANCE' ,'V_\$DIAG_ALERT_EXT');
         l_aq_packages SYS.ODCIVARCHAR2LIST := SYS.ODCIVARCHAR2LIST(
           'DBMS_AQ' ,'DBMS_AQADM' ,'DBMS_AQIN'
           ,'DBMS_AQJMS' ,'DBMS_AQJMS_INTERNAL');
@@ -145,4 +146,3 @@ data:
     {{- end }}
       EOF
 {{- end }}
-
