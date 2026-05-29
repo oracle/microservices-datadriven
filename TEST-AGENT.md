@@ -13,8 +13,8 @@ Use only these sources for installation and test truth:
 - `docs-source/site/docs`, especially `intro.md`, `setup/helm/`, `platform/`, and `observability/`.
 - `helm/infra-charts/obaas-prereqs` and `helm/infra-charts/obaas`.
 - `cloudbank-v5/README.md`, `cloudbank-v5/cloudbank-v5-install.md`, and `cloudbank-v5/cloudbank-test-doc.md`.
-- `Checklist for enterprise level a_adefff5e0ee44eaea28fb4a1bd57d633-030326-1241-6752.pdf`.
 - The task list provided with this guide.
+- The SigNoz Services evidence checklist in this guide.
 
 Use only the OBaaS `next` documentation stream for 2.1.0. Do not use 2.0.0 behavior, older CloudBank documentation, or unrelated repository directories.
 
@@ -707,7 +707,37 @@ kubectl logs -n <application-namespace> -l app.kubernetes.io/name=testrunner
 
 ## Observability Test Requirements
 
-The PDF checklist is an image-only SigNoz Enterprise Services screenshot. It requires evidence that SigNoz Services displays active services over a recent time window and that the Services table has populated `P99 latency (in ms)`, `Error Rate (% of total)`, and `Operations Per Second` columns. Treat this as an explicit acceptance item.
+Use the following SigNoz Services checklist as the minimum UI evidence requirement for enterprise observability validation.
+
+### SigNoz Services Checklist
+
+Capture the SigNoz UI on the `Services` page with these visible elements:
+
+- SigNoz Enterprise branding.
+- The displayed SigNoz version.
+- Left navigation with `Services` selected.
+- Left navigation entries for `Traces`, `Logs`, `Metrics`, `Infra Monitoring`, `Dashboards`, and `Messaging Queues`.
+- A top refresh indicator showing a recent refresh, for example `Refreshed 8 sec ago`.
+- Time range set to `Last 30 minutes`.
+- Refresh and share controls visible.
+- A resource attribute search/filter bar above the table.
+- A services table with sortable columns:
+  - service name
+  - `P99 latency (in ms)`
+  - `Error Rate (% of total)`
+  - `Operations Per Second`
+- Multiple service rows with numeric latency, error-rate, and operations-per-second values.
+
+Evidence requirements:
+
+- Capture the page after CloudBank traffic has been generated.
+- Use a recent time window, preferably `Last 30 minutes`.
+- Ensure the screenshot includes the refresh timestamp, selected time range, service rows, and the `P99 latency (in ms)`, `Error Rate (% of total)`, and `Operations Per Second` columns.
+- The service-name column must be readable. If names are cropped or hidden, take another screenshot with the sidebar collapsed, a wider viewport, or horizontal scroll adjusted.
+- At least the CloudBank services and OBaaS platform services should appear in the services list after traffic and platform checks.
+- Numeric values must be present, not blank or `No data`.
+- `Operations Per Second` values of `0.00` are acceptable only when the report also includes curl or smoke-test evidence proving traffic occurred within the selected time range. Prefer capturing the screenshot while traffic is active so at least some services show non-zero operations per second.
+- Error-rate values must be explained. Expected negative tests such as `401` and `403` may contribute to visible error rates; unexplained high error rates must be investigated with logs, traces, and failed HTTP evidence.
 
 ### Access SigNoz
 
