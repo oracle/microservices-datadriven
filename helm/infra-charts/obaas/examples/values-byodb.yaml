@@ -25,12 +25,12 @@
 #
 #   This user should have the following permissions:
 #
-#   SELECT WITH ADMIN OPTION on:
+#   SELECT WITH GRANT OPTION on:
 #         DBA_TABLESPACE_USAGE_METRICS, DBA_TABLESPACES,
 #         GV_$SYSTEM_WAIT_CLASS, GV_$ASM_DISKGROUP_STAT, GV_$DATAFILE,
 #         GV_$SYSSTAT, GV_$PROCESS, GV_$WAITCLASSMETRIC, GV_$SESSION,
 #         GV_$RESOURCE_LIMIT, GV_$PARAMETER, GV_$DATABASE,
-#         GV_$SQLSTATS, GV_$SYSMETRIC, V_$DIAG_ALERT_EXT
+#         GV_$SQLSTATS, GV_$SYSMETRIC, GV_$CON_SYSMETRIC, V_$DIAG_ALERT_EXT
 #
 #   EXECUTE WITH GRANT OPTION on:
 #         SYS.DBMS_AQ, SYS.DBMS_AQADM, SYS.DBMS_AQIN,
@@ -50,7 +50,7 @@ database:
   sqlcl:
     image:
       repository: container-registry.oracle.com/database/sqlcl
-      tag: "25.3.0"
+      tag: "26.1.2"
 
   # For SIDB-FREE/ADB-FREE: container image configuration (exclude for ADB-S)
   image:

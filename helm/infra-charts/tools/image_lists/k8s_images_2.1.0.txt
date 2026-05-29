@@ -17,6 +17,7 @@ docker.io/altinity/clickhouse-operator:0.21.2
 docker.io/altinity/metrics-exporter:0.21.2
 docker.io/apache/apisix:3.14.1-ubuntu
 docker.io/bitnamilegacy/etcd:3.6.1
+docker.io/busybox:1.35
 docker.io/busybox:1.37
 docker.io/clickhouse/clickhouse-server:25.5.6
 docker.io/curlimages/curl:8.20.0
