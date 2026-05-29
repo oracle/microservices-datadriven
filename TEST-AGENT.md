@@ -18,7 +18,7 @@ Use only these sources for installation and test truth:
 
 Use only the OBaaS `next` documentation stream for 2.1.0. Do not use 2.0.0 behavior, older CloudBank documentation, or unrelated repository directories.
 
-For OBaaS 2.1.0 testing, use local chart paths under `helm/infra-charts` unless the public Helm repository has already published charts whose `APP VERSION` or `appVersion` matches the target 2.1.0 version. If the public repository still advertises 2.0.0 or another non-2.1.0 version, do not install or test with public `obaas/obaas-prereqs` or `obaas/obaas` references.
+Do not duplicate command syntax, values-file policy, secrets policy, or cleanup procedure from `AGENTS.md` or `CBV5-AGENT.md` in this file. If those guides conflict with this guide, treat them as canonical for deployment mechanics and treat this guide as canonical for test scope, evidence, and reporting.
 
 ## Required Inputs
 
@@ -48,13 +48,7 @@ Do not proceed with installation until these choices are known. Use placeholders
 
 ## Cluster Policy
 
-OBaaS documented full validation expects:
-
-- Kubernetes 1.34 or later.
-- At least 3 worker nodes.
-- At least 2 OCPU and 32 GB memory per worker node.
-- A working storage provider with `ReadWriteMany` support where required.
-- A working external access path through Ingress or Gateway API.
+Use `AGENTS.md` as the source of truth for full OBaaS cluster prerequisites and capacity requirements.
 
 Local functional testing may use a one-node cluster such as Rancher Desktop when the goal is smoke, sample workload, or developer-loop validation. In that case:
 
@@ -104,345 +98,20 @@ For failures, also capture:
 - APISIX route output when the failure involves gateway traffic.
 - Full HTTP request command, response status, headers, and body.
 
-## Installation Procedure
-
-### 1. Preflight
-
-Record local tool and cluster access evidence:
-
-```bash
-kubectl config current-context
-kubectl version
-kubectl get nodes -o wide
-kubectl describe nodes
-kubectl get storageclass
-kubectl get ns
-kubectl get ingressclass
-kubectl get gatewayclass
-helm version
-helm list -A
-```
-
-Expected:
-
-- Current context is `<kube-context>`.
-- The agent can list nodes, namespaces, storage classes, and Helm releases.
-- The target cluster policy is recorded as `Full Validation` or `Local Functional`.
-- Storage and access-path limitations are documented before installation.
-
-### 2. Confirm Chart Source
-
-Record local chart versions:
-
-```bash
-grep '^version:' helm/infra-charts/obaas-prereqs/Chart.yaml
-grep '^appVersion:' helm/infra-charts/obaas-prereqs/Chart.yaml
-grep '^version:' helm/infra-charts/obaas/Chart.yaml
-grep '^appVersion:' helm/infra-charts/obaas/Chart.yaml
-```
-
-If comparing public charts, record:
-
-```bash
-helm repo add obaas https://oracle.github.io/microservices-backend/helm
-helm repo update
-helm search repo obaas/obaas-prereqs --versions
-helm search repo obaas/obaas --versions
-```
-
-Expected:
-
-- Use local chart paths when public `APP VERSION` does not match the target 2.1.0 application version.
-- Use these local chart paths for in-development 2.1.0 tests:
-  - `helm/infra-charts/obaas-prereqs`
-  - `helm/infra-charts/obaas`
-
-### 3. Lint And Render
-
-Lint and render before installing whenever values are available:
-
-```bash
-helm lint helm/infra-charts/obaas-prereqs -f <prereqs-values-file>
-helm lint helm/infra-charts/obaas -f <app-values-file>
-helm template <prereqs-release> helm/infra-charts/obaas-prereqs \
-  -n <platform-system-namespace> \
-  -f <prereqs-values-file> >"$EVIDENCE_DIR/helm/obaas-prereqs-rendered.yaml"
-helm template <app-release> helm/infra-charts/obaas \
-  -n <application-namespace> \
-  -f <app-values-file> >"$EVIDENCE_DIR/helm/obaas-rendered.yaml"
-```
-
-If no prerequisite values file is used, omit the `-f <prereqs-values-file>` argument.
-
-Expected:
-
-- `helm lint` succeeds.
-- Rendered manifests are saved as evidence.
-- Optional components selected in values match the test scope.
-
-### 4. cert-manager
-
-If cert-manager is not installed and healthy, install it before `obaas-prereqs`:
-
-```bash
-helm install \
-  cert-manager oci://quay.io/jetstack/charts/cert-manager \
-  --version v1.19.4 \
-  --namespace cert-manager \
-  --create-namespace \
-  --set installCRDs=true \
-  --set crds.keep=false
-```
-
-Verify:
-
-```bash
-kubectl get pods -n cert-manager
-kubectl wait --for=condition=Available deployment --all -n cert-manager --timeout=5m
-kubectl get crd | grep cert-manager
-```
-
-Expected: cert-manager pods are healthy and cert-manager CRDs exist.
-
-### 5. Install Cluster Prerequisites
-
-Install `obaas-prereqs` once per cluster:
-
-```bash
-helm upgrade --install <prereqs-release> helm/infra-charts/obaas-prereqs \
-  -n <platform-system-namespace> \
-  --create-namespace \
-  -f <prereqs-values-file>
-```
-
-If no custom prerequisite values are needed, omit `-f <prereqs-values-file>`.
-
-Verify:
-
-```bash
-helm status <prereqs-release> -n <platform-system-namespace>
-kubectl get pods -n <platform-system-namespace> -o wide
-kubectl get deploy,sts,ds,svc -n <platform-system-namespace>
-kubectl get crd | grep -E 'external-secrets|kafka|coherence|opentelemetry|database|clickhouse'
-kubectl get events -n <platform-system-namespace> --sort-by=.lastTimestamp
-```
-
-Expected prerequisite components, when enabled:
-
-- cert-manager
-- External Secrets Operator
-- metrics-server
-- kube-state-metrics
-- Strimzi Kafka Operator
-- Coherence Operator
-- OpenTelemetry Operator
-- Oracle Database Operator
-- ClickHouse CRDs
-
-### 6. Install OBaaS
-
-Install OBaaS in the application namespace:
-
-```bash
-helm upgrade --install <app-release> helm/infra-charts/obaas \
-  -n <application-namespace> \
-  --create-namespace \
-  -f <app-values-file>
-```
-
-Verify:
-
-```bash
-helm status <app-release> -n <application-namespace>
-kubectl get pods -n <application-namespace> -o wide
-kubectl get deploy,sts,svc,ingress,gateway,httproute,pvc,job -n <application-namespace>
-kubectl get instrumentation traces-instrumentation -n <application-namespace>
-kubectl get events -n <application-namespace> --sort-by=.lastTimestamp
-```
-
-Expected OBaaS components, when enabled:
-
-- APISIX gateway and admin service
-- Envoy Gateway or ingress-nginx, according to `<access-path>`
-- Eureka
-- Config Server
-- Spring Boot Admin Server
-- SigNoz
-- ClickHouse
-- Oracle Database Exporter
-- OTMM/MicroTx
-- Oracle database integration or in-cluster database resources
-- Kafka resources, if enabled
-- AI Optimizer, if enabled
-- OTMM workflow server or console, if enabled
-
-Do not deploy CloudBank until all required OBaaS components are healthy.
-
-## CloudBank Deployment
-
-CloudBank v5 must be installed in the same namespace as OBaaS.
-
-### 1. CloudBank Preflight
-
-Run from the repository root unless a step changes directory:
-
-```bash
-kubectl get secret <priv-secret-name> -n <application-namespace>
-kubectl get instrumentation traces-instrumentation -n <application-namespace>
-cd cloudbank-v5
-./check_prereqs.sh --build
-./check_prereqs.sh --deploy \
-  -n <application-namespace> \
-  -o <app-release> \
-  -d <cloudbank-dbname> \
-  -s <priv-secret-name>
-```
-
-If `<priv-secret-name>` is the default `<cloudbank-dbname>-db-priv-authn`, the `-s` argument may be omitted.
-
-Expected:
-
-- Build and deploy prerequisites pass.
-- Privileged DB secret exists.
-- `traces-instrumentation` exists when observability and Java auto-instrumentation are enabled.
-
-### 2. Build And Publish Images
-
-For OCI/OCIR auto-detection:
-
-```bash
-cd cloudbank-v5
-./1-oci_repos.sh -c <compartment-name> -p <prefix>
-./2-images_build_push.sh -p <prefix> -t <cloudbank-image-tag> --yes
-```
-
-For an explicit registry:
-
-```bash
-cd cloudbank-v5
-./2-images_build_push.sh \
-  -r <cloudbank-registry> \
-  -t <cloudbank-image-tag> \
-  --yes
-```
-
-For local clusters where images are already available to the cluster runtime:
-
-```bash
-cd cloudbank-v5
-./2-images_build_push.sh --skip-push --yes
-```
-
-Expected:
-
-- Images build for `azn-server`, `account`, `customer`, `creditscore`, `transfer`, `checks`, and `testrunner`.
-- Image push or local availability is proven.
-
-### 3. Create CloudBank Secrets
-
-```bash
-cd cloudbank-v5
-./3-k8s_db_secrets.sh \
-  -n <application-namespace> \
-  -d <cloudbank-dbname> \
-  -s <priv-secret-name>
-```
-
-Expected:
-
-- CloudBank DB secrets exist.
-- `<cloudbank-dbname>-azn-server-auth` exists with OAuth client secret keys.
-- `<cloudbank-dbname>-azn-server-signing-key` exists.
-
-### 4. Deploy CloudBank Services
-
-For OCI/OCIR auto-detection:
-
-```bash
-cd cloudbank-v5
-./4-deploy_all_services.sh \
-  -n <application-namespace> \
-  -o <app-release> \
-  -d <cloudbank-dbname> \
-  -s <priv-secret-name> \
-  -p <prefix> \
-  -t <cloudbank-image-tag> \
-  --yes
-```
-
-For an explicit registry:
-
-```bash
-cd cloudbank-v5
-./4-deploy_all_services.sh \
-  -n <application-namespace> \
-  -o <app-release> \
-  -d <cloudbank-dbname> \
-  -s <priv-secret-name> \
-  -r <cloudbank-registry> \
-  -t <cloudbank-image-tag> \
-  --image-pull-secret <image-pull-secret> \
-  --yes
-```
-
-Omit `--image-pull-secret` when the cluster can pull images anonymously.
-
-Verify:
-
-```bash
-helm list -n <application-namespace>
-kubectl get pods -n <application-namespace> \
-  | grep -E 'azn-server|account|customer|creditscore|transfer|checks|testrunner'
-kubectl get jobs -n <application-namespace> | grep db-init
-```
-
-Expected: all seven CloudBank service pods are `1/1 Running`, and database init jobs succeed.
-
-### 5. Create APISIX Routes
-
-```bash
-cd cloudbank-v5
-./5-apisix_create_routes.sh \
-  -n <application-namespace> \
-  -o <app-release> \
-  -d <cloudbank-dbname>
-```
-
-Expected:
-
-- Public authorization routes exist for `/.well-known/*` and `/oauth2/*`.
-- Protected CloudBank API routes exist.
-- `/user/api/v1*` is not externally exposed.
-- Internal account journal routes are blocked externally.
-
-### 6. Smoke Test
-
-```bash
-cd cloudbank-v5
-./6-smoke_test_secure_services.sh \
-  -n <application-namespace> \
-  -o <app-release> \
-  -d <cloudbank-dbname>
-```
-
-If an external gateway URL is supplied:
-
-```bash
-cd cloudbank-v5
-./6-smoke_test_secure_services.sh \
-  -n <application-namespace> \
-  -o <app-release> \
-  -d <cloudbank-dbname> \
-  --gateway-url <gateway-url>
-```
-
-Expected:
-
-- Authorization metadata and JWKS are reachable.
-- Protected API without token returns `401`.
-- Protected API with correct read token returns success.
-- Wrong-scope calls return `403`.
-- Deposit and transfer checks succeed unless `--read-only` is used.
+## Execution Flow
+
+This file does not own deployment mechanics. Use it to decide what must be tested and what evidence must be captured.
+
+1. Prepare the evidence directory and report skeleton from this file.
+2. Use `AGENTS.md` for all OBaaS preflight, chart-source selection, values preparation, cert-manager, `obaas-prereqs`, OBaaS install, uninstall, and reinstall commands.
+3. After each OBaaS phase, return to the master test matrix in this file and record status, evidence paths, and failures.
+4. Use `CBV5-AGENT.md` for all CloudBank v5 prerequisite checks, image handling, secret creation, service deployment, APISIX route creation, smoke tests, manual endpoint tests, and cleanup commands.
+5. After each CloudBank phase, return to the master test matrix in this file and record status, evidence paths, and failures.
+6. Use the observability, security, lifecycle, isolation, and report sections in this file for test coverage that is broader than either deployment guide.
+7. Do not continue from OBaaS installation to CloudBank deployment until all required OBaaS health checks in the matrix are passing or explicitly waived.
+8. Do not mark a test run complete until the report template in this file is filled out and all required evidence has been captured.
+
+The exact commands, flags, values files, secret names, and cleanup procedures must come from `AGENTS.md` and `CBV5-AGENT.md` at execution time.
 
 ## Master Test Matrix
 
@@ -508,202 +177,29 @@ Use this matrix as the master list for each run. Mark each test `Pass`, `Fail`, 
 | MT-003 | Multi-OBaaS | Verify SigNoz isolation. | Each SigNoz instance shows only its namespace's telemetry. | screenshots |
 | DB-001 | BYODB | Test `database.type: OTHER` when available. | OBaaS installs against BYODB and required grants are verified. | SQL and Helm output |
 
-## Functional Test Details
+## Functional Test Guidance
 
-### APISIX Gateway
+Use `AGENTS.md`, `CBV5-AGENT.md`, and the local platform documentation for exact commands. This section defines only the additional system-test expectations.
 
-Find the gateway:
+Platform checks:
 
-```bash
-kubectl get svc -n <application-namespace> | grep apisix-gateway
-```
+- APISIX gateway must be reachable through the selected access path or a documented local port-forward.
+- APISIX admin API must show the route set expected after CloudBank route creation.
+- Eureka must show the OBaaS platform services and all seven CloudBank services after deployment.
+- Config Server must respond. If no test property is seeded, record that the server is reachable and that no config data validation was performed.
+- Spring Boot Admin must show monitored Spring services and health status.
 
-For local testing:
+CloudBank checks:
 
-```bash
-kubectl port-forward -n <application-namespace> svc/<app-release>-apisix-gateway 9080:80
-export GATEWAY_URL=http://127.0.0.1:9080
-```
+- Run the automated secured smoke test from `CBV5-AGENT.md` first and preserve its full output.
+- Run any additional manual endpoint checks from `cloudbank-v5/cloudbank-test-doc.md` only when they add evidence not already covered by the smoke test.
+- Verify OAuth metadata and JWKS reachability, unauthorized access rejection, wrong-scope rejection, read-token success, deposit/journal/clearance behavior, transfer behavior, and expected workflow logs.
+- Use HTTPS for external gateway URLs. Use local port-forwarding only for local test clusters or isolated evidence capture.
 
-For external testing:
+Screenshots:
 
-```bash
-export GATEWAY_URL=<https-gateway-url>
-```
-
-Use HTTPS for external gateway URLs so client secrets and tokens are not sent over plaintext network links.
-
-### APISIX Admin API
-
-```bash
-kubectl port-forward -n <application-namespace> svc/<app-release>-apisix-admin 9180:9180
-APISIX_KEY=$(
-  kubectl -n <application-namespace> get configmap <app-release>-apisix \
-    -o jsonpath='{.data.config\.yaml}' \
-    | grep -A2 'name.*admin' \
-    | grep key \
-    | awk '{print $2}'
-)
-curl -s http://127.0.0.1:9180/apisix/admin/routes \
-  -H "X-API-KEY: $APISIX_KEY" | jq
-```
-
-Expected: APISIX returns route data, including CloudBank routes after `5-apisix_create_routes.sh`.
-
-### Eureka
-
-```bash
-kubectl port-forward -n <application-namespace> svc/<app-release>-eureka 8761:8761
-curl -s http://127.0.0.1:8761/eureka/apps | tee "$EVIDENCE_DIR/obaas/eureka-apps.xml"
-```
-
-Expected after CloudBank deployment:
-
-- `AZN-SERVER`
-- `ACCOUNT`
-- `CUSTOMER`
-- `CREDITSCORE`
-- `TRANSFER`
-- `CHECKS`
-- `TESTRUNNER`
-
-Capture a Selenium screenshot of `http://127.0.0.1:8761`.
-
-### Config Server
-
-```bash
-kubectl port-forward -n <application-namespace> svc/<app-release>-config-server 8081:8080
-curl -s http://127.0.0.1:8081/application/default | jq
-```
-
-Expected: JSON response from Spring Cloud Config Server. If no property sources are configured, an empty `propertySources` array is acceptable only when Config Server reachability is proven and the report records that no test property was seeded.
-
-When the run scope includes config data validation, seed a test property using the documented SQLcl pod approach from `docs-source/site/docs/platform/configserver.md`, then verify:
-
-```bash
-curl -s http://127.0.0.1:8081/billing/default/latest | jq
-```
-
-Expected: the response includes the seeded property values.
-
-### Spring Boot Admin
-
-```bash
-kubectl port-forward -n <application-namespace> svc/<app-release>-admin-server 8989:8989
-```
-
-Capture a Selenium screenshot of `http://127.0.0.1:8989`.
-
-Expected:
-
-- UI is reachable.
-- Registered CloudBank Spring Boot services appear after deployment.
-- Health status is available for each registered service.
-
-### CloudBank OAuth And APIs
-
-```bash
-export CLIENT_ID=cloudbank-client
-export CLIENT_SECRET=$(
-  kubectl get secret <cloudbank-dbname>-azn-server-auth -n <application-namespace> \
-    -o jsonpath='{.data.client-secret}' | base64 -d
-)
-export TEST_CLIENT_ID=cloudbank-test-client
-export TEST_CLIENT_SECRET=$(
-  kubectl get secret <cloudbank-dbname>-azn-server-auth -n <application-namespace> \
-    -o jsonpath='{.data.test-client-secret}' | base64 -d
-)
-
-curl -s "$GATEWAY_URL/.well-known/oauth-authorization-server" | jq
-curl -s "$GATEWAY_URL/oauth2/jwks" | jq '.keys[].kid'
-
-export READ_TOKEN=$(
-  curl -s -u "$CLIENT_ID:$CLIENT_SECRET" \
-    -X POST "$GATEWAY_URL/oauth2/token" \
-    -d grant_type=client_credentials \
-    -d scope=cloudbank.read | jq -r .access_token
-)
-export WRITE_TOKEN=$(
-  curl -s -u "$CLIENT_ID:$CLIENT_SECRET" \
-    -X POST "$GATEWAY_URL/oauth2/token" \
-    -d grant_type=client_credentials \
-    -d scope="cloudbank.read cloudbank.write" | jq -r .access_token
-)
-export TEST_TOKEN=$(
-  curl -s -u "$TEST_CLIENT_ID:$TEST_CLIENT_SECRET" \
-    -X POST "$GATEWAY_URL/oauth2/token" \
-    -d grant_type=client_credentials \
-    -d scope=cloudbank.test | jq -r .access_token
-)
-export TRANSFER_TOKEN=$(
-  curl -s -u "$CLIENT_ID:$CLIENT_SECRET" \
-    -X POST "$GATEWAY_URL/oauth2/token" \
-    -d grant_type=client_credentials \
-    -d scope=cloudbank.transfer | jq -r .access_token
-)
-```
-
-Core checks:
-
-```bash
-curl -i "$GATEWAY_URL/api/v1/creditscore"
-curl -s -H "Authorization: Bearer $READ_TOKEN" "$GATEWAY_URL/api/v1/accounts" | jq
-curl -s -H "Authorization: Bearer $READ_TOKEN" "$GATEWAY_URL/api/v1/customer" | jq
-curl -s -H "Authorization: Bearer $READ_TOKEN" "$GATEWAY_URL/api/v1/creditscore" | jq
-```
-
-Deposit and transfer checks:
-
-```bash
-export FROM_ACCOUNT_ID=<account-id-with-positive-balance>
-export TO_ACCOUNT_ID=<another-account-id>
-
-curl -i -X POST -H 'Content-Type: application/json' \
-  -H "Authorization: Bearer $TEST_TOKEN" \
-  -d "{\"accountId\": ${TO_ACCOUNT_ID}, \"amount\": 256}" \
-  "$GATEWAY_URL/api/v1/testrunner/deposit"
-
-curl -i -H "Authorization: Bearer $READ_TOKEN" \
-  "$GATEWAY_URL/api/v1/account/${TO_ACCOUNT_ID}/journal"
-
-curl -i -X POST -H 'Content-Type: application/json' \
-  -H "Authorization: Bearer $TEST_TOKEN" \
-  -d '{"journalId": <journal-id>}' \
-  "$GATEWAY_URL/api/v1/testrunner/clear"
-
-curl -s -H "Authorization: Bearer $READ_TOKEN" \
-  "$GATEWAY_URL/api/v1/account/${TO_ACCOUNT_ID}" | jq
-curl -s -H "Authorization: Bearer $READ_TOKEN" \
-  "$GATEWAY_URL/api/v1/account/${FROM_ACCOUNT_ID}" | jq
-curl -s -X POST -H "Authorization: Bearer $TRANSFER_TOKEN" \
-  "$GATEWAY_URL/transfer?fromAccount=${FROM_ACCOUNT_ID}&toAccount=${TO_ACCOUNT_ID}&amount=100"
-curl -s -H "Authorization: Bearer $READ_TOKEN" \
-  "$GATEWAY_URL/api/v1/account/${TO_ACCOUNT_ID}" | jq
-curl -s -H "Authorization: Bearer $READ_TOKEN" \
-  "$GATEWAY_URL/api/v1/account/${FROM_ACCOUNT_ID}" | jq
-```
-
-Expected:
-
-- Missing token returns `401`.
-- Wrong scope returns `403`.
-- Read APIs return valid JSON.
-- Deposit returns success and creates a pending journal entry.
-- Clearance changes the journal to a completed deposit.
-- Transfer response contains `withdraw succeeded deposit succeeded`.
-- Source and destination balances change by the transfer amount.
-
-Capture logs:
-
-```bash
-kubectl logs -n <application-namespace> -l app.kubernetes.io/name=checks
-kubectl logs -n <application-namespace> -l app.kubernetes.io/name=transfer
-kubectl logs -n <application-namespace> -l app.kubernetes.io/name=azn-server
-kubectl logs -n <application-namespace> -l app.kubernetes.io/name=account
-kubectl logs -n <application-namespace> -l app.kubernetes.io/name=customer
-kubectl logs -n <application-namespace> -l app.kubernetes.io/name=creditscore
-kubectl logs -n <application-namespace> -l app.kubernetes.io/name=testrunner
-```
+- Capture Eureka and Spring Boot Admin UI evidence with Selenium or an equivalent browser automation tool.
+- For any UI that cannot be captured, record the exact access method used, browser or automation error, related service state, and related logs.
 
 ## Observability Test Requirements
 
@@ -741,15 +237,7 @@ Evidence requirements:
 
 ### Access SigNoz
 
-```bash
-kubectl -n <application-namespace> get secret signoz-authn \
-  -o jsonpath='{.data.email}' | base64 -d && echo
-kubectl -n <application-namespace> get secret signoz-authn \
-  -o jsonpath='{.data.password}' | base64 -d && echo
-kubectl -n <application-namespace> port-forward svc/<app-release>-signoz 8080:8080
-```
-
-Open `http://127.0.0.1:8080/login` and capture screenshots after login.
+Use the SigNoz access procedure from `docs-source/site/docs/observability/access.md` for the current chart version and selected release name. Record the credential source, access method, and URL in the run report without printing passwords into committed files.
 
 ### Required SigNoz Screenshots
 
@@ -855,27 +343,14 @@ Run destructive lifecycle tests only with explicit operator approval and only af
 ### Uninstall And Reinstall
 
 1. Uninstall CloudBank using `CBV5-AGENT.md` cleanup steps.
-2. Uninstall OBaaS:
-
-```bash
-helm uninstall <app-release> -n <application-namespace>
-kubectl get all,secret,configmap,pvc,job,ingress,gateway,httproute -n <application-namespace>
-```
-
+2. Uninstall OBaaS using `AGENTS.md` cleanup or uninstall guidance for the selected installation type.
 3. Verify the namespace is empty except for explicitly retained or approved resources.
 4. Reinstall OBaaS into the same namespace using the same values.
 5. Rerun platform and CloudBank smoke tests.
 
 ### Multi-OBaaS
 
-Install a second OBaaS instance in a different namespace:
-
-```bash
-helm upgrade --install <tenant2-release> helm/infra-charts/obaas \
-  -n <tenant2-namespace> \
-  --create-namespace \
-  -f <tenant2-values-file>
-```
+Install a second OBaaS instance in a different namespace using the multi-tenant guidance and values policy in `AGENTS.md`.
 
 Expected:
 
@@ -898,48 +373,18 @@ Expected:
 
 ## Failure Evidence
 
-When any test fails, immediately collect:
+When any test fails, collect the relevant diagnostics from `AGENTS.md`, `CBV5-AGENT.md`, and the local platform docs, then attach them to the report. At minimum, evidence should cover:
 
-```bash
-kubectl get pods -n <application-namespace> -o wide
-kubectl get jobs -n <application-namespace>
-kubectl get events -n <application-namespace> --sort-by=.lastTimestamp
-helm status <app-release> -n <application-namespace>
-```
-
-For each failing pod:
-
-```bash
-kubectl describe pod <pod> -n <application-namespace>
-kubectl logs <pod> -n <application-namespace>
-kubectl logs <pod> -n <application-namespace> --previous
-```
-
-For failed database initialization:
-
-```bash
-kubectl logs job/<service>-db-init -n <application-namespace>
-kubectl get secrets -n <application-namespace> | grep -E 'db-authn|azn-server'
-```
-
-For route or authorization failures:
-
-```bash
-kubectl get configmap <app-release>-apisix -n <application-namespace>
-kubectl get svc -n <application-namespace> | grep apisix
-curl -s http://127.0.0.1:9180/apisix/admin/routes \
-  -H "X-API-KEY: $APISIX_KEY" | jq
-kubectl logs -n <application-namespace> -l app.kubernetes.io/name=azn-server
-```
-
-For observability failures:
-
-```bash
-kubectl get pods,svc,endpoints -n <application-namespace> | grep -E 'signoz|clickhouse|otel|k8s-infra'
-kubectl logs -n <application-namespace> -l app.kubernetes.io/name=<app-release>
-kubectl get instrumentation traces-instrumentation -n <application-namespace> -o yaml
-kubectl get pods -n <application-namespace> -o yaml | grep -A5 -B5 OTEL_EXPORTER_OTLP_ENDPOINT
-```
+- Current namespace workload state.
+- Relevant Helm release status.
+- Current and previous logs for failing pods.
+- `describe` output for failing pods, jobs, PVCs, services, ingress, Gateway API resources, or other implicated resources.
+- Namespace events sorted by time.
+- Failed job logs, especially database initialization jobs.
+- Gateway route or APISIX Admin API output for route, auth, or gateway failures.
+- HTTP request and response evidence for endpoint failures.
+- SigNoz, ClickHouse, OpenTelemetry collector, instrumentation, and application telemetry configuration evidence for observability failures.
+- Browser automation error details for UI or screenshot failures.
 
 ## Run Report Template
 
