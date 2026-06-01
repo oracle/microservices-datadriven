@@ -63,6 +63,26 @@ class CloudBankSecurityAutoConfigurationTest {
     }
 
     @Test
+    void chatEndpointRequiresReadScope() throws Exception {
+        mockMvc.perform(post("/chat")
+                .contentType(MediaType.TEXT_PLAIN)
+                .content("hello"))
+                .andExpect(status().isUnauthorized());
+
+        mockMvc.perform(post("/chat")
+                .contentType(MediaType.TEXT_PLAIN)
+                .content("hello")
+                .with(jwt().authorities(() -> "SCOPE_cloudbank.write")))
+                .andExpect(status().isForbidden());
+
+        mockMvc.perform(post("/chat")
+                .contentType(MediaType.TEXT_PLAIN)
+                .content("hello")
+                .with(jwt().authorities(() -> "SCOPE_cloudbank.read")))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     void internalEndpointsRemainCompatibleByDefault() throws Exception {
         mockMvc.perform(post("/deposit")
                 .contentType(MediaType.TEXT_PLAIN))
@@ -88,6 +108,11 @@ class CloudBankSecurityAutoConfigurationTest {
 
         @PostMapping("/deposit")
         String deposit() {
+            return "ok";
+        }
+
+        @PostMapping("/chat")
+        String chat() {
             return "ok";
         }
     }

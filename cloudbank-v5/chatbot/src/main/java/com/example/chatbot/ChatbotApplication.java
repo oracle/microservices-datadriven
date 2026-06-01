@@ -7,8 +7,10 @@ import com.example.common.filter.LoggingFilterConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 
 @SpringBootApplication
+@EnableMethodSecurity
 @Import(LoggingFilterConfig.class)
 public class ChatbotApplication {
 
