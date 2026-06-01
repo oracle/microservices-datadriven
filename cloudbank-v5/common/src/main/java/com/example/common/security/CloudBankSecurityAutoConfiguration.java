@@ -90,6 +90,7 @@ public class CloudBankSecurityAutoConfiguration {
                     .requestMatchers(HttpMethod.DELETE, "/api/v1/customer/**").hasAuthority(ADMIN_SCOPE)
                     .requestMatchers(HttpMethod.GET, "/api/v1/creditscore").hasAuthority(READ_SCOPE)
                     .requestMatchers(HttpMethod.GET, "/hello").hasAuthority(READ_SCOPE)
+                    .requestMatchers(HttpMethod.POST, "/chat").hasAuthority(READ_SCOPE)
                     .requestMatchers(HttpMethod.POST, "/transfer").hasAuthority(TRANSFER_SCOPE)
                     .requestMatchers(HttpMethod.POST, "/api/v1/testrunner/**").hasAuthority(TEST_SCOPE)
                     .anyRequest().authenticated();
