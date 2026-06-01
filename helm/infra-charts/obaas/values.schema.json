@@ -16,6 +16,31 @@
           "description": "Image pull secrets must be a list (strings or {name: ...} objects), not a bare string. Use --set global.imagePullSecrets[0]=mysecret"
         }
       }
+    },
+    "networkPolicy": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "allowSameNamespace": { "type": "boolean" },
+        "allowPublicIngress": { "type": "boolean" },
+        "allowExternalEgress": { "type": "boolean" },
+        "dns": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "namespaceSelector": {
+              "type": "object",
+              "additionalProperties": { "type": "string" }
+            },
+            "podSelector": {
+              "type": "object",
+              "additionalProperties": { "type": "string" }
+            }
+          }
+        },
+        "extraIngress": { "type": "array" },
+        "extraEgress": { "type": "array" }
+      }
     }
   }
 }

@@ -57,14 +57,18 @@ public class CloudBankSecurityAutoConfiguration {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         if (!securityEnabled) {
-            http.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
+            http.authorizeHttpRequests(authorize -> authorize
+                    .requestMatchers(EndpointRequest.to("health", "info")).permitAll()
+                    .requestMatchers(EndpointRequest.toAnyEndpoint()).authenticated()
+                    .anyRequest().permitAll());
             return http.build();
         }
 
         http
             .authorizeHttpRequests(authorize -> {
                 authorize
-                    .requestMatchers(EndpointRequest.to("health", "info", "prometheus")).permitAll()
+                    .requestMatchers(EndpointRequest.to("health", "info")).permitAll()
+                    .requestMatchers(EndpointRequest.toAnyEndpoint()).authenticated()
                     .requestMatchers("/error", "/error/**").permitAll();
 
                 if (requireInternalToken) {

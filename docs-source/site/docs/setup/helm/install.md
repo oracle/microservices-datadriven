@@ -91,6 +91,8 @@ Cluster
 
 **Namespace behavior:** All OBaaS chart components deploy to the release namespace (specified with the `-n` flag during installation). By default, ingress-nginx watches only its own release namespace (`scope.enabled: true`).
 
+**Network isolation:** The OBaaS chart installs NetworkPolicy resources in the release namespace. Effective enforcement depends on the cluster CNI plugin; use a CNI that supports Kubernetes NetworkPolicy and has policy enforcement enabled. By default, the chart establishes a default-deny baseline, allows same-namespace traffic, allows DNS egress, permits public ingress to the configured gateway or ingress entrypoints, and explicitly allows external egress for compatibility with external databases, OCI APIs, registries, and identity providers.
+
 **Directory structure:**
 
 ```tree
