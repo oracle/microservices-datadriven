@@ -12,6 +12,7 @@ import com.example.customer.repository.CustomersRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import static com.example.common.security.CloudBankAuthorization.canAccessCustomer;
+import static com.example.common.security.CloudBankAuthorization.isPrivileged;
+
 @RestController
 @RequestMapping("/api/v1")
 @Slf4j
@@ -33,15 +37,36 @@ public class CustomerController {
         this.customersRepository = customersRepository;
     }
 
+    /**
+     * Returns all customers for privileged callers, otherwise only the caller's customer record.
+     *
+     * @param authentication authenticated caller.
+     * @return customer records visible to the caller.
+     */
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/customer")
-    public List<Customers> findAll() {
+    public List<Customers> findAll(Authentication authentication) {
+        if (!isPrivileged(authentication)) {
+            return ownCustomer(authentication);
+        }
         return customersRepository.findAll();
     }
 
+    /**
+     * Returns customer records matching a name fragment within the caller's allowed scope.
+     *
+     * @param customerName customer name fragment.
+     * @param authentication authenticated caller.
+     * @return matching customer records visible to the caller.
+     */
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/customer/name/{customerName}")
-    public List<Customers> findByCustomerByName(@PathVariable String customerName) {
+    public List<Customers> findByCustomerByName(@PathVariable String customerName, Authentication authentication) {
+        if (!isPrivileged(authentication)) {
+            return ownCustomer(authentication).stream()
+                    .filter(customer -> contains(customer.getCustomerName(), customerName))
+                    .toList();
+        }
         return customersRepository.findByCustomerNameIsContaining(customerName);
     }
 
@@ -53,7 +78,10 @@ public class CustomerController {
      * @return If the customers is found, a customer and HTTP Status code.
      */
     @GetMapping("/customer/{id}")
-    public ResponseEntity<Customers> getCustomerById(@PathVariable("id") String id) {
+    public ResponseEntity<Customers> getCustomerById(@PathVariable("id") String id, Authentication authentication) {
+        if (!canAccessCustomer(authentication, id)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         Optional<Customers> customerData = customersRepository.findById(id);
         try {
             return customerData.map(customers -> new ResponseEntity<>(customers, HttpStatus.OK))
@@ -70,7 +98,12 @@ public class CustomerController {
      * @return Returns a customer if found
      */
     @GetMapping("/customer/byemail/{email}")
-    public List<Customers> getCustomerByEmail(@PathVariable("email") String email) {
+    public List<Customers> getCustomerByEmail(@PathVariable("email") String email, Authentication authentication) {
+        if (!isPrivileged(authentication)) {
+            return ownCustomer(authentication).stream()
+                    .filter(customer -> contains(customer.getCustomerEmail(), email))
+                    .toList();
+        }
         return customersRepository.findByCustomerEmailIsContaining(email);
     }
 
@@ -81,7 +114,10 @@ public class CustomerController {
      * @return Returns HTTP Status code or the URI of the created object.
      */
     @PostMapping("/customer")
-    public ResponseEntity<Customers> createCustomer(@RequestBody Customers customer) {
+    public ResponseEntity<Customers> createCustomer(@RequestBody Customers customer, Authentication authentication) {
+        if (!canAccessCustomer(authentication, customer.getCustomerId())) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         boolean exists = customersRepository.existsById(customer.getCustomerId());
 
         if (!exists) {
@@ -114,7 +150,11 @@ public class CustomerController {
      * @return A Http Status code
      */
     @PutMapping("/customer/{id}")
-    public ResponseEntity<Customers> updateCustomer(@PathVariable("id") String id, @RequestBody Customers customer) {
+    public ResponseEntity<Customers> updateCustomer(@PathVariable("id") String id, @RequestBody Customers customer,
+            Authentication authentication) {
+        if (!canAccessCustomer(authentication, id)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         Optional<Customers> customerData = customersRepository.findById(id);
         try {
             if (customerData.isPresent()) {
@@ -138,7 +178,11 @@ public class CustomerController {
      * @return A Http Status code
      */
     @DeleteMapping("/customer/{customerId}")
-    public ResponseEntity<HttpStatus> deleteCustomer(@PathVariable("customerId") String customerId) {
+    public ResponseEntity<HttpStatus> deleteCustomer(@PathVariable("customerId") String customerId,
+            Authentication authentication) {
+        if (!canAccessCustomer(authentication, customerId)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         try {
             customersRepository.deleteById(customerId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -165,5 +209,18 @@ public class CustomerController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private List<Customers> ownCustomer(Authentication authentication) {
+        if (authentication == null || authentication.getName() == null) {
+            return List.of();
+        }
+        return customersRepository.findById(authentication.getName())
+                .map(List::of)
+                .orElseGet(List::of);
+    }
+
+    private static boolean contains(String value, String fragment) {
+        return value != null && fragment != null && value.contains(fragment);
     }
 }

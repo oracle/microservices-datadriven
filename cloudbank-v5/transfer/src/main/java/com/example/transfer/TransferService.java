@@ -5,6 +5,7 @@ package com.example.transfer;
 
 import java.net.URI;
 
+import com.example.common.security.CloudBankAuthorization;
 import com.oracle.microtx.springboot.lra.annotation.Compensate;
 import com.oracle.microtx.springboot.lra.annotation.Complete;
 import com.oracle.microtx.springboot.lra.annotation.LRA;
@@ -16,11 +17,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -32,6 +35,7 @@ public class TransferService {
 
     public static final String TRANSFER_ID = "TRANSFER_ID";
 
+    @Value("${account.lookup.url}") URI accountLookupUri;
     @Value("${account.withdraw.url}") URI withdrawUri;
     @Value("${account.deposit.url}") URI depositUri;
     @Value("${transfer.cancel.url}") URI transferCancelUri;
@@ -68,9 +72,13 @@ public class TransferService {
     public ResponseEntity<String> transfer(@RequestParam("fromAccount") long fromAccount,
             @RequestParam("toAccount") long toAccount,
             @RequestParam("amount") long amount,
-            @RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) {
+            @RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId,
+            Authentication authentication) {
         if (amount <= 0) {
             return ResponseEntity.badRequest().body("transfer failed: amount must be positive");
+        }
+        if (!canTransferFromAccount(fromAccount, authentication)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("transfer failed: account access denied");
         }
         if (lraId == null) {
             return new ResponseEntity<>("Failed to create LRA", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -110,6 +118,29 @@ public class TransferService {
 
         // return status
         return ResponseEntity.ok("transfer status:" + returnString);
+    }
+
+    private boolean canTransferFromAccount(long accountId, Authentication authentication) {
+        if (CloudBankAuthorization.isPrivileged(authentication)) {
+            return true;
+        }
+        if (authentication == null || authentication.getName() == null) {
+            return false;
+        }
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUri(accountLookupUri)
+                .path("/{accountId}");
+        try {
+            ResponseEntity<AccountLookup> response = restTemplate.getForEntity(
+                    builder.buildAndExpand(accountId).toUri(),
+                    AccountLookup.class);
+            return response.getStatusCode().is2xxSuccessful()
+                    && response.getBody() != null
+                    && authentication.getName().equals(response.getBody().accountCustomerId());
+        } catch (RestClientException exception) {
+            log.warn("Could not authorize transfer for account {}", accountId, exception);
+            return false;
+        }
     }
 
     private String withdraw(String lraId, long accountId, long amount) {
@@ -216,4 +247,6 @@ public class TransferService {
         return ResponseEntity.ok(response.getBody());
     }
 
+    private record AccountLookup(String accountCustomerId) {
+    }
 }

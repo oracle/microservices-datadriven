@@ -68,6 +68,19 @@ java -jar customer-helidon.jar
 mvn exec:java
 ```
 
+## Security
+
+The customer API is protected with MicroProfile JWT. `CustomerApplication` enables MP-JWT with `@LoginConfig(authMethod = "MP-JWT")`, and `CustomerResource` requires an authenticated bearer token before serving `/api/v1/customer*` requests.
+
+The service validates tokens from `azn-server` using the JWK set configured by `CLOUDBANK_SECURITY_JWK_SET_URI` or `mp.jwt.verify.publickey.location`. It enforces CloudBank OAuth scopes from the JWT `scope` claim:
+
+- `cloudbank.read` can read the caller's own customer record.
+- `cloudbank.write` can create or update the caller's own customer record.
+- `cloudbank.admin` can access any customer record and delete customers.
+- `cloudbank.internal` is accepted on read paths for internal service-to-service lookup flows.
+
+Requests without a bearer token return `401`. Requests with a valid token but the wrong scope or customer id return `403`.
+
 ## Quick Start with Local Oracle Database
 
 To run against a local Oracle Docker container, simply:
@@ -178,6 +191,7 @@ Exercise the application as described above.
 # Microprofile server properties
 server.port=8080
 server.host=0.0.0.0
+mp.jwt.verify.publickey.location=${CLOUDBANK_SECURITY_JWK_SET_URI:http://azn-server:8080/oauth2/jwks}
 
 # Application properties. This is the default greeting
 app.greeting=Hello

@@ -2,6 +2,7 @@
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 package com.example.helidon.producer;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 @Path("/post")
 @ApplicationScoped
+@RolesAllowed("cloudbank.internal")
 public class ProducerResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProducerResource.class);

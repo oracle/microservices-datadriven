@@ -24,7 +24,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(
         classes = CloudBankSecurityAutoConfigurationTest.TestApplication.class,
         properties = {
-            "cloudbank.security.enabled=true",
             "eureka.client.enabled=false",
             "spring.cloud.config.import-check.enabled=false",
             "spring.cloud.discovery.enabled=false",
@@ -50,6 +49,17 @@ class CloudBankSecurityAutoConfigurationTest {
     }
 
     @Test
+    void accountLookupAllowsInternalServiceScope() throws Exception {
+        mockMvc.perform(get("/api/v1/account/27")
+                .with(jwt().authorities(() -> "SCOPE_cloudbank.transfer")))
+                .andExpect(status().isForbidden());
+
+        mockMvc.perform(get("/api/v1/account/27")
+                .with(jwt().authorities(() -> "SCOPE_cloudbank.internal")))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     void transferEndpointRequiresTransferScope() throws Exception {
         mockMvc.perform(post("/transfer")
                 .contentType(MediaType.TEXT_PLAIN)
@@ -63,9 +73,14 @@ class CloudBankSecurityAutoConfigurationTest {
     }
 
     @Test
-    void internalEndpointsRemainCompatibleByDefault() throws Exception {
+    void internalEndpointRequiresInternalScopeByDefault() throws Exception {
         mockMvc.perform(post("/deposit")
                 .contentType(MediaType.TEXT_PLAIN))
+                .andExpect(status().isUnauthorized());
+
+        mockMvc.perform(post("/deposit")
+                .contentType(MediaType.TEXT_PLAIN)
+                .with(jwt().authorities(() -> "SCOPE_cloudbank.internal")))
                 .andExpect(status().isOk());
     }
 
@@ -78,6 +93,11 @@ class CloudBankSecurityAutoConfigurationTest {
     static class TestController {
         @GetMapping("/api/v1/creditscore")
         String read() {
+            return "ok";
+        }
+
+        @GetMapping("/api/v1/account/27")
+        String accountLookup() {
             return "ok";
         }
 

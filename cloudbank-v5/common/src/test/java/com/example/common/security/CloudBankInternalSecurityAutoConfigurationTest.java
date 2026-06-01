@@ -24,7 +24,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(
         classes = CloudBankInternalSecurityAutoConfigurationTest.TestApplication.class,
         properties = {
-            "cloudbank.security.enabled=true",
             "cloudbank.security.require-internal-token=true",
             "eureka.client.enabled=false",
             "spring.cloud.config.import-check.enabled=false",

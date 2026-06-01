@@ -14,6 +14,7 @@ import com.example.accounts.repository.AccountRepository;
 import com.example.accounts.repository.JournalRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import static com.example.common.security.CloudBankAuthorization.canAccessCustomer;
+import static com.example.common.security.CloudBankAuthorization.isPrivileged;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -41,7 +45,13 @@ public class AccountController {
      * @return List off accounts
      */
     @GetMapping("/accounts")
-    public List<Account> getAllAccounts() {
+    public List<Account> getAllAccounts(Authentication authentication) {
+        if (!isPrivileged(authentication)) {
+            if (authentication == null || authentication.getName() == null) {
+                return List.of();
+            }
+            return accountRepository.findByAccountCustomerId(authentication.getName());
+        }
         return accountRepository.findAll();
     }
 
@@ -52,7 +62,10 @@ public class AccountController {
      * @return Returns HTTP Status code or the URI of the created object.
      */
     @PostMapping("/account")
-    public ResponseEntity<Account> createAccount(@RequestBody Account account) {
+    public ResponseEntity<Account> createAccount(@RequestBody Account account, Authentication authentication) {
+        if (!canAccessCustomer(authentication, account.getAccountCustomerId())) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         boolean exists = accountRepository.existsById(account.getAccountId());
 
         if (!exists) {
@@ -79,10 +92,11 @@ public class AccountController {
      * @return An account
      */
     @GetMapping("/account/{accountId}")
-    public ResponseEntity<Account> getAccountById(@PathVariable("accountId") long accountId) {
+    public ResponseEntity<Account> getAccountById(@PathVariable("accountId") long accountId,
+            Authentication authentication) {
         Optional<Account> accountData = accountRepository.findById(accountId);
         try {
-            return accountData.map(account -> new ResponseEntity<>(account, HttpStatus.OK))
+            return accountData.map(account -> accountResponse(account, authentication))
                     .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -96,7 +110,11 @@ public class AccountController {
      * @return A list opf Account(s)
      */
     @GetMapping("/account/getAccounts/{customerId}")
-    public ResponseEntity<List<Account>> getAccountsByCustomerId(@PathVariable("customerId") String customerId) {
+    public ResponseEntity<List<Account>> getAccountsByCustomerId(@PathVariable("customerId") String customerId,
+            Authentication authentication) {
+        if (!canAccessCustomer(authentication, customerId)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         try {
             List<Account> accountData = new ArrayList<Account>();
             accountData.addAll(accountRepository.findByAccountCustomerId(customerId));
@@ -132,7 +150,12 @@ public class AccountController {
      * @return List of Journal object(s)
      */
     @GetMapping("/account/{accountId}/transactions")
-    public ResponseEntity<List<Journal>> getTransactions(@PathVariable("accountId") long accountId) {
+    public ResponseEntity<List<Journal>> getTransactions(@PathVariable("accountId") long accountId,
+            Authentication authentication) {
+        ResponseEntity<HttpStatus> authorization = authorizeAccountAccess(accountId, authentication);
+        if (authorization != null) {
+            return new ResponseEntity<>(authorization.getStatusCode());
+        }
         try {
             List<Journal> transactions = new ArrayList<Journal>();
             transactions.addAll(journalRepository.findByAccountId(accountId));
@@ -152,7 +175,12 @@ public class AccountController {
      * @return HTTP Status Code
      */
     @PostMapping("/account/journal")
-    public ResponseEntity<Journal> postSimpleJournalEntry(@RequestBody Journal journalEntry) {
+    public ResponseEntity<Journal> postSimpleJournalEntry(@RequestBody Journal journalEntry,
+            Authentication authentication) {
+        ResponseEntity<HttpStatus> authorization = authorizeAccountAccess(journalEntry.getAccountId(), authentication);
+        if (authorization != null) {
+            return new ResponseEntity<>(authorization.getStatusCode());
+        }
         boolean exists = journalRepository.existsById(journalEntry.getJournalId());
         if (!exists) {
             try {
@@ -173,8 +201,13 @@ public class AccountController {
      * @return Journal object(s)
      */
     @GetMapping("/account/{accountId}/journal")
-    public List<Journal> getJournalEntriesForAccount(@PathVariable("accountId") long accountId) {
-        return journalRepository.findJournalByAccountId(accountId);
+    public ResponseEntity<List<Journal>> getJournalEntriesForAccount(@PathVariable("accountId") long accountId,
+            Authentication authentication) {
+        ResponseEntity<HttpStatus> authorization = authorizeAccountAccess(accountId, authentication);
+        if (authorization != null) {
+            return new ResponseEntity<>(authorization.getStatusCode());
+        }
+        return new ResponseEntity<>(journalRepository.findJournalByAccountId(accountId), HttpStatus.OK);
     }
 
     /**
@@ -184,11 +217,16 @@ public class AccountController {
      * @return HTTP Status Code
      */
     @PostMapping("/account/journal/{journalId}/clear")
-    public ResponseEntity<Journal> clearJournalEntry(@PathVariable long journalId) {
+    public ResponseEntity<Journal> clearJournalEntry(@PathVariable long journalId, Authentication authentication) {
         try {
             Optional<Journal> data = journalRepository.findById(journalId);
             if (data.isPresent()) {
                 Journal newJournalEntry = data.get();
+                ResponseEntity<HttpStatus> authorization =
+                        authorizeAccountAccess(newJournalEntry.getAccountId(), authentication);
+                if (authorization != null) {
+                    return new ResponseEntity<>(authorization.getStatusCode());
+                }
                 newJournalEntry.setJournalType("DEPOSIT");
                 journalRepository.saveAndFlush(newJournalEntry);
                 return new ResponseEntity<Journal>(newJournalEntry, HttpStatus.OK);
@@ -198,6 +236,24 @@ public class AccountController {
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private ResponseEntity<Account> accountResponse(Account account, Authentication authentication) {
+        if (!canAccessCustomer(authentication, account.getAccountCustomerId())) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(account, HttpStatus.OK);
+    }
+
+    private ResponseEntity<HttpStatus> authorizeAccountAccess(long accountId, Authentication authentication) {
+        Optional<Account> accountData = accountRepository.findById(accountId);
+        if (accountData.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if (!canAccessCustomer(authentication, accountData.get().getAccountCustomerId())) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        return null;
     }
 
 }
