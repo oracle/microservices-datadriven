@@ -51,6 +51,39 @@ global:
         tag: "alpine"
 
 # -----------------------
+# -- Network Policy Configuration
+networkPolicy:
+  # Creates namespace-scoped NetworkPolicy resources for the OBaaS release.
+  # Enforcement requires a Kubernetes CNI plugin that implements NetworkPolicy.
+  enabled: true
+
+  # Allow pod-to-pod traffic within the OBaaS release namespace.
+  allowSameNamespace: true
+
+  # Allow external clients and the Kubernetes control plane to reach gateway,
+  # ingress, and webhook endpoints that are intentionally exposed by OBaaS.
+  allowPublicIngress: true
+
+  # Allow egress to destinations outside the release namespace. Keep enabled
+  # unless you also provide extraEgress rules for your database, OCI services,
+  # identity providers, image registries, and other required endpoints.
+  allowExternalEgress: true
+
+  dns:
+    # Allow DNS lookups to CoreDNS/kube-dns.
+    enabled: true
+    namespaceSelector:
+      kubernetes.io/metadata.name: kube-system
+    podSelector:
+      k8s-app: kube-dns
+
+  # Additional raw NetworkPolicy ingress rules applied to all pods.
+  extraIngress: []
+
+  # Additional raw NetworkPolicy egress rules applied to all pods.
+  extraEgress: []
+
+# -----------------------
 # -- OBaaS Configuration
 #
 # Note: Cluster-singleton prerequisites must be installed via the obaas-prereqs chart before installing this chart.
@@ -531,12 +564,12 @@ signoz:
       # Only applies if using a ratio sampler. 1.0 = 100%, 0.1 = 10%
       argument: "1.0"
     java:
-      # Custom environment variables for Java instrumentation
-      # Example:
-      # env:
-      #   - name: OTEL_LOGS_EXPORTER
-      #     value: otlp
-      env: []
+      # Export Spring Boot application metrics through the injected Java agent.
+      env:
+        - name: OTEL_METRICS_EXPORTER
+          value: otlp
+        - name: OTEL_LOGS_EXPORTER
+          value: none
   
   # Change to override individual component images
   signoz:

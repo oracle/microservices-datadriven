@@ -7,7 +7,7 @@ begin
       p_schema              => upper('&&app_username'),
       p_url_mapping_type    => 'BASE_PATH',
       p_url_mapping_pattern => 'support',
-      p_auto_rest_auth      => false
+      p_auto_rest_auth      => true
    );
 commit;
 end;
@@ -15,11 +15,12 @@ end;
 
 begin
    ords.enable_object(
-      p_enabled      => true,
-      p_schema       => upper('&&app_username'),
-      p_object       => 'TICKET_DV',
-      p_object_type  => 'VIEW',
-      p_object_alias => 'ticket'
+      p_enabled          => true,
+      p_schema           => upper('&&app_username'),
+      p_object           => 'TICKET_DV',
+      p_object_type      => 'VIEW',
+      p_object_alias     => 'ticket',
+      p_auto_rest_auth   => true
    );
 commit;
 end;

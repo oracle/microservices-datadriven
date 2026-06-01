@@ -2,6 +2,10 @@
 Copyright (c) 2024, 2025, Oracle and/or its affiliates.
 Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
 */}}
+{{- $testSecurityContext := deepCopy (.Values.securityContext | default dict) -}}
+{{- if not (hasKey $testSecurityContext "runAsUser") -}}
+{{- $_ := set $testSecurityContext "runAsUser" 65534 -}}
+{{- end -}}
 apiVersion: v1
 kind: Pod
 metadata:
@@ -11,8 +15,16 @@ metadata:
   annotations:
     "helm.sh/hook": test
 spec:
+  {{ with .Values.podSecurityContext }}
+  securityContext:
+    {{- toYaml . | nindent 4 }}
+  {{ end }}
   containers:
     - name: wget
+      {{ with $testSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{ end }}
       image: busybox
       command: ['wget']
       args: ['{{ include "obaas-app.fullname" . }}:{{ .Values.service.port }}']

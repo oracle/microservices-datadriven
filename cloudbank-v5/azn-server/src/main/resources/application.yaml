@@ -58,13 +58,13 @@ azn:
 management:
   endpoint:
     health:
-      show-details: when_authorized
+      show-details: when-authorized
       roles: ACTUATOR
   endpoints:
     web:
       exposure:
         # Keep actuator surface small; SecurityConfig protects non-health/info endpoints.
-        include: health,info,prometheus
+        include: health,info
   health:
     probes:
       enabled: true

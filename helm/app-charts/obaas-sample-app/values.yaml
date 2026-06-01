@@ -120,8 +120,14 @@ serviceAccount:
 
 podAnnotations: {}
 podLabels: {}
-podSecurityContext: {}
-securityContext: {}
+podSecurityContext:
+  runAsNonRoot: true
+securityContext:
+  runAsNonRoot: true
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
 
 ingress:
   enabled: false

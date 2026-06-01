@@ -30,6 +30,7 @@ A CNCF-compliant Kubernetes cluster with the following specifications:
 - At least 2 OCPU and 32GB memory per worker node
 - Working storage provider with storage class for RWX (ReadWriteMany) PVs
 - Working network provider supporting either Ingress or Gateway API for external cluster access
+- (optional but recommended) Kubernetes NetworkPolicy enforcement from the cluster CNI plugin
 
 You may need extra capacity:
 
@@ -45,6 +46,14 @@ You may need extra capacity:
 :::tip[Recommended]
 Oracle Kubernetes Engine (OKE) "Quick Create/Enhanced" cluster is the recommended platform for OBaaS deployments.
 :::
+
+### NetworkPolicy enforcement
+
+The OBaaS application chart creates NetworkPolicy resources in each release namespace. These policies establish a default-deny baseline, allow traffic within the release namespace, allow DNS egress, and allow public ingress only to the gateway and ingress entrypoints that OBaaS exposes. For compatibility, outbound traffic to external destinations is explicitly allowed by default.
+
+NetworkPolicy objects are only enforced when the Kubernetes cluster uses a CNI plugin that implements NetworkPolicy. Before using OBaaS in a shared or production cluster, confirm that your CNI has NetworkPolicy enforcement enabled. Clusters without an enforcing CNI will accept the NetworkPolicy resources, but pod traffic will not be isolated by them.
+
+If you disable the chart's default external egress allowance, add explicit `networkPolicy.extraEgress` rules for every required external dependency, including Oracle Database endpoints, OCI APIs, image registries, identity providers, and any outbound service your applications call.
 
 ### Oracle Database
 

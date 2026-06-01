@@ -25,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         classes = CloudBankSecurityAutoConfigurationTest.TestApplication.class,
         properties = {
             "eureka.client.enabled=false",
+            "management.endpoints.web.exposure.include=health,info,env",
             "spring.cloud.config.import-check.enabled=false",
             "spring.cloud.discovery.enabled=false",
             "spring.security.oauth2.resourceserver.jwt.jwk-set-uri=http://example.invalid/oauth2/jwks"
@@ -84,6 +85,15 @@ class CloudBankSecurityAutoConfigurationTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    void onlyHealthAndInfoActuatorEndpointsArePublic() throws Exception {
+        mockMvc.perform(get("/actuator/health"))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/actuator/env"))
+                .andExpect(status().isUnauthorized());
+    }
+
     @SpringBootApplication
     @Import({CloudBankSecurityAutoConfiguration.class, TestController.class})
     static class TestApplication {
@@ -108,6 +118,11 @@ class CloudBankSecurityAutoConfigurationTest {
 
         @PostMapping("/deposit")
         String deposit() {
+            return "ok";
+        }
+
+        @PostMapping("/chat")
+        String chat() {
             return "ok";
         }
     }
