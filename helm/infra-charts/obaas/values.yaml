@@ -531,12 +531,12 @@ signoz:
       # Only applies if using a ratio sampler. 1.0 = 100%, 0.1 = 10%
       argument: "1.0"
     java:
-      # Custom environment variables for Java instrumentation
-      # Example:
-      # env:
-      #   - name: OTEL_LOGS_EXPORTER
-      #     value: otlp
-      env: []
+      # Export Spring Boot application metrics through the injected Java agent.
+      env:
+        - name: OTEL_METRICS_EXPORTER
+          value: otlp
+        - name: OTEL_LOGS_EXPORTER
+          value: none
   
   # Change to override individual component images
   signoz:
