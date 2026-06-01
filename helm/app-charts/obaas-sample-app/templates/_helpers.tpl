@@ -104,7 +104,7 @@ OBaaS platform Helm release revision (looked up dynamically)
 {{- if gt (index $maxVersion "value") 0 }}
   {{- printf "%d" (index $maxVersion "value") }}
 {{- else }}
-  1
+{{- print "1" }}
 {{- end }}
 {{- end }}
 {{/*
@@ -182,7 +182,7 @@ Database wallet secret name (dynamically looks up obaas platform revision)
 {{- if $walletSecret }}
 {{- $walletSecret }}
 {{- else }}
-{{- printf "%s-adb-tns-admin-%s" (include "obaas.releaseName" .) (include "obaas.releaseRevision" .) }}
+{{- printf "%s-adb-tns-admin-%s" (include "obaas.releaseName" .) (include "obaas.releaseRevision" . | trim) }}
 {{- end }}
 {{- end }}
 
