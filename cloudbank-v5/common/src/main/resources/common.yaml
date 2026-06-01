@@ -28,8 +28,8 @@ eureka:
 management:
   endpoint:
     health:
-      show-details: when_authorized
-      show-components: when_authorized
+      show-details: when-authorized
+      show-components: when-authorized
   endpoints:
     web:
       exposure:
