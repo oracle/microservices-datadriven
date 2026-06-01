@@ -25,11 +25,9 @@ spec:
         {{- if .Values.otel.enabled }}
         # Injects the OpenTelemetry Java agent into the application pod.
         instrumentation.opentelemetry.io/inject-java: "{{ .Release.Namespace }}/traces-instrumentation"
+        {{- if eq (.Values.obaas.framework | upper) "HELIDON" }}
         signoz.io/scrape: "true"
         signoz.io/port: "{{ .Values.service.port }}"
-        {{- if eq (.Values.obaas.framework | upper) "SPRING_BOOT" }}
-        signoz.io/path: /actuator/prometheus
-        {{- else if eq (.Values.obaas.framework | upper) "HELIDON" }}
         signoz.io/path: /metrics
         {{- end }}
         {{- end }}

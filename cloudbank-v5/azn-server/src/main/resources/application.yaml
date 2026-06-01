@@ -64,7 +64,7 @@ management:
     web:
       exposure:
         # Keep actuator surface small; SecurityConfig protects non-health/info endpoints.
-        include: health,info,prometheus
+        include: health,info
   health:
     probes:
       enabled: true
