@@ -55,7 +55,6 @@ class ChatbotApplicationTest {
         controller = new ChatController(chatModel, 2, Duration.ofMinutes(1),
                 Clock.fixed(Instant.EPOCH, ZoneOffset.UTC));
         request = new MockHttpServletRequest();
-        request.setRemoteAddr("192.0.2.10");
         authentication = new TestingAuthenticationToken("alice", "n/a", "SCOPE_cloudbank.read");
     }
 
