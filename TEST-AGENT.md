@@ -13,6 +13,8 @@ Use only these sources for installation and test truth:
 - `docs-source/site/docs`, especially `intro.md`, `setup/helm/`, `platform/`, and `observability/`.
 - `helm/infra-charts/obaas-prereqs` and `helm/infra-charts/obaas`.
 - `cloudbank-v5/README.md`, `cloudbank-v5/cloudbank-v5-install.md`, and `cloudbank-v5/cloudbank-test-doc.md`.
+- `cloudbank-v5/customer-helidon/README.md` when a mixed Spring Boot and Helidon CloudBank workload is required for observability testing.
+- `cloudbank-v5/helidon-producer/README.md` and `cloudbank-v5/helidon-consumer/README.md` when Kafka observability or Helidon MP messaging telemetry must be validated.
 - The task list provided with this guide.
 - The SigNoz Services evidence checklist in this guide.
 
@@ -41,6 +43,8 @@ Collect and record these values before any mutating command:
 | `<cloudbank-dbname>` | Database prefix used by CloudBank scripts. |
 | `<cloudbank-image-tag>` | CloudBank image tag, default `0.0.1-SNAPSHOT`. |
 | `<cloudbank-registry>` | Explicit image registry path, if not using OCIR auto-detection. |
+| `<cloudbank-customer-implementation>` | `customer` for the Spring service, or `customer-helidon` when Helidon dashboard validation is required. |
+| `<kafka-load-workload>` | Kafka load source when Kafka dashboards are required, for example `helidon-producer` and `helidon-consumer`. |
 | `<priv-secret-name>` | Privileged DB secret, usually `<cloudbank-dbname>-db-priv-authn` unless customized. |
 | `<evidence-dir>` | Directory for all run evidence and reports. |
 
@@ -141,9 +145,9 @@ Use this matrix as the master list for each run. Mark each test `Pass`, `Fail`, 
 | PLAT-009 | Platform | Verify optional AI Optimizer. | AI Optimizer pods and required secrets exist when enabled. | pod, secret output |
 | PLAT-010 | Platform | Verify optional workflow server or console. | Optional components are healthy when enabled. | pod, service, screenshot |
 | CB-001 | CloudBank | Run CloudBank prerequisite checks. | Build and deploy checks pass. | script output |
-| CB-002 | CloudBank | Build and publish or load images. | Seven images are available to the cluster. | build/push output |
+| CB-002 | CloudBank | Build and publish or load images. | Images for the selected CloudBank services are available to the cluster. | build/push output |
 | CB-003 | CloudBank | Create CloudBank secrets. | Expected DB, OAuth, and signing-key secrets exist. | secret list |
-| CB-004 | CloudBank | Deploy seven services. | `azn-server`, `account`, `customer`, `creditscore`, `transfer`, `checks`, `testrunner` are running. | Helm and pod output |
+| CB-004 | CloudBank | Deploy seven services. | `azn-server`, `account`, selected customer implementation, `creditscore`, `transfer`, `checks`, `testrunner` are running. | Helm and pod output |
 | CB-005 | CloudBank | Create APISIX routes. | Required routes created and sensitive routes blocked. | route script output |
 | CB-006 | CloudBank | Run secured smoke test. | Smoke test passes. | smoke script output |
 | CB-007 | CloudBank | Check OAuth metadata and JWKS. | Metadata is public and JWKS exposes a key ID. | curl output |
@@ -167,6 +171,8 @@ Use this matrix as the master list for each run. Mark each test `Pass`, `Fail`, 
 | OBS-012 | Observability | Verify JVM/Spring observability. | Spring Boot and JVM dashboards show CloudBank data. | screenshots |
 | OBS-013 | Observability | Verify MicroTx observability. | MicroTx dashboard shows data after transfer workflow, or waiver explains absence. | screenshot |
 | OBS-014 | Observability | Verify messaging queues view. | Messaging Queues view is accessible and populated when queue/Kafka data exists. | screenshot |
+| OBS-015 | Observability | Verify telemetry data before dashboard capture. | Metrics, logs, and traces exist for required services in the selected time window before screenshots are taken. | curl/API/SQL output |
+| OBS-016 | Observability | Validate captured screenshots. | Screenshot guardrails prove the expected page was captured and required dashboards contain data. | validation report |
 | SEC-001 | Security | Scan OBaaS images. | Scanner completes and critical/high findings are triaged. | scan report |
 | SEC-002 | Security | Scan CloudBank images. | Scanner completes and critical/high findings are triaged. | scan report |
 | SEC-003 | Security | Record scanner metadata. | Scanner name, version, DB date, image tags, and digests are recorded. | scan output |
@@ -185,13 +191,19 @@ Platform checks:
 
 - APISIX gateway must be reachable through the selected access path or a documented local port-forward.
 - APISIX admin API must show the route set expected after CloudBank route creation.
-- Eureka must show the OBaaS platform services and all seven CloudBank services after deployment.
+- Eureka must show the OBaaS platform services and all selected CloudBank services after deployment.
 - Config Server must respond. If no test property is seeded, record that the server is reachable and that no config data validation was performed.
 - Spring Boot Admin must show monitored Spring services and health status.
+- OTMM/MicroTx must be tested on every run where it is installed. If MicroTx is known to fail in the tested OBaaS build, do not skip the test; run it, mark the status `Fail` or `Waived` according to operator policy, and record the version-specific failure, logs, workflow output, and recommended retest trigger.
 
 CloudBank checks:
 
 - Run the automated secured smoke test from `CBV5-AGENT.md` first and preserve its full output.
+- When the run must validate Helidon observability, deploy `customer-helidon` instead of the Spring `customer` service so the workload includes both Spring Boot and Helidon services.
+- Use `CBV5-AGENT.md` for the standard CloudBank deployment flow and `cloudbank-v5/customer-helidon/README.md` only for the `customer-helidon` build, values, deployment, and service-specific verification details.
+- When `customer-helidon` is selected, preserve evidence that the `/api/v1/customer*` route targets the Helidon customer service and that customer API smoke tests still pass.
+- If no Helidon workload is deployed, mark Helidon dashboards `Not Applicable`; do not fail them for showing no data.
+- This repository currently has Helidon MP examples, not Helidon SE examples. Treat `Helidon SE Details` as `Not Applicable` or `Waived: no Helidon SE workload in this run` unless a real Helidon SE workload has been deployed.
 - Run any additional manual endpoint checks from `cloudbank-v5/cloudbank-test-doc.md` only when they add evidence not already covered by the smoke test.
 - Verify OAuth metadata and JWKS reachability, unauthorized access rejection, wrong-scope rejection, read-token success, deposit/journal/clearance behavior, transfer behavior, and expected workflow logs.
 - Use HTTPS for external gateway URLs. Use local port-forwarding only for local test clusters or isolated evidence capture.
@@ -204,6 +216,101 @@ Screenshots:
 ## Observability Test Requirements
 
 Use the following SigNoz Services checklist as the minimum UI evidence requirement for enterprise observability validation.
+
+### Telemetry Data Readiness
+
+Do not start dashboard screenshot capture until the run has proved that relevant telemetry exists for the selected time window. Empty dashboards are not acceptable evidence for required observability tests unless the dashboard is for an optional component that was not installed or the report includes an explicit waiver.
+
+Before UI capture, use curl, SigNoz API calls from an authenticated browser/session, ClickHouse queries, service metrics endpoints, or other direct telemetry checks to prove data is present. Save all command output under `$EVIDENCE_DIR/observability`.
+
+Required readiness checks:
+
+- Services: prove recent service telemetry exists for OBaaS platform services and all deployed CloudBank services.
+- Traces: prove at least one recent CloudBank trace exists and includes more than one CloudBank service when a workflow crosses services.
+- Logs: prove recent logs exist for `<application-namespace>` and at least one CloudBank service.
+- Metrics: prove recent metric series exist for HTTP traffic, JVM, Spring, Helidon when deployed, APISIX or gateway traffic, Kubernetes pod or node metrics, and database metrics where those components are installed.
+- Dashboard-specific data: for every required dashboard screenshot, identify at least one metric, trace, log query, or table on that dashboard that has data before capture.
+
+Acceptable direct evidence examples:
+
+```bash
+curl -sS <signoz-or-query-api-url> >"$EVIDENCE_DIR/observability/signoz-services-data.json"
+curl -sS <cloudbank-service-actuator-prometheus-url> >"$EVIDENCE_DIR/observability/cloudbank-actuator-prometheus.txt"
+kubectl -n <application-namespace> exec <clickhouse-pod> -- clickhouse-client --query '<read-only-query>' >"$EVIDENCE_DIR/observability/clickhouse-telemetry-check.txt"
+```
+
+The exact SigNoz API and ClickHouse schema may vary by chart version. Record the query or API path used, the time window, the response status, and enough response data to prove the count is greater than zero.
+
+### Telemetry Load Generation
+
+If any required telemetry readiness check returns no data, generate load before taking screenshots. Do not mark an empty required dashboard as passing just because the page loaded.
+
+Use CloudBank traffic first because it exercises the most useful path through APISIX, OAuth, Spring Boot services, database calls, traces, logs, and JVM metrics:
+
+- Run the CloudBank secured smoke test from `CBV5-AGENT.md`.
+- Repeat read endpoints for account, customer, creditscore, and OAuth metadata. If `customer-helidon` is selected, customer endpoint traffic must route to the Helidon customer service.
+- Run deposit, journal, check clearance, and transfer workflows.
+- Prefer a short loop, for example 5 to 10 minutes, with modest concurrency that the local cluster can sustain.
+- Capture the exact load command, start and end timestamps, request counts, HTTP status summary, and any errors.
+
+Map generated load to dashboard expectations:
+
+| Dashboard or View | Data To Generate Before Capture |
+| --- | --- |
+| SigNoz Services, APM Metrics, HTTP API Monitoring | Repeated CloudBank API requests through APISIX. |
+| Apache APISIX, Envoy Gateway, NGINX | Gateway-routed CloudBank API requests. |
+| Spring Boot Observability, Spring Boot 3.x Statistics, JVM Metrics | CloudBank service requests plus actuator or metrics scraping evidence. |
+| DB Calls Monitoring, Oracle Database Dashboard | CloudBank account, deposit, journal, and transfer operations that touch the database. |
+| MicroTx | CloudBank transfer workflow. |
+| Logs and Traces | CloudBank smoke and workflow requests with trace propagation enabled. |
+| Kubernetes Pod, Node, PVC, Host, kube-state-metrics | Wait for collector scrape intervals and verify pod/node/PVC metrics directly. |
+| Kafka Server Monitoring Dashboard | Kafka producer/consumer traffic when Kafka is enabled. Prefer `helidon-producer` and `helidon-consumer` with repeated `POST /post` requests to `my-topic`. |
+| Helidon MP dashboards | `customer-helidon` customer API requests, `helidon-producer` Kafka publish requests, or `helidon-consumer` message consumption when those workloads are deployed. |
+| Helidon SE dashboards | A real Helidon SE workload. If none is deployed, mark the dashboard `Not Applicable` or `Waived` with the reason `no Helidon SE example/workload in this run`. |
+
+After load generation, wait for the collector and SigNoz ingestion lag to settle, then rerun telemetry readiness checks. A typical wait is 1 to 3 minutes on a local cluster, but use observed ingestion behavior rather than a fixed assumption.
+
+### Kafka Load Generation
+
+When Kafka is enabled and Kafka dashboards are required, do not accept an empty Kafka dashboard until load has been attempted and diagnostics have been captured.
+
+Preferred load path:
+
+1. Deploy `helidon-producer` and `helidon-consumer` using their local README files and values files.
+2. Confirm their values set `OTEL_INSTRUMENTATION_KAFKA_METRICS_ENABLED=true`.
+3. Confirm the Kafka bootstrap service and topic values match the installed Strimzi Kafka cluster.
+4. Send repeated `POST /post` requests to the producer service.
+5. Confirm producer logs show messages sent and consumer logs show messages consumed.
+6. Verify Kafka producer or consumer metrics exist before taking Kafka dashboard screenshots.
+
+Example local-cluster load loop:
+
+```bash
+for i in $(seq 1 200); do
+  curl -sS -X POST \
+    -H "Content-Type: text/plain" \
+    --data "obaas-kafka-load-${i}-$(date -u +%Y%m%dT%H%M%SZ)" \
+    http://<helidon-producer-url>/post
+  echo
+  sleep 1
+done >"$EVIDENCE_DIR/observability/kafka-load-curl.out" \
+  2>"$EVIDENCE_DIR/observability/kafka-load-curl.err"
+```
+
+If a gateway route is not available for `helidon-producer`, use a local port-forward only for evidence capture:
+
+```bash
+kubectl -n <application-namespace> port-forward svc/helidon-producer 18080:80
+```
+
+Kafka readiness evidence must include:
+
+- `kubectl get kafka,kafkatopic,pods,svc -n <application-namespace>` output when the CRDs are available.
+- Producer and consumer pod logs showing send and consume activity.
+- Direct telemetry evidence for producer or consumer metrics, such as `kafka.producer.*`, `messaging.kafka.producer.*`, `kafka.consumer.*`, or `messaging.kafka.consumer.*`.
+- Kafka dashboard screenshot validation after the load and ingestion wait.
+
+If Kafka is enabled but `helidon-producer` and `helidon-consumer` are not deployed, use an equivalent producer/consumer or Strimzi client pod to generate topic traffic and record the exact commands. If no Kafka-producing workload is available, mark Kafka dashboard population `Fail` for a full observability run or `Waived` only with operator approval.
 
 ### SigNoz Services Checklist
 
@@ -272,8 +379,35 @@ Capture evidence for:
   - JVM Metrics
   - NGINX (OTEL), if ingress-nginx is enabled
   - MicroTx
-  - Kafka Server Monitoring Dashboard, if Kafka is enabled
-  - Helidon dashboards, only when Helidon workloads are deployed
+- Kafka Server Monitoring Dashboard, if Kafka is enabled, after producer/consumer load has been generated
+- Helidon Main Dashboard, Helidon MP Details, and Helidon JVM Details, only when `customer-helidon`, `helidon-producer`, `helidon-consumer`, or another Helidon MP workload is deployed
+- Helidon SE Details only when a real Helidon SE workload is deployed; otherwise mark it `Not Applicable` or `Waived` because this repository currently provides Helidon MP examples only
+
+### Dashboard Detail Capture Requirements
+
+The dashboards list page proves only that dashboards are installed. It does not prove that any individual dashboard was opened or populated.
+
+Capture exactly one dashboards-list screenshot for `OBS-008`. For each named dashboard required by `OBS-009` through `OBS-014`, capture a separate dashboard-detail screenshot.
+
+Before saving a named dashboard screenshot, the browser automation must verify:
+
+- The final browser URL is a dashboard detail route, not the dashboards list route. For SigNoz this means a URL shaped like `/dashboard/<dashboard-id>` rather than only `/dashboard`.
+- The visible dashboard title or breadcrumb matches the expected dashboard name.
+- The page is not still on `All Dashboards`, `Dashboards`, or `Create and manage dashboards for your workspace`.
+- The expected dashboard-specific content is visible, such as variables, panels, legends, table headings, or metric labels from that dashboard.
+- The dashboard has finished loading or has been refreshed after navigation.
+
+Recommended capture sequence for each named dashboard:
+
+1. Start from the dashboards list and search for the exact dashboard title.
+2. Click the dashboard row or link.
+3. Wait until the URL changes to a dashboard detail route and the expected dashboard title is visible.
+4. Run telemetry and screenshot validation checks.
+5. Save the screenshot only after validation passes.
+
+If the click does not leave the dashboards list, retry with a more direct navigation method. Acceptable fallback methods include opening the link discovered in the DOM, using the dashboard ID from an authenticated SigNoz API response, or using the dashboard ID visible in the browser URL after a manual successful click. Record the fallback method in the validation artifact.
+
+If the automation still captures the dashboards list page for a named dashboard, mark that dashboard screenshot `Fail`, keep the failed screenshot as diagnostic evidence, and recapture before the run can pass.
 
 ### Selenium Evidence Capture
 
@@ -292,10 +426,54 @@ screenshots/signoz-07-dashboards-list.png
 screenshots/signoz-08-dashboard-spring-boot-observability.png
 screenshots/signoz-09-dashboard-http-api.png
 screenshots/signoz-10-dashboard-db-calls.png
+screenshots/signoz-11-dashboard-helidon-main.png
+screenshots/signoz-12-dashboard-helidon-mp.png
 screenshots/eureka-services.png
 screenshots/spring-boot-admin-services.png
 screenshots/apisix-dashboard.png
 ```
+
+### Screenshot Validation Guardrails
+
+Every automated screenshot capture must produce a companion validation artifact under `$EVIDENCE_DIR/observability`, for example `screenshot-validation.json` or `screenshot-validation.md`.
+
+For each screenshot, record:
+
+- Expected view or dashboard name.
+- Screenshot file path.
+- Browser URL after navigation.
+- Page title or visible heading text captured from the DOM.
+- Time range selected in the UI.
+- Whether the page is authenticated and not redirected to login.
+- Whether the page contains obvious error states such as `404`, `500`, `unauthorized`, `failed to load`, or a blank root element.
+- Whether the screenshot is non-empty and visually plausible, using at least a file-size and image-dimension check.
+
+For dashboard screenshots, also record:
+
+- Dashboard title matched the expected title.
+- The browser URL is a dashboard detail URL, not only the dashboards list. For SigNoz, `/dashboard` is the list view and must not pass for a named dashboard; `/dashboard/<dashboard-id>` is expected.
+- The DOM text does not identify the page as only the dashboards list, such as `All Dashboards` without the expected dashboard detail heading.
+- Count of visible `No Data` panels.
+- Count or examples of visible numeric values, table rows, chart legends, service names, or plotted series.
+- The direct telemetry readiness evidence file that proves backing data existed before the screenshot was captured.
+
+Pass/fail rules:
+
+- A required dashboard screenshot fails when the expected dashboard title is missing.
+- A required dashboard screenshot fails when the captured page is the dashboard list, login page, error page, or a blank page.
+- A required dashboard screenshot fails when its final URL is only the dashboards list route, even if the expected dashboard name appears in the list.
+- A required dashboard screenshot fails when all meaningful panels show `No Data`, blank panels, or zero-only values after load generation.
+- A screenshot may pass with some `No Data` panels only when at least one relevant panel is populated and the report explains why the empty panels are expected.
+- Optional dashboards for disabled components must be marked `Not Applicable`, not `Pass`.
+
+Recommended guardrail implementation:
+
+- Use Selenium to capture both the screenshot and page DOM text.
+- Save DOM text next to the screenshot, for example `screenshots/<name>.txt`.
+- Use browser assertions before saving the screenshot: expected heading present, expected dashboard-detail URL pattern, expected time range, and at least one data-bearing selector or text value present.
+- Save the final URL for every screenshot in the validation artifact. This is mandatory for distinguishing a dashboard list screenshot from a dashboard detail screenshot.
+- Optionally run OCR or image analysis after capture to catch cases where the DOM looked correct but the image is blank, off-screen, or still loading.
+- Re-capture after refreshing the dashboard if validation fails because panels are still loading.
 
 If a UI cannot be accessed, mark the related test `Fail` and capture:
 
@@ -421,6 +599,8 @@ Use this template:
 | Access Path |  |
 | CloudBank DB Name |  |
 | CloudBank Image Tag |  |
+| CloudBank Customer Implementation | `customer` / `customer-helidon` |
+| Kafka Load Workload | `helidon-producer` / `helidon-consumer` / other / not enabled |
 | Evidence Directory |  |
 
 ## Executive Summary
@@ -466,29 +646,66 @@ Known deviations or waivers:
 | PRE-001 | Preflight |  |  |  |  |  |
 | INST-001 | Install |  |  |  |  |  |
 | PLAT-001 | Platform |  |  |  |  |  |
+| PLAT-002 | Platform |  |  |  |  |  |
+| PLAT-003 | Platform |  |  |  |  |  |
+| PLAT-004 | Platform |  |  |  |  |  |
+| PLAT-005 | Platform |  |  |  |  |  |
+| PLAT-006 | Platform |  |  |  |  |  |
+| PLAT-007 | Platform |  |  |  |  |  |
 | CB-001 | CloudBank |  |  |  |  |  |
 | OBS-001 | Observability |  |  |  |  |  |
+| OBS-011 | Observability |  |  |  |  |  |
+| OBS-013 | Observability |  |  |  |  |  |
+| OBS-015 | Observability |  |  |  |  |  |
+| OBS-016 | Observability |  |  |  |  |  |
 | SEC-001 | Security |  |  |  |  |  |
+
+## Platform Evidence Summary
+
+| Component | Status | Evidence | Notes |
+| --- | --- | --- | --- |
+| APISIX Gateway Service |  |  |  |
+| APISIX Admin API Routes |  |  |  |
+| Eureka UI/API |  |  |  |
+| Config Server |  |  |  |
+| Spring Boot Admin UI |  |  |  |
+| Oracle Database Exporter |  |  |  |
+| OTMM/MicroTx Runtime |  |  | Include version-specific known failures instead of omitting this row. |
+| MicroTx Transfer Workflow |  |  | Include CloudBank transfer evidence and failure diagnostics when failing. |
 
 ## Observability Evidence Summary
 
-| View / Dashboard | Status | Evidence | Notes |
-| --- | --- | --- | --- |
-| SigNoz Services |  |  |  |
-| Services P99/Error Rate/OPS Columns |  |  |  |
-| Traces |  |  |  |
-| Logs |  |  |  |
-| Metrics |  |  |  |
-| Infra Monitoring |  |  |  |
-| Dashboards List |  |  |  |
-| Spring Boot Observability |  |  |  |
-| Spring Boot Statistics |  |  |  |
-| Oracle Database Dashboard |  |  |  |
-| APISIX Dashboard |  |  |  |
-| HTTP API Monitoring |  |  |  |
-| DB Calls Monitoring |  |  |  |
-| JVM Metrics |  |  |  |
-| MicroTx |  |  |  |
+Telemetry readiness summary:
+
+- Readiness check time window:
+- Direct telemetry evidence:
+- Load generated before capture: Yes / No
+- Load evidence:
+- Ingestion wait time:
+- Screenshot validation evidence:
+
+| View / Dashboard | Telemetry Data Present Before Capture | Screenshot Validation | Status | Evidence | Notes |
+| --- | --- | --- | --- | --- | --- |
+| SigNoz Services |  |  |  |  |  |
+| Services P99/Error Rate/OPS Columns |  |  |  |  |  |
+| Traces |  |  |  |  |  |
+| Logs |  |  |  |  |  |
+| Metrics |  |  |  |  |  |
+| Infra Monitoring |  |  |  |  |  |
+| Dashboards List |  |  |  |  |  |
+| Spring Boot Observability |  |  |  |  |  |
+| Spring Boot Statistics |  |  |  |  |  |
+| Oracle Database Dashboard |  |  |  |  |  |
+| APISIX Dashboard |  |  |  |  | Gateway/service health belongs in Platform Evidence Summary; this row is for SigNoz APISIX observability. |
+| HTTP API Monitoring |  |  |  |  |  |
+| DB Calls Monitoring |  |  |  |  |  |
+| JVM Metrics |  |  |  |  |  |
+| MicroTx |  |  |  |  | Keep this row even for known current-version failures; record failure evidence or waiver. |
+| Kafka Server Monitoring Dashboard |  |  |  |  |  |
+| Helidon Main Dashboard |  |  |  |  |  |
+| Helidon MP Details |  |  |  |  |  |
+| Helidon SE Details |  |  |  |  |  |
+| Helidon JVM Details |  |  |  |  |  |
 
 ## Security Scan Summary
 
@@ -524,7 +741,9 @@ A run is complete only when:
 - The selected installation tier is explicitly recorded.
 - Required install and platform tests are complete.
 - CloudBank deployment and smoke tests are complete.
+- Observability readiness checks prove required telemetry existed before screenshots were captured, or load generation was run and the checks were repeated.
 - Observability evidence includes SigNoz Services, traces, logs, metrics, dashboards, and dashboard-population screenshots.
+- Screenshot validation guardrails pass for every required UI evidence file.
 - Vulnerability scans are complete or explicitly waived by the operator.
 - Every failure has logs, events, command output, and a recommended next action.
 - The run report contains an overall pass/fail result, pass rate, traffic-light rating, and evidence links.
