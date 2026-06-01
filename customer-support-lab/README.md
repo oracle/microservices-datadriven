@@ -117,9 +117,19 @@ curl -X GET "http://localhost:8080/tickets"
 
 ## ORDS
 
-ORDS (Oracle REST Data Services) must be installed and configured separately — it is not included in the `gvenzl/oracle-free` Docker image. It is pre-installed on OCI Autonomous Database. Run `src/test/resources/ords.sql` as the app user to enable the REST-enabled schema and view, then:
+ORDS (Oracle REST Data Services) must be installed and configured separately — it is not included in the `gvenzl/oracle-free` Docker image. It is pre-installed on OCI Autonomous Database. Run `src/test/resources/ords.sql` as the app user to enable the REST-enabled schema and view with authorization required.
+
+For this lab, the ORDS AutoREST endpoint is accessed with database Basic authentication using the application schema credentials. Use HTTPS when passing database credentials. If you run standalone ORDS, make sure database/schema authentication is enabled for the ORDS pool before testing these `curl` commands.
 
 When the ORDS schema and view are enabled, we can fetch ticket data using the ORDS REST API:
+
+Unauthenticated requests should be rejected:
+
+```bash
+curl -i -X GET $ORDS_URL/support/ticket/
+```
+
+Authenticated requests use the application database credentials:
 
 ```bash
 curl -X GET $ORDS_URL/support/ticket/ \
