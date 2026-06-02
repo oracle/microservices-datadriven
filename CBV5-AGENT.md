@@ -18,6 +18,7 @@ Use these local sources for CloudBank v5 deployment and testing truth:
 - `cloudbank-v5/4-deploy_all_services.sh`
 - `cloudbank-v5/5-apisix_create_routes.sh`
 - `cloudbank-v5/6-smoke_test_secure_services.sh`
+- `cloudbank-v5/7-test_all_services.sh`
 - `cloudbank-v5/*/values.yaml`
 - `helm/app-charts/obaas-sample-app`
 - `docs-source/site/docs/setup/helm`
@@ -39,7 +40,9 @@ Before deployment, collect and record:
 - `<registry>`: optional explicit registry path. If omitted, use OCI/OCIR auto-detection from the CloudBank scripts.
 - `<repository-visibility>`: OCIR repository visibility, either public or private. The repository creation script defaults to public unless `--private` is supplied.
 - `<image-pull-secret>`: optional Kubernetes pull secret for private or otherwise authenticated registries.
-- `<gateway-url>`: optional APISIX gateway URL for smoke tests. If omitted, the smoke-test script creates a local port-forward.
+- `<gateway-url>`: optional APISIX gateway URL for smoke and all-services tests. If omitted, the test scripts create a local port-forward.
+- `<owner-username>`: optional seeded customer/account owner username for full all-services tests. Defaults to `qwertysdwr`.
+- `<owner-password>`: optional password used by `7-test_all_services.sh` when creating or resetting the owner user for authorization-code testing.
 
 Default to OCI/OCIR image handling unless the operator provides an explicit registry. For non-OCI or explicitly provided registries, use `--registry`. Use `--image-pull-secret` only when the target cluster needs credentials to pull from the selected registry.
 
@@ -277,7 +280,7 @@ The `azn-server` user-management API `/user/api/v1*` must not be exposed through
 
 ## Testing
 
-Run the secured smoke test first:
+Run the secured smoke test first. This is the quick route, OAuth, and basic workflow check:
 
 ```bash
 cd cloudbank-v5
@@ -313,7 +316,81 @@ Expected smoke-test coverage:
 - account IDs can be discovered
 - testrunner deposit rejects a read token
 - testrunner deposit accepts a test token, unless `--read-only` is used
-- transfer accepts a transfer token, unless `--read-only` is used
+- the transfer route and workflow are exercised, unless `--read-only` is used
+
+Run the full all-services test after the smoke test. This is the authoritative end-to-end CloudBank validation:
+
+```bash
+cd cloudbank-v5
+./7-test_all_services.sh -n <namespace> -o <obaas-release> -d <dbname>
+```
+
+If the operator provides an external gateway URL:
+
+```bash
+cd cloudbank-v5
+./7-test_all_services.sh \
+  -n <namespace> \
+  -o <obaas-release> \
+  -d <dbname> \
+  --gateway-url <gateway-url>
+```
+
+If the default local ports conflict with existing port-forwards, override them:
+
+```bash
+cd cloudbank-v5
+./7-test_all_services.sh \
+  -n <namespace> \
+  -o <obaas-release> \
+  -d <dbname> \
+  --local-port 19080 \
+  --auth-local-port 19081 \
+  --service-base-port 19100
+```
+
+Use read-only mode when mutating check deposit, check clear, and transfer checks are not acceptable:
+
+```bash
+cd cloudbank-v5
+./7-test_all_services.sh -n <namespace> -o <obaas-release> -d <dbname> --read-only
+```
+
+If the seeded owner user must be customized, pass the owner values explicitly:
+
+```bash
+cd cloudbank-v5
+./7-test_all_services.sh \
+  -n <namespace> \
+  -o <obaas-release> \
+  -d <dbname> \
+  --owner-username <owner-username> \
+  --owner-password <owner-password>
+```
+
+Expected all-services coverage:
+
+- all seven CloudBank Kubernetes deployments are available
+- all seven direct `/actuator/health` checks return `UP`
+- APISIX gateway, authorization metadata, JWKS, and scoped OAuth client tokens work
+- the `azn-server` user-management API remains blocked through APISIX
+- protected route `401` and wrong-scope `403` behavior is preserved
+- owner-scoped account and customer APIs succeed with an authorization-code user token
+- `testrunner` publishes a check deposit, `checks` creates and clears the account journal entry
+- transfer completes through APISIX and updates source and target balances
+
+Expected all-services result:
+
+```text
+PASS=<positive-number> FAIL=0
+All CloudBank service tests passed
+```
+
+### Authorization Model For Tests
+
+APISIX enforces route-level OAuth scopes, but CloudBank services also enforce service-side ownership. Client-credentials tokens such as `cloudbank-client` are valid for route and scope checks, but they are not a customer or account owner. Account detail, customer detail, journal reads, check workflow polling, and transfer verification must use a user token whose subject matches the target account/customer owner.
+
+`7-test_all_services.sh` handles this by creating or resetting a seeded owner user through the internal `azn-server` API and minting an authorization-code plus PKCE token for that user. Do not weaken service authorization or APISIX routes to make tests pass.
 
 For manual testing, follow `cloudbank-v5/cloudbank-test-doc.md`. Use `http://localhost` only with local port-forward testing. Use HTTPS for external gateway URLs so client secrets and tokens are not sent over plaintext network links.
 
@@ -346,6 +423,13 @@ Check OAuth endpoints through the APISIX gateway:
 kubectl port-forward -n <namespace> svc/<obaas-release>-apisix-gateway 9080:80
 curl -s http://127.0.0.1:9080/.well-known/oauth-authorization-server | jq
 curl -s http://127.0.0.1:9080/oauth2/jwks | jq '.keys[].kid'
+```
+
+Run full automated verification:
+
+```bash
+cd cloudbank-v5
+./7-test_all_services.sh -n <namespace> -o <obaas-release> -d <dbname>
 ```
 
 Check Eureka registration:
@@ -477,7 +561,8 @@ Expected HTTP behavior:
 
 - no bearer token on protected APIs: `401`
 - wrong scope: `403`
-- correct scope: success response for the target API
+- correct route scope: request passes APISIX and reaches the target service
+- correct route scope plus matching owner token: success response for owner-scoped account, customer, journal, and transfer APIs
 
 ### Smoke Test Failures
 
@@ -491,6 +576,27 @@ cd cloudbank-v5
 If read-only succeeds but default smoke tests fail, inspect `account`, `testrunner`, `transfer`, database init jobs, and AQ/LRA-related logs.
 
 Immediately after a redeploy, mutating smoke-test calls can occasionally time out while services finish Eureka registration and warm database connections. If token issuance, read-only checks, and expected `401` or `403` checks pass but a deposit or transfer call returns `504`, wait briefly and rerun the smoke test once before treating it as a persistent deployment failure.
+
+### All-Services Test Failures
+
+Run the full test when smoke tests pass but a complete workload validation is needed:
+
+```bash
+cd cloudbank-v5
+./7-test_all_services.sh -n <namespace> -o <obaas-release> -d <dbname>
+```
+
+If `7-test_all_services.sh` returns `403` on account detail, customer detail, journal polling, or transfer, check that the owner user was created, the owner authorization-code token was issued, and the selected account/customer records are owned by that token subject. Use `--owner-username` and `--owner-password` only when the deployment uses different seeded data.
+
+If account transactions return `204`, treat it as a valid empty-state response. The account service returns `204 No Content` when an accessible account has no matching transactions.
+
+If the checks workflow fails after `testrunner deposit test` returns `201`, inspect `testrunner`, `checks`, Oracle AQ/JMS configuration, and account journal polling:
+
+```bash
+kubectl logs -n <namespace> -l app.kubernetes.io/name=testrunner
+kubectl logs -n <namespace> -l app.kubernetes.io/name=checks
+kubectl logs -n <namespace> -l app.kubernetes.io/name=account
+```
 
 ## Cleanup
 

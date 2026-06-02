@@ -1,7 +1,7 @@
 dependencies:
 - name: external-secrets
   repository: https://charts.external-secrets.io
-  version: 1.1.0
+  version: 2.5.0
 - name: metrics-server
   repository: https://kubernetes-sigs.github.io/metrics-server/
   version: 3.13.0
@@ -20,5 +20,5 @@ dependencies:
 - name: oracle-database-operator
   repository: file://charts/oracle-database-operator
   version: 0.2.0
-digest: sha256:c349704599dc60925de2f54f1704ed760c6dc983acb5419e59309b8127a6e383
-generated: "2026-03-18T10:24:05.211804005-04:00"
+digest: sha256:759d554eb1c159115d4212dcadb35a5fba93dcf4bae56da48066182f8f7ac252
+generated: "2026-06-02T10:42:58.078024-05:00"

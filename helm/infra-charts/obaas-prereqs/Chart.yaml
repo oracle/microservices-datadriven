@@ -18,7 +18,7 @@ appVersion: "2.1.0-build.13"
 # SubCharts - Cluster-scoped singleton infrastructure
 dependencies:
   - name: external-secrets
-    version: "1.1.0"
+    version: "2.5.0"
     repository: https://charts.external-secrets.io
     condition: external-secrets.enabled
   - name: metrics-server

@@ -200,7 +200,7 @@ OBaaS requires [cert-manager](https://cert-manager.io/) as a prerequisite. If yo
 ```shell
 helm install \
   cert-manager oci://quay.io/jetstack/charts/cert-manager \
-  --version v1.19.4 \
+  --version v1.19.5 \
   --namespace cert-manager \
   --create-namespace \
   --set installCRDs=true \
