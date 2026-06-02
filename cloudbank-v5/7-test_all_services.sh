@@ -30,8 +30,10 @@ KEEP_PORT_FORWARD=false
 READ_ONLY=false
 FROM_ACCOUNT_ID=""
 TO_ACCOUNT_ID=""
+# Owner is the seeded CloudBank customer/account user used for ownership-scoped API tests.
 OWNER_USERNAME="qwertysdwr"
-OWNER_PASSWORD="Welcome-12345a!"
+# Keep empty by default so no cleartext password is stored in the script.
+OWNER_PASSWORD=""
 CLIENT_ID="cloudbank-client"
 CLIENT_SECRET=""
 TEST_CLIENT_ID="cloudbank-test-client"
@@ -142,7 +144,7 @@ Options:
   --from-account ACCOUNT_ID       Source account for transfer test
   --to-account ACCOUNT_ID         Destination account for deposit/transfer tests
   --owner-username USERNAME       Seeded customer/account owner username (default: qwertysdwr)
-  --owner-password PASSWORD       Password to create/reset for owner username
+  --owner-password PASSWORD       Password to create/reset for owner username (default: generated at runtime)
   --read-only                     Skip mutating check deposit, check clear, and transfer tests
   --keep-port-forward             Leave the APISIX gateway port-forward running
   -h, --help                      Show this help message
@@ -250,6 +252,13 @@ wait_for_url() {
 
 url_encode() {
     jq -rn --arg value "$1" '$value|@uri'
+}
+
+# Generates a one-run owner password for OAuth login and password reset.
+generate_owner_password() {
+    local random_part
+    random_part=$(openssl rand -base64 32 | tr -dc 'A-Za-z0-9' | head -c 24)
+    printf 'Cbv5-%s9!' "$random_part"
 }
 
 # =============================================================================
@@ -617,6 +626,10 @@ test_gateway_and_oauth() {
 
     get_client_secrets || true
     start_auth_port_forward || true
+    # --owner-password can still supply a known value for debugging/reuse.
+    if [[ -z "$OWNER_PASSWORD" ]]; then
+        OWNER_PASSWORD=$(generate_owner_password)
+    fi
     ensure_owner_user || true
     get_owner_token || true
 
