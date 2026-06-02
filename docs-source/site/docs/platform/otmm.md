@@ -3,7 +3,7 @@ title: Oracle Transaction Manager for Microservices
 sidebar_position: 10
 ---
 
-[Oracle Transaction Manager for Microservices](https://www.oracle.com/database/transaction-manager-for-microservices/), also known as "MicroTx", simplifies application development and operations by enabling distributed transactions to ensure consistency across microservices deployed in Kubernetes.
+[Oracle Transaction Manager for Microservices](https://docs.oracle.com/en/database/oracle/transaction-manager-for-microservices/26.1/index.html), also known as "MicroTx", simplifies application development and operations by enabling distributed transactions to ensure consistency across microservices deployed in Kubernetes.
 
 Oracle Backend for Microservices and AI includes the free version of MicroTx, which has all of the functionality of the commercial version, but limits the number of transactions and only persists data in memory. It is recommended for evaluations and application development purposes.
 
@@ -41,9 +41,9 @@ lra:
 
 ## MicroTx Workflow Server
 
-The MicroTx Workflow Server extends transaction coordinator with advanced workflow capabilities. 
+The MicroTx Workflow Server extends transaction coordinator with advanced workflow capabilities.
 
-Before running the workflow server, ensure you have at least 2 CPU and 4 Gi memory free in your cluster. To enable the workflow server, set the `otmm.workflowServer.enabled` property to true in the Helm values:
+For MicroTx sizing and deployment guidance, see the official [Oracle Transaction Manager for Microservices 26.1 documentation](https://docs.oracle.com/en/database/oracle/transaction-manager-for-microservices/26.1/index.html). To enable the workflow server in OBaaS, set the `otmm.workflowServer.enabled` property to true in the Helm values:
 
 ```yaml
 otmm:
@@ -53,4 +53,4 @@ otmm:
 
 ## Upgrading to the commercial version
 
-If you have licensed Oracle Transaction Manager for Microservices Enterprise Edition, please see the [documentation](https://docs.oracle.com/en/database/oracle/transaction-manager-for-microservices/23.4.1/index.html) for details of how to install and configure MicroTx. Oracle recommends that you perform a new installation rather than attempting to upgrade the provided MicroTx Free installation to the commercial version.
+If you have licensed Oracle Transaction Manager for Microservices Enterprise Edition, please see the [documentation](https://docs.oracle.com/en/database/oracle/transaction-manager-for-microservices/26.1/index.html) for details of how to install and configure MicroTx. Oracle recommends that you perform a new installation rather than attempting to upgrade the provided MicroTx Free installation to the commercial version.
