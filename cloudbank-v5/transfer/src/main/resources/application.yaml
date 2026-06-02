@@ -26,6 +26,8 @@ spring:
 
 # Use k8s DNS to lookup the other microservices
 account:
+  lookup:
+    url: http://account:8080/api/v1/account
   deposit:
     url: http://account:8080/deposit
   withdraw:

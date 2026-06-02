@@ -7,7 +7,7 @@ Scope:
 
 - Includes deployed Spring services: `account`, `customer`, `creditscore`, `transfer`, `checks`, and `testrunner`.
 - Includes planned `azn-server` endpoints from `markxnelson/azn-server` branch `SPRING_BOOT_3.X`.
-- Excludes Helidon services and `chatbot` for this round.
+- Covers the Spring services and the Helidon `customer-helidon` customer variant. Excludes `chatbot` for this round.
 - Paths are application paths unless the `Gateway route` column says otherwise.
 
 Suggested placeholder meanings:
@@ -61,10 +61,10 @@ Use OAuth scopes for API authorization. Keep roles mainly as convenient user/cli
 
 | Service | Method | Application path | Gateway route | Endpoint type | Required role/scope | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
-| account | GET | `/api/v1/accounts` | `/api/v1/account*` | Account read | `SCOPE_cloudbank.read` | List all accounts. |
+| account | GET | `/api/v1/accounts` | `/api/v1/account*` | Account read | `SCOPE_cloudbank.read` | List all accounts. Service-side checks also accept `SCOPE_cloudbank.internal` for internal ownership lookup flows. |
 | account | POST | `/api/v1/account` | `/api/v1/account*` | Account write | `SCOPE_cloudbank.write` | Create account. |
-| account | GET | `/api/v1/account/{accountId}` | `/api/v1/account*` | Account read | `SCOPE_cloudbank.read` | Read account by id. |
-| account | GET | `/api/v1/account/getAccounts/{customerId}` | `/api/v1/account*` | Account read | `SCOPE_cloudbank.read` | Read accounts by customer id. |
+| account | GET | `/api/v1/account/{accountId}` | `/api/v1/account*` | Account read | `SCOPE_cloudbank.read` | Read account by id. Service-side checks also accept `SCOPE_cloudbank.internal` for internal ownership lookup flows. |
+| account | GET | `/api/v1/account/getAccounts/{customerId}` | `/api/v1/account*` | Account read | `SCOPE_cloudbank.read` | Read accounts by customer id. Service-side checks also accept `SCOPE_cloudbank.internal` for internal ownership lookup flows. |
 | account | DELETE | `/api/v1/account/{accountId}` | `/api/v1/account*` | Account admin/write | `SCOPE_cloudbank.admin` | Delete account. |
 | account | GET | `/api/v1/account/{accountId}/transactions` | `/api/v1/account*` | Account read | `SCOPE_cloudbank.read` | Read account transactions. |
 | account | POST | `/api/v1/account/journal` | `/api/v1/account/journal*` block route | Internal write | `SCOPE_cloudbank.internal` | Called by `checks`; service-to-service only. APISIX blocks external access with an unissued scope. |
@@ -85,13 +85,13 @@ Use OAuth scopes for API authorization. Keep roles mainly as convenient user/cli
 
 | Service | Method | Application path | Gateway route | Endpoint type | Required role/scope | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
-| customer | GET | `/api/v1/customer` | `/api/v1/customer*` | Customer read | `SCOPE_cloudbank.read` | List customers. |
-| customer | GET | `/api/v1/customer/name/{customerName}` | `/api/v1/customer*` | Customer read | `SCOPE_cloudbank.read` | Search customers by name. |
-| customer | GET | `/api/v1/customer/{id}` | `/api/v1/customer*` | Customer read | `SCOPE_cloudbank.read` | Read customer by id. |
-| customer | GET | `/api/v1/customer/byemail/{email}` | `/api/v1/customer*` | Customer read | `SCOPE_cloudbank.read` | Search customers by email. |
-| customer | POST | `/api/v1/customer` | `/api/v1/customer*` | Customer write | `SCOPE_cloudbank.write` | Create customer. |
-| customer | PUT | `/api/v1/customer/{id}` | `/api/v1/customer*` | Customer write | `SCOPE_cloudbank.write` | Update customer. |
-| customer | DELETE | `/api/v1/customer/{customerId}` | `/api/v1/customer*` | Customer admin/write | `SCOPE_cloudbank.admin` | Delete customer. |
+| customer | GET | `/api/v1/customer` | `/api/v1/customer*` | Customer read | `SCOPE_cloudbank.read` | List customers. Service-side checks also accept `SCOPE_cloudbank.internal` for internal ownership lookup flows. Applies to Spring `customer` and Helidon `customer-helidon`. |
+| customer | GET | `/api/v1/customer/name/{customerName}` | `/api/v1/customer*` | Customer read | `SCOPE_cloudbank.read` | Search customers by name. Service-side checks also accept `SCOPE_cloudbank.internal` for internal ownership lookup flows. Applies to Spring `customer` and Helidon `customer-helidon`. |
+| customer | GET | `/api/v1/customer/{id}` | `/api/v1/customer*` | Customer read | `SCOPE_cloudbank.read` | Read customer by id. Service-side checks also accept `SCOPE_cloudbank.internal` for internal ownership lookup flows. Applies to Spring `customer` and Helidon `customer-helidon`. |
+| customer | GET | `/api/v1/customer/byemail/{email}` | `/api/v1/customer*` | Customer read | `SCOPE_cloudbank.read` | Search customers by email. Service-side checks also accept `SCOPE_cloudbank.internal` for internal ownership lookup flows. Applies to Spring `customer` and Helidon `customer-helidon`. |
+| customer | POST | `/api/v1/customer` | `/api/v1/customer*` | Customer write | `SCOPE_cloudbank.write` | Create customer. Applies to Spring `customer` and Helidon `customer-helidon`. |
+| customer | PUT | `/api/v1/customer/{id}` | `/api/v1/customer*` | Customer write | `SCOPE_cloudbank.write` | Update customer. Applies to Spring `customer` and Helidon `customer-helidon`. |
+| customer | DELETE | `/api/v1/customer/{customerId}` | `/api/v1/customer*` | Customer admin/write | `SCOPE_cloudbank.admin` | Delete customer. Applies to Spring `customer` and Helidon `customer-helidon`. |
 | customer | POST | `/api/v1/customer/applyLoan/{amount}` | `/api/v1/customer*` | Loan workflow | `SCOPE_cloudbank.write` | Currently returns `418 I_AM_A_TEAPOT`; decide whether to expose. |
 
 ## Credit Score Service

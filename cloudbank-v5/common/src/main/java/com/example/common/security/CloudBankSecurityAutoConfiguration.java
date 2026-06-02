@@ -41,7 +41,6 @@ public class CloudBankSecurityAutoConfiguration {
      * Shared CloudBank HTTP security policy.
      *
      * @param http Spring Security HTTP configuration.
-     * @param securityEnabled enables OAuth2 resource server authorization.
      * @param requireInternalToken protects internal service callback endpoints.
      * @return configured security filter chain.
      * @throws Exception when the filter chain cannot be built.
@@ -49,20 +48,11 @@ public class CloudBankSecurityAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(SecurityFilterChain.class)
     public SecurityFilterChain cloudBankSecurityFilterChain(HttpSecurity http,
-            @Value("${cloudbank.security.enabled:false}") boolean securityEnabled,
-            @Value("${cloudbank.security.require-internal-token:false}") boolean requireInternalToken)
+            @Value("${cloudbank.security.require-internal-token:true}") boolean requireInternalToken)
             throws Exception {
         http
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-        if (!securityEnabled) {
-            http.authorizeHttpRequests(authorize -> authorize
-                    .requestMatchers(EndpointRequest.to("health", "info")).permitAll()
-                    .requestMatchers(EndpointRequest.toAnyEndpoint()).authenticated()
-                    .anyRequest().permitAll());
-            return http.build();
-        }
 
         http
             .authorizeHttpRequests(authorize -> {
@@ -78,12 +68,12 @@ public class CloudBankSecurityAutoConfiguration {
                 }
 
                 authorize
-                    .requestMatchers(HttpMethod.GET, "/api/v1/accounts").hasAuthority(READ_SCOPE)
-                    .requestMatchers(HttpMethod.GET, "/api/v1/account/**").hasAuthority(READ_SCOPE)
+                    .requestMatchers(HttpMethod.GET, "/api/v1/accounts").hasAnyAuthority(READ_SCOPE, INTERNAL_SCOPE)
+                    .requestMatchers(HttpMethod.GET, "/api/v1/account/**").hasAnyAuthority(READ_SCOPE, INTERNAL_SCOPE)
                     .requestMatchers(HttpMethod.POST, "/api/v1/account").hasAuthority(WRITE_SCOPE)
                     .requestMatchers(HttpMethod.DELETE, "/api/v1/account/**").hasAuthority(ADMIN_SCOPE)
-                    .requestMatchers(HttpMethod.GET, "/api/v1/customer/**").hasAuthority(READ_SCOPE)
-                    .requestMatchers(HttpMethod.GET, "/api/v1/customer").hasAuthority(READ_SCOPE)
+                    .requestMatchers(HttpMethod.GET, "/api/v1/customer/**").hasAnyAuthority(READ_SCOPE, INTERNAL_SCOPE)
+                    .requestMatchers(HttpMethod.GET, "/api/v1/customer").hasAnyAuthority(READ_SCOPE, INTERNAL_SCOPE)
                     .requestMatchers(HttpMethod.POST, "/api/v1/customer").hasAuthority(WRITE_SCOPE)
                     .requestMatchers(HttpMethod.POST, "/api/v1/customer/applyLoan/**").hasAuthority(WRITE_SCOPE)
                     .requestMatchers(HttpMethod.PUT, "/api/v1/customer/**").hasAuthority(WRITE_SCOPE)

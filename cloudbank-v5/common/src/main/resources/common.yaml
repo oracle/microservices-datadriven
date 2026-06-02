@@ -5,6 +5,11 @@ spring:
   threads:
     virtual:
       enabled: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${CLOUDBANK_SECURITY_JWK_SET_URI:http://azn-server:8080/oauth2/jwks}
   jpa:
     hibernate:
       ddl-auto: validate
@@ -76,3 +81,13 @@ request:
     max-payload-length: 0
     include-headers: false
     include-client-info: false
+
+cloudbank:
+  security:
+    require-internal-token: ${CLOUDBANK_SECURITY_REQUIRE_INTERNAL_TOKEN:true}
+    service-token:
+      enabled: ${CLOUDBANK_SECURITY_SERVICE_TOKEN_ENABLED:false}
+      token-uri: ${CLOUDBANK_SECURITY_SERVICE_TOKEN_URI:http://azn-server:8080/oauth2/token}
+      client-id: ${CLOUDBANK_SECURITY_SERVICE_TOKEN_CLIENT_ID:cloudbank-service-client}
+      client-secret: ${CLOUDBANK_SECURITY_SERVICE_TOKEN_CLIENT_SECRET:}
+      scope: ${CLOUDBANK_SECURITY_SERVICE_TOKEN_SCOPE:cloudbank.internal}
