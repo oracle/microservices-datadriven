@@ -8,19 +8,19 @@ metadata:
   name: {{ .Release.Name }}-otmm-console
   namespace: {{ .Release.Namespace }}
   labels:
+    {{- include "obaas.labels" . | nindent 4 }}
     app.kubernetes.io/name: {{ .Release.Name }}-otmm-console
     app.kubernetes.io/component: transaction-coordinator
     app.kubernetes.io/part-of: {{ .Release.Name }}
-    {{- include "obaas.labels" . | nindent 4 }}
 spec:
   ports:
     - name: http-stock
       port: 5001
-      targetPort: 5001
+      targetPort: http-console
       protocol: TCP
     - name: http-console
       port: 5002
-      targetPort: 8080
+      targetPort: http-console
       protocol: TCP
   selector:
     app.kubernetes.io/name: {{ .Release.Name }}-otmm-console
@@ -31,10 +31,10 @@ metadata:
   name: {{ .Release.Name }}-otmm-console
   namespace: {{ .Release.Namespace }}
   labels:
+    {{- include "obaas.labels" . | nindent 4 }}
     app.kubernetes.io/name: {{ .Release.Name }}-otmm-console
     app.kubernetes.io/component: transaction-coordinator
     app.kubernetes.io/part-of: {{ .Release.Name }}
-    {{- include "obaas.labels" . | nindent 4 }}
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
@@ -55,10 +55,10 @@ metadata:
   name: {{ .Release.Name }}-otmm-console
   namespace: {{ .Release.Namespace }}
   labels:
+    {{- include "obaas.labels" . | nindent 4 }}
     app.kubernetes.io/name: {{ .Release.Name }}-otmm-console
     app.kubernetes.io/component: transaction-coordinator
     app.kubernetes.io/part-of: {{ .Release.Name }}
-    {{- include "obaas.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.otmm.console.replicas | default 1 }}
   selector:
@@ -67,10 +67,10 @@ spec:
   template:
     metadata:
       labels:
+        {{- include "obaas.labels" . | nindent 8 }}
         app.kubernetes.io/name: {{ .Release.Name }}-otmm-console
         app.kubernetes.io/component: transaction-coordinator
         app.kubernetes.io/part-of: {{ .Release.Name }}
-        {{- include "obaas.labels" . | nindent 4 }}
     spec:
       {{- include "obaas.imagePullSecrets" (dict "local" (index .Values "otmm").imagePullSecrets "global" .Values.global.imagePullSecrets "secretName" .Values.global.imagePullSecretName) | nindent 6 }}
       serviceAccountName: {{ .Release.Name }}-otmm-console
@@ -79,12 +79,17 @@ spec:
           image: {{ .Values.otmm.console.image.repository }}:{{ .Values.otmm.console.image.tag }}
           imagePullPolicy: {{ (index .Values "otmm").image.pullPolicy | default "IfNotPresent" }}
           ports:
-            - name: http-stock
-              containerPort: 5001
-              protocol: TCP
             - name: http-console
               containerPort: 8080
               protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http-console
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 6
           resources:
             {{- with .Values.otmm.console.resources }}
             {{ toYaml . | nindent 6 }}
@@ -98,11 +103,11 @@ spec:
           {{- end }}
           env:
             - name: CONSOLE_APP_NAME
-              value: {{ .Release.Name }}-otmm-console
+              value: console
             - name: TMM_NAMESPACE
               value: {{ .Release.Namespace }}
             - name: TMM_APP_NAME
-              value: {{ .Release.Name }}-otmm-tcs
+              value: otmm-tcs
             - name: TMM_TCS_URL
               value: "http://{{ .Release.Name }}-otmm-tcs:9000"
             {{- if eq .Values.otmm.commonConfiguration.security.enabled true }}

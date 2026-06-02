@@ -396,13 +396,13 @@ otmm:
   enabled: true
   replicas: 1
   image:
-    repository: container-registry.oracle.com/database/otmm
-    tag: "24.4.1"
+    repository: container-registry.oracle.com/database/microtx-coordinator
+    tag: "26.1.1"
   commonConfiguration:
     externalURL: {}
     security: {}
   workflowServer:
-    enabled: false
+    enabled: true
     encryption:
       enabled: true
     logging: {}
@@ -417,16 +417,21 @@ otmm:
       storage:
         fileSystem: {}
     image:
-      repository: container-registry.oracle.com/database/workflow-server
-      tag: latest
+      repository: container-registry.oracle.com/database/microtx-workflow
+      tag: "26.1.1"
     replicas: 1
-    # Override default resources if needed (defaults: cpu 2, memory 4Gi)
-    # resources: {}
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: "2"
+        memory: 4Gi
   console:
-    enabled: false
+    enabled: true
     image:
-      repository: container-registry.oracle.com/database/console
-      tag: latest
+      repository: container-registry.oracle.com/database/microtx-console
+      tag: "26.1.1"
   # Override default resources if needed (defaults: cpu 250m, memory 1Gi)
   # resources: {}
 
