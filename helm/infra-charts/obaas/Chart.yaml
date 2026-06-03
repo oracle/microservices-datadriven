@@ -11,7 +11,7 @@ maintainers:
     email: obaas_ww@oracle.com
     url: https://oracle.github.io/microservices-backend
 # This is the chart version.
-version: 0.0.14
+version: 0.0.15
 # This is the version number of the application being deployed.
 appVersion: "2.1.0-build.13"
 
@@ -37,10 +37,10 @@ dependencies:
     repository: https://charts.signoz.io
     condition: signoz.enabled
   - name: apisix
-    version: "2.12.3"
+    version: "2.14.1"
     repository: https://apache.github.io/apisix-helm-chart
     condition: apisix.enabled
   - name: ai-optimizer
-    version: ">=2.0.0 <3.0.0"
+    version: "2.0.3"
     repository: https://oracle.github.io/ai-optimizer/helm
     condition: ai-optimizer.enabled

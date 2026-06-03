@@ -79,7 +79,7 @@ Note that most components also have additional configuration, and some have opti
 
 The OBaaS Helm charts include most components by depending on those components' public Helm charts.  This means that any customization option provided in those Helm charts are available for your use. 
 
-For example the [APISIX Helm chart](https://github.com/apache/apisix-helm-chart/tree/apisix-2.12.3/charts/apisix) provides many configuration options that are documented by APISIX. 
+For example the [APISIX Helm chart](https://github.com/apache/apisix-helm-chart/tree/apisix-2.14.1/charts/apisix) provides many configuration options that are documented by APISIX. 
 
 If you wish to use a customization option from a dependent chart, you may specify it under the key/section for that chart in the appropriate `values.yaml`.  For example, suppose you wanted to change the admin port for APISIX.  In the documentation for the APISIX Helm chart, you notice they provide a field called `apisix.admin.port` for this purpose.  You can include this in the `values.yaml` for the `obaas` Helm chart under the `apisix` key, as follows:
 

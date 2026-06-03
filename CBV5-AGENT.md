@@ -316,7 +316,8 @@ Expected smoke-test coverage:
 - account IDs can be discovered
 - testrunner deposit rejects a read token
 - testrunner deposit accepts a test token, unless `--read-only` is used
-- the transfer route and workflow are exercised, unless `--read-only` is used
+- the transfer route rejects a non-owner client-credentials token with `403`, unless `--read-only` is used
+- successful owner-scoped transfer workflow validation is performed by `7-test_all_services.sh`
 
 Run the full all-services test after the smoke test. This is the authoritative end-to-end CloudBank validation:
 
