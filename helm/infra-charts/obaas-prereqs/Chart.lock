@@ -4,7 +4,7 @@ dependencies:
   version: 2.5.0
 - name: metrics-server
   repository: https://kubernetes-sigs.github.io/metrics-server/
-  version: 3.13.0
+  version: 3.13.1
 - name: kube-state-metrics
   repository: https://prometheus-community.github.io/helm-charts
   version: 6.4.1
@@ -20,5 +20,5 @@ dependencies:
 - name: oracle-database-operator
   repository: file://charts/oracle-database-operator
   version: 0.2.0
-digest: sha256:759d554eb1c159115d4212dcadb35a5fba93dcf4bae56da48066182f8f7ac252
+digest: sha256:8f436d7e038204187eaa0558a7bc0981f5e4c848c3d8cda2d179f77038177a71
 generated: "2026-06-02T10:42:58.078024-05:00"
