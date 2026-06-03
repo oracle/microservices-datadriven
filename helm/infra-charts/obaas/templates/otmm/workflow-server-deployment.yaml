@@ -1,6 +1,26 @@
 ## Copyright (c) 2026, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
 {{- if .Values.otmm.workflowServer.enabled }}
+{{- $workflowMetrics := default dict .Values.otmm.workflowServer.metrics }}
+{{- $workflowMetricsScrape := default dict $workflowMetrics.scrape }}
+{{- $workflowMetricsEnabled := true }}
+{{- if hasKey $workflowMetrics "enabled" }}
+{{- $workflowMetricsEnabled = $workflowMetrics.enabled }}
+{{- end }}
+{{- $workflowMetricsScrapeEnabled := true }}
+{{- if hasKey $workflowMetricsScrape "enabled" }}
+{{- $workflowMetricsScrapeEnabled = $workflowMetricsScrape.enabled }}
+{{- end }}
+{{- $workflowMetricsPort := default "9010" $workflowMetricsScrape.port }}
+{{- $workflowMetricsPath := default "/workflow-server/actuator/prometheus" $workflowMetricsScrape.path }}
+{{- $workflowProbes := default dict .Values.otmm.workflowServer.probes }}
+{{- $workflowStartupProbe := default dict $workflowProbes.startup }}
+{{- $workflowLivenessProbe := default dict $workflowProbes.liveness }}
+{{- $workflowReadinessProbe := default dict $workflowProbes.readiness }}
+{{- $workflowStartupProbeEnabled := false }}
+{{- if hasKey $workflowStartupProbe "enabled" }}
+{{- $workflowStartupProbeEnabled = $workflowStartupProbe.enabled }}
+{{- end }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20,11 +40,11 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: {{ .Release.Name }}-otmm-workflow-server
-      {{- if .Values.signoz.enabled }}
+      {{- if and .Values.signoz.enabled $workflowMetricsEnabled $workflowMetricsScrapeEnabled }}
       annotations:
         signoz.io/scrape: "true"
-        signoz.io/port: "9090"
-        signoz.io/path: "/metrics"
+        signoz.io/port: {{ $workflowMetricsPort | quote }}
+        signoz.io/path: {{ $workflowMetricsPath | quote }}
       {{- end }}
     spec:
       {{- include "obaas.imagePullSecrets" (dict "local" (index .Values "otmm").imagePullSecrets "global" .Values.global.imagePullSecrets "secretName" .Values.global.imagePullSecretName) | nindent 6 }}
@@ -39,8 +59,10 @@ spec:
           ports:
             - containerPort: 9010
               name: http
-            - containerPort: 9090
+            {{- if and $workflowMetricsEnabled (ne ($workflowMetricsPort | toString) "9010") }}
+            - containerPort: {{ $workflowMetricsPort | int }}
               name: metrics
+            {{- end }}
           resources:
             {{- with .Values.otmm.workflowServer.resources }}
             {{ toYaml . | nindent 12 }}
@@ -131,11 +153,11 @@ spec:
 
             # Metrics configuration
             - name: CONDUCTOR_METRICS_ENABLED
-              value: "true"
+              value: {{ $workflowMetricsEnabled | quote }}
             - name: CONDUCTOR_METRICS_PORT
-              value: "9090"
+              value: {{ $workflowMetricsPort | quote }}
             - name: CONDUCTOR_METRICS_PATH
-              value: "/metrics"
+              value: {{ $workflowMetricsPath | quote }}
 
             # Security configuration
             {{- if eq .Values.otmm.commonConfiguration.security.enabled true }}
@@ -194,20 +216,30 @@ spec:
               
           livenessProbe:
             httpGet:
-              path: /workflow-server/health
-              port: 9010
-            initialDelaySeconds: 20
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 3
+              path: {{ $workflowLivenessProbe.path | default "/workflow-server/health" }}
+              port: {{ $workflowLivenessProbe.port | default 9010 }}
+            initialDelaySeconds: {{ $workflowLivenessProbe.initialDelaySeconds | default 20 }}
+            periodSeconds: {{ $workflowLivenessProbe.periodSeconds | default 10 }}
+            timeoutSeconds: {{ $workflowLivenessProbe.timeoutSeconds | default 5 }}
+            failureThreshold: {{ $workflowLivenessProbe.failureThreshold | default 3 }}
           readinessProbe:
             httpGet:
-              path: /workflow-server/health
-              port: 9010
-            initialDelaySeconds: 10
-            periodSeconds: 5
-            timeoutSeconds: 5
-            failureThreshold: 3
+              path: {{ $workflowReadinessProbe.path | default "/workflow-server/health" }}
+              port: {{ $workflowReadinessProbe.port | default 9010 }}
+            initialDelaySeconds: {{ $workflowReadinessProbe.initialDelaySeconds | default 10 }}
+            periodSeconds: {{ $workflowReadinessProbe.periodSeconds | default 5 }}
+            timeoutSeconds: {{ $workflowReadinessProbe.timeoutSeconds | default 5 }}
+            failureThreshold: {{ $workflowReadinessProbe.failureThreshold | default 3 }}
+          {{- if $workflowStartupProbeEnabled }}
+          startupProbe:
+            httpGet:
+              path: {{ $workflowStartupProbe.path | default "/workflow-server/health" }}
+              port: {{ $workflowStartupProbe.port | default 9010 }}
+            initialDelaySeconds: {{ $workflowStartupProbe.initialDelaySeconds | default 20 }}
+            periodSeconds: {{ $workflowStartupProbe.periodSeconds | default 10 }}
+            timeoutSeconds: {{ $workflowStartupProbe.timeoutSeconds | default 5 }}
+            failureThreshold: {{ $workflowStartupProbe.failureThreshold | default 18 }}
+          {{- end }}
       volumes:
             - name: workflow-fs-volume
               emptyDir: {}
