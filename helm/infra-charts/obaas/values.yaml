@@ -401,11 +401,46 @@ otmm:
   commonConfiguration:
     externalURL: {}
     security: {}
+  metrics:
+    enabled: true
+    scrape:
+      enabled: true
+      port: "9000"
+      path: "/metrics"
   workflowServer:
     enabled: true
     encryption:
       enabled: true
     logging: {}
+    metrics:
+      enabled: true
+      scrape:
+        enabled: true
+        port: "9010"
+        path: "/workflow-server/actuator/prometheus"
+    probes:
+      startup:
+        enabled: true
+        path: "/workflow-server/health"
+        port: 9010
+        initialDelaySeconds: 20
+        periodSeconds: 10
+        timeoutSeconds: 5
+        failureThreshold: 18
+      liveness:
+        path: "/workflow-server/health"
+        port: 9010
+        initialDelaySeconds: 20
+        periodSeconds: 10
+        timeoutSeconds: 5
+        failureThreshold: 3
+      readiness:
+        path: "/workflow-server/health"
+        port: 9010
+        initialDelaySeconds: 10
+        periodSeconds: 5
+        timeoutSeconds: 5
+        failureThreshold: 3
     taskConfig:
       txeventq: {}
       transaction: {}
@@ -613,6 +648,9 @@ signoz:
     image:
       registry: docker.io
       repository: signoz/signoz-otel-collector
+    # Override podAnnotations to tune or disable collector self-scrape.
+    # The SigNoz subchart default scrapes collector metrics on port 8888.
+    # podAnnotations: {}
     # ClusterRole rules for Kubernetes service discovery (prometheus receiver)
     clusterRole:
       rules:
