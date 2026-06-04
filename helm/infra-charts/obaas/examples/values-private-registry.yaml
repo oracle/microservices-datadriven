@@ -326,15 +326,15 @@ ingress-nginx:
     image:
       registry: myregistry.example.com  # Default: registry.k8s.io
       image: ingress-nginx/controller
-      tag: "v1.11.5"
-      digest: "sha256:a1cbad75b0a7098bf9325132794dddf9eef917e8a7fe246749a4cea7ff6f01eb"
+      tag: "v1.15.1"
+      digest: "sha256:594ceea76b01c592858f803f9ff4d2cb40542cae2060410b2c95f75907d659e1"
     admissionWebhooks:
       patch:
         image:
           registry: myregistry.example.com
           image: ingress-nginx/kube-webhook-certgen
-          tag: "v1.5.2"
-          digest: "sha256:e8825994b7a2c7497375a9b945f386506ca6a3eda80b89b74ef2db743f66a5ea"
+          tag: "v1.6.9"
+          digest: "sha256:01038e7de14b78d702d2849c3aad72fd25903c4765af63cf16aa3398f5d5f2dd"
 
 
 # =============================================================================

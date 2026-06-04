@@ -1,7 +1,7 @@
 #
 # ============================================================================
 # Generated for private registry mirroring
-# Generated on: 2026-06-01T19:21:10Z
+# Generated on: 2026-06-03
 # OBaaS Helm Charts - Complete Image List
 container-registry.oracle.com/obaas/admin-server:2.0.0
 container-registry.oracle.com/obaas/config-server:2.0.0
@@ -36,7 +36,7 @@ quay.io/jetstack/cert-manager-controller:v1.19.5
 quay.io/jetstack/cert-manager-webhook:v1.19.5
 quay.io/strimzi/kafka:0.51.0-kafka-4.2.0
 quay.io/strimzi/operator:0.51.0
-registry.k8s.io/ingress-nginx/controller:v1.13.2
+registry.k8s.io/ingress-nginx/controller:v1.15.1
 registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.17.0
 registry.k8s.io/metrics-server/metrics-server:v0.8.1
 docker.io/envoyproxy/envoy:distroless-v1.37.0
