@@ -1,3 +1,6 @@
+"""Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl."""
+
 """
 Before/after annotation text viewer component.
 Used by pages 4 and 6 to show the annotation enrichment diff.

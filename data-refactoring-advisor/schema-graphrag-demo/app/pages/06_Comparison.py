@@ -1,3 +1,6 @@
+"""Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl."""
+
 """
 Page 6 — Quantitative comparison: annotation impact on retrieval quality.
 Shows how annotation enrichment shifts cosine distances for relevant tables.

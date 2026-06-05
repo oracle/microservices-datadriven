@@ -1,3 +1,6 @@
+-- Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+-- Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+
 -- =============================================================================
 -- Westfield University — Schema DDL
 -- ~70 domain tables + 5 infrastructure tables, 10 communities, 9 naming eras
