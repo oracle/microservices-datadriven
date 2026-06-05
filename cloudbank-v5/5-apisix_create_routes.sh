@@ -395,6 +395,8 @@ create_all_routes() {
         "$(oidc_plugin cloudbank.write)" "$(methods_json POST PUT)" || ((++errors))
     create_route 1008 "customer-admin" "/api/v1/customer*" "CUSTOMER" "CUSTOMER admin APIs" \
         "$(oidc_plugin cloudbank.admin)" "$(methods_json DELETE)" || ((++errors))
+    create_route 1009 "chatbot" "/chat" "CHATBOT" "CHATBOT Service" \
+        "$(oidc_plugin cloudbank.read)" "$(methods_json POST)" || ((++errors))
     create_route 1010 "azn-metadata" "/.well-known/*" "AZN-SERVER" "Authorization Server Metadata" || ((++errors))
     create_route 1011 "azn-oauth2" "/oauth2/*" "AZN-SERVER" "Authorization Server OAuth2 Endpoints" || ((++errors))
     delete_route_if_present 1012 "azn-user-api" || ((++errors))

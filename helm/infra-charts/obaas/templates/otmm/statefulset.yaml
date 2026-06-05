@@ -1,6 +1,18 @@
 ## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
 {{- if (index .Values "otmm").enabled }}
+{{- $otmmMetrics := default dict .Values.otmm.metrics }}
+{{- $otmmMetricsScrape := default dict $otmmMetrics.scrape }}
+{{- $otmmMetricsEnabled := true }}
+{{- if hasKey $otmmMetrics "enabled" }}
+{{- $otmmMetricsEnabled = $otmmMetrics.enabled }}
+{{- end }}
+{{- $otmmMetricsScrapeEnabled := true }}
+{{- if hasKey $otmmMetricsScrape "enabled" }}
+{{- $otmmMetricsScrapeEnabled = $otmmMetricsScrape.enabled }}
+{{- end }}
+{{- $otmmMetricsPort := default "9000" $otmmMetricsScrape.port }}
+{{- $otmmMetricsPath := default "/metrics" $otmmMetricsScrape.path }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -22,11 +34,11 @@ spec:
       labels:
         app.kubernetes.io/name: {{ .Release.Name }}-otmm-tcs
         app.kubernetes.io/component: transaction-coordinator
-      {{- if .Values.signoz.enabled }}
+      {{- if and .Values.signoz.enabled $otmmMetricsEnabled $otmmMetricsScrapeEnabled }}
       annotations:
         signoz.io/scrape: "true"
-        signoz.io/port: "9000"
-        signoz.io/path: "/metrics"
+        signoz.io/port: {{ $otmmMetricsPort | quote }}
+        signoz.io/path: {{ $otmmMetricsPath | quote }}
       {{- end }}
     spec:
       {{- include "obaas.imagePullSecrets" (dict "local" (index .Values "otmm").imagePullSecrets "global" .Values.global.imagePullSecrets "secretName" .Values.global.imagePullSecretName) | nindent 6 }}

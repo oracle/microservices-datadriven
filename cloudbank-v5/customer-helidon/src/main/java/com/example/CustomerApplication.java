@@ -7,6 +7,7 @@ import jakarta.enterprise.context.Initialized;
 import jakarta.enterprise.event.Observes;
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;
+import org.eclipse.microprofile.auth.LoginConfig;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
 /**
@@ -15,6 +16,7 @@ import org.slf4j.bridge.SLF4JBridgeHandler;
  */
 @ApplicationScoped
 @ApplicationPath("/")
+@LoginConfig(authMethod = "MP-JWT")
 public class CustomerApplication extends Application {
 
     public void init(@Observes @Initialized(ApplicationScoped.class) Object event) {

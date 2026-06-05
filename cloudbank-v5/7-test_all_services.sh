@@ -24,19 +24,26 @@ OBAAS_RELEASE=""
 DB_NAME=""
 GATEWAY_URL=""
 LOCAL_PORT="19080"
+AUTH_LOCAL_PORT="19081"
 SERVICE_BASE_PORT="19100"
 KEEP_PORT_FORWARD=false
 READ_ONLY=false
 FROM_ACCOUNT_ID=""
 TO_ACCOUNT_ID=""
+# Owner is the seeded CloudBank customer/account user used for ownership-scoped API tests.
+OWNER_USERNAME="qwertysdwr"
+# Keep empty by default so no cleartext password is stored in the script.
+OWNER_PASSWORD=""
 CLIENT_ID="cloudbank-client"
 CLIENT_SECRET=""
 TEST_CLIENT_ID="cloudbank-test-client"
 TEST_CLIENT_SECRET=""
+ADMIN_PASSWORD=""
 READ_TOKEN=""
 WRITE_TOKEN=""
 TEST_TOKEN=""
 TRANSFER_TOKEN=""
+OWNER_TOKEN=""
 PORT_FORWARD_PIDS=""
 TMP_DIR=""
 PASS_COUNT=0
@@ -71,6 +78,10 @@ parse_args() {
                 LOCAL_PORT="$2"
                 shift 2
                 ;;
+            --auth-local-port)
+                AUTH_LOCAL_PORT="$2"
+                shift 2
+                ;;
             --service-base-port)
                 SERVICE_BASE_PORT="$2"
                 shift 2
@@ -81,6 +92,14 @@ parse_args() {
                 ;;
             --to-account)
                 TO_ACCOUNT_ID="$2"
+                shift 2
+                ;;
+            --owner-username)
+                OWNER_USERNAME="$2"
+                shift 2
+                ;;
+            --owner-password)
+                OWNER_PASSWORD="$2"
                 shift 2
                 ;;
             --read-only)
@@ -120,9 +139,12 @@ Options:
   -d, --database DBNAME           OBaaS database name/prefix for azn-server auth secret
   --gateway-url URL               Existing APISIX gateway URL, for example http://localhost:19080
   --local-port PORT               Local port for APISIX port-forward (default: 19080)
+  --auth-local-port PORT          Local port for azn-server auth-code flow (default: 19081)
   --service-base-port PORT        First local port for direct service health checks (default: 19100)
   --from-account ACCOUNT_ID       Source account for transfer test
   --to-account ACCOUNT_ID         Destination account for deposit/transfer tests
+  --owner-username USERNAME       Seeded customer/account owner username (default: qwertysdwr)
+  --owner-password PASSWORD       Password to create/reset for owner username (default: generated at runtime)
   --read-only                     Skip mutating check deposit, check clear, and transfer tests
   --keep-port-forward             Leave the APISIX gateway port-forward running
   -h, --help                      Show this help message
@@ -232,6 +254,13 @@ url_encode() {
     jq -rn --arg value "$1" '$value|@uri'
 }
 
+# Generates a one-run owner password for OAuth login and password reset.
+generate_owner_password() {
+    local random_part
+    random_part=$(openssl rand -base64 32 | tr -dc 'A-Za-z0-9' | head -c 24)
+    printf 'Cbv5-%s9!' "$random_part"
+}
+
 # =============================================================================
 # Prerequisites and Port Forwarding
 # =============================================================================
@@ -256,6 +285,12 @@ check_prerequisites() {
         ((++errors))
     else
         print_success "jq is available"
+    fi
+    if ! command -v openssl &>/dev/null; then
+        print_error "openssl is required"
+        ((++errors))
+    else
+        print_success "openssl is available"
     fi
 
     return "$errors"
@@ -295,6 +330,20 @@ start_gateway_port_forward() {
 
     GATEWAY_URL="http://127.0.0.1:${LOCAL_PORT}"
     record_pass "gateway" "$GATEWAY_URL reachable"
+}
+
+start_auth_port_forward() {
+    local log_file="$TMP_DIR/pf-azn-auth.log"
+
+    print_step "Starting azn-server port-forward on localhost:$AUTH_LOCAL_PORT for owner OAuth flow..."
+    AZN_PORT_FORWARD_PID=$(start_port_forward "azn-server" "$AUTH_LOCAL_PORT" "8080" "$log_file")
+
+    if ! wait_for_url "http://127.0.0.1:${AUTH_LOCAL_PORT}/login"; then
+        record_failure "azn auth port-forward" "not reachable; $(tail -n 5 "$log_file" | tr '\n' ' ')"
+        return 1
+    fi
+
+    record_pass "azn auth port-forward" "http://127.0.0.1:$AUTH_LOCAL_PORT reachable"
 }
 
 # =============================================================================
@@ -348,11 +397,13 @@ get_client_secrets() {
         -o jsonpath='{.data.client-secret}' 2>/dev/null | base64 -d)
     TEST_CLIENT_SECRET=$(kubectl get secret "$auth_secret_name" -n "$NAMESPACE" \
         -o jsonpath='{.data.test-client-secret}' 2>/dev/null | base64 -d)
+    ADMIN_PASSWORD=$(kubectl get secret "$auth_secret_name" -n "$NAMESPACE" \
+        -o jsonpath='{.data.admin-password}' 2>/dev/null | base64 -d)
 
-    if [[ -n "$CLIENT_SECRET" && -n "$TEST_CLIENT_SECRET" ]]; then
+    if [[ -n "$CLIENT_SECRET" && -n "$TEST_CLIENT_SECRET" && -n "$ADMIN_PASSWORD" ]]; then
         record_pass "oauth secret" "$auth_secret_name readable"
     else
-        record_failure "oauth secret" "missing client-secret or test-client-secret"
+        record_failure "oauth secret" "missing client-secret, test-client-secret, or admin-password"
         return 1
     fi
 }
@@ -368,6 +419,201 @@ get_token() {
         -d "scope=${scope}" | jq -r '.access_token // empty'
 }
 
+auth_base_url() {
+    printf 'http://127.0.0.1:%s' "$AUTH_LOCAL_PORT"
+}
+
+ensure_owner_user() {
+    local base
+    local create_payload
+    local update_payload
+    local status_code
+
+    base=$(auth_base_url)
+    create_payload=$(jq -n \
+        --arg username "$OWNER_USERNAME" \
+        --arg password "$OWNER_PASSWORD" \
+        --arg email "${OWNER_USERNAME}@example.invalid" \
+        '{username:$username,password:$password,roles:"ROLE_USER",email:$email}')
+
+    LAST_OUT="$TMP_DIR/owner-user-create.json"
+    status_code=$(request_status "$LAST_OUT" \
+        -u "obaas-admin:${ADMIN_PASSWORD}" \
+        -H "Content-Type: application/json" \
+        -X POST \
+        -d "$create_payload" \
+        "${base}/user/api/v1/createUser")
+
+    if [[ "$status_code" == "201" ]]; then
+        record_pass "owner user" "$OWNER_USERNAME created"
+        return 0
+    fi
+
+    if [[ "$status_code" != "409" ]]; then
+        record_failure "owner user" "create returned HTTP $status_code body=$(cat "$LAST_OUT" 2>/dev/null)"
+        return 1
+    fi
+
+    update_payload=$(jq -n \
+        --arg username "$OWNER_USERNAME" \
+        --arg password "$OWNER_PASSWORD" \
+        '{username:$username,password:$password}')
+
+    LAST_OUT="$TMP_DIR/owner-user-password.json"
+    status_code=$(request_status "$LAST_OUT" \
+        -u "obaas-admin:${ADMIN_PASSWORD}" \
+        -H "Content-Type: application/json" \
+        -X PUT \
+        -d "$update_payload" \
+        "${base}/user/api/v1/updatePassword")
+
+    if [[ "$status_code" == "200" ]]; then
+        record_pass "owner user" "$OWNER_USERNAME exists; password reset"
+    else
+        record_failure "owner user" "password reset returned HTTP $status_code body=$(cat "$LAST_OUT" 2>/dev/null)"
+        return 1
+    fi
+}
+
+pkce_verifier() {
+    openssl rand -base64 48 | tr -d '\n' | tr '+/' '-_' | tr -d '='
+}
+
+pkce_challenge() {
+    local verifier="$1"
+    printf '%s' "$verifier" | openssl dgst -sha256 -binary | openssl base64 -A | tr '+/' '-_' | tr -d '='
+}
+
+header_location() {
+    local headers_file="$1"
+    awk 'tolower($1) == "location:" {print $2}' "$headers_file" | tr -d '\r' | tail -1
+}
+
+absolute_auth_url() {
+    local url="$1"
+    local base
+
+    base=$(auth_base_url)
+    if [[ "$url" == /* ]]; then
+        printf '%s%s' "$base" "$url"
+    else
+        printf '%s' "$url"
+    fi
+}
+
+csrf_token_from_html() {
+    local html_file="$1"
+    grep -o 'name="_csrf"[^>]*value="[^"]*"' "$html_file" \
+        | sed -n 's/.*value="\([^"]*\)".*/\1/p' \
+        | head -1
+}
+
+get_owner_token() {
+    local base
+    local verifier
+    local challenge
+    local redirect_uri
+    local auth_url
+    local cookie_file
+    local headers_file
+    local body_file
+    local status_code
+    local csrf
+    local location
+    local next_url
+    local code
+    local token_json
+    local i
+
+    base=$(auth_base_url)
+    verifier=$(pkce_verifier)
+    challenge=$(pkce_challenge "$verifier")
+    redirect_uri="http://127.0.0.1:8080/login/oauth2/code/${CLIENT_ID}"
+    cookie_file="$TMP_DIR/owner-token-cookies.txt"
+    headers_file="$TMP_DIR/owner-token-headers.txt"
+    body_file="$TMP_DIR/owner-token-body.html"
+
+    auth_url="${base}/oauth2/authorize?response_type=code"
+    auth_url+="&client_id=$(url_encode "$CLIENT_ID")"
+    auth_url+="&redirect_uri=$(url_encode "$redirect_uri")"
+    auth_url+="&scope=$(url_encode "openid cloudbank.read cloudbank.transfer")"
+    auth_url+="&code_challenge=$(url_encode "$challenge")"
+    auth_url+="&code_challenge_method=S256"
+    auth_url+="&state=cloudbank-all-services"
+
+    status_code=$(curl --noproxy '*' -sS -L \
+        -c "$cookie_file" \
+        -b "$cookie_file" \
+        -o "$body_file" \
+        -w '%{http_code}' \
+        "$auth_url")
+
+    csrf=$(csrf_token_from_html "$body_file")
+    if [[ "$status_code" != "200" || -z "$csrf" ]]; then
+        record_failure "owner token" "login page HTTP $status_code or CSRF missing"
+        return 1
+    fi
+
+    status_code=$(curl --noproxy '*' -sS \
+        -c "$cookie_file" \
+        -b "$cookie_file" \
+        -D "$headers_file" \
+        -o "$body_file" \
+        -w '%{http_code}' \
+        -H "Content-Type: application/x-www-form-urlencoded" \
+        -X POST \
+        --data-urlencode "username=$OWNER_USERNAME" \
+        --data-urlencode "password=$OWNER_PASSWORD" \
+        --data-urlencode "_csrf=$csrf" \
+        "${base}/login")
+
+    location=$(header_location "$headers_file")
+    for i in $(seq 1 10); do
+        if [[ "$location" == "$redirect_uri"* ]]; then
+            break
+        fi
+        if [[ -z "$location" ]]; then
+            break
+        fi
+        next_url=$(absolute_auth_url "$location")
+        status_code=$(curl --noproxy '*' -sS \
+            -c "$cookie_file" \
+            -b "$cookie_file" \
+            -D "$headers_file" \
+            -o "$body_file" \
+            -w '%{http_code}' \
+            "$next_url")
+        location=$(header_location "$headers_file")
+    done
+
+    if [[ "$location" != "$redirect_uri"* ]]; then
+        record_failure "owner token" "authorization redirect missing; last HTTP $status_code location=$location"
+        return 1
+    fi
+
+    code=$(printf '%s' "$location" | sed -n 's/.*[?&]code=\([^&]*\).*/\1/p')
+    if [[ -z "$code" ]]; then
+        record_failure "owner token" "authorization code missing"
+        return 1
+    fi
+
+    token_json=$(curl --noproxy '*' -sS \
+        -u "${CLIENT_ID}:${CLIENT_SECRET}" \
+        -X POST "${base}/oauth2/token" \
+        -d grant_type=authorization_code \
+        --data-urlencode "code=$code" \
+        --data-urlencode "redirect_uri=$redirect_uri" \
+        --data-urlencode "code_verifier=$verifier")
+
+    OWNER_TOKEN=$(printf '%s' "$token_json" | jq -r '.access_token // empty')
+    if [[ -n "$OWNER_TOKEN" ]]; then
+        record_pass "token/owner user" "$OWNER_USERNAME issued"
+    else
+        record_failure "token/owner user" "not issued; response=$token_json"
+        return 1
+    fi
+}
+
 test_gateway_and_oauth() {
     print_header "APISIX Gateway And OAuth"
 
@@ -379,6 +625,13 @@ test_gateway_and_oauth() {
     fi
 
     get_client_secrets || true
+    start_auth_port_forward || true
+    # --owner-password can still supply a known value for debugging/reuse.
+    if [[ -z "$OWNER_PASSWORD" ]]; then
+        OWNER_PASSWORD=$(generate_owner_password)
+    fi
+    ensure_owner_user || true
+    get_owner_token || true
 
     READ_TOKEN=$(get_token "cloudbank.read")
     WRITE_TOKEN=$(get_token "cloudbank.read cloudbank.write")
@@ -429,7 +682,7 @@ test_routed_service_apis() {
     fi
 
     LAST_OUT="$TMP_DIR/accounts.json"
-    status_code=$(request_status "$LAST_OUT" -H "Authorization: Bearer ${READ_TOKEN}" \
+    status_code=$(request_status "$LAST_OUT" -H "Authorization: Bearer ${OWNER_TOKEN}" \
         "${GATEWAY_URL}/api/v1/accounts")
     record_status "account list" "200" "$status_code"
 
@@ -451,17 +704,21 @@ test_routed_service_apis() {
     fi
 
     LAST_OUT="$TMP_DIR/account-detail.json"
-    status_code=$(request_status "$LAST_OUT" -H "Authorization: Bearer ${READ_TOKEN}" \
+    status_code=$(request_status "$LAST_OUT" -H "Authorization: Bearer ${OWNER_TOKEN}" \
         "${GATEWAY_URL}/api/v1/account/${TO_ACCOUNT_ID}")
     record_status "account detail" "200" "$status_code"
 
     LAST_OUT="$TMP_DIR/account-transactions.json"
-    status_code=$(request_status "$LAST_OUT" -H "Authorization: Bearer ${READ_TOKEN}" \
+    status_code=$(request_status "$LAST_OUT" -H "Authorization: Bearer ${OWNER_TOKEN}" \
         "${GATEWAY_URL}/api/v1/account/${TO_ACCOUNT_ID}/transactions")
-    record_status "account transactions" "200" "$status_code"
+    if [[ "$status_code" == "200" || "$status_code" == "204" ]]; then
+        record_pass "account transactions" "HTTP $status_code"
+    else
+        record_failure "account transactions" "HTTP $status_code expected 200 or 204; body=$(cat "$LAST_OUT" 2>/dev/null)"
+    fi
 
     LAST_OUT="$TMP_DIR/account-journal-before.json"
-    status_code=$(request_status "$LAST_OUT" -H "Authorization: Bearer ${READ_TOKEN}" \
+    status_code=$(request_status "$LAST_OUT" -H "Authorization: Bearer ${OWNER_TOKEN}" \
         "${GATEWAY_URL}/api/v1/account/${TO_ACCOUNT_ID}/journal")
     record_status "account journal" "200" "$status_code"
 
@@ -475,7 +732,7 @@ test_routed_service_apis() {
     record_status "account internal journal block" "403" "$status_code"
 
     LAST_OUT="$TMP_DIR/customers.json"
-    status_code=$(request_status "$LAST_OUT" -H "Authorization: Bearer ${READ_TOKEN}" \
+    status_code=$(request_status "$LAST_OUT" -H "Authorization: Bearer ${OWNER_TOKEN}" \
         "${GATEWAY_URL}/api/v1/customer")
     record_status "customer list" "200" "$status_code"
 
@@ -488,7 +745,7 @@ test_routed_service_apis() {
 
     if [[ -n "$customer_id" ]]; then
         LAST_OUT="$TMP_DIR/customer-detail.json"
-        status_code=$(request_status "$LAST_OUT" -H "Authorization: Bearer ${READ_TOKEN}" \
+        status_code=$(request_status "$LAST_OUT" -H "Authorization: Bearer ${OWNER_TOKEN}" \
             "${GATEWAY_URL}/api/v1/customer/${customer_id}")
         record_status "customer detail" "200" "$status_code"
     else
@@ -497,7 +754,7 @@ test_routed_service_apis() {
 
     if [[ -n "$customer_name" ]]; then
         LAST_OUT="$TMP_DIR/customer-name.json"
-        status_code=$(request_status "$LAST_OUT" -H "Authorization: Bearer ${READ_TOKEN}" \
+        status_code=$(request_status "$LAST_OUT" -H "Authorization: Bearer ${OWNER_TOKEN}" \
             "${GATEWAY_URL}/api/v1/customer/name/$(url_encode "$customer_name")")
         record_status "customer search name" "200" "$status_code"
     else
@@ -506,7 +763,7 @@ test_routed_service_apis() {
 
     if [[ -n "$customer_email" ]]; then
         LAST_OUT="$TMP_DIR/customer-email.json"
-        status_code=$(request_status "$LAST_OUT" -H "Authorization: Bearer ${READ_TOKEN}" \
+        status_code=$(request_status "$LAST_OUT" -H "Authorization: Bearer ${OWNER_TOKEN}" \
             "${GATEWAY_URL}/api/v1/customer/byemail/$(url_encode "$customer_email")")
         record_status "customer search email" "200" "$status_code"
     else
@@ -546,7 +803,7 @@ test_checks_workflow() {
     local journal_id=""
     local i
     for i in $(seq 1 30); do
-        curl --noproxy '*' -sS -H "Authorization: Bearer ${READ_TOKEN}" \
+        curl --noproxy '*' -sS -H "Authorization: Bearer ${OWNER_TOKEN}" \
             "${GATEWAY_URL}/api/v1/account/${TO_ACCOUNT_ID}/journal" >"$TMP_DIR/journal-poll.json"
         journal_id=$(jq -r --argjson amt "$check_amount" \
             '[.[] | select(.journalAmount == $amt and .journalType == "PENDING") | .journalId] | max // empty' \
@@ -573,7 +830,7 @@ test_checks_workflow() {
 
     local cleared=""
     for i in $(seq 1 30); do
-        curl --noproxy '*' -sS -H "Authorization: Bearer ${READ_TOKEN}" \
+        curl --noproxy '*' -sS -H "Authorization: Bearer ${OWNER_TOKEN}" \
             "${GATEWAY_URL}/api/v1/account/${TO_ACCOUNT_ID}/journal" >"$TMP_DIR/journal-clear-poll.json"
         cleared=$(jq -r --argjson jid "$journal_id" \
             '.[] | select(.journalId == $jid and .journalType == "DEPOSIT") | .journalId' \
@@ -604,19 +861,19 @@ test_transfer_workflow() {
     local to_after
 
     LAST_OUT="$TMP_DIR/transfer-before-from.json"
-    status_code=$(request_status "$LAST_OUT" -H "Authorization: Bearer ${READ_TOKEN}" \
+    status_code=$(request_status "$LAST_OUT" -H "Authorization: Bearer ${OWNER_TOKEN}" \
         "${GATEWAY_URL}/api/v1/account/${FROM_ACCOUNT_ID}")
     from_before=$(jq -r '.accountBalance // empty' "$LAST_OUT" 2>/dev/null)
 
     LAST_OUT="$TMP_DIR/transfer-before-to.json"
-    status_code=$(request_status "$LAST_OUT" -H "Authorization: Bearer ${READ_TOKEN}" \
+    status_code=$(request_status "$LAST_OUT" -H "Authorization: Bearer ${OWNER_TOKEN}" \
         "${GATEWAY_URL}/api/v1/account/${TO_ACCOUNT_ID}")
     to_before=$(jq -r '.accountBalance // empty' "$LAST_OUT" 2>/dev/null)
 
     LAST_OUT="$TMP_DIR/transfer.json"
     status_code=$(request_status "$LAST_OUT" \
         -X POST \
-        -H "Authorization: Bearer ${TRANSFER_TOKEN}" \
+        -H "Authorization: Bearer ${OWNER_TOKEN}" \
         "${GATEWAY_URL}/transfer?fromAccount=${FROM_ACCOUNT_ID}&toAccount=${TO_ACCOUNT_ID}&amount=1")
     record_status "transfer request" "200" "$status_code"
 
@@ -629,12 +886,12 @@ test_transfer_workflow() {
     sleep 2
 
     LAST_OUT="$TMP_DIR/transfer-after-from.json"
-    status_code=$(request_status "$LAST_OUT" -H "Authorization: Bearer ${READ_TOKEN}" \
+    status_code=$(request_status "$LAST_OUT" -H "Authorization: Bearer ${OWNER_TOKEN}" \
         "${GATEWAY_URL}/api/v1/account/${FROM_ACCOUNT_ID}")
     from_after=$(jq -r '.accountBalance // empty' "$LAST_OUT" 2>/dev/null)
 
     LAST_OUT="$TMP_DIR/transfer-after-to.json"
-    status_code=$(request_status "$LAST_OUT" -H "Authorization: Bearer ${READ_TOKEN}" \
+    status_code=$(request_status "$LAST_OUT" -H "Authorization: Bearer ${OWNER_TOKEN}" \
         "${GATEWAY_URL}/api/v1/account/${TO_ACCOUNT_ID}")
     to_after=$(jq -r '.accountBalance // empty' "$LAST_OUT" 2>/dev/null)
 

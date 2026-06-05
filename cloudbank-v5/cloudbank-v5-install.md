@@ -355,7 +355,7 @@ The `azn-server` user-management API (`/user/api/v1*`) is intentionally not rout
 
 ### Automated Smoke Test
 
-Run the secured smoke-test script first. It verifies public authorization metadata/JWKs, token issuance, protected-route authentication, scope-based authorization, account lookup, check deposit, and transfer through APISIX.
+Run the secured smoke-test script first. It verifies public authorization metadata/JWKs, token issuance, protected-route authentication, scope-based authorization, account lookup, check deposit, and that the transfer route rejects a non-owner client-credentials token through APISIX. Successful owner-scoped transfer workflow validation is performed by `7-test_all_services.sh`.
 
 ```bash
 ./6-smoke_test_secure_services.sh -n <namespace> -d <dbname>

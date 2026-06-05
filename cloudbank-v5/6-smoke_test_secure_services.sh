@@ -390,7 +390,7 @@ run_smoke_tests() {
         -X POST \
         -H "Authorization: Bearer ${TRANSFER_TOKEN}" \
         "${GATEWAY_URL}/transfer?fromAccount=${FROM_ACCOUNT_ID}&toAccount=${TO_ACCOUNT_ID}&amount=1")
-    record_result "Transfer with transfer token" "200" "$status_code"
+    record_result "Transfer with client credentials owner-blocked" "403" "$status_code"
 }
 
 # =============================================================================

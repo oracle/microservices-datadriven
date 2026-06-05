@@ -30,7 +30,7 @@ This guide covers:
 
 ## Security Architecture
 
-CloudBank v5 is secured by a Spring Authorization Server service named `azn-server`, APISIX gateway route protection, and Spring Security resource-server checks in every in-scope Spring service. APISIX is a first line of defense for externally routed traffic, but the services still validate JWTs themselves.
+CloudBank v5 is secured by a Spring Authorization Server service named `azn-server`, APISIX gateway route protection, and service-side JWT checks. Spring services use the shared Spring Security resource-server configuration from `common`; the Helidon customer variant uses MicroProfile JWT and enforces the same CloudBank scope and ownership rules. APISIX is a first line of defense for externally routed traffic, but the services still validate JWTs themselves.
 
 ```mermaid
 flowchart LR
@@ -87,6 +87,7 @@ flowchart LR
 | `azn-server` | Issues OAuth2 access tokens, publishes authorization metadata and JWKS, stores demo users in `USER_REPO`, and signs JWTs with the persistent signing key. |
 | APISIX | Exposes public OAuth metadata/token routes, validates bearer tokens on CloudBank API routes, enforces route-level scopes, and forwards the bearer token to services. |
 | Spring resource servers | Validate JWTs from `azn-server` and enforce service-side scopes. This remains the hard authorization boundary. |
+| Helidon customer variant | Validates the same JWTs with MicroProfile JWT, reads OAuth scopes from the `scope` claim, and enforces customer ownership checks before read/write operations. |
 | `common` module | Provides shared Spring Security auto-configuration and a service-token provider for internal service-to-service calls. |
 | Kubernetes Secrets | Store database passwords, OAuth client secrets, bootstrap passwords, and persistent signing-key material. |
 | Oracle Database | Stores application data and `USER_REPO.USERS`, including BCrypt password hashes and BCrypt OTP hashes. |
@@ -159,7 +160,7 @@ sequenceDiagram
     Service-->>Client: API response
 ```
 
-APISIX authentication is configured by `5-apisix_create_routes.sh` using the APISIX `openid-connect` plugin in bearer-only mode. A caller first authenticates to `azn-server` at `/oauth2/token` with OAuth client credentials and receives a signed JWT access token. On later API calls, APISIX authenticates the request by validating the `Authorization: Bearer <token>` header against `azn-server` metadata and public keys from `/.well-known/openid-configuration` and `/oauth2/jwks`. APISIX checks the method-specific route's required scope, then forwards the same bearer token to the backend service. The backend service validates the JWT again and enforces its own service-side authorization.
+APISIX authentication is configured by `5-apisix_create_routes.sh` using the APISIX `openid-connect` plugin in bearer-only mode. A caller first authenticates to `azn-server` at `/oauth2/token` with OAuth client credentials and receives a signed JWT access token. On later API calls, APISIX authenticates the request by validating the `Authorization: Bearer <token>` header against `azn-server` metadata and public keys from `/.well-known/openid-configuration` and `/oauth2/jwks`. APISIX checks the method-specific route's required scope, then forwards the same bearer token to the backend service. The backend service validates the JWT again and enforces its own service-side authorization. Spring services map OAuth scopes to `SCOPE_...` authorities; the Helidon customer variant reads the JWT `scope` claim directly.
 
 The demo uses scoped OAuth clients instead of one all-powerful client:
 
@@ -170,7 +171,7 @@ The demo uses scoped OAuth clients instead of one all-powerful client:
 | `cloudbank-test-client` | `test-client-secret` | `cloudbank.test` |
 | `cloudbank-admin-client` | `admin-client-secret` | `cloudbank.admin` |
 
-APISIX enforces route-level scopes for externally routed APIs. Services enforce the same or stricter policy internally. Internal service calls use `cloudbank-service-client` to obtain `cloudbank.internal` tokens, and APISIX blocks external access to internal account journal routes with a deny-style route that requires an unissued scope.
+APISIX enforces route-level scopes for externally routed APIs. Services enforce the same or stricter policy internally. Internal service calls use `cloudbank-service-client` to obtain `cloudbank.internal` tokens. Service-side account and customer read paths accept that internal scope where needed for ownership lookups, while APISIX only exposes the external read/write/admin routes. APISIX blocks external access to internal account journal routes with a deny-style route that requires an unissued scope.
 
 ### Forgot Password Flow
 

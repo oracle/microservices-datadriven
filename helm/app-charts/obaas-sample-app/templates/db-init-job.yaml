@@ -21,8 +21,16 @@ spec:
   template:
     spec:
       restartPolicy: Never
+      {{ with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{ end }}
       containers:
       - name: sqlcl-runner
+        {{ with .Values.securityContext }}
+        securityContext:
+          {{- toYaml . | nindent 10 }}
+        {{ end }}
         image: {{ .Values.database.sqlcl.image.repository | default "container-registry.oracle.com/database/sqlcl" }}:{{ .Values.database.sqlcl.image.tag | default "latest" }}
         env:
         - name: TNS_ADMIN
@@ -73,18 +81,18 @@ spec:
         volumeMounts:
         - name: db-init-scripts
           mountPath: /opt/oracle/scripts/startup
-        {{- if $walletSecret }}
+        {{ if $walletSecret }}
         - name: tns-admin
           mountPath: /app/tns_admin
-        {{- end }}
+        {{ end }}
       volumes:
       - name: db-init-scripts
         configMap:
           name: {{ include "obaas-app.fullname" . }}-db-init
-      {{- if $walletSecret }}
+      {{ if $walletSecret }}
       - name: tns-admin
         secret:
           secretName: {{ $walletSecret }}
           optional: true
-      {{- end }}
+      {{ end }}
 {{- end }}
