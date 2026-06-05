@@ -31,9 +31,10 @@ ghcr.io/external-secrets/external-secrets:v2.5.0
 ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator:0.146.0
 ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-java:1.33.6
 quay.io/brancz/kube-rbac-proxy:v0.20.0
-quay.io/jetstack/cert-manager-cainjector:v1.19.5
-quay.io/jetstack/cert-manager-controller:v1.19.5
-quay.io/jetstack/cert-manager-webhook:v1.19.5
+quay.io/jetstack/cert-manager-cainjector:v1.20.2
+quay.io/jetstack/cert-manager-controller:v1.20.2
+quay.io/jetstack/cert-manager-startupapicheck:v1.20.2
+quay.io/jetstack/cert-manager-webhook:v1.20.2
 quay.io/strimzi/kafka:0.51.0-kafka-4.2.0
 quay.io/strimzi/operator:0.51.0
 registry.k8s.io/ingress-nginx/controller:v1.15.1
