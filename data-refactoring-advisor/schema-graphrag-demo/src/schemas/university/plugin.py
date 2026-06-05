@@ -1,4 +1,4 @@
-"""Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+"""Copyright (c) 2026, Oracle and/or its affiliates.
 Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl."""
 
 """Westfield University schema plugin — fictional 15-year-old university DB with naming chaos."""
