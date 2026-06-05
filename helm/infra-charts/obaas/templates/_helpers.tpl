@@ -554,3 +554,13 @@ For external DBs (ADB-S, OTHER): retrieved from user-provided privAuthN secret
 {{ $serviceValue | b64dec }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+OTMM console effective enablement.
+The console only makes sense when there is a coordinator and/or workflow server
+for it to front, so an explicit console.enabled is overridden to off when both
+coordinator and workflowServer are disabled.
+*/}}
+{{- define "otmm.console.enabled" -}}
+{{- and .Values.otmm.console.enabled (or .Values.otmm.coordinator.enabled .Values.otmm.workflowServer.enabled) -}}
+{{- end -}}

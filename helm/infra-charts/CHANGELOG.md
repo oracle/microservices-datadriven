@@ -102,6 +102,14 @@ AppVersion: 2.1.0-build.12
 
 - Add Kafka metrics
 
+# 0.0.15 - Jun 5, 2026
+
+AppVersion: 2.1.0-build.13
+
+- Restructure OTMM (MicroTX) values into independently toggleable `coordinator`, `workflowServer`, and `console` components, each with its own image and `pullPolicy`; the top-level `otmm.enabled` flag is removed
+- The OTMM console now deploys only when the coordinator and/or workflow server is enabled; an explicit `otmm.console.enabled: true` is overridden when both are disabled. The console is wired only to the backends that are enabled (no dead coordinator/workflow endpoints in single-backend installs)
+- Fix OTMM templates that still referenced the removed top-level `otmm.image`/`otmm.replicas`/`otmm.metrics` paths
+
 # 0.0.14 - May 20, 2026
 
 AppVersion: 2.1.0-build.13

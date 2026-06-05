@@ -47,7 +47,7 @@ spec:
         signoz.io/path: {{ $workflowMetricsPath | quote }}
       {{- end }}
     spec:
-      {{- include "obaas.imagePullSecrets" (dict "local" (index .Values "otmm").imagePullSecrets "global" .Values.global.imagePullSecrets "secretName" .Values.global.imagePullSecretName) | nindent 6 }}
+      {{- include "obaas.imagePullSecrets" (dict "local" .Values.otmm.workflowServer.imagePullSecrets "global" .Values.global.imagePullSecrets "secretName" .Values.global.imagePullSecretName) | nindent 6 }}
       serviceAccountName: {{ .Release.Name }}-otmm-workflow-server
       securityContext:
         fsGroup: 1000
@@ -55,7 +55,7 @@ spec:
       containers:
         - name: server
           image: {{ .Values.otmm.workflowServer.image.repository }}:{{ .Values.otmm.workflowServer.image.tag }}
-          imagePullPolicy: {{ (index .Values "otmm").image.pullPolicy | default "IfNotPresent" }}
+          imagePullPolicy: {{ .Values.otmm.workflowServer.image.pullPolicy | default "IfNotPresent" }}
           ports:
             - containerPort: 9010
               name: http
