@@ -13,8 +13,14 @@ Core Services:
 {{- if (index .Values "admin-server").enabled }}
   ✓ Admin Server (Management API) - {{ (index .Values "admin-server").replicas }} replica(s)
 {{- end }}
-{{- if (index .Values "otmm").enabled }}
-  ✓ OTMM (Transaction Manager) - {{ (index .Values "otmm").replicas }} replica(s)
+{{- if .Values.otmm.coordinator.enabled }}
+  ✓ OTMM Coordinator (Transaction Manager) - {{ .Values.otmm.coordinator.replicas }} replica(s)
+{{- end }}
+{{- if .Values.otmm.workflowServer.enabled }}
+  ✓ OTMM Workflow Server - {{ .Values.otmm.workflowServer.replicas }} replica(s)
+{{- end }}
+{{- if eq (include "otmm.console.enabled" .) "true" }}
+  ✓ OTMM Console
 {{- end }}
 
 API Gateway & Ingress:
@@ -70,11 +76,16 @@ Eureka Service Discovery:
 Admin Server:
   Service: {{ .Release.Name }}-admin-server.{{ .Release.Namespace }}.svc.cluster.local:8989
 {{- end }}
-{{- if (index .Values "otmm").enabled }}
+{{- if or .Values.otmm.coordinator.enabled .Values.otmm.workflowServer.enabled }}
 
 Transaction Manager (OTMM):
-  Service: {{ .Release.Name }}-otmm-tcs.{{ .Release.Namespace }}.svc.cluster.local:9000
+{{- if .Values.otmm.coordinator.enabled }}
+  Coordinator: {{ .Release.Name }}-otmm-tcs.{{ .Release.Namespace }}.svc.cluster.local:9000
   Metrics: http://{{ .Release.Name }}-otmm-tcs.{{ .Release.Namespace }}.svc.cluster.local:9000/metrics
+{{- end }}
+{{- if .Values.otmm.workflowServer.enabled }}
+  Workflow Server: {{ .Release.Name }}-otmm-workflow-server.{{ .Release.Namespace }}.svc.cluster.local:9010
+{{- end }}
 {{- end }}
 {{- if (index .Values "apisix").enabled }}
 

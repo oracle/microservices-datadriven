@@ -1,6 +1,6 @@
 ## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
-{{- if (index .Values "otmm").enabled }}
+{{- if .Values.otmm.coordinator.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -47,10 +47,10 @@ data:
   STORAGE_TYPE: memory
   TCC_COORDINATOR_ENABLED: "true"
   TMM_APPNAME: {{ .Release.Name }}-otmm-tcs
-  TMM_IMAGE: "{{ (index .Values "otmm").image.repository }}:{{ (index .Values "otmm").image.tag }}"
-  TMM_IMAGE_PULLPOLICY: {{ (index .Values "otmm").image.pullPolicy | default "IfNotPresent" }}
+  TMM_IMAGE: "{{ .Values.otmm.coordinator.image.repository }}:{{ .Values.otmm.coordinator.image.tag }}"
+  TMM_IMAGE_PULLPOLICY: {{ .Values.otmm.coordinator.image.pullPolicy | default "IfNotPresent" }}
   TMM_IMAGE_PULLSECRET: {{ .Values.global.imagePullSecretName }}
-  TMM_REPLICA_COUNT: "{{ (index .Values "otmm").replicas }}"
+  TMM_REPLICA_COUNT: "{{ .Values.otmm.coordinator.replicas }}"
   TRANSACTION_TOKEN_ENABLED: "false"
   XA_COORDINATOR_ENABLED: "true"
   XA_COORDINATOR_TX_MAX_TIMEOUT: "600000"

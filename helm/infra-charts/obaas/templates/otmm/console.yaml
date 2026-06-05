@@ -1,7 +1,7 @@
 ## Copyright (c) 2026, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
 
-{{- if .Values.otmm.console.enabled }}
+{{- if eq (include "otmm.console.enabled" .) "true" }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -72,12 +72,12 @@ spec:
         app.kubernetes.io/component: transaction-coordinator
         app.kubernetes.io/part-of: {{ .Release.Name }}
     spec:
-      {{- include "obaas.imagePullSecrets" (dict "local" (index .Values "otmm").imagePullSecrets "global" .Values.global.imagePullSecrets "secretName" .Values.global.imagePullSecretName) | nindent 6 }}
+      {{- include "obaas.imagePullSecrets" (dict "local" .Values.otmm.console.imagePullSecrets "global" .Values.global.imagePullSecrets "secretName" .Values.global.imagePullSecretName) | nindent 6 }}
       serviceAccountName: {{ .Release.Name }}-otmm-console
       containers:
         - name: console
           image: {{ .Values.otmm.console.image.repository }}:{{ .Values.otmm.console.image.tag }}
-          imagePullPolicy: {{ (index .Values "otmm").image.pullPolicy | default "IfNotPresent" }}
+          imagePullPolicy: {{ .Values.otmm.console.image.pullPolicy | default "IfNotPresent" }}
           ports:
             - name: http-console
               containerPort: 8080
@@ -104,12 +104,14 @@ spec:
           env:
             - name: CONSOLE_APP_NAME
               value: console
+            {{- if .Values.otmm.coordinator.enabled }}
             - name: TMM_NAMESPACE
               value: {{ .Release.Namespace }}
             - name: TMM_APP_NAME
               value: otmm-tcs
             - name: TMM_TCS_URL
               value: "http://{{ .Release.Name }}-otmm-tcs:9000"
+            {{- end }}
             {{- if eq .Values.otmm.commonConfiguration.security.enabled true }}
             - name: TMM_ADMIN_USER_ROLE_NAMES
               value: {{ .Values.otmm.commonConfiguration.security.identityProvider.adminUserRoles }}
@@ -158,6 +160,7 @@ spec:
             - name: SECURITY_ENABLED
               value: "false"
             {{- end }}
+            {{- if .Values.otmm.workflowServer.enabled }}
             # WorkflowServer URL configuration
             - name: WF_SERVER
               value: "http://{{ .Release.Name }}-otmm-workflow-server:9010"
@@ -168,6 +171,7 @@ spec:
               value: "{{ .Values.otmm.commonConfiguration.externalURL.protocol }}://{{ .Values.otmm.commonConfiguration.externalURL.host }}:{{ .Values.otmm.commonConfiguration.externalURL.port }}"
             {{- else }}
               value: "{{ .Values.otmm.commonConfiguration.externalURL.protocol | default "http" }}://{{ .Values.otmm.commonConfiguration.externalURL.host | default (printf "%s-otmm-console" .Release.Name) }}"
+            {{- end }}
             {{- end }}
             # temporary
             - name: SECURITY_PROPERTIES_COOKIE_ENCRYPTION_ENABLED

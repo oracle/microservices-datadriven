@@ -1,7 +1,7 @@
 ## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
-{{- if (index .Values "otmm").enabled }}
-{{- $otmmMetrics := default dict .Values.otmm.metrics }}
+{{- if .Values.otmm.coordinator.enabled }}
+{{- $otmmMetrics := default dict .Values.otmm.coordinator.metrics }}
 {{- $otmmMetricsScrape := default dict $otmmMetrics.scrape }}
 {{- $otmmMetricsEnabled := true }}
 {{- if hasKey $otmmMetrics "enabled" }}
@@ -24,7 +24,7 @@ metadata:
     app.kubernetes.io/part-of: {{ .Release.Name }}
     {{- include "obaas.labels" . | nindent 4 }}
 spec:
-  replicas: {{ (index .Values "otmm").replicas }}
+  replicas: {{ .Values.otmm.coordinator.replicas }}
   serviceName: {{ .Release.Name }}-otmm-tcs
   selector:
     matchLabels:
@@ -41,14 +41,14 @@ spec:
         signoz.io/path: {{ $otmmMetricsPath | quote }}
       {{- end }}
     spec:
-      {{- include "obaas.imagePullSecrets" (dict "local" (index .Values "otmm").imagePullSecrets "global" .Values.global.imagePullSecrets "secretName" .Values.global.imagePullSecretName) | nindent 6 }}
+      {{- include "obaas.imagePullSecrets" (dict "local" .Values.otmm.coordinator.imagePullSecrets "global" .Values.global.imagePullSecrets "secretName" .Values.global.imagePullSecretName) | nindent 6 }}
       serviceAccountName: {{ .Release.Name }}-otmm-tcs
       securityContext:
         runAsUser: 1000
       containers:
       - name: otmm-tcs
-        image: "{{ (index .Values "otmm").image.repository }}:{{ (index .Values "otmm").image.tag }}"
-        imagePullPolicy: {{ (index .Values "otmm").image.pullPolicy | default "IfNotPresent" }}
+        image: "{{ .Values.otmm.coordinator.image.repository }}:{{ .Values.otmm.coordinator.image.tag }}"
+        imagePullPolicy: {{ .Values.otmm.coordinator.image.pullPolicy | default "IfNotPresent" }}
         ports:
         - name: http
           containerPort: 9000
@@ -62,8 +62,8 @@ spec:
         - name: config-volume
           mountPath: /etc/config
         resources:
-          {{- if (index .Values "otmm").resources }}
-          {{- toYaml (index .Values "otmm").resources | nindent 10 }}
+          {{- if .Values.otmm.coordinator.resources }}
+          {{- toYaml .Values.otmm.coordinator.resources | nindent 10 }}
           {{- else }}
           limits:
             cpu: 1

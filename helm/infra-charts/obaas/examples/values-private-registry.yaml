@@ -154,17 +154,32 @@ config-server:
   # Override default resources if needed (defaults: cpu 250m-500m, memory 256Mi-512Mi)
   # resources: {}
 
-# Oracle Transaction Manager for Microservices (OTMM)
+# Oracle Transaction Manager for Microservices (OTMM - MicroTX)
+# Each component (coordinator, workflowServer, console) has its own image and
+# can be toggled independently. The console only deploys when the coordinator
+# and/or workflow server is also enabled.
 otmm:
   global:
     imagePullSecrets: *imagePullSecrets
-  enabled: true
-  replicas: 1
-  image:
-    repository: myregistry.example.com/database/otmm
-    tag: "24.4.1"
-  # Override default resources if needed (defaults: cpu 250m, memory 1Gi)
-  # resources: {}
+  coordinator:
+    enabled: true
+    replicas: 1
+    image:
+      repository: myregistry.example.com/database/microtx-coordinator
+      tag: "26.1.1"
+    # Override default resources if needed (defaults: cpu 250m, memory 1Gi)
+    # resources: {}
+  workflowServer:
+    enabled: true
+    replicas: 1
+    image:
+      repository: myregistry.example.com/database/microtx-workflow
+      tag: "26.1.1"
+  console:
+    enabled: true
+    image:
+      repository: myregistry.example.com/database/microtx-console
+      tag: "26.1.1"
 
 # Oracle Database Exporter (Prometheus metrics for Oracle Database)
 oracle-database-exporter:
@@ -745,7 +760,9 @@ kafka:
 # global kubectl (PVC cleanup hook)  | docker.io                     | global.utilities.kubectl.image.registry
 # eureka                             | container-registry.oracle.com | eureka.image.repository
 # admin-server                       | container-registry.oracle.com | admin-server.image.repository
-# otmm                               | container-registry.oracle.com | otmm.image.repository
+# otmm coordinator                   | container-registry.oracle.com | otmm.coordinator.image.repository
+# otmm workflow server               | container-registry.oracle.com | otmm.workflowServer.image.repository
+# otmm console                       | container-registry.oracle.com | otmm.console.image.repository
 # oracle-database-exporter           | container-registry.oracle.com | oracle-database-exporter.image.repository
 # oracle-database-exporter (busybox) | docker.io                     | oracle-database-exporter.busybox.repository
 # database                           | (varies by type)              | database.image.repository
