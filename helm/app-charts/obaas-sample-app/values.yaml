@@ -67,7 +67,7 @@ database:
   sqlcl:
     image:
       repository: container-registry.oracle.com/database/sqlcl
-      tag: latest
+      tag: "26.1.2"
 
 
 eureka:
