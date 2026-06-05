@@ -28,6 +28,8 @@ An Oracle database is a prerequisite for installation, but you may use any kind 
 
 You will need to provide various configuration information to the Helm charts during installation depending on where your database will be deployed.  In each case, you will specify this information in the `database` section of the `values.yaml` file for the `obaas` Helm chart. 
 
+Select the database mode by setting `database.type` to one of the supported values: `SIDB-FREE`, `ADB-FREE`, `ADB-S`, or `OTHER`. Use `SIDB-FREE` or `ADB-FREE` for in-cluster database deployments, `ADB-S` for Autonomous Database deployments, and `OTHER` for non-Autonomous Oracle Database deployments.
+
 | Type of deployment | Information you will need |
 | --- | --- | 
 | Autonomous AI Database (including Globally Distributed) | The OCID of your database, your OCI CLI or SDK configuration details, including your private key, and the password for your `ADMIN` user. | 
@@ -77,7 +79,7 @@ Note that most components also have additional configuration, and some have opti
 
 The OBaaS Helm charts include most components by depending on those components' public Helm charts.  This means that any customization option provided in those Helm charts are available for your use. 
 
-For example the [APISIX Helm chart](https://github.com/apache/apisix-helm-chart/tree/apisix-2.12.3/charts/apisix) provides many configuration options that are documented by APISIX. 
+For example the [APISIX Helm chart](https://github.com/apache/apisix-helm-chart/tree/apisix-2.14.1/charts/apisix) provides many configuration options that are documented by APISIX. 
 
 If you wish to use a customization option from a dependent chart, you may specify it under the key/section for that chart in the appropriate `values.yaml`.  For example, suppose you wanted to change the admin port for APISIX.  In the documentation for the APISIX Helm chart, you notice they provide a field called `apisix.admin.port` for this purpose.  You can include this in the `values.yaml` for the `obaas` Helm chart under the `apisix` key, as follows:
 

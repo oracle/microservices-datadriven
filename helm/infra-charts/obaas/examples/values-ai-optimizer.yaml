@@ -19,12 +19,11 @@
 #     --set database.oci.ocid="ocid1.autonomousdatabase.oc1..."
 
 database:
-  enabled: true
   type: "ADB-S"
   sqlcl:
     image:
       repository: container-registry.oracle.com/database/sqlcl
-      tag: "25.3.0"
+      tag: "26.1.2"
 
   privAuthN:
     secretName: "db-priv-authn"

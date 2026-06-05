@@ -5,21 +5,25 @@ package com.example.transfer;
 
 import java.net.URI;
 
+import com.example.common.security.CloudBankAuthorization;
 import com.oracle.microtx.springboot.lra.annotation.Compensate;
 import com.oracle.microtx.springboot.lra.annotation.Complete;
 import com.oracle.microtx.springboot.lra.annotation.LRA;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -31,12 +35,19 @@ public class TransferService {
 
     public static final String TRANSFER_ID = "TRANSFER_ID";
 
+    @Value("${account.lookup.url}") URI accountLookupUri;
     @Value("${account.withdraw.url}") URI withdrawUri;
     @Value("${account.deposit.url}") URI depositUri;
     @Value("${transfer.cancel.url}") URI transferCancelUri;
     @Value("${transfer.cancel.process.url}") URI transferProcessCancelUri;
     @Value("${transfer.confirm.url}") URI transferConfirmUri;
     @Value("${transfer.confirm.process.url}") URI transferProcessConfirmUri;
+
+    private final RestTemplate restTemplate;
+
+    public TransferService(RestTemplateBuilder restTemplateBuilder) {
+        this.restTemplate = restTemplateBuilder.build();
+    }
 
     /**
      * Ping method.
@@ -61,9 +72,13 @@ public class TransferService {
     public ResponseEntity<String> transfer(@RequestParam("fromAccount") long fromAccount,
             @RequestParam("toAccount") long toAccount,
             @RequestParam("amount") long amount,
-            @RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) {
+            @RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId,
+            Authentication authentication) {
         if (amount <= 0) {
             return ResponseEntity.badRequest().body("transfer failed: amount must be positive");
+        }
+        if (!canTransferFromAccount(fromAccount, authentication)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("transfer failed: account access denied");
         }
         if (lraId == null) {
             return new ResponseEntity<>("Failed to create LRA", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -89,7 +104,6 @@ public class TransferService {
         log.info("LRA/transfer action will be " + (isCompensate ? "cancel" : "confirm"));
 
         // call complete or cancel based on outcome of previous actions
-        RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);
         headers.set(TRANSFER_ID, lraId);
@@ -106,6 +120,29 @@ public class TransferService {
         return ResponseEntity.ok("transfer status:" + returnString);
     }
 
+    private boolean canTransferFromAccount(long accountId, Authentication authentication) {
+        if (CloudBankAuthorization.isPrivileged(authentication)) {
+            return true;
+        }
+        if (authentication == null || authentication.getName() == null) {
+            return false;
+        }
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUri(accountLookupUri)
+                .path("/{accountId}");
+        try {
+            ResponseEntity<AccountLookup> response = restTemplate.getForEntity(
+                    builder.buildAndExpand(accountId).toUri(),
+                    AccountLookup.class);
+            return response.getStatusCode().is2xxSuccessful()
+                    && response.getBody() != null
+                    && authentication.getName().equals(response.getBody().accountCustomerId());
+        } catch (RestClientException exception) {
+            log.warn("Could not authorize transfer for account {}", accountId, exception);
+            return false;
+        }
+    }
+
     private String withdraw(String lraId, long accountId, long amount) {
         log.info("withdraw accountId = " + accountId + ", amount = " + amount);
         log.info("withdraw lraId = " + lraId);
@@ -114,7 +151,6 @@ public class TransferService {
             .queryParam("accountId", accountId)
             .queryParam("amount", amount);
 
-        RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);
         headers.set(LRA_HTTP_CONTEXT_HEADER, lraId.toString());
@@ -136,7 +172,6 @@ public class TransferService {
             .queryParam("accountId", accountId)
             .queryParam("amount", amount);
 
-        RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);
         headers.set(LRA_HTTP_CONTEXT_HEADER, lraId.toString());
@@ -175,7 +210,6 @@ public class TransferService {
     public ResponseEntity<String> confirm(@RequestHeader(TRANSFER_ID) String transferId) {
         log.info("Received confirm for transfer : " + transferId);
 
-        RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);
         headers.set(LRA_HTTP_CONTEXT_HEADER, transferId);
@@ -200,7 +234,6 @@ public class TransferService {
     public ResponseEntity<String> cancel(@RequestHeader(TRANSFER_ID) String transferId) {
         log.info("Received cancel for transfer : " + transferId);
 
-        RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);
         headers.set(LRA_HTTP_CONTEXT_HEADER, transferId);
@@ -214,4 +247,6 @@ public class TransferService {
         return ResponseEntity.ok(response.getBody());
     }
 
+    private record AccountLookup(String accountCustomerId) {
+    }
 }

@@ -1,0 +1,37 @@
+# helidon-consumer Helm Configuration
+fullnameOverride: "helidon-consumer"
+
+image:
+  # Registry should be provided during deployment
+  repository: "REGION.ocir.io/tenancy/cloudbank-v5/helidon-consumer"
+  tag: "5.0-SNAPSHOT"
+
+obaas:
+  releaseName: "obaas"  
+  framework: "HELIDON"
+
+helidon:
+  datasource:
+    name: "consumer"
+
+env:
+  - name: OTEL_SERVICE_NAME
+    value: "helidon-consumer"
+  - name: OTEL_INSTRUMENTATION_KAFKA_METRICS_ENABLED
+    value: "true"
+  - name: KAFKA_BOOTSTRAP_SERVERS
+    value: "obaas-kafka-cluster-kafka-bootstrap:9092"
+  - name: KAFKA_TOPIC
+    value: "my-topic"
+
+database:
+  authN:
+    secretName: "testkafka-db-authn"
+  privAuthN:
+    secretName: "testkafka-db-priv-authn"
+
+# Eureka configuration
+eureka:
+  enabled: true
+  instance:
+    appname: "helidon-consumer"

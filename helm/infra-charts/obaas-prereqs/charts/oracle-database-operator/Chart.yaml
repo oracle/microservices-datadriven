@@ -4,7 +4,7 @@ dependencies:
 - condition: cert-manager.enabled
   name: cert-manager
   repository: https://charts.jetstack.io
-  version: v1.19.1
+  version: v1.19.5
 description: A Helm chart for Oracle Database Operator for Kubernetes
 home: https://github.com/oracle/oracle-database-operator
 keywords:

@@ -23,6 +23,12 @@ https://oss.oracle.com/licenses/upl/ -->
             <groupId>com.oracle.microtx.lra</groupId>
             <artifactId>microtx-lra-spring-boot-starter</artifactId>
             <version>${oracle-microtx-starter.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.netty</groupId>
+                    <artifactId>netty-transport-native-epoll</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.example</groupId>
@@ -50,7 +56,7 @@ https://oss.oracle.com/licenses/upl/ -->
                         <image>
                             <name>${image.registry}/transfer:${project.version}</name>
                             <build>
-                                <from>ghcr.io/oracle/openjdk-image-obaas:21</from>
+                                <from>ghcr.io/oracle/oracle-jdk-image-obaas:21</from>
                                 <assembly>
                                     <mode>dir</mode>
                                     <targetDir>/deployments</targetDir>

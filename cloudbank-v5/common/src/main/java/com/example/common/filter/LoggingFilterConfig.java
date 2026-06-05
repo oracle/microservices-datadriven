@@ -25,7 +25,12 @@ public class LoggingFilterConfig {
      * @return CommonsRequestLoggingFilter bean
      */
     @Bean
-    public CommonsRequestLoggingFilter logFilter() {
+    public CommonsRequestLoggingFilter logFilter(
+            @Value("${request.logging.include-query-string:false}") boolean includeQueryString,
+            @Value("${request.logging.include-payload:false}") boolean includePayload,
+            @Value("${request.logging.max-payload-length:0}") int maxPayloadLength,
+            @Value("${request.logging.include-headers:false}") boolean includeHeaders,
+            @Value("${request.logging.include-client-info:false}") boolean includeClientInfo) {
         log.info("Log filter initialized");
         CommonsRequestLoggingFilter filter = new CommonsRequestLoggingFilter() {
             @Value("${request.logging.shouldLog}")
@@ -81,11 +86,11 @@ public class LoggingFilterConfig {
             }
 
         };
-        filter.setIncludeQueryString(true);
-        filter.setIncludePayload(true);
-        filter.setMaxPayloadLength(10000);
-        filter.setIncludeHeaders(true);
-        filter.setIncludeClientInfo(true);
+        filter.setIncludeQueryString(includeQueryString);
+        filter.setIncludePayload(includePayload);
+        filter.setMaxPayloadLength(maxPayloadLength);
+        filter.setIncludeHeaders(includeHeaders);
+        filter.setIncludeClientInfo(includeClientInfo);
         filter.setBeforeMessagePrefix("Request started => ");
         filter.setAfterMessagePrefix("Request ended => ");
         return filter;

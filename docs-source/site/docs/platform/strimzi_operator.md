@@ -171,3 +171,7 @@ kubectl -n my-namespace run kafka-consumer -ti \
 | `KafkaBridge` | Provides HTTP API access to Kafka |
 
 For the full custom resource reference, see the [Strimzi documentation](https://strimzi.io/docs/operators/latest/configuring).
+
+## Next Steps
+
+- **Kafka Observability**: Learn how to monitor your Strimzi Kafka clusters, producers, and consumers using the [Kafka Observability Guide](../observability/kafka.md).

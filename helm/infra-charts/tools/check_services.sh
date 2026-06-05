@@ -1,4 +1,7 @@
 #!/bin/bash
+# Copyright (c) 2026, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+
 # Quick check of all services in a K8s namespace using a temporary curl pod
 
 NS="${1:?Usage: $0 <namespace>}"

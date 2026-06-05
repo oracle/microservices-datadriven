@@ -14,14 +14,14 @@ This document describes how to deploy OBaaS to an existing Kubernetes cluster us
 - [Example Configurations](#example-configurations) — Common deployment scenarios:
   - [Default](#default-configuration-values-defaultyaml) — Quick start with no overrides
   - [SIDB-FREE Database](#sidb-free-database-values-sidb-freeyaml) — In-cluster Oracle Database Free container
-  - [Existing ADB](#existing-adb-configuration-values-existing-adbyaml) — Connect to a pre-provisioned Autonomous Database
-  - [Other Existing Database](#other-existing-database-values-byodbyaml) - Connect to another type of pre-existing Oracle AI Database, for example an Oracle Base DB, or an on-premises Oracle Database
+  - [Existing Oracle AI Autonomous Database](#existing-oracle-ai-autonomous-database-configuration-values-existing-adbyaml) — Connect to a pre-provisioned Autonomous Database
+  - [Other Existing Database](#other-existing-oracle-ai-database-values-byodbyaml) - Connect to another type of pre-existing Oracle AI Database, for example, an Oracle Base DB, or an on-premises Oracle Database
   - [Multi-Tenant](#multi-tenant-setup-values-tenant1yaml-values-tenant2yaml) — Run multiple OBaaS instances in one cluster
   - [Namespace and Scope](#namespace-and-scope-configuration-values-namespace-overrideyaml) — Control which namespaces components watch
   - [SigNoz Existing Secret](#signoz-existing-secret-values-signoz-existing-secretyaml) — Pre-provisioned SigNoz credentials
   - [SigNoz Cold Storage](#signoz-cold-storage-values-signoz-cold-storageyaml) — Offload older observability data to S3-compatible object storage
   - [Private Registry](#private-registry-configuration-values-private-registryyaml) — Air-gapped and corporate registry setups
-  - [Combining Examples](#combining-examples) — Layer multiple values files together
+  - [Combining Examples](#combining-examples) — Layer multiple value files together
 - [Uninstallation](#uninstallation) — Teardown instructions
 - [Next Steps](#next-steps) — Deploy applications and configure observability
 
@@ -89,7 +89,9 @@ Cluster
     └── Signoz + ClickHouse
 ```
 
-**Namespace behavior:** All OBaaS chart components deploy to the release namespace (specified with the `-n` flag during install). By default, ingress-nginx watches only its own release namespace (`scope.enabled: true`).
+**Namespace behavior:** All OBaaS chart components deploy to the release namespace (specified with the `-n` flag during installation). By default, ingress-nginx watches only its own release namespace (`scope.enabled: true`).
+
+**Network isolation:** The OBaaS chart installs NetworkPolicy resources in the release namespace. Effective enforcement depends on the cluster CNI plugin; use a CNI that supports Kubernetes NetworkPolicy and has policy enforcement enabled. By default, the chart establishes a default-deny baseline, allows same-namespace traffic, allows DNS egress, permits public ingress to the configured gateway or ingress entrypoints, and explicitly allows external egress for compatibility with external databases, OCI APIs, registries, and identity providers.
 
 **Directory structure:**
 
@@ -198,7 +200,7 @@ OBaaS requires [cert-manager](https://cert-manager.io/) as a prerequisite. If yo
 ```shell
 helm install \
   cert-manager oci://quay.io/jetstack/charts/cert-manager \
-  --version v1.19.4 \
+  --version v1.19.5 \
   --namespace cert-manager \
   --create-namespace \
   --set installCRDs=true \
@@ -240,12 +242,12 @@ kubectl get pods -n <application-namespace> -w
 ```
 
 :::tip[First Deployment]
-It may take 5-10 additional minutes for all pods to reach Running state.
+It may take 5-10 additional minutes for all pods to reach the Running state.
 :::
 
 #### Step 4: Verify Installation
 
-After installation completes, verify all components are running:
+After the installation completes, verify all components are running:
 
 ```bash
 kubectl get pods -A
@@ -272,6 +274,8 @@ Several example configurations are provided for comparison.
 | `values-signoz-existing-secret.yaml` | GitOps and pre-created credentials | Depends | Uses an existing SigNoz secret |
 | `values-signoz-cold-storage.yaml` | Long-term observability retention | Depends | Uses S3-compatible object storage |
 | `values-private-registry.yaml` | Air-gapped and private registry installs | Depends | Mirrors images to a private registry |
+
+The OBaaS chart selects the database mode with `database.type`. The supported values are `SIDB-FREE`, `ADB-FREE`, `ADB-S`, and `OTHER`; choose the example values file that matches the database deployment you plan to use.
 
 #### Default Configuration (`values-default.yaml`)
 
@@ -301,11 +305,11 @@ Uses Oracle Database Free as an in-cluster container. This is the default databa
 helm upgrade --install <app-release> obaas/obaas -f examples/values-sidb-free.yaml -n <application-namespace> --create-namespace [--debug]
 ```
 
-#### Existing ADB Configuration (`values-existing-adb.yaml`)
+#### Existing Oracle AI Autonomous Database Configuration (`values-existing-adb.yaml`)
 
 Connects to an existing OCI Autonomous Database (ADB-S) instead of deploying a database container.
 
-**Use case:** Production deployments using a pre-provisioned OCI Autonomous Database
+**Use case:** Production deployments using a pre-provisioned OCI Oracle Autonomous AI Database
 
 <details open>
 <summary>Prerequisites: Create required secrets before installing</summary>
@@ -343,6 +347,39 @@ Connects to an existing OCI Autonomous Database (ADB-S) instead of deploying a d
 
 </details>
 
+##### Get the OCID for an Existing Oracle AI Autonomous Database
+
+Before installing OBaaS with an existing Oracle AI Autonomous Database (ADB), you must get the database OCID. The OCID is required as an input parameter for the `helm` installation command.
+
+A helper script, `get-adb-ocid.sh`, is provided to retrieve the OCID of an existing Oracle AI Autonomous Database. Alternatively, you can locate the OCID manually in the Oracle Cloud Infrastructure (OCI) Console.
+
+###### Script Usage
+
+```bash
+tools/get-adb-ocid.sh -r <region> (-c <compartment-name> | --compartment-ocid <ocid>) -dbname <adb-display-name> [options]
+```
+
+###### Parameters
+
+| Parameter | Description                                                  |
+|---|--------------------------------------------------------------|
+| `-r <region>` | OCI region where the Oracle AI Autonomous Database is deployed |
+| `-c <compartment-name>` | Name of the OCI compartment containing the database          |
+| `--compartment-ocid <ocid>` | OCID of the OCI compartment containing the database          |
+| `-dbname <adb-display-name>` | Display name of the existing Oracle AI Autonomous Database   |
+| `[options]` | Additional optional parameters supported by the script       |
+
+##### Example
+
+```bash
+tools/get-adb-ocid.sh \
+  -r us-ashburn-1 \
+  -c my-compartment \
+  -dbname my-existing-adb
+```
+
+The script returns the OCID for the specified Autonomous Database, which can then be used during the OBaaS installation process.
+
 **Installation:**
 
 The `--set database.authN.secretName=<app-user-secret>` argument is optional.
@@ -357,9 +394,9 @@ helm upgrade --install <app-release> obaas/obaas \
   [--debug]
 ```
 
-#### Other Existing Database (`values-byodb.yaml`)
+#### Other Existing Oracle AI Database (`values-byodb.yaml`)
 
-Connects to an existing Oracle AI Database using a connect string and user credentials.
+Connects to an existing Oracle AI Database using a connection string and user credentials.
 Do not use this option for an Oracle Autonomous Database.  This is a good option for
 an Oracle Base DB or an on-premises Oracle AI Database.
 
@@ -382,12 +419,12 @@ an Oracle Base DB or an on-premises Oracle AI Database.
 1. Ensure the admin user has the following permissions:
 
   ```sql
-  SELECT WITH ADMIN OPTION on:
+  SELECT WITH GRANT OPTION on:
     DBA_TABLESPACE_USAGE_METRICS, DBA_TABLESPACES,
     GV_$SYSTEM_WAIT_CLASS, GV_$ASM_DISKGROUP_STAT, GV_$DATAFILE,
     GV_$SYSSTAT, GV_$PROCESS, GV_$WAITCLASSMETRIC, GV_$SESSION,
     GV_$RESOURCE_LIMIT, GV_$PARAMETER, GV_$DATABASE,
-    GV_$SQLSTATS, GV_$SYSMETRIC, V_$DIAG_ALERT_EXT
+    GV_$SQLSTATS, GV_$SYSMETRIC, GV_$CON_SYSMETRIC, V_$DIAG_ALERT_EXT
 
   EXECUTE WITH GRANT OPTION on:
     SYS.DBMS_AQ, SYS.DBMS_AQADM, SYS.DBMS_AQIN,
@@ -467,7 +504,7 @@ helm upgrade --install <app-release> obaas/obaas -f examples/values-signoz-exist
 
 #### SigNoz Cold Storage (`values-signoz-cold-storage.yaml`)
 
-Configures SigNoz ClickHouse cold storage so recent telemetry stays on local persistent disk and older data is offloaded to S3-compatible object storage.
+Configures SigNoz ClickHouse cold storage so recent telemetry stays on the local persistent disk and older data is offloaded to S3-compatible object storage.
 
 This example can be used with Oracle Cloud Infrastructure Object Storage or with an on-premises S3-compatible object store such as MinIO.
 
@@ -562,7 +599,7 @@ Cluster-singleton prerequisites (cert-manager, external-secrets, metrics-server,
 
 #### Combining Examples
 
-You can layer multiple values files to combine configurations:
+You can layer multiple value files to combine configurations:
 
 ```bash
 # Combine multi-tenant and private registry configurations

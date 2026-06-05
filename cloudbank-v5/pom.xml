@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.13</version>
+        <version>3.5.14</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -24,6 +24,7 @@
     <modules>
         <module>buildtools</module>
         <module>common</module>
+        <module>azn-server</module>
         <module>account</module>
         <module>checks</module>
         <module>customer</module>
@@ -36,24 +37,19 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>21</java.version>
-        <spring-cloud.version>2024.0.1</spring-cloud.version>
+        <spring-cloud.version>2025.0.2</spring-cloud.version>
         <org.springdoc-version>2.4.0</org.springdoc-version>
-        <micrometer-tracing.version>1.6.0</micrometer-tracing.version>
         <lombok.version>1.18.42</lombok.version>
+        <netty.version>4.1.133.Final</netty.version>
+        <bouncycastle.version>1.84</bouncycastle.version>
         <oracle-springboot-starter.version>26.1.1</oracle-springboot-starter.version>
+        <oracle-springboot-aqjms-starter.version>26.0.1</oracle-springboot-aqjms-starter.version>
 	    <oracle-microtx-starter.version>24.4.1</oracle-microtx-starter.version>
 	    <liquibase.version>4.31.1</liquibase.version>
-	    <datasource-micrometer-spring-boot.version>1.1.0</datasource-micrometer-spring-boot.version>
 
         <!-- JKube -->
         <jkube.version>1.18.2</jkube.version>
         <image.registry>localhost</image.registry>
-
-        <!-- Opentelemetry BOM -->
-        <otel-bom.version>2.21.0</otel-bom.version>
-
-        <!-- Opentelemetry UCP -->
-        <otel-ucp.version>2.21.0-alpha</otel-ucp.version>
 
         <!-- Spring AI -->
         <spring-ai.version>1.0.5</spring-ai.version>
@@ -85,40 +81,10 @@
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
-        <!-- Adds the Tracer Implementation -->
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-tracing-bridge-otel</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>io.opentelemetry.instrumentation</groupId>
-                    <artifactId>opentelemetry-instrumentation-api-incubator</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <!-- Adds an exporter to store the traces -->
-        <dependency>
-            <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-exporter-otlp</artifactId>
-        </dependency>
-        <!-- Adds the Tracing API -->
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-tracing</artifactId>
-        </dependency>
         <!-- Eureka client-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.opentelemetry.instrumentation</groupId>
-            <artifactId>opentelemetry-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>net.ttddyy.observation</groupId>
-            <artifactId>datasource-micrometer-spring-boot</artifactId>
-            <version>${datasource-micrometer-spring-boot.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -158,29 +124,10 @@
             <version>${oracle-springboot-starter.version}</version>
             <type>pom</type>
         </dependency>
-        <dependency>
-            <groupId>io.opentelemetry.instrumentation</groupId>
-            <artifactId>opentelemetry-oracle-ucp-11.2</artifactId>
-            <version>${otel-ucp.version}</version>
-        </dependency>
     </dependencies>
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>io.opentelemetry.instrumentation</groupId>
-                <artifactId>opentelemetry-instrumentation-bom</artifactId>
-                <version>${otel-bom.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>io.micrometer</groupId>
-                <artifactId>micrometer-tracing-bom</artifactId>
-                <version>${micrometer-tracing.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -194,6 +141,11 @@
                 <version>${spring-ai.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk18on</artifactId>
+                <version>${bouncycastle.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

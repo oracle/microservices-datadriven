@@ -2,7 +2,10 @@
 -- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 -- This must be executed as SYS
-create user testuser identified by Welcome12345;
+-- SQLcl and SQL*Plus prompt without echoing the password.
+accept teq_password char prompt 'Enter password for testuser: ' hide
+
+create user testuser identified by "&teq_password";
 grant resource, connect, unlimited tablespace to testuser;
 grant aq_user_role to testuser;
 grant execute on dbms_aq to testuser;
@@ -11,3 +14,5 @@ grant execute ON dbms_aqin TO testuser;
 grant execute ON dbms_aqjms TO testuser;
 grant execute on dbms_teqk to testuser;
 commit;
+
+undefine teq_password

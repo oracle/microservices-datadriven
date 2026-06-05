@@ -3,7 +3,7 @@
 # spell-checker: ignore nindent freepdb1 oserror selectai sidb spfile sqlplus
 # spell-checker: ignore sqlcode sqlerror varchar nolog ptype sysdba tablespace tblspace
 
-{{- if and (index .Values "oracle-database-exporter").enabled (and $.Values.database $.Values.database.enabled) }}
+{{- if and (index .Values "oracle-database-exporter").enabled $.Values.database }}
 # Database wait-for-connect init scriptConfigMap
 apiVersion: v1
 kind: ConfigMap

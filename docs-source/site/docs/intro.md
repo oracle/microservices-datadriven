@@ -5,7 +5,7 @@ sidebar_position: 1
 
 ## Accelerate Your Journey to Cloud-Native Applications
 
-Oracle Backend for Microservices and AI (OBaaS) is a comprehensive platform that transforms how developers build, deploy, and scale modern applications. By combining the power of Oracle Database with a complete microservices infrastructure, OBaaS eliminates the complexity of cloud-native development and empowers teams to focus on innovation rather than infrastructure.
+Oracle Backend for Microservices and AI (OBaaS) is a comprehensive platform that transforms how developers build, deploy, and scale modern applications. By combining the power of Oracle AI Database with a complete microservices infrastructure, OBaaS eliminates the complexity of cloud-native development and empowers teams to focus on innovation rather than infrastructure.
 
 ## Build Faster, Scale Smarter
 
@@ -19,7 +19,7 @@ Write code in your preferred framework - Helidon or Spring Boot - while OBaaS ha
 
 ### Enterprise-Grade Infrastructure
 
-Built on Oracle Database and designed for mission-critical workloads, OBaaS provides:
+Built on Oracle AI Database and designed for mission-critical workloads, OBaaS provides:
 
 - **Reliability**: High availability and disaster recovery built in
 - **Security**: Enterprise-grade security controls and compliance
@@ -30,7 +30,7 @@ Built on Oracle Database and designed for mission-critical workloads, OBaaS prov
 
 ### AI-Ready Platform
 
-Leverage the power of Oracle AI Database 26ai to integrate artificial intelligence and machine learning directly into your applications. Build intelligent services that learn and adapt without the complexity of managing separate AI infrastructure.
+Leverage the power of Oracle AI Database to integrate artificial intelligence and machine learning directly into your applications. Build intelligent services that learn and adapt without the complexity of managing separate AI infrastructure.
 
 ### Multi-Cloud Flexibility
 
@@ -46,7 +46,7 @@ OBaaS vastly simplifies the task of building, testing, and operating microservic
 
 ## Get Started
 
-Ready to try OBaaS? Choose your path:
+Ready to try Oracle Backend for Microservices and AI? Choose your path:
 
 - **[Setup →](./setup/index.md)** — Install the platform on your Kubernetes cluster
 - **[Deploy an Application →](./deploy/overview.md)** — Deploy your microservices to an existing OBaaS installation

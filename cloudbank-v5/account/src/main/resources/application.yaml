@@ -32,6 +32,6 @@ spring:
     oracleucp:
       connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
       connection-pool-name: AccountConnectionPool
-      initial-pool-size: 15
-      min-pool-size: 10
-      max-pool-size: 30
+      initial-pool-size: 2
+      min-pool-size: 1
+      max-pool-size: 8

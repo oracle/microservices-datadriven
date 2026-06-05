@@ -18,7 +18,7 @@ This chart must be installed **once per cluster** before installing any OBaaS in
 
 ### Prerequisites
 
-- Kubernetes >= 1.32.1
+- Kubernetes >= 1.34.0
 - Helm 3.x
 
 ### Install Prerequisites (once per cluster)

@@ -35,11 +35,6 @@ https://oss.oracle.com/licenses/upl/ -->
             <version>${liquibase.version}</version>
         </dependency>
         <dependency>
-            <groupId>net.ttddyy.observation</groupId>
-            <artifactId>datasource-micrometer-spring-boot</artifactId>
-            <version>${datasource-micrometer-spring-boot.version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.example</groupId>
             <artifactId>common</artifactId>
             <version>${project.version}</version>
@@ -71,7 +66,7 @@ https://oss.oracle.com/licenses/upl/ -->
                         <image>
                             <name>${image.registry}/customer:${project.version}</name>
                             <build>
-                                <from>ghcr.io/oracle/openjdk-image-obaas:21</from>
+                                <from>ghcr.io/oracle/oracle-jdk-image-obaas:21</from>
                                 <assembly>
                                     <mode>dir</mode>
                                     <targetDir>/deployments</targetDir>

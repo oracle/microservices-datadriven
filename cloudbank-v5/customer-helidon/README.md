@@ -68,6 +68,19 @@ java -jar customer-helidon.jar
 mvn exec:java
 ```
 
+## Security
+
+The customer API is protected with MicroProfile JWT. `CustomerApplication` enables MP-JWT with `@LoginConfig(authMethod = "MP-JWT")`, and `CustomerResource` requires an authenticated bearer token before serving `/api/v1/customer*` requests.
+
+The service validates tokens from `azn-server` using the JWK set configured by `CLOUDBANK_SECURITY_JWK_SET_URI` or `mp.jwt.verify.publickey.location`. It enforces CloudBank OAuth scopes from the JWT `scope` claim:
+
+- `cloudbank.read` can read the caller's own customer record.
+- `cloudbank.write` can create or update the caller's own customer record.
+- `cloudbank.admin` can access any customer record and delete customers.
+- `cloudbank.internal` is accepted on read paths for internal service-to-service lookup flows.
+
+Requests without a bearer token return `401`. Requests with a valid token but the wrong scope or customer id return `403`.
+
 ## Quick Start with Local Oracle Database
 
 To run against a local Oracle Docker container, simply:
@@ -160,6 +173,8 @@ The generation of the executable binary may take a few minutes to complete depen
 
 **Note:** The `Dockerfile.manual` must be renamed to `Dockerfile` before building locally, as JKube uses the Dockerfile when present.
 
+The Dockerfile follows the project's thin-jar packaging model rather than treating the build output as a fat jar. The application jar is built separately from its runtime dependencies, and the jar manifest expects those dependencies to be available through the `libs/` classpath prefix. Because of that, the runtime image must copy both `app.jar` and `libs/`; copying only the jar leaves required Helidon classes out of the container classpath and prevents startup.
+
 ```bash
 # Rename Dockerfile for local build
 git mv Dockerfile.manual Dockerfile
@@ -185,6 +200,7 @@ Exercise the application as described above.
 # Microprofile server properties
 server.port=8080
 server.host=0.0.0.0
+mp.jwt.verify.publickey.location=${CLOUDBANK_SECURITY_JWK_SET_URI:http://azn-server:8080/oauth2/jwks}
 
 # Application properties. This is the default greeting
 app.greeting=Hello
@@ -268,7 +284,7 @@ The included Dockerfile uses a **multi-stage build**:
 
 ```dockerfile
 # 1st stage, build the app
-FROM container-registry.oracle.com/java/jdk-no-fee-term:21 as build
+FROM container-registry.oracle.com/java/jdk-no-fee-term:21 AS build
 
 # Install maven
 WORKDIR /usr/share
@@ -283,21 +299,31 @@ WORKDIR /helidon
 
 # Create a first layer to cache the "Maven World" in the local repository.
 ADD pom.xml .
+ADD src/assembly/jib-ready.xml src/assembly/jib-ready.xml
 RUN mvn package -Dmaven.test.skip -Declipselink.weave.skip -DskipOpenApiGenerate
 
-# Do the Maven build with fat JAR!
+# Do the Maven build with thin JAR and runtime dependencies.
 ADD src src
 RUN mvn package -DskipTests
 
 # 2nd stage, build the runtime image
 FROM container-registry.oracle.com/java/jdk-no-fee-term:21
+
 WORKDIR /helidon
 
-# Copy ONLY the fat JAR (not libs directory)
-COPY --from=build /helidon/target/*.jar app.jar
+RUN groupadd -g 1000 appuser && \
+    useradd -u 1000 -g 1000 -d /helidon -s /sbin/nologin appuser && \
+    chown -R 1000:1000 /helidon
 
-# Simple fat JAR execution
+# Copy the thin JAR and its runtime dependencies.
+COPY --from=build --chown=1000:1000 /helidon/target/*.jar app.jar
+COPY --from=build --chown=1000:1000 /helidon/target/libs libs
+
+USER 1000
+
+# Simple thin JAR execution; the manifest references libs/.
 CMD ["java", "-jar", "app.jar"]
+
 EXPOSE 8080
 ```
 
@@ -351,4 +377,3 @@ kubectl port-forward svc/customer-helidon 8080:8080 -n tenant1
 # 2. Run the test script (in a separate terminal)
 ./test-endpoints.sh
 ```
-

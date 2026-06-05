@@ -3,7 +3,7 @@
 apiVersion: v2
 type: application
 name: "obaas-prereqs"
-kubeVersion: ">= 1.32.1"
+kubeVersion: ">= 1.34.0"
 description: Prerequisites and cluster-singleton infrastructure for Oracle Backend as a Service
 home: https://oracle.github.io/microservices-backend
 maintainers:
@@ -11,18 +11,18 @@ maintainers:
     email: obaas_ww@oracle.com
     url: https://oracle.github.io/microservices-backend
 # This is the chart version.
-version: 0.0.13
+version: 0.0.14
 # This is the version number of the application being deployed.
-appVersion: "2.1.0-build.12"
+appVersion: "2.1.0-build.13"
 
 # SubCharts - Cluster-scoped singleton infrastructure
 dependencies:
   - name: external-secrets
-    version: "1.1.0"
+    version: "2.5.0"
     repository: https://charts.external-secrets.io
     condition: external-secrets.enabled
   - name: metrics-server
-    version: "3.13.0"
+    version: "3.13.1"
     repository: https://kubernetes-sigs.github.io/metrics-server/
     condition: metrics-server.enabled
   - name: kube-state-metrics

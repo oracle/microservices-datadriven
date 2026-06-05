@@ -51,6 +51,39 @@ global:
         tag: "alpine"
 
 # -----------------------
+# -- Network Policy Configuration
+networkPolicy:
+  # Creates namespace-scoped NetworkPolicy resources for the OBaaS release.
+  # Enforcement requires a Kubernetes CNI plugin that implements NetworkPolicy.
+  enabled: true
+
+  # Allow pod-to-pod traffic within the OBaaS release namespace.
+  allowSameNamespace: true
+
+  # Allow external clients and the Kubernetes control plane to reach gateway,
+  # ingress, and webhook endpoints that are intentionally exposed by OBaaS.
+  allowPublicIngress: true
+
+  # Allow egress to destinations outside the release namespace. Keep enabled
+  # unless you also provide extraEgress rules for your database, OCI services,
+  # identity providers, image registries, and other required endpoints.
+  allowExternalEgress: true
+
+  dns:
+    # Allow DNS lookups to CoreDNS/kube-dns.
+    enabled: true
+    namespaceSelector:
+      kubernetes.io/metadata.name: kube-system
+    podSelector:
+      k8s-app: kube-dns
+
+  # Additional raw NetworkPolicy ingress rules applied to all pods.
+  extraIngress: []
+
+  # Additional raw NetworkPolicy egress rules applied to all pods.
+  extraEgress: []
+
+# -----------------------
 # -- OBaaS Configuration
 #
 # Note: Cluster-singleton prerequisites must be installed via the obaas-prereqs chart before installing this chart.
@@ -331,7 +364,7 @@ apisix:
   # Full registry path required for clusters with short name mode enforcing
   image:
     repository: "docker.io/apache/apisix"
-    tag: "3.14.1-ubuntu"
+    tag: "3.16.0-ubuntu"
 
   # Init container image
   initContainer:
@@ -358,21 +391,59 @@ config-server:
   # Override default resources if needed (defaults: cpu 250m-500m, memory 256Mi-512Mi)
   # resources: {}
 
-# Oracle Transaction Manager for Microservices (OTMM)
+# Oracle Transaction Manager for Microservices (OTMM - MicroTX)
+
 otmm:
-  enabled: true
-  replicas: 1
-  image:
-    repository: container-registry.oracle.com/database/otmm
-    tag: "24.4.1"
   commonConfiguration:
     externalURL: {}
     security: {}
+  coordinator:
+    enabled: true
+    replicas: 1
+    image:
+      repository: container-registry.oracle.com/database/microtx-coordinator
+      tag: "26.1.1"
+      pullPolicy: IfNotPresent
+    metrics:
+      enabled: true
+      scrape:
+        enabled: true
+        port: "9000"
+        path: "/metrics"
   workflowServer:
-    enabled: false
+    enabled: true
     encryption:
       enabled: true
     logging: {}
+    metrics:
+      enabled: true
+      scrape:
+        enabled: true
+        port: "9010"
+        path: "/workflow-server/actuator/prometheus"
+    probes:
+      startup:
+        enabled: true
+        path: "/workflow-server/health"
+        port: 9010
+        initialDelaySeconds: 20
+        periodSeconds: 10
+        timeoutSeconds: 5
+        failureThreshold: 18
+      liveness:
+        path: "/workflow-server/health"
+        port: 9010
+        initialDelaySeconds: 20
+        periodSeconds: 10
+        timeoutSeconds: 5
+        failureThreshold: 3
+      readiness:
+        path: "/workflow-server/health"
+        port: 9010
+        initialDelaySeconds: 10
+        periodSeconds: 5
+        timeoutSeconds: 5
+        failureThreshold: 3
     taskConfig:
       txeventq: {}
       transaction: {}
@@ -384,16 +455,23 @@ otmm:
       storage:
         fileSystem: {}
     image:
-      repository: container-registry.oracle.com/database/workflow-server
-      tag: latest
+      repository: container-registry.oracle.com/database/microtx-workflow
+      tag: "26.1.1"
+      pullPolicy: IfNotPresent
     replicas: 1
-    # Override default resources if needed (defaults: cpu 2, memory 4Gi)
-    # resources: {}
+    resources:
+      requests:
+        cpu: 500m
+        memory: 1Gi
+      limits:
+        cpu: "2"
+        memory: 4Gi
   console:
-    enabled: false
+    enabled: true
     image:
-      repository: container-registry.oracle.com/database/console
-      tag: latest
+      repository: container-registry.oracle.com/database/microtx-console
+      tag: "26.1.1"
+      pullPolicy: IfNotPresent
   # Override default resources if needed (defaults: cpu 250m, memory 1Gi)
   # resources: {}
 
@@ -403,7 +481,7 @@ oracle-database-exporter:
   replicas: 1
   image:
     repository: container-registry.oracle.com/database/observability-exporter
-    tag: "2.2.2"
+    tag: "2.4.0"
   # Busybox sidecar for tailing alert.log
   busybox:
     repository: docker.io/busybox
@@ -414,14 +492,13 @@ oracle-database-exporter:
 # Database Configuration
 # Supports SIDB-FREE, ADB-FREE, ADB-S (OCI Autonomous Database), or OTHER (external database)
 database:
-  enabled: true
   # Database type: SIDB-FREE, ADB-FREE, ADB-S, or OTHER
   type: "SIDB-FREE"
   # SQLcl image for database initialization jobs
   sqlcl:
     image:
       repository: container-registry.oracle.com/database/sqlcl
-      tag: "25.3.0"
+      tag: "26.1.2"
 
   # For SIDB-FREE/ADB-FREE: container image configuration (exclude for ADB-S)
   image:
@@ -509,7 +586,7 @@ signoz:
       image:
         registry: docker.io
         repository: curlimages/curl
-        tag: "8.17.0"
+        tag: "8.20.0"
     busybox:
       image:
         registry: docker.io
@@ -532,12 +609,12 @@ signoz:
       # Only applies if using a ratio sampler. 1.0 = 100%, 0.1 = 10%
       argument: "1.0"
     java:
-      # Custom environment variables for Java instrumentation
-      # Example:
-      # env:
-      #   - name: OTEL_LOGS_EXPORTER
-      #     value: otlp
-      env: []
+      # Export Spring Boot application metrics through the injected Java agent.
+      env:
+        - name: OTEL_METRICS_EXPORTER
+          value: otlp
+        - name: OTEL_LOGS_EXPORTER
+          value: none
   
   # Change to override individual component images
   signoz:
@@ -576,6 +653,9 @@ signoz:
     image:
       registry: docker.io
       repository: signoz/signoz-otel-collector
+    # Override podAnnotations to tune or disable collector self-scrape.
+    # The SigNoz subchart default scrapes collector metrics on port 8888.
+    # podAnnotations: {}
     # ClusterRole rules for Kubernetes service discovery (prometheus receiver)
     clusterRole:
       rules:

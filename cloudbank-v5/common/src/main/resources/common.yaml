@@ -5,14 +5,19 @@ spring:
   threads:
     virtual:
       enabled: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${CLOUDBANK_SECURITY_JWK_SET_URI:http://azn-server:8080/oauth2/jwks}
   jpa:
     hibernate:
       ddl-auto: validate
     properties:
       hibernate:
         dialect: org.hibernate.dialect.OracleDialect
-        format_sql: true
-    show-sql: true
+        format_sql: false
+    show-sql: false
 
 eureka:
   instance:
@@ -28,12 +33,12 @@ eureka:
 management:
   endpoint:
     health:
-      show-details: always
-      show-components: always
+      show-details: when-authorized
+      show-components: when-authorized
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: health,info
   metrics:
     tags:
       application: ${spring.application.name}
@@ -47,19 +52,13 @@ management:
   health:
     probes:
       enabled: true
-  tracing:
-    sampling:
-      probability: 1.0
   info:
     os:
-      enabled: true
+      enabled: false
     env:
-      enabled: true
+      enabled: false
     java:
-      enabled: true
-  observations:
-    key-values:
-      app: ${spring.application.name}
+      enabled: false
 
 logging:
   level:
@@ -70,10 +69,25 @@ logging:
 jdbc:
   datasource-proxy:
     query:
-      enable-logging: true
+      enable-logging: false
       log-level: INFO
-    include-parameter-values: true
+    include-parameter-values: false
 
 request:
   logging:
-    shouldLog: true
+    shouldLog: false
+    include-query-string: false
+    include-payload: false
+    max-payload-length: 0
+    include-headers: false
+    include-client-info: false
+
+cloudbank:
+  security:
+    require-internal-token: ${CLOUDBANK_SECURITY_REQUIRE_INTERNAL_TOKEN:true}
+    service-token:
+      enabled: ${CLOUDBANK_SECURITY_SERVICE_TOKEN_ENABLED:false}
+      token-uri: ${CLOUDBANK_SECURITY_SERVICE_TOKEN_URI:http://azn-server:8080/oauth2/token}
+      client-id: ${CLOUDBANK_SECURITY_SERVICE_TOKEN_CLIENT_ID:cloudbank-service-client}
+      client-secret: ${CLOUDBANK_SECURITY_SERVICE_TOKEN_CLIENT_SECRET:}
+      scope: ${CLOUDBANK_SECURITY_SERVICE_TOKEN_SCOPE:cloudbank.internal}
