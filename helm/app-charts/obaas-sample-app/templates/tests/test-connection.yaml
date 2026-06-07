@@ -25,7 +25,7 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{ end }}
-      image: busybox
+      image: docker.io/busybox:1.37
       command: ['wget']
       args: ['{{ include "obaas-app.fullname" . }}:{{ .Values.service.port }}']
   restartPolicy: Never

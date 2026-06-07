@@ -22,5 +22,5 @@ done <<< "$SERVICES"
 
 # Run it all in one temporary pod using busybox (widely available)
 kubectl run "$POD_NAME" -n "$NS" --rm -it --restart=Never \
-  --image=busybox:latest \
+  --image=docker.io/busybox:1.37 \
   -- sh -c "$SCRIPT"
