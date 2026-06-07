@@ -27,7 +27,7 @@ Use this when cert-manager is already installed or managed separately.
 helm repo add jetstack https://charts.jetstack.io
 helm upgrade --install cert-manager jetstack/cert-manager \
   --namespace cert-manager --create-namespace \
-  --set installCRDs=true
+  --set crds.enabled=true
 
 # Install operator
 helm upgrade --install oraoperator . --set cert-manager.enabled=false
@@ -42,7 +42,7 @@ Use this when cert-manager is installed in a non-default namespace.
 helm repo add jetstack https://charts.jetstack.io
 helm upgrade --install cert-manager jetstack/cert-manager \
   --namespace my-cert-manager --create-namespace \
-  --set installCRDs=true
+  --set crds.enabled=true
 
 # Install operator
 helm upgrade --install oraoperator . \
@@ -88,7 +88,7 @@ helm uninstall oraoperator
 |-----------|-------------|---------|
 | `cert-manager.enabled` | Install cert-manager as a subchart | `true` |
 | `cert-manager.namespace` | Namespace for cert-manager | `cert-manager` |
-| `cert-manager.installCRDs` | Install cert-manager CRDs | `true` |
+| `cert-manager.crds.enabled` | Install cert-manager CRDs | `true` |
 | `certManagerWaitJob.enabled` | Wait for cert-manager webhook before creating Issuer | `true` |
 | `certManagerWaitJob.image.repository` | Image repository for wait job | `registry.k8s.io/kubectl` |
 | `certManagerWaitJob.image.tag` | Image tag for wait job | `v1.28.0` |

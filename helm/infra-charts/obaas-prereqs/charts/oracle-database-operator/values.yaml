@@ -168,8 +168,8 @@ cert-manager:
   # Namespace for cert-manager (subchart install location and webhook lookup)
   # Defaults to the release namespace if not specified
   namespace: "cert-manager"
-  installCRDs: true
   crds:
+    enabled: true
     # Allow CRDs to be deleted on uninstall (WARNING: deletes all cert-manager resources)
     keep: false
   global:
