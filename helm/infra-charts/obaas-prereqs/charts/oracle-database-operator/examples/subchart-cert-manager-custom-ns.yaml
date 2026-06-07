@@ -9,4 +9,5 @@
 cert-manager:
   enabled: true
   namespace: "my-cert-manager"
-  installCRDs: true
+  crds:
+    enabled: true
