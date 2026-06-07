@@ -1,0 +1,53 @@
+# Environment
+.env
+*.env
+
+# ADB Wallet (never commit)
+wallet/
+Wallet_*/
+*.zip
+cwallet.sso
+ewallet.p12
+keystore.jks
+ojdbc.properties
+sqlnet.ora
+tnsnames.ora
+truststore.jks
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+venv/
+.venv/
+env/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Streamlit
+.streamlit/secrets.toml
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs
+*.log

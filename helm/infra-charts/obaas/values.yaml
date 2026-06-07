@@ -391,22 +391,25 @@ config-server:
   # Override default resources if needed (defaults: cpu 250m-500m, memory 256Mi-512Mi)
   # resources: {}
 
-# Oracle Transaction Manager for Microservices (OTMM)
+# Oracle Transaction Manager for Microservices (OTMM - MicroTX)
+
 otmm:
-  enabled: true
-  replicas: 1
-  image:
-    repository: container-registry.oracle.com/database/microtx-coordinator
-    tag: "26.1.1"
   commonConfiguration:
     externalURL: {}
     security: {}
-  metrics:
+  coordinator:
     enabled: true
-    scrape:
+    replicas: 1
+    image:
+      repository: container-registry.oracle.com/database/microtx-coordinator
+      tag: "26.1.1"
+      pullPolicy: IfNotPresent
+    metrics:
       enabled: true
-      port: "9000"
-      path: "/metrics"
+      scrape:
+        enabled: true
+        port: "9000"
+        path: "/metrics"
   workflowServer:
     enabled: true
     encryption:
@@ -454,6 +457,7 @@ otmm:
     image:
       repository: container-registry.oracle.com/database/microtx-workflow
       tag: "26.1.1"
+      pullPolicy: IfNotPresent
     replicas: 1
     resources:
       requests:
@@ -467,6 +471,7 @@ otmm:
     image:
       repository: container-registry.oracle.com/database/microtx-console
       tag: "26.1.1"
+      pullPolicy: IfNotPresent
   # Override default resources if needed (defaults: cpu 250m, memory 1Gi)
   # resources: {}
 

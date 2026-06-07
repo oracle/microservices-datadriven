@@ -39,6 +39,28 @@ lra:
     url: ${MP_LRA_COORDINATOR_URL}
 ```
 
+## Components and enablement
+
+The MicroTx installation is made up of three components, each of which can be enabled or disabled independently in the Helm values:
+
+- `otmm.coordinator` — the transaction coordinator (XA/LRA/TCC).
+- `otmm.workflowServer` — the [workflow server](#microtx-workflow-server) (see below).
+- `otmm.console` — the web console used to monitor transactions and workflows.
+
+All three are enabled by default. To disable a component, set its `enabled` flag to `false`:
+
+```yaml
+otmm:
+  coordinator:
+    enabled: true
+  workflowServer:
+    enabled: true
+  console:
+    enabled: false
+```
+
+The console exists only to front the coordinator and workflow server, so it is deployed only when at least one of those two components is enabled. If both `otmm.coordinator.enabled` and `otmm.workflowServer.enabled` are `false`, the console is not deployed even if `otmm.console.enabled` is `true`. When deployed, the console is connected only to the backends that are enabled, so a coordinator-only or workflow-only install does not leave the console pointing at a service that was not deployed.
+
 ## MicroTx Workflow Server
 
 The MicroTx Workflow Server extends transaction coordinator with advanced workflow capabilities.
