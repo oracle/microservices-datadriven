@@ -80,7 +80,7 @@ Mirrors container images from public registries to a private registry. Supports 
 | `-f, --file FILE` | Path to images file (default: `./image_lists/k8s_images_<appVersion>.txt`) |
 | `-p, --platform PLATFORM` | Target platform for images (default: `linux/amd64`) |
 | `--export-only` | Pull, tag, and save images to `--archive-dir` without pushing |
-| `--import-only` | Load images from `--archive-dir` and push them without pulling |
+| `--import-only` | Load images from `--archive-dir`, push them without pulling, and clean up imported archives after success |
 | `--archive-dir DIR` | Directory used by `--export-only` and `--import-only` |
 
 **Prerequisites:**
@@ -94,6 +94,7 @@ Mirrors container images from public registries to a private registry. Supports 
 - Skips OKE public images (`oke-public`)
 - Cleans up local images after pushing to save disk space
 - `--export-only` writes tar archives plus `manifest.tsv`; the manifest records source image, target image, archive file, and platform.
+- Successful `--import-only` runs remove the imported tar archives and manifest, then remove `--archive-dir` when it is empty.
 
 **Split VPN workflow:**
 
@@ -101,14 +102,14 @@ When public registries are reachable only off VPN and the private registry is re
 
 ```bash
 # Off VPN: pull public linux/amd64 images and save them locally
-./mirror-images.sh obaas-docker-release.dockerhub-iad.oci.oraclecorp.com \
-  -f /tmp/one-image.txt \
+./mirror-images.sh myregistry.example.com \
+  -f ./images.txt \
   --platform linux/amd64 \
   --export-only \
   --archive-dir /tmp/obaas-images
 
 # On VPN: load local archives and push to the private registry
-./mirror-images.sh obaas-docker-release.dockerhub-iad.oci.oraclecorp.com \
+./mirror-images.sh myregistry.example.com \
   --import-only \
   --archive-dir /tmp/obaas-images
 ```

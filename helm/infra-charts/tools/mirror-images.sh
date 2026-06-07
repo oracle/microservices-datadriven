@@ -86,6 +86,7 @@ Options:
     --export-only          Pull, tag, and save images to --archive-dir without pushing
     --import-only          Load images from --archive-dir and push them without pulling
     --archive-dir DIR      Directory used by --export-only and --import-only
+                          Successful --import-only runs remove imported archives
 
 Examples:
     $(basename "$0") myregistry.example.com
@@ -503,6 +504,42 @@ process_manifest_file() {
     print_summary "$total_images" "$successful" "$failed"
 }
 
+cleanup_import_archives() {
+    local line
+    local source_image
+    local target_image
+    local archive_name
+    local image_platform
+    local archive_path
+
+    if [[ "$DRY_RUN" == "true" ]]; then
+        return 0
+    fi
+
+    log info "Cleaning up imported archives from: $ARCHIVE_DIR"
+
+    while IFS= read -r line || [[ -n "$line" ]]; do
+        [[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
+
+        IFS=$'\t' read -r source_image target_image archive_name image_platform <<< "$line"
+        if [[ -z "$archive_name" || "$archive_name" == */* || "$archive_name" == "." || "$archive_name" == ".." ]]; then
+            log warn "Skipping cleanup for invalid archive name: ${archive_name:-<empty>}"
+            continue
+        fi
+
+        archive_path="${ARCHIVE_DIR}/${archive_name}"
+        rm -f -- "$archive_path"
+    done < "$MANIFEST_FILE"
+
+    rm -f -- "$MANIFEST_FILE"
+
+    if rmdir -- "$ARCHIVE_DIR" 2>/dev/null; then
+        log success "Removed archive directory: $ARCHIVE_DIR"
+    else
+        log warn "Archive directory is not empty; left in place: $ARCHIVE_DIR"
+    fi
+}
+
 print_summary() {
     local total_images=$1
     local successful=$2
@@ -677,6 +714,7 @@ main() {
         log info "Found $total_images archived images to import"
         echo
         process_manifest_file "$total_images"
+        cleanup_import_archives
     else
         local total_images
         total_images=$(count_images_file)
