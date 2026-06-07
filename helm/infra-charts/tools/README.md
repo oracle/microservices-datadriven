@@ -64,6 +64,12 @@ Mirrors container images from public registries to a private registry. Supports 
 
 # Mirror images for a different platform (default: linux/amd64)
 ./mirror-images.sh myregistry.example.com --platform linux/arm64
+
+# Export linux/amd64 images while off VPN
+./mirror-images.sh myregistry.example.com -f ./images.txt --platform linux/amd64 --export-only --archive-dir /tmp/obaas-images
+
+# Import and push the exported images while on VPN
+./mirror-images.sh myregistry.example.com --import-only --archive-dir /tmp/obaas-images
 ```
 
 **Options:**
@@ -73,16 +79,39 @@ Mirrors container images from public registries to a private registry. Supports 
 | `-n, --dry-run` | Show what would be done without mirroring |
 | `-f, --file FILE` | Path to images file (default: `./image_lists/k8s_images_<appVersion>.txt`) |
 | `-p, --platform PLATFORM` | Target platform for images (default: `linux/amd64`) |
+| `--export-only` | Pull, tag, and save images to `--archive-dir` without pushing |
+| `--import-only` | Load images from `--archive-dir` and push them without pulling |
+| `--archive-dir DIR` | Directory used by `--export-only` and `--import-only` |
 
 **Prerequisites:**
 - `docker` or `podman` must be installed
-- Authenticated to both source and target registries
+- Authenticated to source registries for normal or `--export-only` mode
+- Authenticated to the target registry for normal or `--import-only` mode
 
 **Behavior:**
 - Automatically strips known registry prefixes (docker.io, registry.k8s.io, quay.io, ghcr.io, gcr.io, container-registry.oracle.com, *.ocir.io)
 - Skips images already in the target registry
 - Skips OKE public images (`oke-public`)
 - Cleans up local images after pushing to save disk space
+- `--export-only` writes tar archives plus `manifest.tsv`; the manifest records source image, target image, archive file, and platform.
+
+**Split VPN workflow:**
+
+When public registries are reachable only off VPN and the private registry is reachable only on VPN, run:
+
+```bash
+# Off VPN: pull public linux/amd64 images and save them locally
+./mirror-images.sh obaas-docker-release.dockerhub-iad.oci.oraclecorp.com \
+  -f /tmp/one-image.txt \
+  --platform linux/amd64 \
+  --export-only \
+  --archive-dir /tmp/obaas-images
+
+# On VPN: load local archives and push to the private registry
+./mirror-images.sh obaas-docker-release.dockerhub-iad.oci.oraclecorp.com \
+  --import-only \
+  --archive-dir /tmp/obaas-images
+```
 
 ---
 
