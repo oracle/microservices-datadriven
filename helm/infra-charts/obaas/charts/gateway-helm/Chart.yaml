@@ -3,7 +3,7 @@ name: gateway-helm
 description: The Helm chart for Envoy Gateway
 type: application
 
-version: 1.7.0
+version: 1.8.1
 appVersion: "latest"
 icon: https://raw.githubusercontent.com/envoyproxy/gateway/main/site/assets/icons/logo.svg
 
@@ -23,3 +23,7 @@ home: https://gateway.envoyproxy.io/
 
 sources:
   - https://github.com/envoyproxy/gateway
+
+dependencies:
+  - name: crds
+    version: "0.0.0"

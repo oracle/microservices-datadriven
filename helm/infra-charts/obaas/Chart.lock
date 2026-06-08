@@ -1,7 +1,7 @@
 dependencies:
 - name: gateway-helm
   repository: file://charts/gateway-helm
-  version: 1.7.0
+  version: 1.8.1
 - name: ingress-nginx
   repository: https://kubernetes.github.io/ingress-nginx
   version: 4.13.2
@@ -16,6 +16,6 @@ dependencies:
   version: 2.12.3
 - name: ai-optimizer
   repository: https://oracle.github.io/ai-optimizer/helm
-  version: 2.0.3
-digest: sha256:3c67c274bf48b34ca9b03f3a74d6c087ea43acf4cb95dc304815d404a01af26a
-generated: "2026-03-17T15:26:07.650752Z"
+  version: 2.3.0
+digest: sha256:1fc82f3b18248d6fd785a66975f7a2d58c8e1c6c4449f90178a14e2eacd36a95
+generated: "2026-06-08T13:05:46.039579-07:00"

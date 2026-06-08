@@ -28,11 +28,12 @@ global:
   #   imagePullSecrets: &imagePullSecrets
   #     - *secretName
   # The &secretName and &imagePullSecrets anchors are YAML plumbing that propagate the
-  # value to all subcharts — do not rename or remove them.
+  # value to OBaaS templates and subcharts that accept string secret lists.
+  # Some upstream subcharts require {name: ...} objects; see examples/values-private-registry.yaml.
   # See examples/values-private-registry.yaml for a complete working example.
   imagePullSecretName: &secretName ""
 
-  # Image pull secrets list (string format for subchart compatibility).
+  # Image pull secrets list (string format for OBaaS helper compatibility).
   # OBaaS helpers normalize strings to {name: ...} objects where needed.
   # Do not remove &imagePullSecrets or *secretName — they wire the value to subcharts.
   imagePullSecrets: &imagePullSecrets []
@@ -104,31 +105,34 @@ gateway-helm:
     envoyGateway:
       provider:
         type: Kubernetes
-        kubernetes:
-          envoyDeployment:
-            container:
-              # Envoy proxy data plane image — override to use a private registry.
-              # Default: docker.io/envoyproxy/envoy:distroless-v1.37.0
-              image: ""
 
   # Global settings
   global:
     # -- Global override for image registry
     imageRegistry: ""
     # -- Global override for image pull secrets
-    imagePullSecrets: *imagePullSecrets
+    # gateway-helm renders these values directly with toYaml and expects object-shaped secrets.
+    imagePullSecrets: []
 
     # If set, these override image-specific values: useful when installing the chart in a private registry environment.
     # Override image-specific values directly if a global override is not desired.
     images:
       envoyGateway:
         # This is the full image name including the hub, repo, and tag.
-        image: "docker.io/envoyproxy/gateway:v1.7.0"
+        image: "docker.io/envoyproxy/gateway:v1.8.1"
         # Specify image pull policy if default behavior isn't desired.
         # Default behavior: latest images will be Always else IfNotPresent.
         pullPolicy: Always
         # List of secrets in the same namespace of the component that can be used to pull images from private repositories.
-        pullSecrets: *imagePullSecrets
+        pullSecrets: []
+      envoyProxy:
+        # Envoy proxy data plane image — override to use a private registry.
+        # Legacy overrides under config.envoyGateway.provider.kubernetes.envoyDeployment
+        # are still honored by OBaaS templates when this value is empty.
+        image: "docker.io/envoyproxy/envoy:distroless-v1.38.1"
+        pullPolicy: IfNotPresent
+        # List of secrets in the same namespace that can pull the Envoy proxy image.
+        pullSecrets: []
       ratelimit:
         # This is the full image name including the hub, repo, and tag.
         image: "docker.io/envoyproxy/ratelimit:3fb70258"
@@ -136,7 +140,7 @@ gateway-helm:
         # Default behavior: latest images will be Always else IfNotPresent.
         pullPolicy: IfNotPresent
         # List of secrets in the same namespace of the component that can be used to pull images from private repositories.
-        pullSecrets: *imagePullSecrets
+        pullSecrets: []
 
   deployment:
     pod:
