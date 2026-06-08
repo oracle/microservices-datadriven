@@ -27,7 +27,7 @@ docker.io/otel/opentelemetry-collector-contrib:0.139.0
 docker.io/signoz/signoz-otel-collector:v0.144.1
 docker.io/signoz/signoz:v0.113.0
 docker.io/signoz/zookeeper:3.7.1
-ghcr.io/external-secrets/external-secrets:v2.5.0
+ghcr.io/external-secrets/external-secrets:v2.6.0
 ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator:0.146.0
 ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-java:1.33.6
 quay.io/brancz/kube-rbac-proxy:v0.20.0
@@ -39,6 +39,6 @@ quay.io/strimzi/kafka:0.51.0-kafka-4.2.0
 quay.io/strimzi/operator:0.51.0
 registry.k8s.io/ingress-nginx/controller:v1.15.1
 registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.17.0
-registry.k8s.io/metrics-server/metrics-server:v0.8.1
+registry.k8s.io/metrics-server/metrics-server:v0.8.0
 docker.io/envoyproxy/envoy:distroless-v1.37.0
 docker.io/envoyproxy/gateway:v1.7.0
