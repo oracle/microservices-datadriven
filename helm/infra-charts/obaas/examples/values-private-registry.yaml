@@ -217,7 +217,7 @@ database:
   # For SIDB-FREE/ADB-FREE: container image configuration (exclude for ADB-S)
   image:
     repository: "myregistry.example.com/database/free"
-    tag: "latest"
+    tag: "23.26.2.0"
 
   # For ADB-S: OCI Autonomous Database OCID (exclude for SIDB-FREE/ADB-FREE/OTHER)
   oci:
