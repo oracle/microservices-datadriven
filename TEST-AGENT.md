@@ -45,6 +45,9 @@ Collect and record these values before any mutating command:
 | `<cloudbank-registry>` | Explicit image registry path, if not using OCIR auto-detection. |
 | `<cloudbank-customer-implementation>` | `customer` for the Spring service, or `customer-helidon` when Helidon dashboard validation is required. |
 | `<kafka-load-workload>` | Kafka load source when Kafka dashboards are required, for example `helidon-producer` and `helidon-consumer`. |
+| `<otmm-coordinator-enabled>` | Whether the optional OTMM/MicroTx coordinator is enabled through `otmm.coordinator.enabled`. |
+| `<otmm-workflow-server-enabled>` | Whether the optional MicroTx Workflow Server is enabled through `otmm.workflowServer.enabled`. |
+| `<otmm-console-enabled>` | Whether the optional OTMM console is requested through `otmm.console.enabled`; it renders only when `otmm.coordinator.enabled` or `otmm.workflowServer.enabled` is also true. |
 | `<priv-secret-name>` | Privileged DB secret, usually `<cloudbank-dbname>-db-priv-authn` unless customized. |
 | `<evidence-dir>` | Directory for all run evidence and reports. |
 
@@ -97,6 +100,7 @@ For failures, also capture:
 - `kubectl describe` for the failing resource.
 - Current and previous pod logs.
 - Related jobs and job logs.
+- For MicroTx Workflow Server failures, workflow server logs, health endpoint output, service/endpoints output, Helm values, latest `obaas-run-sql-*` job logs, and database privilege diagnostics for the application user.
 - Namespace events sorted by time.
 - Helm release status.
 - APISIX route output when the failure involves gateway traffic.
@@ -140,10 +144,11 @@ Use this matrix as the master list for each run. Mark each test `Pass`, `Fail`, 
 | PLAT-004 | Platform | Verify Config Server. | `/<application>/<profile>` returns JSON property source response. | curl output |
 | PLAT-005 | Platform | Verify Spring Boot Admin. | Admin UI is reachable and services appear. | screenshot |
 | PLAT-006 | Platform | Verify database exporter. | Exporter pod/service is healthy and metrics scrape target exists. | pod, service, logs |
-| PLAT-007 | Platform | Verify OTMM/MicroTx. | OTMM service is healthy and transfer workflow can use it. | pod output and CloudBank transfer evidence |
+| PLAT-007 | Platform | Verify optional OTMM/MicroTx coordinator runtime. | When enabled, OTMM service is healthy and CloudBank transfer can use the LRA coordinator; otherwise marked `Not Applicable` with values evidence. | Helm values, pod output, CloudBank transfer evidence |
 | PLAT-008 | Platform | Verify optional Kafka. | Kafka CRs and dashboard data exist when Kafka is enabled. | Strimzi/Kafka output |
 | PLAT-009 | Platform | Verify optional AI Optimizer. | AI Optimizer pods and required secrets exist when enabled. | pod, secret output |
-| PLAT-010 | Platform | Verify optional workflow server or console. | Optional components are healthy when enabled. | pod, service, screenshot |
+| PLAT-010 | Platform | Verify optional MicroTx Workflow Server. | When enabled, workflow server is healthy, Flyway migration succeeds, and no Oracle privilege error is present; otherwise marked `Not Applicable` with values evidence. | Helm values, pod, service, health endpoint, logs |
+| PLAT-011 | Platform | Verify optional OTMM console. | When `otmm.console.enabled=true` and either coordinator or workflow server is enabled, console is healthy and reachable; otherwise marked `Not Applicable` with values evidence. | Helm values, pod, service, screenshot |
 | CB-001 | CloudBank | Run CloudBank prerequisite checks. | Build and deploy checks pass. | script output |
 | CB-002 | CloudBank | Build and publish or load images. | Images for the selected CloudBank services are available to the cluster. | build/push output |
 | CB-003 | CloudBank | Create CloudBank secrets. | Expected DB, OAuth, and signing-key secrets exist. | secret list |
@@ -169,7 +174,7 @@ Use this matrix as the master list for each run. Mark each test `Pass`, `Fail`, 
 | OBS-010 | Observability | Verify DB observability. | Oracle Database and DB Calls dashboards show data. | screenshots |
 | OBS-011 | Observability | Verify APISIX observability. | APISIX dashboard shows gateway request data. | screenshot |
 | OBS-012 | Observability | Verify JVM/Spring observability. | Spring Boot and JVM dashboards show CloudBank data. | screenshots |
-| OBS-013 | Observability | Verify MicroTx observability. | MicroTx dashboard shows data after transfer workflow, or waiver explains absence. | screenshot |
+| OBS-013 | Observability | Verify optional MicroTx observability. | When `otmm.coordinator.enabled=true`, MicroTx dashboard shows data after transfer workflow or waiver explains absence; when disabled, mark `Not Applicable` with values evidence. | screenshot or values evidence |
 | OBS-014 | Observability | Verify messaging queues view. | Messaging Queues view is accessible and populated when queue/Kafka data exists. | screenshot |
 | OBS-015 | Observability | Verify telemetry data before dashboard capture. | Metrics, logs, and traces exist for required services in the selected time window before screenshots are taken. | curl/API/SQL output |
 | OBS-016 | Observability | Validate captured screenshots. | Screenshot guardrails prove the expected page was captured and required dashboards contain data. | validation report |
@@ -194,7 +199,11 @@ Platform checks:
 - Eureka must show the OBaaS platform services and all selected CloudBank services after deployment.
 - Config Server must respond. If no test property is seeded, record that the server is reachable and that no config data validation was performed.
 - Spring Boot Admin must show monitored Spring services and health status.
-- OTMM/MicroTx must be tested on every run where it is installed. If MicroTx is known to fail in the tested OBaaS build, do not skip the test; run it, mark the status `Fail` or `Waived` according to operator policy, and record the version-specific failure, logs, workflow output, and recommended retest trigger.
+- OTMM/MicroTx coordinator is optional and controlled by `otmm.coordinator.enabled`. Test the coordinator runtime on every run where it is enabled or installed. If it is disabled, mark the related rows `Not Applicable` and preserve values evidence proving it was disabled. If MicroTx is known to fail in the tested OBaaS build, do not skip the test when enabled; run it, mark the status `Fail` or `Waived` according to operator policy, and record the version-specific failure, logs, workflow output, and recommended retest trigger.
+- The optional MicroTx Workflow Server is a separate test surface from the coordinator runtime. When `otmm.workflowServer.enabled=true`, preserve Helm values proving the option is enabled, deployment and pod readiness, service/endpoints output, `/workflow-server/health` output, and workflow server logs.
+- Workflow server logs must show successful startup and successful Flyway schema migration or validation. Search and record whether the logs contain `ORA-01031`, `FlywayException`, failed database login, missing database secret, or missing service-name evidence.
+- The MicroTx Workflow Server uses the OBaaS application database secret and application schema. If Flyway DDL fails, collect the latest `obaas-run-sql-*` job logs and verify the application user has schema DDL privileges and quota before marking the issue as an application failure.
+- Treat the optional OTMM console as a separate component. Do not use a healthy console screenshot as evidence that the workflow server is installed or that workflow database migrations succeeded.
 
 CloudBank checks:
 
@@ -261,7 +270,7 @@ Map generated load to dashboard expectations:
 | Apache APISIX, Envoy Gateway, NGINX | Gateway-routed CloudBank API requests. |
 | Spring Boot Observability, Spring Boot 3.x Statistics, JVM Metrics | CloudBank service requests plus actuator or metrics scraping evidence. |
 | DB Calls Monitoring, Oracle Database Dashboard | CloudBank account, deposit, journal, and transfer operations that touch the database. |
-| MicroTx | CloudBank transfer workflow. |
+| MicroTx | CloudBank transfer workflow for coordinator/LRA telemetry when `otmm.coordinator.enabled=true`; MicroTx Workflow Server health, logs, and metrics when `otmm.workflowServer.enabled=true`. |
 | Logs and Traces | CloudBank smoke and workflow requests with trace propagation enabled. |
 | Kubernetes Pod, Node, PVC, Host, kube-state-metrics | Wait for collector scrape intervals and verify pod/node/PVC metrics directly. |
 | Kafka Server Monitoring Dashboard | Kafka producer/consumer traffic when Kafka is enabled. Prefer `helidon-producer` and `helidon-consumer` with repeated `POST /post` requests to `my-topic`. |
@@ -378,7 +387,7 @@ Capture evidence for:
   - HTTP API Monitoring
   - JVM Metrics
   - NGINX (OTEL), if ingress-nginx is enabled
-  - MicroTx
+- MicroTx dashboard, if `otmm.coordinator.enabled=true`, after CloudBank transfer workflow load has been generated
 - Kafka Server Monitoring Dashboard, if Kafka is enabled, after producer/consumer load has been generated
 - Helidon Main Dashboard, Helidon MP Details, and Helidon JVM Details, only when `customer-helidon`, `helidon-producer`, `helidon-consumer`, or another Helidon MP workload is deployed
 - Helidon SE Details only when a real Helidon SE workload is deployed; otherwise mark it `Not Applicable` or `Waived` because this repository currently provides Helidon MP examples only
@@ -559,6 +568,7 @@ When any test fails, collect the relevant diagnostics from `AGENTS.md`, `CBV5-AG
 - `describe` output for failing pods, jobs, PVCs, services, ingress, Gateway API resources, or other implicated resources.
 - Namespace events sorted by time.
 - Failed job logs, especially database initialization jobs.
+- For MicroTx Workflow Server failures, collect workflow server health output, workflow server logs, service/endpoints output, Helm values, latest `obaas-run-sql-*` job logs, and application-user privilege or quota diagnostics for Flyway DDL failures such as `ORA-01031`.
 - Gateway route or APISIX Admin API output for route, auth, or gateway failures.
 - HTTP request and response evidence for endpoint failures.
 - SigNoz, ClickHouse, OpenTelemetry collector, instrumentation, and application telemetry configuration evidence for observability failures.
@@ -601,6 +611,9 @@ Use this template:
 | CloudBank Image Tag |  |
 | CloudBank Customer Implementation | `customer` / `customer-helidon` |
 | Kafka Load Workload | `helidon-producer` / `helidon-consumer` / other / not enabled |
+| OTMM Coordinator Enabled | true / false |
+| OTMM Workflow Server Enabled | true / false |
+| OTMM Console Requested / Effective | true / false |
 | Evidence Directory |  |
 
 ## Executive Summary
@@ -652,6 +665,10 @@ Known deviations or waivers:
 | PLAT-005 | Platform |  |  |  |  |  |
 | PLAT-006 | Platform |  |  |  |  |  |
 | PLAT-007 | Platform |  |  |  |  |  |
+| PLAT-008 | Platform |  |  |  |  |  |
+| PLAT-009 | Platform |  |  |  |  |  |
+| PLAT-010 | Platform |  |  |  |  |  |
+| PLAT-011 | Platform |  |  |  |  |  |
 | CB-001 | CloudBank |  |  |  |  |  |
 | OBS-001 | Observability |  |  |  |  |  |
 | OBS-011 | Observability |  |  |  |  |  |
@@ -670,8 +687,11 @@ Known deviations or waivers:
 | Config Server |  |  |  |
 | Spring Boot Admin UI |  |  |  |
 | Oracle Database Exporter |  |  |  |
-| OTMM/MicroTx Runtime |  |  | Include version-specific known failures instead of omitting this row. |
-| MicroTx Transfer Workflow |  |  | Include CloudBank transfer evidence and failure diagnostics when failing. |
+| OTMM/MicroTx Runtime |  |  | Optional; required only when `otmm.coordinator.enabled=true`; include version-specific known failures instead of omitting this row. |
+| MicroTx Transfer Workflow |  |  | Optional; required only when `otmm.coordinator.enabled=true`; include CloudBank transfer evidence and failure diagnostics when failing. |
+| MicroTx Workflow Server |  |  | Optional; required only when `otmm.workflowServer.enabled=true`; include deployment, pod, service, endpoint, and health evidence. |
+| Workflow Server Flyway DB Initialization |  |  | Optional; required only when workflow server is enabled; include migration logs and any Oracle privilege diagnostics. |
+| OTMM Console |  |  | Optional; required only when `otmm.console.enabled=true` and either coordinator or workflow server is enabled; do not use as workflow server evidence. |
 
 ## Observability Evidence Summary
 
@@ -700,7 +720,7 @@ Telemetry readiness summary:
 | HTTP API Monitoring |  |  |  |  |  |
 | DB Calls Monitoring |  |  |  |  |  |
 | JVM Metrics |  |  |  |  |  |
-| MicroTx |  |  |  |  | Keep this row even for known current-version failures; record failure evidence or waiver. |
+| MicroTx |  |  |  |  | Optional; if `otmm.coordinator.enabled=true`, record coordinator/LRA evidence and workflow-server telemetry when workflow server is enabled. If disabled, mark `Not Applicable` with values evidence. |
 | Kafka Server Monitoring Dashboard |  |  |  |  |  |
 | Helidon Main Dashboard |  |  |  |  |  |
 | Helidon MP Details |  |  |  |  |  |

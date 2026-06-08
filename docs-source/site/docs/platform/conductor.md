@@ -9,5 +9,16 @@ For reference: [Conductor OSS Documentation](https://docs.conductor-oss.org)
 
 ## Installing MicroTx Workflow
 
-MicroTx Workflow will be installed if `otmm.enabled` and `otmm.workflowServer.enabled` are set to `true` in the `values.yaml` file.  The web user interface will be installed if `otmm.console.enabled` is set to `true`.  Note that the web user interface is optional, you may choose to install just the workflow engine if you wish.
+MicroTx Workflow Server is installed when `otmm.workflowServer.enabled` is set to `true` in the `values.yaml` file. The MicroTx transaction coordinator is controlled separately by `otmm.coordinator.enabled`.
 
+```yaml
+otmm:
+  coordinator:
+    enabled: true
+  workflowServer:
+    enabled: true
+  console:
+    enabled: true
+```
+
+The web user interface is requested with `otmm.console.enabled=true`, but it is deployed only when either `otmm.coordinator.enabled` or `otmm.workflowServer.enabled` is also `true`. The web user interface is optional; you may install just the workflow engine by setting `otmm.workflowServer.enabled=true` and `otmm.console.enabled=false`.

@@ -118,9 +118,9 @@ minimum permissions the platform needs.
 
 <summary>What OBAAS_USER is granted</summary>
 
-The init script grants the following permissions:
+The init script grants or refreshes the following permissions:
 
-- **DB_DEVELOPER_ROLE** (Oracle 21c+). On Oracle 19c or earlier, falls back to `CREATE SESSION`.
+- **DB_DEVELOPER_ROLE** (Oracle 21c+). On Oracle 19c or databases where this role is unavailable, falls back to explicit schema privileges: `CREATE SESSION`, `CREATE TABLE`, `CREATE VIEW`, `CREATE SEQUENCE`, `CREATE PROCEDURE`, `CREATE TRIGGER`, and `CREATE TYPE`.
 - **SELECT on monitoring views** Required by the Oracle Database Exporter for Prometheus metrics.
 - **Unlimited quota** on its default tablespace.
 - **ADB only:** `EXECUTE ON DBMS_CLOUD_AI` and `EXECUTE ON DBMS_CLOUD_PIPELINE` for the AI Optimizer feature.
@@ -131,12 +131,13 @@ The init script grants the following permissions:
 
 <summary>Which components use OBAAS_USER</summary>
 
-Two components read the `<release>-db-authn` Secret at runtime:
+The following components read the `<release>-db-authn` Secret at runtime:
 
 - **Oracle Database Exporter** — connects as OBAAS_USER to query the monitoring views for Prometheus metrics.
 - **Database init container** — uses the credentials during initialization to create the user and verify connectivity.
+- **MicroTx Workflow Server** — connects as OBAAS_USER and uses Flyway to create or update its workflow schema objects when `otmm.workflowServer.enabled` is `true`.
 
-Other platform components (Eureka, Admin Server, MicroTx Workflow) connect to the database through their own Spring Boot datasource configuration and do not use OBAAS_USER.
+Other platform components such as Eureka and Admin Server connect to the database through their own Spring Boot datasource configuration.
 
 </details>
 
