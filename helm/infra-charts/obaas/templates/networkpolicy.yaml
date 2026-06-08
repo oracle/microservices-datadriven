@@ -1,0 +1,202 @@
+{{- if .Values.networkPolicy.enabled }}
+{{/*
+Copyright (c) 2026, Oracle and/or its affiliates.
+Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+*/}}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "obaas.fullname" . }}-default-deny
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: network-policy
+    {{- include "obaas.labels" . | nindent 4 }}
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress
+{{- if .Values.networkPolicy.allowSameNamespace }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "obaas.fullname" . }}-allow-same-namespace
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: network-policy
+    {{- include "obaas.labels" . | nindent 4 }}
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector: {}
+  egress:
+    - to:
+        - podSelector: {}
+{{- end }}
+{{- if .Values.networkPolicy.dns.enabled }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "obaas.fullname" . }}-allow-dns-egress
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: network-policy
+    {{- include "obaas.labels" . | nindent 4 }}
+spec:
+  podSelector: {}
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              {{- toYaml .Values.networkPolicy.dns.namespaceSelector | nindent 14 }}
+          podSelector:
+            matchLabels:
+              {{- toYaml .Values.networkPolicy.dns.podSelector | nindent 14 }}
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+{{- end }}
+{{- if .Values.networkPolicy.allowExternalEgress }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "obaas.fullname" . }}-allow-external-egress
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: network-policy
+    {{- include "obaas.labels" . | nindent 4 }}
+spec:
+  podSelector: {}
+  policyTypes:
+    - Egress
+  egress:
+    - {}
+{{- end }}
+{{- if .Values.networkPolicy.allowPublicIngress }}
+{{- if (index .Values "ingress-nginx").enabled }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "obaas.fullname" . }}-allow-ingress-nginx
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: network-policy
+    {{- include "obaas.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: ingress-nginx
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: controller
+  policyTypes:
+    - Ingress
+  ingress:
+    - {}
+{{- end }}
+{{- if (index .Values "gateway-helm").enabled }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "obaas.fullname" . }}-allow-envoy-gateway
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: network-policy
+    {{- include "obaas.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: gateway-helm
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  policyTypes:
+    - Ingress
+  ingress:
+    - {}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "obaas.fullname" . }}-allow-envoy-proxy
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: network-policy
+    {{- include "obaas.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchExpressions:
+      - key: gateway.envoyproxy.io/owning-gateway-name
+        operator: In
+        values:
+          - {{ .Release.Name }}-envoy-apisix
+  policyTypes:
+    - Ingress
+  ingress:
+    - {}
+{{- end }}
+{{- if (index .Values "apisix").enabled }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "obaas.fullname" . }}-allow-apisix-gateway
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: network-policy
+    {{- include "obaas.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: apisix
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  policyTypes:
+    - Ingress
+  ingress:
+    - ports:
+        - protocol: TCP
+          port: 9080
+        - protocol: TCP
+          port: 9443
+{{- end }}
+{{- end }}
+{{- if or .Values.networkPolicy.extraIngress .Values.networkPolicy.extraEgress }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "obaas.fullname" . }}-custom-rules
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/component: network-policy
+    {{- include "obaas.labels" . | nindent 4 }}
+spec:
+  podSelector: {}
+  policyTypes:
+    {{- if .Values.networkPolicy.extraIngress }}
+    - Ingress
+    {{- end }}
+    {{- if .Values.networkPolicy.extraEgress }}
+    - Egress
+    {{- end }}
+  {{- with .Values.networkPolicy.extraIngress }}
+  ingress:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.networkPolicy.extraEgress }}
+  egress:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}
+{{- end }}

@@ -16,7 +16,7 @@ database:
   # Container image for the database
   # image:
   #   repository: "container-registry.oracle.com/database/free"
-  #   tag: "latest"
+  #   tag: "23.26.2.0"
 
   # Privileged user credentials (SYSTEM) - auto-generated if not provided
   # privAuthN:

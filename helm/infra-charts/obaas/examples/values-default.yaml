@@ -35,8 +35,15 @@ ingress-nginx:
 admin-server:
   enabled: true
 
+# OTMM (MicroTX) components can be toggled independently. The console only
+# deploys when the coordinator and/or workflow server is also enabled.
 otmm:
-  enabled: true
+  coordinator:
+    enabled: true
+  workflowServer:
+    enabled: true
+  console:
+    enabled: true
 
 # Database (SIDB-FREE by default)
 # Database uses SIDB-FREE by default from values.yaml

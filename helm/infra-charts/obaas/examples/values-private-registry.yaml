@@ -153,17 +153,32 @@ config-server:
   # Override default resources if needed (defaults: cpu 250m-500m, memory 256Mi-512Mi)
   # resources: {}
 
-# Oracle Transaction Manager for Microservices (OTMM)
+# Oracle Transaction Manager for Microservices (OTMM - MicroTX)
+# Each component (coordinator, workflowServer, console) has its own image and
+# can be toggled independently. The console only deploys when the coordinator
+# and/or workflow server is also enabled.
 otmm:
   global:
     imagePullSecrets: *imagePullSecrets
-  enabled: true
-  replicas: 1
-  image:
-    repository: myregistry.example.com/database/otmm
-    tag: "24.4.1"
-  # Override default resources if needed (defaults: cpu 250m, memory 1Gi)
-  # resources: {}
+  coordinator:
+    enabled: true
+    replicas: 1
+    image:
+      repository: myregistry.example.com/database/microtx-coordinator
+      tag: "26.1.1"
+    # Override default resources if needed (defaults: cpu 250m, memory 1Gi)
+    # resources: {}
+  workflowServer:
+    enabled: true
+    replicas: 1
+    image:
+      repository: myregistry.example.com/database/microtx-workflow
+      tag: "26.1.1"
+  console:
+    enabled: true
+    image:
+      repository: myregistry.example.com/database/microtx-console
+      tag: "26.1.1"
 
 # Oracle Database Exporter (Prometheus metrics for Oracle Database)
 oracle-database-exporter:
@@ -196,12 +211,12 @@ database:
   sqlcl:
     image:
       repository: myregistry.example.com/database/sqlcl
-      tag: "25.3.0"
+      tag: "26.1.2"
 
   # For SIDB-FREE/ADB-FREE: container image configuration (exclude for ADB-S)
   image:
     repository: "myregistry.example.com/database/free"
-    tag: "latest"
+    tag: "23.26.2.0"
 
   # For ADB-S: OCI Autonomous Database OCID (exclude for SIDB-FREE/ADB-FREE/OTHER)
   oci:
@@ -325,15 +340,15 @@ ingress-nginx:
     image:
       registry: myregistry.example.com  # Default: registry.k8s.io
       image: ingress-nginx/controller
-      tag: "v1.11.5"
-      digest: "sha256:a1cbad75b0a7098bf9325132794dddf9eef917e8a7fe246749a4cea7ff6f01eb"
+      tag: "v1.15.1"
+      digest: "sha256:594ceea76b01c592858f803f9ff4d2cb40542cae2060410b2c95f75907d659e1"
     admissionWebhooks:
       patch:
         image:
           registry: myregistry.example.com
           image: ingress-nginx/kube-webhook-certgen
-          tag: "v1.5.2"
-          digest: "sha256:e8825994b7a2c7497375a9b945f386506ca6a3eda80b89b74ef2db743f66a5ea"
+          tag: "v1.6.9"
+          digest: "sha256:01038e7de14b78d702d2849c3aad72fd25903c4765af63cf16aa3398f5d5f2dd"
 
 
 # =============================================================================
@@ -505,7 +520,7 @@ apisix:
   # Full registry path required for clusters with short name mode enforcing
   image:
     repository: "myregistry.example.com/apache/apisix"
-    tag: "3.14.1-ubuntu"
+    tag: "3.16.0-ubuntu"
 
   # Init container image
   initContainer:
@@ -529,7 +544,7 @@ signoz:
       image:
         registry: myregistry.example.com
         repository: curlimages/curl
-        tag: "8.17.0"
+        tag: "8.20.0"
     busybox:
       image:
         registry: myregistry.example.com
@@ -744,7 +759,9 @@ kafka:
 # global kubectl (PVC cleanup hook)  | docker.io                     | global.utilities.kubectl.image.registry
 # eureka                             | container-registry.oracle.com | eureka.image.repository
 # admin-server                       | container-registry.oracle.com | admin-server.image.repository
-# otmm                               | container-registry.oracle.com | otmm.image.repository
+# otmm coordinator                   | container-registry.oracle.com | otmm.coordinator.image.repository
+# otmm workflow server               | container-registry.oracle.com | otmm.workflowServer.image.repository
+# otmm console                       | container-registry.oracle.com | otmm.console.image.repository
 # oracle-database-exporter           | container-registry.oracle.com | oracle-database-exporter.image.repository
 # oracle-database-exporter (busybox) | docker.io                     | oracle-database-exporter.busybox.repository
 # database                           | (varies by type)              | database.image.repository

@@ -1,26 +1,26 @@
 ## Copyright (c) 2026, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
 
-{{- if .Values.otmm.console.enabled }}
+{{- if eq (include "otmm.console.enabled" .) "true" }}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ .Release.Name }}-otmm-console
   namespace: {{ .Release.Namespace }}
   labels:
+    {{- include "obaas.labels" . | nindent 4 }}
     app.kubernetes.io/name: {{ .Release.Name }}-otmm-console
     app.kubernetes.io/component: transaction-coordinator
     app.kubernetes.io/part-of: {{ .Release.Name }}
-    {{- include "obaas.labels" . | nindent 4 }}
 spec:
   ports:
     - name: http-stock
       port: 5001
-      targetPort: 5001
+      targetPort: http-console
       protocol: TCP
     - name: http-console
       port: 5002
-      targetPort: 8080
+      targetPort: http-console
       protocol: TCP
   selector:
     app.kubernetes.io/name: {{ .Release.Name }}-otmm-console
@@ -31,10 +31,10 @@ metadata:
   name: {{ .Release.Name }}-otmm-console
   namespace: {{ .Release.Namespace }}
   labels:
+    {{- include "obaas.labels" . | nindent 4 }}
     app.kubernetes.io/name: {{ .Release.Name }}-otmm-console
     app.kubernetes.io/component: transaction-coordinator
     app.kubernetes.io/part-of: {{ .Release.Name }}
-    {{- include "obaas.labels" . | nindent 4 }}
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
@@ -55,10 +55,10 @@ metadata:
   name: {{ .Release.Name }}-otmm-console
   namespace: {{ .Release.Namespace }}
   labels:
+    {{- include "obaas.labels" . | nindent 4 }}
     app.kubernetes.io/name: {{ .Release.Name }}-otmm-console
     app.kubernetes.io/component: transaction-coordinator
     app.kubernetes.io/part-of: {{ .Release.Name }}
-    {{- include "obaas.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.otmm.console.replicas | default 1 }}
   selector:
@@ -67,24 +67,29 @@ spec:
   template:
     metadata:
       labels:
+        {{- include "obaas.labels" . | nindent 8 }}
         app.kubernetes.io/name: {{ .Release.Name }}-otmm-console
         app.kubernetes.io/component: transaction-coordinator
         app.kubernetes.io/part-of: {{ .Release.Name }}
-        {{- include "obaas.labels" . | nindent 4 }}
     spec:
-      {{- include "obaas.imagePullSecrets" (dict "local" (index .Values "otmm").imagePullSecrets "global" .Values.global.imagePullSecrets "secretName" .Values.global.imagePullSecretName) | nindent 6 }}
+      {{- include "obaas.imagePullSecrets" (dict "local" .Values.otmm.console.imagePullSecrets "global" .Values.global.imagePullSecrets "secretName" .Values.global.imagePullSecretName) | nindent 6 }}
       serviceAccountName: {{ .Release.Name }}-otmm-console
       containers:
         - name: console
           image: {{ .Values.otmm.console.image.repository }}:{{ .Values.otmm.console.image.tag }}
-          imagePullPolicy: {{ (index .Values "otmm").image.pullPolicy | default "IfNotPresent" }}
+          imagePullPolicy: {{ .Values.otmm.console.image.pullPolicy | default "IfNotPresent" }}
           ports:
-            - name: http-stock
-              containerPort: 5001
-              protocol: TCP
             - name: http-console
               containerPort: 8080
               protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http-console
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 6
           resources:
             {{- with .Values.otmm.console.resources }}
             {{ toYaml . | nindent 6 }}
@@ -98,13 +103,15 @@ spec:
           {{- end }}
           env:
             - name: CONSOLE_APP_NAME
-              value: {{ .Release.Name }}-otmm-console
+              value: console
+            {{- if .Values.otmm.coordinator.enabled }}
             - name: TMM_NAMESPACE
               value: {{ .Release.Namespace }}
             - name: TMM_APP_NAME
-              value: {{ .Release.Name }}-otmm-tcs
+              value: otmm-tcs
             - name: TMM_TCS_URL
               value: "http://{{ .Release.Name }}-otmm-tcs:9000"
+            {{- end }}
             {{- if eq .Values.otmm.commonConfiguration.security.enabled true }}
             - name: TMM_ADMIN_USER_ROLE_NAMES
               value: {{ .Values.otmm.commonConfiguration.security.identityProvider.adminUserRoles }}
@@ -153,6 +160,7 @@ spec:
             - name: SECURITY_ENABLED
               value: "false"
             {{- end }}
+            {{- if .Values.otmm.workflowServer.enabled }}
             # WorkflowServer URL configuration
             - name: WF_SERVER
               value: "http://{{ .Release.Name }}-otmm-workflow-server:9010"
@@ -163,6 +171,7 @@ spec:
               value: "{{ .Values.otmm.commonConfiguration.externalURL.protocol }}://{{ .Values.otmm.commonConfiguration.externalURL.host }}:{{ .Values.otmm.commonConfiguration.externalURL.port }}"
             {{- else }}
               value: "{{ .Values.otmm.commonConfiguration.externalURL.protocol | default "http" }}://{{ .Values.otmm.commonConfiguration.externalURL.host | default (printf "%s-otmm-console" .Release.Name) }}"
+            {{- end }}
             {{- end }}
             # temporary
             - name: SECURITY_PROPERTIES_COOKIE_ENCRYPTION_ENABLED

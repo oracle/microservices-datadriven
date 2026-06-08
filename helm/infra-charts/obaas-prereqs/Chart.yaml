@@ -18,7 +18,7 @@ appVersion: "2.1.0-build.13"
 # SubCharts - Cluster-scoped singleton infrastructure
 dependencies:
   - name: external-secrets
-    version: "1.1.0"
+    version: "2.6.0"
     repository: https://charts.external-secrets.io
     condition: external-secrets.enabled
   - name: metrics-server
@@ -34,7 +34,7 @@ dependencies:
     repository: https://strimzi.io/charts/
     condition: strimzi-kafka-operator.enabled
   - name: coherence-operator
-    version: "3.5.6"
+    version: "3.5.13"
     repository: https://oracle.github.io/coherence-operator/charts
     condition: coherence-operator.enabled
   # Installs the OpenTelemetry Operator to enable auto-instrumentation via custom resources

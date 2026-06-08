@@ -132,7 +132,7 @@ The chart automatically configures:
 - `OTEL_EXPORTER_OTLP_ENDPOINT`
 - `SPRING_PROFILES_ACTIVE`
 - Health probes at `/actuator/health/liveness` and `/actuator/health/readiness`
-- Metrics at `/actuator/prometheus`
+- Metrics through the injected OpenTelemetry Java agent
 
 ### Helidon
 
@@ -342,7 +342,7 @@ helm install my-app ./obaas-sample-app -f values.yaml -n my-namespace --dry-run=
 
 **Helidon "DataSource not found"**: Ensure `helidon.datasource.name` matches your application's datasource bean name.
 
-**OTEL metrics not appearing**: For Helidon, verify `OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf` is set.
+**OTEL metrics not appearing**: For Spring Boot, verify the OpenTelemetry Java agent is injected and `OTEL_METRICS_EXPORTER=otlp` is configured. For Helidon, verify `OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf` is set.
 
 **Health probe failures**: Check probe paths match your framework:
 - Spring Boot: `/actuator/health/liveness`, `/actuator/health/readiness`

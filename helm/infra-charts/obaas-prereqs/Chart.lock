@@ -1,7 +1,7 @@
 dependencies:
 - name: external-secrets
   repository: https://charts.external-secrets.io
-  version: 1.1.0
+  version: 2.6.0
 - name: metrics-server
   repository: https://kubernetes-sigs.github.io/metrics-server/
   version: 3.13.0
@@ -13,12 +13,12 @@ dependencies:
   version: 0.51.0
 - name: coherence-operator
   repository: https://oracle.github.io/coherence-operator/charts
-  version: 3.5.6
+  version: 3.5.13
 - name: opentelemetry-operator
   repository: https://open-telemetry.github.io/opentelemetry-helm-charts
   version: 0.107.0
 - name: oracle-database-operator
   repository: file://charts/oracle-database-operator
   version: 0.2.0
-digest: sha256:c349704599dc60925de2f54f1704ed760c6dc983acb5419e59309b8127a6e383
-generated: "2026-03-18T10:24:05.211804005-04:00"
+digest: sha256:50a7eab0fe9545c2dc7a67064ecd7de0ad89a5ed9f86a84c88afaf802b220703
+generated: "2026-06-08T10:04:36.538306-05:00"

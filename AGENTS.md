@@ -131,12 +131,12 @@ For external databases, the privileged user must be able to create the applicati
 Required `OTHER` database privileges:
 
 ```sql
-SELECT WITH ADMIN OPTION on:
+SELECT WITH GRANT OPTION on:
   DBA_TABLESPACE_USAGE_METRICS, DBA_TABLESPACES,
   GV_$SYSTEM_WAIT_CLASS, GV_$ASM_DISKGROUP_STAT, GV_$DATAFILE,
   GV_$SYSSTAT, GV_$PROCESS, GV_$WAITCLASSMETRIC, GV_$SESSION,
   GV_$RESOURCE_LIMIT, GV_$PARAMETER, GV_$DATABASE,
-  GV_$SQLSTATS, GV_$SYSMETRIC, V_$DIAG_ALERT_EXT
+  GV_$SQLSTATS, GV_$SYSMETRIC, GV_$CON_SYSMETRIC, V_$DIAG_ALERT_EXT
 
 EXECUTE WITH GRANT OPTION on:
   SYS.DBMS_AQ, SYS.DBMS_AQADM, SYS.DBMS_AQIN,
@@ -152,10 +152,10 @@ The OBaaS install docs use:
 ```bash
 helm install \
   cert-manager oci://quay.io/jetstack/charts/cert-manager \
-  --version v1.19.4 \
+  --version v1.20.2 \
   --namespace cert-manager \
   --create-namespace \
-  --set installCRDs=true \
+  --set crds.enabled=true \
   --set crds.keep=false
 ```
 
@@ -421,7 +421,7 @@ kubectl -n <application-namespace> create secret generic db-priv-authn \
 
 Use `dsn` instead of `host`, `port`, and `service_name` when the operator supplies a full connect string.
 
-Before installing with `database.type: OTHER`, verify the privileged user has the `SELECT WITH ADMIN OPTION` and `EXECUTE WITH GRANT OPTION` privileges listed in the Oracle Database prerequisites section above.
+Before installing with `database.type: OTHER`, verify the privileged user has the `SELECT WITH GRANT OPTION` and `EXECUTE WITH GRANT OPTION` privileges listed in the Oracle Database prerequisites section above.
 
 ### Cluster Access Values
 
@@ -693,10 +693,10 @@ Skip this step only if cert-manager is already installed and healthy.
 ```bash
 helm install \
   cert-manager oci://quay.io/jetstack/charts/cert-manager \
-  --version v1.19.4 \
+  --version v1.20.2 \
   --namespace cert-manager \
   --create-namespace \
-  --set installCRDs=true \
+  --set crds.enabled=true \
   --set crds.keep=false
 ```
 

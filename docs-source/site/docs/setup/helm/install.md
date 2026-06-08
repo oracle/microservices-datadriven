@@ -91,6 +91,8 @@ Cluster
 
 **Namespace behavior:** All OBaaS chart components deploy to the release namespace (specified with the `-n` flag during installation). By default, ingress-nginx watches only its own release namespace (`scope.enabled: true`).
 
+**Network isolation:** The OBaaS chart installs NetworkPolicy resources in the release namespace. Effective enforcement depends on the cluster CNI plugin; use a CNI that supports Kubernetes NetworkPolicy and has policy enforcement enabled. By default, the chart establishes a default-deny baseline, allows same-namespace traffic, allows DNS egress, permits public ingress to the configured gateway or ingress entrypoints, and explicitly allows external egress for compatibility with external databases, OCI APIs, registries, and identity providers.
+
 **Directory structure:**
 
 ```tree
@@ -198,10 +200,10 @@ OBaaS requires [cert-manager](https://cert-manager.io/) as a prerequisite. If yo
 ```shell
 helm install \
   cert-manager oci://quay.io/jetstack/charts/cert-manager \
-  --version v1.19.4 \
+  --version v1.20.2 \
   --namespace cert-manager \
   --create-namespace \
-  --set installCRDs=true \
+  --set crds.enabled=true \
   --set crds.keep=false
 ```
 
@@ -417,12 +419,12 @@ an Oracle Base DB or an on-premises Oracle AI Database.
 1. Ensure the admin user has the following permissions:
 
   ```sql
-  SELECT WITH ADMIN OPTION on:
+  SELECT WITH GRANT OPTION on:
     DBA_TABLESPACE_USAGE_METRICS, DBA_TABLESPACES,
     GV_$SYSTEM_WAIT_CLASS, GV_$ASM_DISKGROUP_STAT, GV_$DATAFILE,
     GV_$SYSSTAT, GV_$PROCESS, GV_$WAITCLASSMETRIC, GV_$SESSION,
     GV_$RESOURCE_LIMIT, GV_$PARAMETER, GV_$DATABASE,
-    GV_$SQLSTATS, GV_$SYSMETRIC, V_$DIAG_ALERT_EXT
+    GV_$SQLSTATS, GV_$SYSMETRIC, GV_$CON_SYSMETRIC, V_$DIAG_ALERT_EXT
 
   EXECUTE WITH GRANT OPTION on:
     SYS.DBMS_AQ, SYS.DBMS_AQADM, SYS.DBMS_AQIN,
