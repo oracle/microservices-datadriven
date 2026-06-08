@@ -18,11 +18,11 @@ appVersion: "2.1.0-build.13"
 # SubCharts - Cluster-scoped singleton infrastructure
 dependencies:
   - name: external-secrets
-    version: "2.5.0"
+    version: "2.6.0"
     repository: https://charts.external-secrets.io
     condition: external-secrets.enabled
   - name: metrics-server
-    version: "3.13.1"
+    version: "3.13.0"
     repository: https://kubernetes-sigs.github.io/metrics-server/
     condition: metrics-server.enabled
   - name: kube-state-metrics
