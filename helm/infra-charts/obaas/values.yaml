@@ -111,8 +111,7 @@ gateway-helm:
     # -- Global override for image registry
     imageRegistry: ""
     # -- Global override for image pull secrets
-    # gateway-helm renders these values directly with toYaml and expects object-shaped secrets.
-    imagePullSecrets: []
+    imagePullSecrets: *imagePullSecrets
 
     # If set, these override image-specific values: useful when installing the chart in a private registry environment.
     # Override image-specific values directly if a global override is not desired.
@@ -124,7 +123,7 @@ gateway-helm:
         # Default behavior: latest images will be Always else IfNotPresent.
         pullPolicy: Always
         # List of secrets in the same namespace of the component that can be used to pull images from private repositories.
-        pullSecrets: []
+        pullSecrets: *imagePullSecrets
       envoyProxy:
         # Envoy proxy data plane image — override to use a private registry.
         # Legacy overrides under config.envoyGateway.provider.kubernetes.envoyDeployment
@@ -132,7 +131,7 @@ gateway-helm:
         image: "docker.io/envoyproxy/envoy:distroless-v1.38.1"
         pullPolicy: IfNotPresent
         # List of secrets in the same namespace that can pull the Envoy proxy image.
-        pullSecrets: []
+        pullSecrets: *imagePullSecrets
       ratelimit:
         # This is the full image name including the hub, repo, and tag.
         image: "docker.io/envoyproxy/ratelimit:3fb70258"
@@ -140,7 +139,7 @@ gateway-helm:
         # Default behavior: latest images will be Always else IfNotPresent.
         pullPolicy: IfNotPresent
         # List of secrets in the same namespace of the component that can be used to pull images from private repositories.
-        pullSecrets: []
+        pullSecrets: *imagePullSecrets
 
   deployment:
     pod:
