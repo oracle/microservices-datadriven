@@ -36,6 +36,9 @@ public class CustomerResourceUnitTest {
     @Mock
     private TypedQuery<Customer> typedQuery;
 
+    @Mock
+    private org.eclipse.microprofile.jwt.JsonWebToken jwt;
+
     @InjectMocks
     private CustomerResource customerResource;
 
@@ -51,6 +54,8 @@ public class CustomerResourceUnitTest {
         Customer customer3 = new Customer("CUST003", "Bob Johnson", "bob.johnson@yahoo.com", "VIP customer");
         
         testCustomers = Arrays.asList(testCustomer, customer2, customer3);
+
+        lenient().when(jwt.getClaim("scope")).thenReturn("cloudbank.admin cloudbank.read cloudbank.write");
     }
 
     // ==============================================

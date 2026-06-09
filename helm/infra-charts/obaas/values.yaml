@@ -50,6 +50,9 @@ global:
         repository: nginx
         tag: "alpine"
 
+# OBAAS PLATFORM CONFIGURATION
+otelCollectorEndpoint: "obaas-signoz-otel-collector:4318"
+
 # -----------------------
 # -- Network Policy Configuration
 networkPolicy:
@@ -615,6 +618,8 @@ signoz:
           value: otlp
         - name: OTEL_LOGS_EXPORTER
           value: none
+        - name: OTEL_EXPORTER_OTLP_PROTOCOL
+          value: http/protobuf
   
   # Change to override individual component images
   signoz:

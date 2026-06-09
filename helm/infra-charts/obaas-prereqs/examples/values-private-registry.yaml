@@ -249,7 +249,7 @@ opentelemetry-operator:
   manager:
     collectorImage:
       repository: "myregistry.example.com/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-k8s"
-      tag: "0.146.0"
+      tag: "0.152.0"
     image:
       repository: "myregistry.example.com/open-telemetry/opentelemetry-operator"
-      tag: "0.146.0"
+      tag: "0.152.0"

@@ -18,4 +18,5 @@
 
     <!-- Quiet down verbose internal Helidon logs if necessary -->
     <logger name="org.jboss.weld" level="WARN" />
+    <logger name="org.hibernate.SQL" level="DEBUG" />
 </configuration>

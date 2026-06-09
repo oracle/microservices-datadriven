@@ -39,7 +39,7 @@ dependencies:
     condition: coherence-operator.enabled
   # Installs the OpenTelemetry Operator to enable auto-instrumentation via custom resources
   - name: opentelemetry-operator
-    version: "0.107.0"
+    version: "0.114.1"
     repository: https://open-telemetry.github.io/opentelemetry-helm-charts
     condition: opentelemetry-operator.enabled
   - name: oracle-database-operator

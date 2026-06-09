@@ -11,6 +11,38 @@ NC='\033[0m' # No Color
 echo "Testing Customer Helidon Endpoints at $BASE_URL"
 echo "------------------------------------------------"
 
+NAMESPACE="obaas"
+AZN_SECRET="otelopupgrd-azn-server-auth"
+
+echo "Fetching admin client secret..."
+CLIENT_ID="cloudbank-admin-client"
+CLIENT_SECRET=$(kubectl get secret $AZN_SECRET -n $NAMESPACE -o jsonpath='{.data.admin-client-secret}' | base64 -d)
+
+if [ -z "$CLIENT_SECRET" ]; then
+    echo -e "${RED}Failed to fetch client secret. Make sure azn-server is deployed and the secret exists.${NC}"
+    exit 1
+fi
+
+echo "Port-forwarding azn-server to get auth token..."
+kubectl port-forward svc/azn-server 8081:8080 -n $NAMESPACE > /dev/null 2>&1 &
+AZN_PID=$!
+sleep 5
+
+echo "Fetching OAuth2 Bearer Token..."
+TOKEN=$(curl -s -u "$CLIENT_ID:$CLIENT_SECRET" \
+  -X POST "http://localhost:8081/oauth2/token" \
+  -d grant_type=client_credentials \
+  -d scope="cloudbank.admin" | grep -o '"access_token":"[^"]*' | grep -o '[^"]*$')
+
+kill $AZN_PID
+
+if [ -z "$TOKEN" ]; then
+    echo -e "${RED}Failed to get OAuth2 token. Check if azn-server is running properly.${NC}"
+    exit 1
+fi
+
+AUTH_HEADER="Authorization: Bearer $TOKEN"
+
 # 1. Create a Customer
 echo -e "\n1. Creating a new customer..."
 CREATE_PAYLOAD='{"customerId": "test-user-001", "customerName": "Test User", "customerEmail": "test@example.com", "customerOtherDetails": "Initial Details"}'
@@ -18,25 +50,26 @@ echo "Payload: $CREATE_PAYLOAD"
 
 curl -s -X POST "$BASE_URL" \
      -H "Content-Type: application/json" \
+     -H "$AUTH_HEADER" \
      -d "$CREATE_PAYLOAD" -v
 
 echo -e "\n(Check status code above - expects 201 Created)"
 
 # 2. Get All Customers
 echo -e "\n2. Getting all customers..."
-curl -s -X GET "$BASE_URL" | python3 -m json.tool
+curl -s -X GET "$BASE_URL" -H "$AUTH_HEADER" | python3 -m json.tool
 
 # 3. Get Customer by ID
 echo -e "\n3. Getting customer by ID (test-user-001)..."
-curl -s -X GET "$BASE_URL/test-user-001" | python3 -m json.tool
+curl -s -X GET "$BASE_URL/test-user-001" -H "$AUTH_HEADER" | python3 -m json.tool
 
 # 4. Get Customer by Name
 echo -e "\n4. Getting customer by Name (Test)..."
-curl -s -X GET "$BASE_URL/name/Test" | python3 -m json.tool
+curl -s -X GET "$BASE_URL/name/Test" -H "$AUTH_HEADER" | python3 -m json.tool
 
 # 5. Get Customer by Email
 echo -e "\n5. Getting customer by Email (test@example.com)..."
-curl -s -X GET "$BASE_URL/byemail/test@example.com" | python3 -m json.tool
+curl -s -X GET "$BASE_URL/byemail/test@example.com" -H "$AUTH_HEADER" | python3 -m json.tool
 
 # 6. Update Customer
 echo -e "\n6. Updating customer..."
@@ -45,24 +78,25 @@ echo "Payload: $UPDATE_PAYLOAD"
 
 curl -s -X PUT "$BASE_URL/test-user-001" \
      -H "Content-Type: application/json" \
+     -H "$AUTH_HEADER" \
      -d "$UPDATE_PAYLOAD" | python3 -m json.tool
 
 # 7. Verify Update
 echo -e "\n7. Verifying update (Get by ID)..."
-curl -s -X GET "$BASE_URL/test-user-001" | python3 -m json.tool
+curl -s -X GET "$BASE_URL/test-user-001" -H "$AUTH_HEADER" | python3 -m json.tool
 
 # 8. Apply for Loan (Expect 418 I'm a teapot)
 echo -e "\n8. Applying for loan (amount 5000)..."
-curl -s -X POST "$BASE_URL/applyLoan/5000" -v 2>&1 | grep "< HTTP"
+curl -s -X POST "$BASE_URL/applyLoan/5000" -H "$AUTH_HEADER" -v 2>&1 | grep "< HTTP"
 
 # 9. Delete Customer
 echo -e "\n9. Deleting customer..."
-curl -s -X DELETE "$BASE_URL/test-user-001" -v
+curl -s -X DELETE "$BASE_URL/test-user-001" -H "$AUTH_HEADER" -v
 
 echo -e "\n(Check status code above - expects 204 No Content)"
 
 # 10. Verify Deletion
 echo -e "\n10. Verifying deletion (Get by ID - Expect 404)..."
-curl -s -X GET "$BASE_URL/test-user-001" -v 2>&1 | grep "< HTTP"
+curl -s -X GET "$BASE_URL/test-user-001" -H "$AUTH_HEADER" -v 2>&1 | grep "< HTTP"
 
 echo -e "\n${GREEN}Test Sequence Complete${NC}"

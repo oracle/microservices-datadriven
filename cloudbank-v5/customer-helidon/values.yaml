@@ -34,3 +34,22 @@ eureka:
   enabled: true
   instance:
     appname: "helidon-customer-service"
+
+# Required Security Contexts for OpenTelemetry Auto-Instrumentation
+# The OTEL Operator injects an init container to copy the Java agent.
+# If runAsUser is not explicitly set, Kubernetes defaults to the base image's USER (root),
+# which violates the runAsNonRoot: true policy and causes a CreateContainerConfigError.
+# User 185 aligns with the Helidon Jib/S2I base image permissions.
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 185
+  runAsGroup: 0
+  fsGroup: 0
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
