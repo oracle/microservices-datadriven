@@ -73,6 +73,8 @@ otmm:
     enabled: true
 ```
 
+When the workflow server is enabled, it uses the OBaaS application database secret, typically `<release>-db-authn`, and runs Flyway against that schema during startup. The database init job grants `OBAAS_USER` the schema privileges required for this initialization. If a pre-existing application user is supplied through `database.authN.secretName`, that user must have equivalent schema DDL privileges and quota on its default tablespace.
+
 ## Upgrading to the commercial version
 
 If you have licensed Oracle Transaction Manager for Microservices Enterprise Edition, please see the [documentation](https://docs.oracle.com/en/database/oracle/transaction-manager-for-microservices/26.1/index.html) for details of how to install and configure MicroTx. Oracle recommends that you perform a new installation rather than attempting to upgrade the provided MicroTx Free installation to the commercial version.
