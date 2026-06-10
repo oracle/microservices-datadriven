@@ -368,3 +368,23 @@ kubectl port-forward svc/customer-helidon 8080:8080 -n tenant1
 # 2. Run the test script (in a separate terminal)
 ./test-endpoints.sh
 ```
+
+## Understanding the Configuration
+
+To help you successfully run and extend this microservice, here is the reasoning behind some of our key configuration choices:
+
+### Container Security Contexts
+In our `values.yaml`, we enforce strict security boundaries using `podSecurityContext` and `securityContext`:
+1. **OpenTelemetry Init Container (`runAsUser: 185`):** Because our cluster enforces a strict `runAsNonRoot: true` policy, we must explicitly define the user ID to match our Helidon base image (`185`). Without this, the OpenTelemetry Operator's init container would default to `root` and Kubernetes would block the pod from starting with a `CreateContainerConfigError`.
+2. **Dropping Capabilities:** We set `allowPrivilegeEscalation: false` and explicitly drop `ALL` capabilities to ensure the container runs with the absolute minimum privileges necessary, significantly reducing the attack surface.
+
+### Authorization Server (`azn-server`) Dependency
+This microservice now has a **strict runtime dependency** on the `azn-server`. Because our endpoints are locked down with MicroProfile Security annotations (e.g., `@Authenticated` and `@RolesAllowed`), the service will reject any request that does not contain a valid JWT bearer token. 
+* **For the Service:** It requires the `CLOUDBANK_SECURITY_JWK_SET_URI` (pointing to `azn-server`) to verify the cryptographically signed JWTs.
+* **For Testing:** You can no longer hit endpoints with plain `curl` commands. Use the provided `test-endpoints.sh` script, which demonstrates how to programmatically authenticate against `azn-server` using `client_credentials` to fetch a valid OAuth2 token before making requests.
+
+### Correlating Traces with Logs in JSON
+This service achieves "Zero-Code Observability" by outputting pure JSON logs that are automatically scraped by the OpenTelemetry Collector. To ensure all logs (including framework logs) have `trace_id` correlations:
+1. **JUL to SLF4J Bridge:** Helidon's internal HTTP server uses Java Util Logging (JUL). We use `src/main/resources/logging.properties` to bridge these logs to SLF4J, ensuring they flow through our Logback configuration.
+2. **Native MDC Injection:** We rely entirely on the OpenTelemetry Java Agent to intercept SLF4J and automatically inject trace IDs into the MDC (Mapped Diagnostic Context). The `LogstashEncoder` then natively serializes these into our JSON output without requiring custom `MdcFilter` code.
+3. **Hibernate SQL Logging:** We set `hibernate.show_sql=false` and instead enable `<logger name="org.hibernate.SQL" level="DEBUG" />` in `logback.xml`. This prevents raw SQL strings from breaking our JSON log structure and ensures SQL statements receive trace context.

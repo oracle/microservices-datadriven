@@ -40,16 +40,59 @@ Once processing starts, the following key metrics are available in the SigNoz **
 ### 1. Build the Application
 Use Maven to compile the application and build the container image:
 ```bash
-mvn clean package -DskipTests
-docker build -t REGION.ocir.io/tenancy/cloudbank-v5/helidon-consumer:5.0-SNAPSHOT .
+mvn clean package k8s:build k8s:push -Dimage.registry=REGION.ocir.io/tenancy/cloudbank-v5 -Dimage.tag=5.0-SNAPSHOT
 ```
 
 ### 2. Deploy using Helm
-Deploy the service using the local OBaaS sample app chart:
+Deploy the service using the published OBaaS sample app chart:
 ```bash
-helm upgrade --install helidon-consumer ../../helm/app-charts/obaas-sample-app \
+helm upgrade --install helidon-consumer obaas/obaas-sample-app \
   -f values.yaml \
   -n obaas
+```
+
+### 3. Security Context Requirements
+When deploying to OBaaS, the environment often enforces strict Pod Security Standards (like `runAsNonRoot: true`). However, the OpenTelemetry operator injects an init container to copy the Java agent, which attempts to run as `root` by default.
+
+To prevent a `CreateContainerConfigError`, you must explicitly configure the Pod's security context to use Helidon's standard non-root user (UID `185`). Ensure your `values.yaml` includes the following:
+
+```yaml
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 185
+  runAsGroup: 0
+  fsGroup: 0
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+```
+
+### 4. Testing the Consumer
+To verify the consumer is successfully receiving messages, you can produce messages to the `my-topic` topic and watch the consumer's logs.
+
+**1. Tail the Consumer Logs:**
+```bash
+kubectl logs -f deployment/helidon-consumer -n obaas
+```
+
+**2. Produce a Message (via Helidon Producer):**
+If you have the `helidon-producer` deployed, you can use its REST endpoint:
+```bash
+kubectl port-forward svc/helidon-producer 8080:8080 -n obaas &
+curl -X POST http://localhost:8080/post \
+  -H "Content-Type: text/plain" \
+  -d "Test message from producer!"
+```
+
+**Alternative: Produce directly via Kafka CLI:**
+You can also launch an interactive Kafka producer pod within the cluster:
+```bash
+kubectl -n obaas run kafka-tester -ti --image=quay.io/strimzi/kafka:0.41.0-kafka-3.7.0 --rm=true --restart=Never -- bin/kafka-console-producer.sh --bootstrap-server obaas-kafka-cluster-kafka-bootstrap:9092 --topic my-topic
 ```
 
 ## Observability Dashboards

@@ -62,10 +62,8 @@ This service is deployed using the standard OBaaS Helm chart pattern to ensure c
 ### 1. Build the Application
 Use Maven to compile the application and build the container image:
 ```bash
-mvn clean package -DskipTests
-docker build -t REGION.ocir.io/tenancy/cloudbank-v5/helidon-producer:5.0-SNAPSHOT .
+mvn clean package k8s:build k8s:push -Dimage.registry=REGION.ocir.io/tenancy/cloudbank-v5 -Dimage.tag=5.0-SNAPSHOT
 ```
-*(Ensure you push the image to your container registry if running on a remote cluster).*
 
 ### 2. Deploy using Helm
 Deploy the service using the published OBaaS sample app chart:
@@ -74,6 +72,40 @@ helm upgrade --install helidon-producer obaas/obaas-sample-app \
   -f values.yaml \
   -n obaas
 ```
+
+### 3. Testing the Endpoint
+You can verify the deployment using the included `./test-endpoints.sh` script. This script automates the full authentication and delivery flow:
+1. Extacts the client credentials from the `otelopupgrd-azn-server-auth` secret.
+2. Uses port-forwarding to request an OAuth2 Bearer token from the `azn-server`. *(Note: Due to ingress routing logic in OBaaS, this curl request must explicitly include the `-H "Host: azn-server:8080"` header).*
+3. Port-forwards the `helidon-producer` pod and uses the Bearer token to authorize the `POST` request.
+
+```bash
+./test-endpoints.sh obaas
+```
+
+### 4. Security Context Requirements
+When deploying to OBaaS, the environment enforces strict Pod Security Standards. The OpenTelemetry operator injects an init container to copy the Java agent, which will fail with a `CreateContainerConfigError` if it attempts to run as root.
+
+You must explicitly configure the Pod's security context in `values.yaml` to use Helidon's standard non-root user (UID `185`):
+
+```yaml
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 185
+  runAsGroup: 0
+  fsGroup: 0
+```
+
+### 5. JWT Security Validation
+The OBaaS authorization server (`azn-server`) issues permissions via the `scope` claim rather than the `groups` claim expected by standard Jakarta `@RolesAllowed`. 
+
+To properly secure endpoints, the `helidon-producer` uses:
+1.  **`@Authenticated`**: Ensures a valid MP-JWT is present without enforcing rigid group mapping.
+2.  **Manual Scope Checking**: Injects the `JsonWebToken` and checks for the required scope (e.g., `cloudbank.internal`) manually within the endpoint code.
+3.  **Dynamic Issuer Verification**: The JWT issuer is dynamically configured with a fallback in `microprofile-config.properties`:
+    ```properties
+    mp.jwt.verify.issuer=${MP_JWT_VERIFY_ISSUER:http://azn-server:8080}
+    ```
 
 ## Observability Dashboards
 

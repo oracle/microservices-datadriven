@@ -9,12 +9,15 @@ import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
+import org.eclipse.microprofile.auth.LoginConfig;
+
 /**
  * Main entry point for the Helidon JAX-RS Application.
  * Configures the SLF4J logging bridge to ensure JUL logs are routed to Logback.
  */
 @ApplicationScoped
 @ApplicationPath("/")
+@LoginConfig(authMethod = "MP-JWT")
 public class ProducerApplication extends Application {
 
     public void init(@Observes @Initialized(ApplicationScoped.class) Object event) {
