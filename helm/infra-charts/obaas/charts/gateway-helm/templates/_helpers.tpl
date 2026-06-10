@@ -1,4 +1,11 @@
 {{/*
+Allow the release namespace to be overridden.
+*/}}
+{{- define "eg.namespace" -}}
+{{- default .Release.Namespace .Values.namespaceOverride | trunc 63 | trimSuffix "-" -}}
+{{- end }}
+
+{{/*
 Expand the name of the chart.
 */}}
 {{- define "eg.name" -}}
@@ -40,6 +47,9 @@ helm.sh/chart: {{ include "eg.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- with .Values.commonLabels }}
+{{ toYaml . }}
+{{- end }}
 {{- end }}
 
 {{/*
@@ -103,36 +113,48 @@ Pull policy for the Envoy Gateway image.
 
 {{/*
 Pull secrets for the Envoy Gateway image.
-Normalizes string items to {name: ...} objects for K8s compatibility.
-Priority: global.imagePullSecrets > deployment.envoyGateway.imagePullSecrets
-         > global.images.envoyGateway.pullSecrets > global.imagePullSecretName
 */}}
+{{- define "eg.normalizedImagePullSecrets" -}}
+{{- $secrets := default (list) .secrets -}}
+{{- if kindIs "string" $secrets -}}
+{{- $secrets = list $secrets -}}
+{{- end -}}
+{{- if and (not $secrets) .secretName -}}
+{{- $secrets = list .secretName -}}
+{{- end -}}
+{{- $normalized := list -}}
+{{- range $secrets -}}
+{{- if kindIs "string" . -}}
+{{- if . -}}
+{{- $normalized = append $normalized (dict "name" .) -}}
+{{- end -}}
+{{- else -}}
+{{- $normalized = append $normalized . -}}
+{{- end -}}
+{{- end -}}
+{{- toYaml $normalized -}}
+{{- end }}
+
+{{- define "eg.renderImagePullSecrets" -}}
+{{- $pullSecrets := include "eg.normalizedImagePullSecrets" . | trim -}}
+{{- if eq $pullSecrets "[]" -}}
+imagePullSecrets: []
+{{- else -}}
+imagePullSecrets:
+{{ $pullSecrets }}
+{{- end -}}
+{{- end }}
+
 {{- define "eg.image.pullSecrets" -}}
 {{- $secrets := list -}}
-{{- if gt (len (default (list) .Values.global.imagePullSecrets)) 0 -}}
-  {{- $secrets = .Values.global.imagePullSecrets -}}
-{{- else if gt (len (default (list) .Values.deployment.envoyGateway.imagePullSecrets)) 0 -}}
-  {{- $secrets = .Values.deployment.envoyGateway.imagePullSecrets -}}
-{{- else if gt (len (default (list) .Values.global.images.envoyGateway.pullSecrets)) 0 -}}
-  {{- $secrets = .Values.global.images.envoyGateway.pullSecrets -}}
-{{- else if .Values.global.imagePullSecretName -}}
-  {{- $secrets = list (dict "name" .Values.global.imagePullSecretName) -}}
-{{- end -}}
-{{- if kindIs "string" $secrets -}}
-  {{- $secrets = list $secrets -}}
-{{- end -}}
-{{- if $secrets -}}
-imagePullSecrets:
-{{- range $secrets }}
-{{- if kindIs "string" . }}
-- name: {{ . | quote }}
-{{- else }}
-- {{ toYaml . | nindent 2 | trim }}
+{{- if .Values.global.imagePullSecrets -}}
+{{- $secrets = .Values.global.imagePullSecrets -}}
+{{- else if .Values.deployment.envoyGateway.imagePullSecrets -}}
+{{- $secrets = .Values.deployment.envoyGateway.imagePullSecrets -}}
+{{- else if .Values.global.images.envoyGateway.pullSecrets -}}
+{{- $secrets = .Values.global.images.envoyGateway.pullSecrets -}}
 {{- end }}
-{{- end }}
-{{- else -}}
-imagePullSecrets: []
-{{- end }}
+{{ include "eg.renderImagePullSecrets" (dict "secrets" $secrets "secretName" .Values.global.imagePullSecretName) }}
 {{- end }}
 
 {{/*
@@ -151,47 +173,77 @@ The name of the Envoy Ratelimit image.
 
 {{/*
 Pull secrets for the Envoy Ratelimit image.
-Normalizes string items to {name: ...} objects for K8s compatibility.
-Priority: global.imagePullSecrets > global.images.ratelimit.pullSecrets > global.imagePullSecretName
 */}}
 {{- define "eg.ratelimit.image.pullSecrets" -}}
 {{- $secrets := list -}}
-{{- if gt (len (default (list) .Values.global.imagePullSecrets)) 0 -}}
-  {{- $secrets = .Values.global.imagePullSecrets -}}
-{{- else if gt (len (default (list) .Values.global.images.ratelimit.pullSecrets)) 0 -}}
-  {{- $secrets = .Values.global.images.ratelimit.pullSecrets -}}
-{{- else if .Values.global.imagePullSecretName -}}
-  {{- $secrets = list (dict "name" .Values.global.imagePullSecretName) -}}
-{{- end -}}
-{{- if kindIs "string" $secrets -}}
-  {{- $secrets = list $secrets -}}
-{{- end -}}
-{{- if $secrets -}}
-imagePullSecrets:
-{{- range $secrets }}
-{{- if kindIs "string" . }}
-- name: {{ . | quote }}
-{{- else }}
-- {{ toYaml . | nindent 2 | trim }}
+{{- if .Values.global.imagePullSecrets }}
+{{- $secrets = .Values.global.imagePullSecrets -}}
+{{- else if .Values.global.images.ratelimit.pullSecrets -}}
+{{- $secrets = .Values.global.images.ratelimit.pullSecrets -}}
 {{- end }}
-{{- end }}
-{{- else -}}
-imagePullSecrets: []
-{{- end }}
+{{ include "eg.renderImagePullSecrets" (dict "secrets" $secrets "secretName" .Values.global.imagePullSecretName) }}
 {{- end }}
 
+{{/*
+Resolve the Envoy Proxy image.
+*/}}
+{{- define "eg.envoyProxy.image" -}}
+{{-   $imageParts := splitn "/" 2 .Values.global.images.envoyProxy.image -}}
+{{/*    if global.imageRegistry is defined, it takes precedence always */}}
+{{-   $registryName := default $imageParts._0 .Values.global.imageRegistry -}}
+{{-   $repositoryTag := $imageParts._1 -}}
+{{-   $repositoryParts := splitn ":" 2 $repositoryTag -}}
+{{-   $repositoryName := $repositoryParts._0 -}}
+{{-   $imageTag := default "distroless-dev" $repositoryParts._1 -}}
+{{-   printf "%s/%s:%s" $registryName $repositoryName $imageTag -}}
+{{- end -}}
+
+{{/*
+Resolve the Envoy Proxy image pull secrets.
+*/}}
+{{- define "eg.envoyProxy.image.pullSecrets" -}}
+{{- $secrets := list -}}
+{{- if .Values.global.imagePullSecrets }}
+{{- $secrets = .Values.global.imagePullSecrets -}}
+{{- else if .Values.global.images.envoyProxy.pullSecrets -}}
+{{- $secrets = .Values.global.images.envoyProxy.pullSecrets -}}
+{{- end }}
+{{ include "eg.renderImagePullSecrets" (dict "secrets" $secrets "secretName" .Values.global.imagePullSecretName) }}
+{{- end }}
 
 {{/*
 The default Envoy Gateway configuration.
 */}}
 {{- define "eg.default-envoy-gateway-config" -}}
+{{- if or .Values.global.images.envoyProxy.image .Values.config.envoyGateway.envoyProxy }}
+{{- $envoyProxyBase := .Values.config.envoyGateway.envoyProxy | default dict }}
+{{- $imageOverride := dict }}
+{{- if .Values.global.images.envoyProxy.image }}
+  {{- $container := dict "image" (include "eg.envoyProxy.image" .) }}
+  {{- if .Values.global.images.envoyProxy.pullPolicy }}
+    {{- $_ := set $container "imagePullPolicy" .Values.global.images.envoyProxy.pullPolicy }}
+  {{- end }}
+  {{- $deployment := dict "container" $container }}
+  {{- if or .Values.global.imagePullSecrets .Values.global.images.envoyProxy.pullSecrets .Values.global.imagePullSecretName }}
+    {{- $pullSecretsYaml := include "eg.envoyProxy.image.pullSecrets" . }}
+    {{- $pullSecrets := dict "imagePullSecrets" ($pullSecretsYaml | fromYaml).imagePullSecrets }}
+    {{- $_ := set $deployment "pod" $pullSecrets }}
+  {{- end }}
+  {{- $kubernetes := dict "envoyDeployment" $deployment }}
+  {{- $provider := dict "type" "Kubernetes" "kubernetes" $kubernetes }}
+  {{- $imageOverride = dict "provider" $provider }}
+{{- end }}
+{{- $merged := mustMergeOverwrite (dict) $envoyProxyBase $imageOverride }}
+envoyProxy:
+{{ toYaml $merged | indent 2 }}
+{{- end }}
 provider:
   type: Kubernetes
   kubernetes:
     rateLimitDeployment:
       container:
         image: {{ include "eg.ratelimit.image" . }}
-      {{- if (or (gt (len (default (list) .Values.global.imagePullSecrets)) 0) (gt (len (default (list) .Values.global.images.ratelimit.pullSecrets)) 0) .Values.global.imagePullSecretName) }}
+      {{- if (or .Values.global.imagePullSecrets .Values.global.images.ratelimit.pullSecrets .Values.global.imagePullSecretName) }}
       pod:
         {{- include "eg.ratelimit.image.pullSecrets" . | nindent 8 }}
       {{- end }}

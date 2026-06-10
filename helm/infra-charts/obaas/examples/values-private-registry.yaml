@@ -34,8 +34,7 @@
 #       - *secretName
 #
 #   IMPORTANT: Do not rename or remove &secretName, &imagePullSecrets, or *secretName.
-#   These are YAML anchors that propagate the value to all subcharts automatically.
-#   OBaaS helpers normalize the string list to Kubernetes {name: ...} objects.
+#   These are YAML anchors that propagate the value to OBaaS templates and subcharts.
 #
 # Step 4: Install or upgrade the chart:
 #
@@ -63,11 +62,11 @@ global:
   airGapped: true
 
   # Image pull secret name — this is the ONLY value you need to change (see Step 3 above).
-  # The &secretName anchor propagates it to ingress-nginx and other object-format subcharts.
+  # The &secretName anchor propagates it to OBaaS templates and subcharts.
   imagePullSecretName: &secretName myregistry-secret
 
-  # Image pull secrets as a string list — used by subcharts that expect ["secret-name"] format
-  # (apisix, signoz, gateway-helm). OBaaS helpers normalize strings to {name: ...} objects.
+  # Image pull secrets as a string list — used by OBaaS templates and subcharts that expect
+  # ["secret-name"] format. OBaaS helpers normalize strings to {name: ...} objects.
   imagePullSecrets: &imagePullSecrets
     - *secretName
 
@@ -300,17 +299,17 @@ gateway-helm:
     envoyGateway:
       provider:
         type: Kubernetes
-        kubernetes:
-          envoyDeployment:
-            container:
-              image: "myregistry.example.com/envoyproxy/envoy:distroless-v1.37.0"
   global:
     imageRegistry: myregistry.example.com
     imagePullSecrets: *imagePullSecrets
     images:
       envoyGateway:
-        image: "myregistry.example.com/envoyproxy/gateway:v1.7.0"
+        image: "myregistry.example.com/envoyproxy/gateway:v1.8.1"
         pullPolicy: Always
+        pullSecrets: *imagePullSecrets
+      envoyProxy:
+        image: "myregistry.example.com/envoyproxy/envoy:distroless-v1.38.1"
+        pullPolicy: IfNotPresent
         pullSecrets: *imagePullSecrets
       ratelimit:
         image: "myregistry.example.com/envoyproxy/ratelimit:3fb70258"
