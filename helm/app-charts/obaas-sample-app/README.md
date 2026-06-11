@@ -34,7 +34,7 @@ helm list -n <obaas-namespace>
 Example output:
 ```
 NAME    NAMESPACE   REVISION    STATUS      CHART         APP VERSION
-obaas   citest      1           deployed    obaas-0.0.1   2.0.0-M5
+obaas   citest      1           deployed    obaas-0.1.0   2.1.0
 ```
 
 The `NAME` column shows the release name (in this case, `obaas`). Use this value for `obaas.releaseName` in your values file.
