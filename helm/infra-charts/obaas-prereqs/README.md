@@ -81,7 +81,7 @@ oracle-database-operator:
   # image:
   #   registry: myregistry.example.com
   #   repository: database/operator
-  #   tag: "2.0.0"
+  #   tag: "2.1.0"
   # Uncomment to watch specific namespace instead of all namespaces
   # watchNamespace: "tenant1"
 ```

@@ -129,7 +129,7 @@ eureka:
   replicas: 3
   image:
     repository: container-registry.oracle.com/obaas/service-registry
-    tag: "2.0.0"
+    tag: "2.1.0"
   # Override default resources if needed (defaults: cpu 250m-500m, memory 1Gi-1200Mi)
   resources: {}
 
@@ -383,7 +383,7 @@ admin-server:
   replicas: 1
   image:
     repository: container-registry.oracle.com/obaas/admin-server
-    tag: "2.0.0"
+    tag: "2.1.0"
   # Override default resources if needed (defaults: cpu 250m-500m, memory 256Mi-512Mi)
   # resources: {}
 
@@ -393,7 +393,7 @@ config-server:
   replicas: 1
   image:
     repository: container-registry.oracle.com/obaas/config-server
-    tag: "2.0.0"
+    tag: "2.1.0"
   # Override default resources if needed (defaults: cpu 250m-500m, memory 256Mi-512Mi)
   # resources: {}
 
@@ -773,7 +773,7 @@ signoz:
         image:
           registry: container-registry.oracle.com
           repository: obaas/dashboards
-          tag: "2.0.0"
+          tag: "2.1.0"
         command:
           - sh
           - -c
