@@ -42,4 +42,4 @@ quay.io/strimzi/kafka:0.51.0-kafka-4.2.0
 quay.io/strimzi/operator:0.51.0
 registry.k8s.io/ingress-nginx/controller:v1.15.1
 registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.17.0
-registry.k8s.io/metrics-server/metrics-server:v0.8.0
+registry.k8s.io/metrics-server/metrics-server:v0.8.1
