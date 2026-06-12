@@ -1,0 +1,81 @@
+## Copyright (c) 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+# Example: Kafka Enabled Configuration
+# This configuration enables the Strimzi-managed Kafka cluster created by the
+# obaas chart. All components deploy to the Helm release namespace.
+#
+# Prerequisites:
+#   Install obaas-prereqs chart once per cluster before installing this chart.
+#   Keep strimzi-kafka-operator enabled in obaas-prereqs.
+#   Ensure the Strimzi operator watches the namespace where this chart is installed.
+#
+# Usage:
+#   helm upgrade --install obaas . \
+#     -f examples/values-kafka.yaml \
+#     -n obaas \
+#     --create-namespace
+#
+# To scrape Kafka broker, topic, and consumer metrics into SigNoz, also include:
+#   -f extensions/kafka-metrics.yaml
+#
+# Kafka bootstrap services:
+#   Release "obaas" creates obaas-kafka-cluster-kafka-bootstrap:9092.
+#   The chart also creates a stable alias, kafka-bootstrap:9092.
+
+# -----------------------
+# -- Global Configuration
+global:
+  # No private registry credentials needed
+  imagePullSecrets: []
+
+# -----------------------
+# -- OBaaS Components
+
+# Service Discovery
+eureka:
+  enabled: true
+
+# API Gateway
+apisix:
+  enabled: true
+
+ingress-nginx:
+  enabled: true
+
+# Platform Services
+admin-server:
+  enabled: true
+
+# OTMM (MicroTX) components can be toggled independently. The console only
+# deploys when the coordinator and/or workflow server is also enabled.
+otmm:
+  coordinator:
+    enabled: true
+  workflowServer:
+    enabled: true
+  console:
+    enabled: true
+
+# Database (SIDB-FREE by default)
+# Database uses SIDB-FREE by default from values.yaml
+
+oracle-database-exporter:
+  enabled: true
+
+# Observability
+signoz:
+  enabled: true
+
+# AI Optimizer (disabled by default)
+ai-optimizer:
+  enabled: false
+
+# Config Server
+config-server:
+  enabled: true
+
+# Create a Strimzi-managed Kafka cluster.
+kafka:
+  enabled: true
+  version: 4.2.0
+  metadataVersion: 4.2-IV1

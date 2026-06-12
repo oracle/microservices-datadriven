@@ -66,11 +66,18 @@ Additional resources are likely to be available from your Kubernetes provider.  
 
 OBaaS contains a number of components, and you may choose which components you wish to install.  Each component has its own section in the `values.yaml` file for either the `obaas` or `obaas-prereqs` Helm chart.  Note that the components in the `obaas-prereqs` Helm chart are cluster-wide deployments that can only be installed once per cluster.
 
-You may opt out of installing any component by setting its `enabled` field to `false`.  For example, if you do not want to install the Strimzi Kafka Operator, you would update the `values.yaml` for the `obaas` Helm chart as follows:
+You may opt out of installing any component by setting its `enabled` field to `false`.  For example, if you do not want to install the Strimzi Kafka Operator, you would update the `values.yaml` for the `obaas-prereqs` Helm chart as follows:
 
 ```yaml
-kakfa:
+strimzi-kafka-operator:
   enabled: false
+```
+
+To create a Kafka cluster for an OBaaS instance, enable Kafka in the `obaas` Helm chart. The `values-kafka.yaml` example shows this configuration:
+
+```yaml
+kafka:
+  enabled: true
 ```
 
 Note that most components also have additional configuration, and some have optional sub-components that you may also enable or disable as desired.

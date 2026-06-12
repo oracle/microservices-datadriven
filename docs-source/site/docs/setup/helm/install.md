@@ -20,6 +20,7 @@ This document describes how to deploy OBaaS to an existing Kubernetes cluster us
   - [Namespace and Scope](#namespace-and-scope-configuration-values-namespace-overrideyaml) — Control which namespaces components watch
   - [SigNoz Existing Secret](#signoz-existing-secret-values-signoz-existing-secretyaml) — Pre-provisioned SigNoz credentials
   - [SigNoz Cold Storage](#signoz-cold-storage-values-signoz-cold-storageyaml) — Offload older observability data to S3-compatible object storage
+  - [Kafka Enabled](#kafka-enabled-configuration-values-kafkayaml) — Create a Strimzi-managed Kafka cluster
   - [Private Registry](#private-registry-configuration-values-private-registryyaml) — Air-gapped and corporate registry setups
   - [Combining Examples](#combining-examples) — Layer multiple value files together
 - [Uninstallation](#uninstallation) — Teardown instructions
@@ -37,6 +38,7 @@ Choose the example values file that best matches your deployment scenario:
 - `values-namespace-override.yaml` - Custom ingress namespace watching behavior
 - `values-signoz-existing-secret.yaml` - Pre-provisioned SigNoz admin credentials
 - `values-signoz-cold-storage.yaml` - Long-term observability retention using S3-compatible object storage
+- `values-kafka.yaml` - Strimzi-managed Kafka cluster for Kafka workloads and observability
 - `values-private-registry.yaml` - Air-gapped or private registry environments
 
 If you are unsure where to start, use `values-sidb-free.yaml` for evaluation or `values-existing-adb.yaml` for an external OCI Autonomous Database deployment.
@@ -66,6 +68,7 @@ Attempting to install the obaas-prereqs chart multiple times will cause CRD vers
 - **Signoz** - Observability stack with ClickHouse
 - **Spring Boot Admin** - Application monitoring
 - **OTMM** - Transaction manager for microservices, including MicroTX Workflow for service orchestration
+- **Kafka cluster** - Optional namespace-scoped Kafka custom resource managed by the Strimzi operator from `obaas-prereqs`
 
 Each instance operates independently in its own namespace with its own ingress controller and observability stack.
 
@@ -274,6 +277,7 @@ Several example configurations are provided for comparison.
 | `values-namespace-override.yaml` | Namespace watch tuning | Depends | Adjusts ingress scope |
 | `values-signoz-existing-secret.yaml` | GitOps and pre-created credentials | Depends | Uses an existing SigNoz secret |
 | `values-signoz-cold-storage.yaml` | Long-term observability retention | Depends | Uses S3-compatible object storage |
+| `values-kafka.yaml` | Kafka workloads and observability testing | Depends | Creates a Strimzi-managed Kafka cluster |
 | `values-private-registry.yaml` | Air-gapped and private registry installs | Depends | Mirrors images to a private registry |
 
 The OBaaS chart selects the database mode with `database.type`. The supported values are `SIDB-FREE`, `ADB-FREE`, `ADB-S`, and `OTHER`; choose the example values file that matches the database deployment you plan to use.
@@ -533,6 +537,37 @@ helm upgrade --install <app-release> obaas/obaas \
   -f examples/values-signoz-cold-storage.yaml \
   -n <application-namespace> --create-namespace [--debug]
 ```
+
+#### Kafka Enabled Configuration (`values-kafka.yaml`)
+
+Creates a Strimzi-managed Kafka cluster in the OBaaS release namespace. This is useful for Kafka integration testing, CloudBank Helidon producer and consumer workloads, and Kafka observability validation in SigNoz.
+
+**Prerequisites:**
+
+1. Install `obaas-prereqs` once per cluster.
+1. Keep `strimzi-kafka-operator` enabled in `obaas-prereqs`.
+1. Ensure the Strimzi operator watches the OBaaS release namespace.
+
+**Installation:**
+
+```bash
+helm upgrade --install <app-release> obaas/obaas \
+  -f examples/values-kafka.yaml \
+  -n <application-namespace> \
+  --create-namespace [--debug]
+```
+
+**Optional Kafka metrics in SigNoz:**
+
+```bash
+helm upgrade --install <app-release> obaas/obaas \
+  -f examples/values-kafka.yaml \
+  -f extensions/kafka-metrics.yaml \
+  -n <application-namespace> \
+  --create-namespace [--debug]
+```
+
+With release name `obaas`, Kafka clients can use `obaas-kafka-cluster-kafka-bootstrap:9092`. The chart also creates the stable alias `kafka-bootstrap:9092`.
 
 #### Private Registry Configuration (`values-private-registry.yaml`)
 
