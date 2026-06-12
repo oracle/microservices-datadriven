@@ -507,6 +507,35 @@ kubectl describe pod <pod> -n <namespace>
 
 Common causes are database connection errors, missing auth secrets, failed Liquibase initialization, or unavailable `azn-server` token/JWKS endpoints.
 
+If `checks` crashes with a duplicate Spring JMS bean definition, capture current and previous logs before changing anything:
+
+```bash
+kubectl logs -n <namespace> -l app.kubernetes.io/name=checks
+kubectl logs -n <namespace> -l app.kubernetes.io/name=checks --previous
+kubectl describe pod -n <namespace> -l app.kubernetes.io/name=checks
+```
+
+The known AQJMS compatibility failure signature includes:
+
+- `checks` pod enters `CrashLoopBackOff`
+- logs show duplicate bean `jmsListenerContainerFactoryConfigurer`
+- logs reference both `org.springframework.boot.jms.autoconfigure.JmsAnnotationDrivenConfiguration` and `org.springframework.boot.autoconfigure.jms.JmsAnnotationDrivenConfiguration`
+
+For this failure, downgrade the shared CloudBank AQJMS starter property in `cloudbank-v5/pom.xml`:
+
+```xml
+<oracle-springboot-aqjms-starter.version>26.0.1</oracle-springboot-aqjms-starter.version>
+```
+
+Then rebuild and push both `checks` and `testrunner` with the same registry and image tag selected for the run. `testrunner` must be rebuilt too because it uses the same parent AQJMS property. Redeploy both Helm releases with the same namespace, OBaaS release, database name, and privileged secret values selected during CloudBank deployment. Verify all seven CloudBank services are running, then run:
+
+```bash
+cd cloudbank-v5
+./7-test_all_services.sh -n <namespace> -o <obaas-release> -d <dbname>
+```
+
+Save the original failure logs, rebuild output, redeploy output, final pod state, and full test output in the evidence directory.
+
 ### Database Initialization Failures
 
 Check init jobs and database secrets:
