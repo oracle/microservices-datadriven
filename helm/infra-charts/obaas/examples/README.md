@@ -114,7 +114,38 @@ kubectl create secret generic my-signoz-secret \
 helm upgrade --install obaas . -f examples/values-signoz-existing-secret.yaml -n obaas
 ```
 
-### 7. Private Registry Configuration (`values-private-registry.yaml`)
+### 7. Kafka Enabled Configuration (`values-kafka.yaml`)
+
+Create a Strimzi-managed Kafka cluster in the OBaaS release namespace.
+
+**Use case:** Kafka integration testing, CloudBank Helidon producer/consumer workloads, Kafka observability validation
+
+**Prerequisites:**
+1. Install `obaas-prereqs` once per cluster.
+2. Keep `strimzi-kafka-operator` enabled in `obaas-prereqs`.
+3. Ensure the Strimzi operator watches the OBaaS release namespace.
+
+**Installation:**
+```bash
+helm upgrade --install obaas . \
+  -f examples/values-kafka.yaml \
+  -n obaas \
+  --create-namespace
+```
+
+**Optional Kafka metrics in SigNoz:**
+```bash
+helm upgrade --install obaas . \
+  -f examples/values-kafka.yaml \
+  -f extensions/kafka-metrics.yaml \
+  -n obaas \
+  --create-namespace
+```
+
+With release name `obaas`, Kafka clients can use `obaas-kafka-cluster-kafka-bootstrap:9092`.
+The chart also creates the stable alias `kafka-bootstrap:9092`.
+
+### 8. Private Registry Configuration (`values-private-registry.yaml`)
 
 Use a private container registry for all images with authentication.
 
