@@ -20,5 +20,5 @@ dependencies:
 - name: oracle-database-operator
   repository: file://charts/oracle-database-operator
   version: 0.2.0
-digest: sha256:50a7eab0fe9545c2dc7a67064ecd7de0ad89a5ed9f86a84c88afaf802b220703
-generated: "2026-06-08T10:04:36.538306-05:00"
+digest: sha256:6b2421a5c33cda7ae81f2e0442f8602a8a393991ab754300597e511ce6ae4699
+generated: "2026-06-12T14:58:51.53149-05:00"
