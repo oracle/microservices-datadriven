@@ -38,7 +38,7 @@ Collect and record these values before any mutating command:
 | `<app-values-file>` | Values file for the OBaaS application chart. |
 | `<database-type>` | `SIDB-FREE`, `ADB-FREE`, `ADB-S`, or `OTHER`. |
 | `<storage-class>` | StorageClass selected for persistent components. |
-| `<access-path>` | Envoy Gateway, ingress-nginx, both, existing external access, or port-forward-only. |
+| `<access-path>` | Envoy Gateway by default, deprecated ingress-nginx when explicitly enabled, both, existing external access, or port-forward-only. |
 | `<registry-mode>` | Public registries, private registry, air-gapped, OCIR, or local cluster images. |
 | `<cloudbank-dbname>` | Database prefix used by CloudBank scripts. |
 | `<cloudbank-image-tag>` | CloudBank image tag, default `0.0.1-SNAPSHOT`. |
@@ -132,7 +132,7 @@ Use this matrix as the master list for each run. Mark each test `Pass`, `Fail`, 
 | PRE-003 | Preflight | Verify Helm access. | `helm version` and `helm list -A` succeed. | Helm output |
 | PRE-004 | Preflight | Verify cluster capacity policy. | Full validation meets requirements, or local deviations are recorded. | node describe |
 | PRE-005 | Preflight | Verify storage classes and RWX support decision. | Selected storage class and RWX status are recorded. | storageclass output |
-| PRE-006 | Preflight | Verify external access strategy. | Envoy Gateway, ingress-nginx, both, or port-forward-only path is documented. | service, ingress, gateway output |
+| PRE-006 | Preflight | Verify external access strategy. | Envoy Gateway default, explicit ingress-nginx opt-in, both, or port-forward-only path is documented. | service, ingress, gateway output |
 | PRE-007 | Preflight | Verify chart source. | Local 2.1.0 chart paths are used unless public charts match target version. | Chart.yaml and Helm search output |
 | INST-001 | Install | Install or verify cert-manager. | cert-manager deployments are available and CRDs exist. | pod, wait, CRD output |
 | INST-002 | Install | Install `obaas-prereqs` once. | Release deployed and prerequisite pods healthy. | Helm status and pod output |
@@ -270,7 +270,7 @@ Map generated load to dashboard expectations:
 | Dashboard or View | Data To Generate Before Capture |
 | --- | --- |
 | SigNoz Services, APM Metrics, HTTP API Monitoring | Repeated CloudBank API requests through APISIX. |
-| Apache APISIX, Envoy Gateway, NGINX | Gateway-routed CloudBank API requests. |
+| Apache APISIX and Envoy Gateway by default; NGINX only when ingress-nginx is explicitly enabled | Gateway-routed CloudBank API requests. |
 | Spring Boot Observability, Spring Boot 3.x Statistics, JVM Metrics | CloudBank service requests plus actuator or metrics scraping evidence. |
 | DB Calls Monitoring, Oracle Database Dashboard | CloudBank account, deposit, journal, and transfer operations that touch the database. |
 | MicroTx | CloudBank transfer workflow for coordinator/LRA telemetry when `otmm.coordinator.enabled=true`; MicroTx Workflow Server health, logs, and metrics when `otmm.workflowServer.enabled=true`. |
@@ -555,7 +555,7 @@ Expected:
 - Each OBaaS release is healthy.
 - Each Eureka instance shows only services from its namespace.
 - Each SigNoz instance shows only telemetry from its namespace.
-- Ingress-nginx class names, controller values, and election IDs are unique when ingress-nginx is enabled for both tenants.
+- Ingress-nginx class names, controller values, and election IDs are unique when deprecated ingress-nginx is explicitly enabled for both tenants.
 
 ### BYODB
 

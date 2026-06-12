@@ -212,7 +212,7 @@ JVM Runtime metrics for all services deployed in the cluster in terms of CPU/Mem
 
 ## NGINX (OTEL)
 
-Details about connections/requests being handled by the [NGINX Ingress controller](https://github.com/kubernetes/ingress-nginx).
+Details about connections/requests being handled by the [NGINX Ingress controller](https://github.com/kubernetes/ingress-nginx). This dashboard is relevant only when deprecated ingress-nginx is explicitly enabled.
 
 ![Nginx Dashboard](images/nginx-dashboard.png)
 

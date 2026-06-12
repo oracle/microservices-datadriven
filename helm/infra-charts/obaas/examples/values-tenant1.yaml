@@ -1,14 +1,14 @@
 ## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
 # Example values for tenant1 installation
-# This shows how to configure unique IngressClass for multi-tenant deployments
+# This keeps optional unique ingress-nginx settings for multi-tenant opt-in deployments.
 #
 # Install with:
 #   helm upgrade --install obaas-tenant1 . -n tenant1 -f examples/values-tenant1.yaml --create-namespace
 
-# Configure unique ingress controller for this tenant
+# Optional legacy ingress controller configuration for this tenant
 ingress-nginx:
-  enabled: true
+  enabled: false
   controller:
     # Unique IngressClass name for this tenant
     ingressClass: nginx-tenant1

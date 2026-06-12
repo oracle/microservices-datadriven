@@ -46,7 +46,7 @@ If you plan to use the in-cluster (Single instance) deployment option, be aware 
 
 Kubernetes has deprecated the Ingress API and is moving to the Gateway API as its replacement.  At this time, both are supported, but it is important to consider your migration strategy.
 
-OBaaS 2.1.0 includes both NGINX Ingress Controller (which works with the Ingress API) and Envoy Gateway (which works with the Gateway API).  You should choose which of these you wish to install, and update the `values.yaml` for the `obaas` Helm chart to reflect your choice.  You can choose which is installed by setting the appropriate `enabled` field to `true` or `false`.  Note that there are additional configuration options for each.
+OBaaS 2.1.0 includes Envoy Gateway (which works with the Gateway API) and deprecated NGINX Ingress Controller (which works with the Ingress API). Envoy Gateway is enabled by default. NGINX Ingress Controller is disabled by default and should be enabled only when you still require the legacy Ingress API path. You can choose which is installed by setting the appropriate `enabled` field to `true` or `false`. Note that there are additional configuration options for each.
 
 ```yaml
 gateway-helm:
@@ -55,10 +55,10 @@ gateway-helm:
   ...
 
 ingress-nginx:
-  enabled: true
+  enabled: false
 ```
 
-You may also choose to install both if you prefer, or neither, for example, if your Kubernetes cluster already has another method for external cluster access provided.
+You may also choose to explicitly install both during migration, or neither, for example, if your Kubernetes cluster already has another method for external cluster access provided.
 
 Additional resources are likely to be available from your Kubernetes provider.  For example, see [this guide](https://gateway-api.sigs.k8s.io/guides/getting-started/migrating-from-ingress-nginx/) on the Kubernetes SIG website.
 

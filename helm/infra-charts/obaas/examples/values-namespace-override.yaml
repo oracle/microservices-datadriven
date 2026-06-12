@@ -24,11 +24,10 @@ global:
 
 # -----------------------
 # -- Ingress Controller Scope
-# By default, the ingress-nginx controller watches only the release namespace.
-# This can be changed if needed.
+# This optional legacy ingress-nginx configuration is kept for explicit opt-in installs.
 
 ingress-nginx:
-  enabled: true
+  enabled: false
   controller:
     # Scope to release namespace only (default: true)
     scope:

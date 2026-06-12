@@ -30,6 +30,7 @@ global:
 
 # -----------------------
 # -- OBaaS Components
+# Default access uses Envoy Gateway. Legacy ingress-nginx is disabled unless explicitly enabled.
 
 # Service Discovery
 eureka:
@@ -40,7 +41,7 @@ apisix:
   enabled: true
 
 ingress-nginx:
-  enabled: true
+  enabled: false
 
 # Platform Services
 admin-server:

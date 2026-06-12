@@ -199,7 +199,7 @@ Ask and record answers for these decisions:
 - Is cert-manager already installed and healthy?
 - Which database mode will be used: `SIDB-FREE`, `ADB-FREE`, `ADB-S`, or `OTHER`?
 - For external database modes, have Kubernetes secrets been created for privileged and optional application credentials?
-- Which external access path should be installed: Envoy Gateway, ingress-nginx, both, or neither?
+- Which external access path should be installed: Envoy Gateway default, deprecated ingress-nginx opt-in, both, or neither?
 - Will multiple OBaaS tenants share the cluster?
 - Are all images pulled from public registries, or is a private registry required?
 - Should SigNoz be installed?
@@ -273,7 +273,7 @@ OBaaS uses two Helm charts.
 `obaas` installs namespace-scoped OBaaS platform components and can be installed once per tenant or application namespace. It includes:
 
 - `gateway-helm` for Envoy Gateway
-- `ingress-nginx`
+- deprecated `ingress-nginx`, disabled by default and available for explicit opt-in
 - Apache APISIX
 - Eureka service discovery
 - Spring Boot Admin server
@@ -425,7 +425,7 @@ Before installing with `database.type: OTHER`, verify the privileged user has th
 
 ### Cluster Access Values
 
-OBaaS 2.1.0 supports both Gateway API through Envoy Gateway and Ingress API through ingress-nginx.
+OBaaS 2.1.0 supports both Gateway API through Envoy Gateway and Ingress API through ingress-nginx. Envoy Gateway is enabled by default. ingress-nginx is deprecated and disabled by default; enable it only when an environment still requires the legacy Ingress API path.
 
 Enable Envoy Gateway:
 
@@ -434,7 +434,7 @@ gateway-helm:
   enabled: true
 ```
 
-Enable ingress-nginx:
+Enable deprecated ingress-nginx only when the legacy Ingress API path is required:
 
 ```yaml
 ingress-nginx:
@@ -446,12 +446,12 @@ ingress-nginx:
 
 Valid choices:
 
-- Enable only Envoy Gateway for Gateway API-first clusters.
-- Enable only ingress-nginx for Ingress API-based environments.
+- Use the default Envoy Gateway path for Gateway API-first clusters.
+- Explicitly enable ingress-nginx only for legacy Ingress API-based environments.
 - Enable both during migration or where both access patterns are required.
 - Disable both if the cluster already provides another supported external access mechanism.
 
-For multi-tenant ingress-nginx installs, each tenant must use unique values for:
+For multi-tenant ingress-nginx opt-in installs, each tenant must use unique values for:
 
 - `ingress-nginx.controller.ingressClass`
 - `ingress-nginx.controller.ingressClassResource.name`
@@ -591,7 +591,7 @@ kubectl -n <namespace> create secret docker-registry myregistry-secret \
 
 Subcharts do not all use the same image value shape. In private registry installs, review and override:
 
-- `ingress-nginx.controller.image.registry`
+- `ingress-nginx.controller.image.registry` when deprecated ingress-nginx is explicitly enabled
 - `signoz.global.imageRegistry`
 - `apisix.etcd.image.registry`
 - full `image.repository` paths for OBaaS components such as Eureka, admin-server, config-server, OTMM, database, Oracle Database Exporter, and APISIX

@@ -187,7 +187,7 @@ gateway-helm:
 
 
 ingress-nginx:
-  enabled: true
+  enabled: false
   # ingress-nginx (deprecated) requires object format [{name: "x"}]; configure independently:
   # imagePullSecrets:
   #   - name: myregistry-secret

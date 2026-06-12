@@ -322,7 +322,7 @@ gateway-helm:
 # Default registry: registry.k8s.io
 
 ingress-nginx:
-  enabled: true
+  enabled: false
   # ingress-nginx requires [{name: ...}] format (upstream chart, cannot use string anchor)
   imagePullSecrets:
     - name: *secretName

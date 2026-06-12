@@ -24,7 +24,7 @@ The OBaaS {OBAAS_VERSION} Helm charts use the following chart and application ve
 
 ### Additions in this Release
 
-* Envoy Gateway is added to provide external access to the cluster, implementing the new Kubernetes Gateway API.
+* Envoy Gateway is added and enabled by default to provide external access to the cluster, implementing the new Kubernetes Gateway API.
 * OpenTelemetry Operator is added to provide auto-instrumentation for Java applications.
 * Spring Config Server is added to provide centralized configuration for Spring Boot applications.
 * NetworkPolicy resources are added to the OBaaS application chart to define namespace-scoped network isolation rules.
@@ -37,7 +37,7 @@ The OBaaS {OBAAS_VERSION} Helm charts use the following chart and application ve
 
 Components that are deprecated in this release may be removed in a future release.
 
-* NGINX Ingress Controller is deprecated in this release due to deprecation of the Ingress API in Kubernetes, in favor of the new Gateway API.
+* NGINX Ingress Controller is deprecated in this release due to deprecation of the Ingress API in Kubernetes, in favor of the new Gateway API. It is disabled by default and remains available only when explicitly enabled.
 * Coherence Operator is deprecated in this release.
 
 ### Replacements/changes/updates in this Release

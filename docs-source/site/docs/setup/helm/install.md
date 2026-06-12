@@ -62,7 +62,8 @@ Attempting to install the obaas-prereqs chart multiple times will cause CRD vers
 
 **obaas** (namespace-scoped, install per tenant):
 
-- **ingress-nginx** - Namespace-specific ingress controller
+- **Envoy Gateway** - Default Gateway API controller for external access
+- **ingress-nginx** - Deprecated namespace-specific ingress controller, disabled by default and available for explicit opt-in
 - **Apache APISIX** - API Gateway
 - **Eureka** - Service discovery
 - **Signoz** - Observability stack with ClickHouse
@@ -70,7 +71,7 @@ Attempting to install the obaas-prereqs chart multiple times will cause CRD vers
 - **OTMM** - Transaction manager for microservices, including MicroTX Workflow for service orchestration
 - **Kafka cluster** - Optional namespace-scoped Kafka custom resource managed by the Strimzi operator from `obaas-prereqs`
 
-Each instance operates independently in its own namespace with its own ingress controller and observability stack.
+Each instance operates independently in its own namespace with its own gateway resources and observability stack. Deprecated ingress-nginx is installed only when explicitly enabled.
 
 ```tree
 Cluster
@@ -81,18 +82,18 @@ Cluster
 │   ├── kube-state-metrics
 │   └── strimzi-kafka-operator (manages Kafka CRs across all namespaces)
 ├── tenant1 namespace (OBaaS instance 1)
-│   ├── ingress-nginx
+│   ├── Envoy Gateway resources
 │   ├── APISIX, Eureka, Coherence, etc.
 │   ├── Kafka cluster (CR managed by Strimzi)
 │   └── Signoz + ClickHouse
 └── tenant2 namespace (OBaaS instance 2)
-    ├── ingress-nginx
+    ├── Envoy Gateway resources
     ├── APISIX, Eureka, Coherence, etc.
     ├── Kafka cluster (CR managed by Strimzi)
     └── Signoz + ClickHouse
 ```
 
-**Namespace behavior:** All OBaaS chart components deploy to the release namespace (specified with the `-n` flag during installation). By default, ingress-nginx watches only its own release namespace (`scope.enabled: true`).
+**Namespace behavior:** All OBaaS chart components deploy to the release namespace (specified with the `-n` flag during installation). Envoy Gateway is enabled by default. If deprecated ingress-nginx is explicitly enabled, it watches only its own release namespace by default (`scope.enabled: true`).
 
 **Network isolation:** The OBaaS chart installs NetworkPolicy resources in the release namespace. Effective enforcement depends on the cluster CNI plugin; use a CNI that supports Kubernetes NetworkPolicy and has policy enforcement enabled. By default, the chart establishes a default-deny baseline, allows same-namespace traffic, allows DNS egress, permits public ingress to the configured gateway or ingress entrypoints, and explicitly allows external egress for compatibility with external databases, OCI APIs, registries, and identity providers.
 
@@ -474,9 +475,9 @@ helm upgrade --install <tenant2-release> obaas/obaas -n <tenant2-namespace> -f e
 
 #### Namespace and Scope Configuration (`values-namespace-override.yaml`)
 
-Demonstrates how to configure the ingress-nginx watching scope. All OBaaS components deploy to the release namespace (specified with the `-n` flag).
+Demonstrates legacy opt-in ingress-nginx watching scope configuration. All OBaaS components deploy to the release namespace (specified with the `-n` flag).
 
-**Use case:** Controlling which namespaces components watch
+**Use case:** Preserving legacy ingress-nginx namespace watch settings when ingress-nginx is explicitly enabled
 
 **Installation:**
 
@@ -615,7 +616,7 @@ Each subchart has its own image configuration that must be set explicitly.
 
 **Subcharts with a dedicated registry field** (set to your registry URL):
 
-- **ingress-nginx**: `controller.image.registry`
+- **ingress-nginx**: `controller.image.registry` when deprecated ingress-nginx is explicitly enabled
 - **signoz**: `global.imageRegistry`
 - **apisix etcd**: `apisix.etcd.image.registry`
 

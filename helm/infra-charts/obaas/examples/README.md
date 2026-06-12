@@ -6,7 +6,7 @@ This directory contains example values files demonstrating different configurati
 
 ### 1. Default Configuration (`values-default.yaml`)
 
-Minimal configuration with no overrides. All subcharts use their default settings and deploy to the release namespace.
+Minimal configuration with no overrides. Envoy Gateway is enabled by default, deprecated ingress-nginx is disabled by default, and all enabled subcharts deploy to the release namespace.
 
 **Use case:** Quick start, development, testing
 
@@ -17,7 +17,7 @@ helm upgrade --install obaas . -f examples/values-default.yaml -n obaas --create
 
 ### 2. Namespace and Scope Configuration (`values-namespace-override.yaml`)
 
-Shows how to configure component scopes. All obaas components deploy to the release namespace (specified with `-n` flag). This example demonstrates how to configure the ingress-nginx watching scope.
+Shows how to preserve legacy ingress-nginx scope settings for explicit opt-in installs. All obaas components deploy to the release namespace (specified with `-n` flag).
 
 **Use case:** Controlling which namespaces components watch
 
@@ -33,11 +33,11 @@ helm upgrade --install obaas . -f examples/values-namespace-override.yaml -n oba
 
 ### 3. Multi-Tenant Setup (`values-tenant1.yaml`, `values-tenant2.yaml`)
 
-Configure unique IngressClass and credentials for each tenant to allow multiple OBaaS instances in the same cluster.
+Configure credentials for each tenant and preserve optional unique ingress-nginx settings for clusters that explicitly enable the deprecated Ingress API path.
 
 **Use case:** Multi-tenant deployments, namespace isolation, multiple independent OBaaS instances
 
-**Why this is needed:**
+**When legacy ingress-nginx is enabled:**
 - Each ingress-nginx controller creates a cluster-scoped `IngressClass` resource
 - Multiple controllers must have unique IngressClass names to avoid conflicts
 - Each controller needs unique election IDs to prevent leader election issues
@@ -47,11 +47,11 @@ Configure unique IngressClass and credentials for each tenant to allow multiple 
 # Install first tenant
 helm upgrade --install obaas-tenant1 . -n tenant1 -f examples/values-tenant1.yaml --create-namespace
 
-# Install second tenant (with different IngressClass)
+# Install second tenant
 helm upgrade --install obaas-tenant2 . -n tenant2 -f examples/values-tenant2.yaml --create-namespace
 ```
 
-**Important:** Always ensure each tenant has:
+**Important:** When explicitly enabling ingress-nginx, always ensure each tenant has:
 - Unique `controller.ingressClass` value
 - Unique `controller.ingressClassResource.name` value
 - Unique `controller.ingressClassResource.controllerValue`
@@ -200,7 +200,7 @@ signoz:
 All obaas chart components deploy to the release namespace (specified with `-n` flag during install). There is no `global.namespace` override.
 
 **Component Scopes:**
-- **ingress-nginx** - By default watches only the release namespace (`scope.enabled: true`)
+- **ingress-nginx** - Deprecated and disabled by default; when explicitly enabled, it watches only the release namespace (`scope.enabled: true`)
 
 ## Image Registry Override Details
 
@@ -208,7 +208,7 @@ Each subchart has its own image configuration that must be explicitly set for pr
 
 ### Subcharts with Separate Registry Field
 These subcharts have a dedicated registry field (set to your registry URL):
-- **ingress-nginx**: `controller.image.registry`
+- **ingress-nginx**: `controller.image.registry` when deprecated ingress-nginx is explicitly enabled
 - **signoz**: `global.imageRegistry`
 - **apisix etcd**: `apisix.etcd.image.registry`
 

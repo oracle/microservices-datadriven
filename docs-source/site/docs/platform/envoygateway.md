@@ -7,7 +7,7 @@ sidebar_position: 7
 
 ## Installing Envoy Gateway
 
-Envoy Gateway will be installed if `gateway-helm.enabled` is set to `true` in the `values.yaml` file. The default namespace for the Envoy Gateway is the chart installation namespace.
+Envoy Gateway is enabled by default and will be installed when `gateway-helm.enabled` is set to `true` in the `values.yaml` file. The default namespace for the Envoy Gateway is the chart installation namespace.
 
 ## Admin UI
 
