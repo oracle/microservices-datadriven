@@ -9,5 +9,5 @@ maintainers:
   - name: Oracle and/or its affiliates
     email: obaas_ww@oracle.com
     url: https://oracle.github.io/microservices-backend
-version: 0.0.1
-appVersion: "0.0.1"
+version: 0.1.0
+appVersion: "2.1.0"

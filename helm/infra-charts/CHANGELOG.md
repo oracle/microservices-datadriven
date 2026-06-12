@@ -102,7 +102,7 @@ AppVersion: 2.1.0-build.12
 
 - Add Kafka metrics
 
-# 0.0.15 - Jun 5, 2026
+# 0.0.14 - Jun 5, 2026
 
 AppVersion: 2.1.0-build.13
 
@@ -110,9 +110,9 @@ AppVersion: 2.1.0-build.13
 - The OTMM console now deploys only when the coordinator and/or workflow server is enabled; an explicit `otmm.console.enabled: true` is overridden when both are disabled. The console is wired only to the backends that are enabled (no dead coordinator/workflow endpoints in single-backend installs)
 - Fix OTMM templates that still referenced the removed top-level `otmm.image`/`otmm.replicas`/`otmm.metrics` paths
 
-# 0.0.14 - May 20, 2026
+# 0.0.15 - May 20, 2026
 
-AppVersion: 2.1.0-build.13
+AppVersion: 2.1.0-build.14
 
 - Allow `otelCollectorEndpoint` override in `Instrumentation` resource
 - Update charts to version 0.0.14 and appVersion 2.1.0-build.13
@@ -121,3 +121,9 @@ AppVersion: 2.1.0-build.13
 - Fix Config Server SigNoz metrics scrape path from /metrics to /actuator/prometheus
 - Add template-time validation for database.type, failing fast with a clear error for missing or unsupported database configuration
 - Component version revisions
+
+# 0.1.0 - June 15, 2026
+
+AppVersion: 2.1.0
+
+- Production release of 2.1.0

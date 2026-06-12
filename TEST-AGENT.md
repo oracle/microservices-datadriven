@@ -148,7 +148,7 @@ Use this matrix as the master list for each run. Mark each test `Pass`, `Fail`, 
 | PLAT-008 | Platform | Verify optional Kafka. | Kafka CRs and dashboard data exist when Kafka is enabled. | Strimzi/Kafka output |
 | PLAT-009 | Platform | Verify optional AI Optimizer. | AI Optimizer pods and required secrets exist when enabled. | pod, secret output |
 | PLAT-010 | Platform | Verify optional MicroTx Workflow Server. | When enabled, workflow server is healthy, Flyway migration succeeds, and no Oracle privilege error is present; otherwise marked `Not Applicable` with values evidence. | Helm values, pod, service, health endpoint, logs |
-| PLAT-011 | Platform | Verify optional OTMM console. | When `otmm.console.enabled=true` and either coordinator or workflow server is enabled, console is healthy and reachable; otherwise marked `Not Applicable` with values evidence. | Helm values, pod, service, screenshot |
+| PLAT-011 | Platform | Verify optional OTMM console. | When `otmm.console.enabled=true` and either coordinator or workflow server is enabled, console is healthy and reachable at `/consoleui/`; otherwise marked `Not Applicable` with values evidence. | Helm values, pod, service, `/consoleui/` HTTP output, screenshot |
 | CB-001 | CloudBank | Run CloudBank prerequisite checks. | Build and deploy checks pass. | script output |
 | CB-002 | CloudBank | Build and publish or load images. | Images for the selected CloudBank services are available to the cluster. | build/push output |
 | CB-003 | CloudBank | Create CloudBank secrets. | Expected DB, OAuth, and signing-key secrets exist. | secret list |
@@ -203,7 +203,7 @@ Platform checks:
 - The optional MicroTx Workflow Server is a separate test surface from the coordinator runtime. When `otmm.workflowServer.enabled=true`, preserve Helm values proving the option is enabled, deployment and pod readiness, service/endpoints output, `/workflow-server/health` output, and workflow server logs.
 - Workflow server logs must show successful startup and successful Flyway schema migration or validation. Search and record whether the logs contain `ORA-01031`, `FlywayException`, failed database login, missing database secret, or missing service-name evidence.
 - The MicroTx Workflow Server uses the OBaaS application database secret and application schema. If Flyway DDL fails, collect the latest `obaas-run-sql-*` job logs and verify the application user has schema DDL privileges and quota before marking the issue as an application failure.
-- Treat the optional OTMM console as a separate component. Do not use a healthy console screenshot as evidence that the workflow server is installed or that workflow database migrations succeeded.
+- Treat the optional OTMM console as a separate component. The console web UI is served from `/consoleui/` on the `obaas-otmm-console` service, not from the service root. For example, from inside the cluster use `http://obaas-otmm-console.<application-namespace>.svc.cluster.local:5001/consoleui/`; with a local port-forward use `kubectl -n <application-namespace> port-forward svc/obaas-otmm-console 15001:5001` and open `http://127.0.0.1:15001/consoleui/`. The service root `/` may return `404 Endpoint not found` and should not by itself be treated as console failure. Do not use a healthy console screenshot as evidence that the workflow server is installed or that workflow database migrations succeeded.
 
 CloudBank checks:
 
@@ -239,6 +239,7 @@ Required readiness checks:
 - Logs: prove recent logs exist for `<application-namespace>` and at least one CloudBank service.
 - Metrics: prove recent metric series exist for HTTP traffic, JVM, Spring, Helidon when deployed, APISIX or gateway traffic, Kubernetes pod or node metrics, and database metrics where those components are installed.
 - Dashboard-specific data: for every required dashboard screenshot, identify at least one metric, trace, log query, or table on that dashboard that has data before capture.
+- Screenshot-specific data: after capture, inspect the screenshot companion DOM text and validation metadata for each required dashboard. A dashboard page load is not enough; the validation artifact must show at least one data-bearing panel, table row, plotted series, legend, service name, endpoint, metric value, or non-zero/current sample that matches the dashboard's purpose.
 
 Acceptable direct evidence examples:
 
@@ -261,6 +262,8 @@ Use CloudBank traffic first because it exercises the most useful path through AP
 - Run deposit, journal, check clearance, and transfer workflows.
 - Prefer a short loop, for example 5 to 10 minutes, with modest concurrency that the local cluster can sustain.
 - Capture the exact load command, start and end timestamps, request counts, HTTP status summary, and any errors.
+- Continue or repeat load generation until the required readiness checks for the target dashboards return data, or until a bounded timeout is reached and the report records the remaining dashboard as `Fail`, `Partial`, `Waived`, or `Not Applicable` with the exact reason.
+- Capture required dashboards shortly after the readiness checks pass. If the selected time window is `Last 30 minutes`, make sure load occurred inside that window; prefer capturing while a light traffic loop is still running for HTTP, APISIX, service, and JVM dashboards.
 
 Map generated load to dashboard expectations:
 
@@ -463,7 +466,10 @@ For dashboard screenshots, also record:
 - The browser URL is a dashboard detail URL, not only the dashboards list. For SigNoz, `/dashboard` is the list view and must not pass for a named dashboard; `/dashboard/<dashboard-id>` is expected.
 - The DOM text does not identify the page as only the dashboards list, such as `All Dashboards` without the expected dashboard detail heading.
 - Count of visible `No Data` panels.
+- Count of visible `No data` or equivalent empty-state panels normalized case-insensitively.
 - Count or examples of visible numeric values, table rows, chart legends, service names, or plotted series.
+- The dashboard population classification: `populated`, `partial`, `empty`, `zero-only`, or `not-applicable`.
+- For `partial` dashboards, the panel or data-bearing evidence that justifies accepting the screenshot and the specific empty panels that remain.
 - The direct telemetry readiness evidence file that proves backing data existed before the screenshot was captured.
 
 Pass/fail rules:
@@ -472,7 +478,9 @@ Pass/fail rules:
 - A required dashboard screenshot fails when the captured page is the dashboard list, login page, error page, or a blank page.
 - A required dashboard screenshot fails when its final URL is only the dashboards list route, even if the expected dashboard name appears in the list.
 - A required dashboard screenshot fails when all meaningful panels show `No Data`, blank panels, or zero-only values after load generation.
+- A required dashboard screenshot fails when the validation artifact cannot identify at least one dashboard-relevant populated panel or data row after load generation.
 - A screenshot may pass with some `No Data` panels only when at least one relevant panel is populated and the report explains why the empty panels are expected.
+- A screenshot should be marked `Partial`, not `Pass`, when it contains useful data but also has prominent empty panels that need follow-up.
 - Optional dashboards for disabled components must be marked `Not Applicable`, not `Pass`.
 
 Recommended guardrail implementation:
@@ -481,8 +489,11 @@ Recommended guardrail implementation:
 - Save DOM text next to the screenshot, for example `screenshots/<name>.txt`.
 - Use browser assertions before saving the screenshot: expected heading present, expected dashboard-detail URL pattern, expected time range, and at least one data-bearing selector or text value present.
 - Save the final URL for every screenshot in the validation artifact. This is mandatory for distinguishing a dashboard list screenshot from a dashboard detail screenshot.
+- Parse the saved DOM text for empty-state phrases such as `No Data`, `No data`, `No logs found`, `No traces found`, `No metrics found`, and `There is no data`. Store those counts in the validation artifact.
+- Parse the saved DOM text for dashboard-specific positive evidence such as CloudBank service names, HTTP endpoint rows, APISIX request counters, JVM CPU or memory samples, Oracle DB metric samples, MicroTx transaction widgets, Helidon MP memory or HTTP request panels, or non-zero request/operation counts.
 - Optionally run OCR or image analysis after capture to catch cases where the DOM looked correct but the image is blank, off-screen, or still loading.
 - Re-capture after refreshing the dashboard if validation fails because panels are still loading.
+- If a recapture still shows an empty required dashboard after telemetry readiness checks pass, preserve both the failed screenshot and the direct telemetry evidence, then mark the dashboard `Fail` or `Partial` according to the positive evidence visible in the screenshot.
 
 If a UI cannot be accessed, mark the related test `Fail` and capture:
 
@@ -691,7 +702,7 @@ Known deviations or waivers:
 | MicroTx Transfer Workflow |  |  | Optional; required only when `otmm.coordinator.enabled=true`; include CloudBank transfer evidence and failure diagnostics when failing. |
 | MicroTx Workflow Server |  |  | Optional; required only when `otmm.workflowServer.enabled=true`; include deployment, pod, service, endpoint, and health evidence. |
 | Workflow Server Flyway DB Initialization |  |  | Optional; required only when workflow server is enabled; include migration logs and any Oracle privilege diagnostics. |
-| OTMM Console |  |  | Optional; required only when `otmm.console.enabled=true` and either coordinator or workflow server is enabled; do not use as workflow server evidence. |
+| OTMM Console |  |  | Optional; required only when `otmm.console.enabled=true` and either coordinator or workflow server is enabled; verify `/consoleui/`, not service root `/`; do not use as workflow server evidence. |
 
 ## Observability Evidence Summary
 
@@ -762,7 +773,7 @@ A run is complete only when:
 - Required install and platform tests are complete.
 - CloudBank deployment and smoke tests are complete.
 - Observability readiness checks prove required telemetry existed before screenshots were captured, or load generation was run and the checks were repeated.
-- Observability evidence includes SigNoz Services, traces, logs, metrics, dashboards, and dashboard-population screenshots.
+- Observability evidence includes SigNoz Services, traces, logs, metrics, dashboards, dashboard-population screenshots, load-generation output, and dashboard validation metadata that distinguishes populated, partial, empty, zero-only, and not-applicable dashboards.
 - Screenshot validation guardrails pass for every required UI evidence file.
 - Vulnerability scans are complete or explicitly waived by the operator.
 - Every failure has logs, events, command output, and a recommended next action.

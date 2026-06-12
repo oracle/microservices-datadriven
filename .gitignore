@@ -9,6 +9,9 @@ grabdish/inventory-micronaut/build/
 .deployed/
 .deployed/*.yaml
 
+# Test run evidence artifacts
+test-run*/
+
 # Compiled class file
 *.class
 

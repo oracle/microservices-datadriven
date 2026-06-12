@@ -3,9 +3,9 @@
 # Generated for private registry mirroring
 # Generated on: 2026-06-03
 # OBaaS Helm Charts - Complete Image List
-container-registry.oracle.com/obaas/admin-server:2.0.0
-container-registry.oracle.com/obaas/config-server:2.0.0
-container-registry.oracle.com/obaas/service-registry:2.0.0
+container-registry.oracle.com/obaas/admin-server:2.1.0
+container-registry.oracle.com/obaas/config-server:2.1.0
+container-registry.oracle.com/obaas/service-registry:2.1.0
 container-registry.oracle.com/database/free:23.26.2.0
 container-registry.oracle.com/database/observability-exporter:2.4.0
 container-registry.oracle.com/database/operator:2.1.0
@@ -14,7 +14,7 @@ container-registry.oracle.com/database/microtx-coordinator:26.1.1
 container-registry.oracle.com/database/microtx-workflow:26.1.1
 container-registry.oracle.com/database/sqlcl:26.1.2
 container-registry.oracle.com/middleware/coherence-operator:3.5.13
-container-registry.oracle.com/obaas/dashboards:2.0.0
+container-registry.oracle.com/obaas/dashboards:2.1.0
 docker.io/altinity/clickhouse-operator:0.21.2
 docker.io/altinity/metrics-exporter:0.21.2
 docker.io/apache/apisix:3.16.0-ubuntu
