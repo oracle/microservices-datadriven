@@ -208,6 +208,7 @@ Platform checks:
 CloudBank checks:
 
 - Run the automated secured smoke test from `CBV5-AGENT.md` first and preserve its full output.
+- For CloudBank all-services tests, account IDs used with `--from-account` and `--to-account` must be accounts visible to the `--owner-username` user token used by the script. Do not guess seeded account IDs across environments. Prefer letting `cloudbank-v5/7-test_all_services.sh` auto-discover accounts, or first run it with `--read-only` and reuse the reported `account discovery from=<id> to=<id>` pair for the full mutating run.
 - When the run must validate Helidon observability, deploy `customer-helidon` instead of the Spring `customer` service so the workload includes both Spring Boot and Helidon services.
 - Use `CBV5-AGENT.md` for the standard CloudBank deployment flow and `cloudbank-v5/customer-helidon/README.md` only for the `customer-helidon` build, values, deployment, and service-specific verification details.
 - When `customer-helidon` is selected, preserve evidence that the `/api/v1/customer*` route targets the Helidon customer service and that customer API smoke tests still pass.
