@@ -1,5 +1,5 @@
-"""Copyright (c) 2026, Oracle and/or its affiliates.
-Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl."""
+# Copyright (c) 2026, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
 
 """
 Combine raw table metadata (columns, FK refs, row count) with
@@ -109,6 +109,17 @@ def _get_community_name(table_name: str, nodes_table: str) -> str:
     return row[0] if row and row[0] else "Unknown"
 
 
+def _table_exists_in_nodes(table_name: str, nodes_table: str) -> bool:
+    """Return True when the workload graph contains this table."""
+    from src.db.connection import get_connection
+    sql = f"SELECT COUNT(*) FROM {nodes_table} WHERE table_name = :tbl"
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(sql, tbl=table_name.upper())
+            (count,) = cur.fetchone()
+    return bool(count)
+
+
 # ---------------------------------------------------------------------------
 # Per-table augmentation
 # ---------------------------------------------------------------------------
@@ -119,6 +130,13 @@ def augment_table(table_name: str, ctx: SchemaContext) -> int:
     annotated and baseline embedding rows.
     Returns the annotation count for the table.
     """
+    table_name = table_name.upper()
+    if not _table_exists_in_nodes(table_name, ctx.nodes_table):
+        raise ValueError(
+            f"Table {table_name} is not present in {ctx.nodes_table}. "
+            "Run --step extract first, or choose a table that appears in the captured workload."
+        )
+
     info = get_table_info(table_name, schema=ctx.schema_name)
     annotation_lines = generate_annotations(table_name, ctx)
     community_name = _get_community_name(table_name, ctx.nodes_table)
