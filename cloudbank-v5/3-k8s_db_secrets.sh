@@ -441,6 +441,7 @@ create_auth_server_secret() {
     local service_client_secret="$5"
     local test_client_secret="$6"
     local admin_client_secret="$7"
+    local microtx_client_secret="$8"
 
     if [[ "$DRY_RUN" == true ]]; then
         print_success "Would create: $secret_name"
@@ -450,6 +451,7 @@ create_auth_server_secret() {
         print_info "  service-client-secret: $(display_secret_value "$service_client_secret")"
         print_info "  test-client-secret:    $(display_secret_value "$test_client_secret")"
         print_info "  admin-client-secret:   $(display_secret_value "$admin_client_secret")"
+        print_info "  microtx-client-secret: $(display_secret_value "$microtx_client_secret")"
         print_info "  used by: azn-server bootstrap users and scoped OAuth clients"
         return 0
     fi
@@ -459,7 +461,7 @@ create_auth_server_secret() {
             delete_secret "$secret_name"
         else
             local missing_keys=0
-            for key in admin-password user-password client-secret service-client-secret test-client-secret admin-client-secret; do
+            for key in admin-password user-password client-secret service-client-secret test-client-secret admin-client-secret microtx-client-secret; do
                 if [[ -z "$(kubectl get secret "$secret_name" -n "$NAMESPACE" \
                     -o "jsonpath={.data.${key}}" 2>/dev/null)" ]]; then
                     print_error "Secret '$secret_name' exists but is missing key '$key'"
@@ -482,6 +484,7 @@ create_auth_server_secret() {
         --from-literal=service-client-secret="$service_client_secret" \
         --from-literal=test-client-secret="$test_client_secret" \
         --from-literal=admin-client-secret="$admin_client_secret" \
+        --from-literal=microtx-client-secret="$microtx_client_secret" \
         &> /dev/null
 
     print_success "Created: $secret_name (azn-server bootstrap users and scoped OAuth clients)"
@@ -613,12 +616,14 @@ main() {
     local azn_service_client_secret
     local azn_test_client_secret
     local azn_admin_client_secret
+    local azn_microtx_client_secret
     azn_admin_password=$(generate_oracle_password)
     azn_user_password=$(generate_oracle_password)
     azn_client_secret=$(generate_oracle_password)
     azn_service_client_secret=$(generate_oracle_password)
     azn_test_client_secret=$(generate_oracle_password)
     azn_admin_client_secret=$(generate_oracle_password)
+    azn_microtx_client_secret=$(generate_oracle_password)
     print_success "Generated azn-server bootstrap and scoped OAuth client secrets"
 
     # Create secrets
@@ -661,7 +666,8 @@ main() {
 
     create_auth_server_secret "${DB_NAME}-azn-server-auth" \
         "$azn_admin_password" "$azn_user_password" "$azn_client_secret" \
-        "$azn_service_client_secret" "$azn_test_client_secret" "$azn_admin_client_secret"
+        "$azn_service_client_secret" "$azn_test_client_secret" "$azn_admin_client_secret" \
+        "$azn_microtx_client_secret"
     create_signing_key_secret "${DB_NAME}-azn-server-signing-key"
 
     # Summary

@@ -533,3 +533,4 @@ docs-source/**/public
 # OCA
 .oca/
 .oca/*
+.env
