@@ -5,9 +5,8 @@ description: "Observability for Spring Boot applications with the Oracle Backend
 keywords: "observability metrics tracing spring springboot microservices development oracle backend"
 ---
 
-Oracle Backend for Microservices and AI includes a number of common open source components to provide application observability including Prometheus, Grafana, Jaeger, and OpenTelemetry Collector.
+Oracle Backend for Microservices and AI includes [SigNoz](https://github.com/SigNoz/signoz) to provide application observability.
 
 For more details, read the following:
 
-* [Metrics](./metrics)
-* [Tracing](./tracing)
+* [SigNoz](./signoz/)

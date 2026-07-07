@@ -52,7 +52,7 @@ if(graph !=null) {
 
 ```
 // Get a list of graphs loaded into the graph server memory
-session.getGraphs();
+session.getGraphs(Namespace.PRIVATE)
 ```
 
 ## Render Graph using pgql-pgx
@@ -125,7 +125,7 @@ Switch to pgql-pgx
 SELECT COUNT(DISTINCT N.COMMUNITY) AS NUM_COMMUNITIES FROM MATCH (n)  ON UNIVERSITYSCHEMA
 ```
 
-6 communities detected, lets see what we have
+5 communities detected, lets see what we have
 
 ## List Communities and Number of Nodes in Each
 

@@ -1,7 +1,0 @@
-delete --app-name application --service-name account
-delete --app-name application --service-name checks
-delete --app-name application --service-name creditscore
-delete --app-name application --service-name customer
-delete --app-name application --service-name testrunner
-delete --app-name application --service-name transfer
-delete --app-name application --service-name chatbot

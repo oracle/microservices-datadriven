@@ -27,7 +27,7 @@ When installing in a _desktop_ environment, for example a developer's desktop, t
 
 ## Download
 
-Download the latest release of [Oracle Backend for Microservices and AI](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.3/onprem-ebaas_latest.zip).
+Download the latest release of [Oracle Backend for Microservices and AI](https://github.com/oracle/microservices-backend/releases/download/OBAAS-1.4.0/onprem-ebaas_latest.zip).
 
 ## Setup
 
@@ -68,16 +68,8 @@ The application is defined in `ansible/vars/ebaas.yaml`. For example:
 ```yaml
 ---
 ebaas_edition: "COMMUNITY"
-vault: ""
-vault_key: ""
-vault_crypto_endpoint: ""
-vault_management_endpoint: ""
-vault_storage_account_name: "N/A"
-vault_storage_account_key: "N/A"
-vault_storage: ""
-vault_storage_lock: ""
 apisix_admin_password: "Correct-horse-Battery-staple-35"
-grafana_admin_password: "Correct-horse-Battery-staple-35"
+signoz_admin_password: "Correct-horse-Battery-staple-35"
 oractl_admin_password: "Correct-horse-Battery-staple-35"
 oractl_user_password: "Correct-horse-Battery-staple-35"
 ...

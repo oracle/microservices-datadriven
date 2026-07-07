@@ -33,17 +33,25 @@ main:
         ref: "/platform/microtx"
       - name: Vault
         ref: "/platform/vault"
+      - name: Kafka
+        ref: "/platform/kafka"
       - name: VS Code plugin
         ref: "/platform/vscode-plugin"
       - name: IntelliJ plugin
         ref: "/platform/intellij-plugin"
+      - name: Oracle AI Optimizer and Toolkit
+        ref: "/platform/aiexpforapps"
+      - name: Database Exporter
+        ref: "/platform/dbexporter"
+      - name: Database Operator
+        ref: "/platform/dboperator"
+      - name: Secrets Operator
+        ref: "/platform/extsecrets"
   - name: Observability
     ref: "/observability"
     sub:
-      - name: Metrics
-        ref: "/observability/metrics"
-      - name: Tracing
-        ref: "/observability/tracing"
+      - name: Signoz
+        ref: "/observability/signoz"
   - name: Security
     ref: "/security"
     sub:
@@ -60,13 +68,6 @@ main:
         ref: "/development/envvars"
   - name: Spring Boot Starters
     ref: "/starters"
-    sub:
-      - name: "UCP"
-        ref: "/starters/ucp"
-      - name: "Wallet"
-        ref: "/starters/wallet"
-      - name: "AQ/JMS"
-        ref: "/starters/aqjms"
   - name: Infrastructure
     ref: "/infrastructure"
     sub:

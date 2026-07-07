@@ -13,34 +13,31 @@ Oracle Backend for Microservices and AI includes a number of platform services w
 
     ```shell
     $ kubectl get ns
-      NAME                              STATUS   AGE
-      admin-server                      Active   4h56m
-      apisix                            Active   4h56m
-      application                       Active   4h57m
-      azn-server                        Active   4h56m
-      cert-manager                      Active   4h59m
-      coherence                         Active   4h56m
-      conductor-server                  Active   4h56m
-      config-server                     Active   4h55m
-      default                           Active   5h8m
-      eureka                            Active   4h57m
-      grafana                           Active   4h55m
-      ingress-nginx                     Active   4h57m
-      kafka                             Active   4h56m
-      kaniko                            Active   5h1m
-      kube-node-lease                   Active   5h8m
-      kube-public                       Active   5h8m
-      kube-state-metrics                Active   4h57m
-      kube-system                       Active   5h8m
-      metrics-server                    Active   4h57m
-      obaas-admin                       Active   4h55m
-      observability                     Active   4h55m
-      open-telemetry                    Active   4h55m
-      oracle-database-exporter          Active   4h55m
-      oracle-database-operator-system   Active   4h59m
-      otmm                              Active   4h55m
-      prometheus                        Active   4h57m
-      vault                             Active   4h54m
+    NAME                              STATUS   AGE
+    admin-server                      Active   62d
+    apisix                            Active   22d
+    application                       Active   37d
+    azn-server                        Active   62d
+    cert-manager                      Active   62d
+    coherence                         Active   62d
+    conductor-server                  Active   62d
+    config-server                     Active   62d
+    default                           Active   68d
+    eureka                            Active   62d
+    external-secrets                  Active   47d
+    ingress-nginx                     Active   62d
+    kafka                             Active   62d
+    kaniko                            Active   62d
+    kube-node-lease                   Active   68d
+    kube-public                       Active   68d
+    kube-state-metrics                Active   62d
+    kube-system                       Active   68d
+    metrics-server                    Active   62d
+    obaas-admin                       Active   62d
+    observability                     Active   14d
+    oracle-database-exporter          Active   62d
+    oracle-database-operator-system   Active   62d
+    otmm                              Active   62d
     ```
 
    Here is a summary of what is in each of these namespaces:
@@ -53,16 +50,12 @@ Oracle Backend for Microservices and AI includes a number of platform services w
       * `conductor-server` contains Netflix Conductor OSS which can be used to manage workflows
       * `config-server` contains the Spring CLoud Config Server
       * `eureka` contains the Spring Eureka Service Registry which is used for service discovery
-      * `grafana` contains Grafana which can be used to monitor and manage your environment
       * `ingress-nginx` contains the NGINX ingress controller which is used to manage external access to the cluster
       * `kafka` contains a three-node Kafka cluster that can be used by your application
       * `obaas-admin` contains the Oracle Backend for Microservices and AI administration server that manages deployment of your services
-      * `observability` contains Jaeger tracing which is used for viewing distributed traces
-      * `open-telemetry` contains the Open Telemetry Collector which is used to collect distributed tracing information for your services
+      * `observability` contains SigNoz tracing which is used for viewing distributed logs,traces and metrics.
       * `oracle-database-operator-system` contains the Oracle Database Operator for Kubernetes which can be used to manage Oracle Databases in Kubernetes environments
       * `otmm` contains Oracle Transaction Manager for Microservices which is used to manage transactions across services
-      * `prometheus` contains Prometheus which collects metrics about your services and makes the available to Grafana for alerting and dashboards
-      * `vault` contains HashiCorp Vault which can be used to store secret or sensitive information for services, like credentials for example
 
    Kubernetes namespaces contain other resources like pods, services, secrets and config maps.  You will explore some of these now.
 

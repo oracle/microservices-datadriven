@@ -1,0 +1,43 @@
+## Copyright (c) 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+
+## AKS-focused overrides for the obaas chart.
+##
+## Usage:
+##   helm install <release> ./obaas -n <namespace> -f obaas/examples/values-aks.yaml
+##
+## Notes:
+## - This file assumes an AKS cluster with the built-in Azure Disk CSI storage classes.
+## - If your cluster uses a different StorageClass, replace "managed-csi" below.
+## - The default ingress remains public. Uncomment the internal load balancer annotations
+##   if you want a private ingress endpoint inside the Azure virtual network.
+
+## managed-csi is used as the storage class over the legacy "default" AKS storage class.
+
+k8s-infra:
+  global:
+    cloud: azure
+    clusterName: aks
+    deploymentEnvironment: aks
+
+signoz:
+  global:
+    cloud: azure
+    storageClass: managed-csi
+    clusterName: aks
+
+  clickhouse:
+    persistence:
+      storageClass: managed-csi
+
+  signoz:
+    persistence:
+      storageClass: managed-csi
+
+gateway-helm:
+  service:
+    type: ClusterIP
+
+## Legacy ingress APIs are disabled by default.
+ingress-nginx:
+  enabled: false

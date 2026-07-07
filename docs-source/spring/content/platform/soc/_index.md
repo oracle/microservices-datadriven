@@ -15,9 +15,6 @@ resources:
   - name: soc-manage-workloads
     src: "soc-manage-workloads.png"
     title: "SOC Manage Workloads screen"
-  - name: soc-grafana-link
-    src: "soc-grafana-link.png"
-    title: "Grafana Dashboard for Workload"
   - name: soc-manage-identity
     src: "soc-manage-identity.png"
     title: "SOC Manage Identity screen"
@@ -84,18 +81,48 @@ resources:
   - name: soc-alerts
     src: "soc-alerts.png"
     title: "Alerts"
+  - name: soc-workload-details
+    src: "soc-workload-details.png"
+    title: "Workload Details"
+  - name: soc-workload-details-overview
+    src: "soc-workload-details-overview.png"
+    title: "Workload Details: Overview"
+  - name: soc-workload-details-overview-scale
+    src: "soc-workload-details-overview-scale.png"
+    title: "Workload Details: Scale workload"
+  - name: soc-workload-details-hpa
+    src: "soc-workload-details-hpa.png"
+    title: "Workload Details: Horizontal Pod Autoscaler(HPA)"
+  - name: soc-workload-details-hpa-create
+    src: "soc-workload-details-hpa-create.png"
+    title: "Workload Details: Create HPA"
+  - name: soc-workload-details-route
+    src: "soc-workload-details-route.png"
+    title: "Workload Details: APISIX Routes"
+  - name: soc-manage-config
+    src: "soc-manage-config.png"
+    title: "Manage Configuration"
+  - name: soc-manage-config-create
+    src: "soc-manage-config-create.png"
+    title: "Create Configuration"
+  - name: soc-manage-config-update
+    src: "soc-manage-config-update.png"
+    title: "Update Configuration"
+  - name: soc-manage-config-delete
+    src: "soc-manage-config-delete.png"
+    title: "Delete Configuration"
 ---
 
 Oracle Backend for Microservices and AI includes "ServiceOps Center". The ServiceOps Center provides a web user interface to manage the Oracle Backend for Microservices and AI. This release includes the following capabilities:
 
 - View details about the configuration and health of the environment
 - Manage and deploy workloads/microservices deployed in the environment
-- Easy one-click access to Grafana dashboards for applications
 - Manage users and roles defined in the Authorization Server included in the environment
-- Easy one-click access to Grafana dashboards for the Kubernetes cluster, the applications and the Oracle Database
 - Collect diagnostic data for support
 
-**Note:** More capabilities will be added to this feature in future releases.
+{{< hint type=[warning] icon=gdoc_fire title="Deprecation Notice" >}}
+This component is deprecated in the 1.4.0 release and will be removed in a future release.
+{{< /hint >}}
 
 - [Accessing ServiceOps Center](#accessing-serviceops-center)
 - [Login Screen](#login-screen)
@@ -115,12 +142,20 @@ Oracle Backend for Microservices and AI includes "ServiceOps Center". The Servic
       - [Upload workload binary](#upload-workload-binary)
       - [Progress screen](#progress-screen)
     - [Delete Workload(s)](#delete-workloads)
+    - [Workload Details](#workload-details)
+      - [Overview](#overview)
+      - [Horizontal Pod Autoscaler](#horizontal-pod-autoscaler)
+      - [APISIX Routes](#apisix-routes)
   - [Manage Identity](#manage-identity)
     - [Create User](#create-user)
     - [Change Password](#change-password)
     - [Change Roles](#change-roles)
     - [Change Email](#change-email)
     - [Delete User(s)](#delete-users)
+  - [Manage Configuration](#manage-configuration)
+    - [Create Configuration](#create-configuration)
+    - [Update Configuration](#update-configuration)
+    - [Delete Configuration(s)](#delete-configurations)
   - [Collect Diagnostic Data](#collect-diagnostic-data)
   - [Alerts](#alerts)
   - [Usage Reporting](#usage-reporting)
@@ -227,7 +262,6 @@ The ServiceOps Center Dashboard provides information about the overall state of 
 - The version and platform the environment is running on
 - The configuration and sizing of the Kubernetes cluster
 - The configuration and sizing of the Database instance
-- Easy one-click access to Grafana dashboards to see detailed status of the Kubernetes cluster and Database instance
 - The overall system health status
 - How many applications are deployed in the environment
 
@@ -280,17 +314,6 @@ the status of each workload, and how many replicas are currently running and des
 {{< img name="soc-manage-workloads" size="medium" lazy=false >}}
 
 <!-- spellchecker-enable -->
-
-You can click on the "open" link in the Dashboard column to open the Spring Boot Statistics Grafana dashboard for any workload listed in the table. Note that you may need to authenticate to Grafana the first time.
-
-<!-- spellchecker-disable -->
-
-{{< img name="soc-grafana-link" size="medium" lazy=false >}}
-
-<!-- spellchecker-enable -->
-
-More details of this dashboard can be found [here](../../observability/metrics/#spring-boot-statistics).
-
 
 #### Create Workload
 
@@ -376,6 +399,85 @@ To delete one or more workload, select and click "DELETE".
 
 <!-- spellchecker-enable -->
 
+#### Workload Details
+
+To access details about a Workload, click on the name of the workload.
+
+<!-- spellchecker-disable -->
+
+{{< img name="soc-workload-details" size="medium" lazy=false >}}
+
+<!-- spellchecker-enable -->
+
+##### Overview
+
+The Overview section on the Workload details page contains basic details of the workload such as
+
+- Name of the workload
+- Image
+- Ports exposed by the workload
+- Spring profile
+- Status of Health Probe
+- CPU Resource request
+- Name of the Liquibase database
+- Workload creation/last update timestamps
+- Replicas available
+- Overall status of the workload.
+
+The Overview section also provides buttons to control state of the workload. You can click START to start a workload which is currently unavailable. Click STOP to stop a running workload. DELETE can be used to permanently remove a workload from the cluster.
+
+<!-- spellchecker-disable -->
+
+{{< img name="soc-workload-details-overview" size="medium" lazy=false >}}
+
+<!-- spellchecker-enable -->
+
+To scale the workload to a desired number of replicas, click SCALE and enter the number of replicas.
+
+<!-- spellchecker-disable -->
+
+{{< img name="soc-workload-details-overview-scale" size="medium" lazy=false >}}
+
+<!-- spellchecker-enable -->
+
+##### Horizontal Pod Autoscaler
+
+The Horizontal Pod Autoscaler section contains basic details of the [Horizontal Pod Autocaler](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) or HPA present for a workload such as
+
+- Name
+- Reference to target deployment
+- Target metric value
+- Minimum number of pods
+- Maximum number of pods
+- Current replicas
+- Age of HPA
+
+If a HPA exists, DELETE button can be used to delete the HPA.
+
+<!-- spellchecker-disable -->
+
+{{< img name="soc-workload-details-hpa" size="medium" lazy=false >}}
+
+<!-- spellchecker-enable -->
+
+If no HPA exists for the workload, you can create one by clicking the CREATE button and entering HPA details.
+
+<!-- spellchecker-disable -->
+
+{{< img name="soc-workload-details-hpa-create" size="medium" lazy=false >}}
+
+<!-- spellchecker-enable -->
+
+##### APISIX Routes
+
+The APISIX Routes section Name, Path and Target port of [APISIX Route](https://apisix.apache.org/docs/apisix/terminology/route/) present for a workload.
+
+<!-- spellchecker-disable -->
+
+{{< img name="soc-workload-details-route" size="medium" lazy=false >}}
+
+<!-- spellchecker-enable -->
+
 ### Manage Identity
 
 The Manage Identity screen is accessible from the Security menu and allows you to view and edit information about the users and roles defined in the Authorization Server included in the platform.
@@ -433,6 +535,46 @@ You can select one or more users and click "DELETE" to delete selected user(s).
 <!-- spellchecker-disable -->
 
 {{< img name="soc-delete-user" size="medium" lazy=false >}}
+
+<!-- spellchecker-enable -->
+
+### Manage Configuration
+
+The Manage Configuration screen is accessible from the Config-Server menu and allows you to view and edit external configuration in [Spring Cloud Config server](../config).
+
+<!-- spellchecker-disable -->
+
+{{< img name="soc-manage-config" size="medium" lazy=false >}}
+
+<!-- spellchecker-enable -->
+
+#### Create Configuration
+
+You can click "CREATE" to create a new configuration by specifying the application name, Spring profile, config label, key and its value. 
+
+<!-- spellchecker-disable -->
+
+{{< img name="soc-manage-config-create" size="medium" lazy=false >}}
+
+<!-- spellchecker-enable -->
+
+#### Update Configuration
+
+You can select a configuration and click "UPDATE" to change its value.
+
+<!-- spellchecker-disable -->
+
+{{< img name="soc-manage-config-update" size="medium" lazy=false >}}
+
+<!-- spellchecker-enable -->
+
+#### Delete Configuration(s)
+
+You can select one or more configurations and click "DELETE" to delete selected configuration(s).
+
+<!-- spellchecker-disable -->
+
+{{< img name="soc-manage-config-delete" size="medium" lazy=false >}}
 
 <!-- spellchecker-enable -->
 

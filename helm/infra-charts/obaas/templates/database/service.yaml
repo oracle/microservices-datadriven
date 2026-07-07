@@ -1,0 +1,25 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+
+# Database Service (SIDB-FREE or ADB-FREE)
+{{- if .Values.database }}
+{{- if eq (include "obaas.database.isContainerDB" .) "true" }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "obaas.fullname" . }}-{{ include "obaas.database.dbName" . }}
+  labels:
+    app.kubernetes.io/component: database
+    {{- include "obaas.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 1521
+      targetPort: 1521
+      protocol: TCP
+      name: oracle
+  selector:
+    app.kubernetes.io/component: database
+    {{- include "obaas.selectorLabels" . | nindent 4 }}
+{{- end }}
+{{- end }}

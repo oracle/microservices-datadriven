@@ -26,7 +26,7 @@ Watch this video for more information.
 
 ## CloudBank - Building an Application with Spring Boot and Mobile APIs with Oracle Database and Kubernetes
 
-[In this workshop (~ 2 hours)](https://bit.ly/CloudBankOnOBaaS), you learn how to build Microservices using Spring Boot and deploy
+[In this workshop (~ 2 hours)](https://bit.ly/cloudbankAI), you learn how to build Microservices using Spring Boot and deploy
 them to the Oracle Backend for Microservices and AI. You learn about accessing the database using the Java Persistence API (JPA), service
 discovery, exposing services with the API Gateway, managing transactions across Microservices, workflow, and using observability tools
 to monitor your services and diagnose issues.

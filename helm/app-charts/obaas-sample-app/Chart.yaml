@@ -1,0 +1,13 @@
+## Copyright (c) 2024, 2025, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+apiVersion: v2
+type: application
+name: obaas-sample-app
+description: A Helm chart for deploying applications to the Oracle Backend for Microservices and AI (OBaaS) Platform
+home: https://oracle.github.io/microservices-backend
+maintainers:
+  - name: Oracle and/or its affiliates
+    email: obaas_ww@oracle.com
+    url: https://oracle.github.io/microservices-backend
+version: 0.1.0
+appVersion: "2.1.0"

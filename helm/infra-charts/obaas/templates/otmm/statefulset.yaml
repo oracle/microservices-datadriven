@@ -1,0 +1,79 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+{{- if .Values.otmm.coordinator.enabled }}
+{{- $otmmMetrics := default dict .Values.otmm.coordinator.metrics }}
+{{- $otmmMetricsScrape := default dict $otmmMetrics.scrape }}
+{{- $otmmMetricsEnabled := true }}
+{{- if hasKey $otmmMetrics "enabled" }}
+{{- $otmmMetricsEnabled = $otmmMetrics.enabled }}
+{{- end }}
+{{- $otmmMetricsScrapeEnabled := true }}
+{{- if hasKey $otmmMetricsScrape "enabled" }}
+{{- $otmmMetricsScrapeEnabled = $otmmMetricsScrape.enabled }}
+{{- end }}
+{{- $otmmMetricsPort := default "9000" $otmmMetricsScrape.port }}
+{{- $otmmMetricsPath := default "/metrics" $otmmMetricsScrape.path }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Name }}-otmm-tcs
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Release.Name }}-otmm-tcs
+    app.kubernetes.io/component: transaction-coordinator
+    app.kubernetes.io/part-of: {{ .Release.Name }}
+    {{- include "obaas.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.otmm.coordinator.replicas }}
+  serviceName: {{ .Release.Name }}-otmm-tcs
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Release.Name }}-otmm-tcs
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Release.Name }}-otmm-tcs
+        app.kubernetes.io/component: transaction-coordinator
+      {{- if and .Values.signoz.enabled $otmmMetricsEnabled $otmmMetricsScrapeEnabled }}
+      annotations:
+        signoz.io/scrape: "true"
+        signoz.io/port: {{ $otmmMetricsPort | quote }}
+        signoz.io/path: {{ $otmmMetricsPath | quote }}
+      {{- end }}
+    spec:
+      {{- include "obaas.imagePullSecrets" (dict "local" .Values.otmm.coordinator.imagePullSecrets "global" .Values.global.imagePullSecrets "secretName" .Values.global.imagePullSecretName) | nindent 6 }}
+      serviceAccountName: {{ .Release.Name }}-otmm-tcs
+      securityContext:
+        runAsUser: 1000
+      containers:
+      - name: otmm-tcs
+        image: "{{ .Values.otmm.coordinator.image.repository }}:{{ .Values.otmm.coordinator.image.tag }}"
+        imagePullPolicy: {{ .Values.otmm.coordinator.image.pullPolicy | default "IfNotPresent" }}
+        ports:
+        - name: http
+          containerPort: 9000
+          protocol: TCP
+        env:
+        - name: GIN_MODE
+          value: release
+        - name: CONFIG_MAP_PATH
+          value: /etc/config
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config
+        resources:
+          {{- if .Values.otmm.coordinator.resources }}
+          {{- toYaml .Values.otmm.coordinator.resources | nindent 10 }}
+          {{- else }}
+          limits:
+            cpu: 1
+            memory: 1Gi
+          requests:
+            cpu: 250m
+            memory: 1Gi
+          {{- end }}
+      volumes:
+      - name: config-volume
+        configMap:
+          name: {{ .Release.Name }}-otmm-config
+{{- end }}

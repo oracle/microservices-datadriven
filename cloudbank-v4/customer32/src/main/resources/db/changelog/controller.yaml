@@ -1,6 +1,0 @@
----
-databaseChangeLog:
-  - include:
-      file: classpath:db/changelog/table.sql
-  - include:
-      file: classpath:db/changelog/data.sql

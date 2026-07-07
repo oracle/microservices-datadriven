@@ -1,6 +1,0 @@
-delete-autoscaler --service-name account
-delete-autoscaler --service-name checks
-delete-autoscaler --service-name customer
-delete-autoscaler --service-name creditscore
-delete-autoscaler --service-name testrunner
-delete-autoscaler --service-name transfer

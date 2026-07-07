@@ -52,7 +52,20 @@ Now that the account service is deployed, you need to expose it through the API 
 
 1. Verify the account service
 
-    In the next two commands, you need to provide the correct IP address for the API Gateway in your backend environment.  You can find the IP address using this command, you need the one listed in the **`EXTERNAL-IP`** column:
+    If you are using the [OCI Free Tier single container version](../provision/install-free-trial.md), the steps are a different to get the **EXTERNAL-IP**. In this version Traefik is used. To get the **EXTERNAL-IP** execute the following command to get the **EXTERNAL-IP**.
+
+    ```shell
+    $ kubectl get svc -n kube-system
+    NAME             TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)                        AGE
+    kube-dns         ClusterIP      10.43.0.10     <none>        53/UDP,53/TCP,9153/TCP         120d
+    kubelet          ClusterIP      None           <none>        10250/TCP,10255/TCP,4194/TCP   120d
+    metrics-server   ClusterIP      10.43.216.45   <none>        443/TCP                        120d
+    traefik          LoadBalancer   10.43.176.16   172.98.0.2    80:32224/TCP,443:31377/TCP     120d
+    ```
+
+    The services are only accessible from the host machine (if you want to access the services you can create a SSH tunnel).
+
+    If you are using the [OCI Free Tier single container version](../provision/install-free-trial.md) you kan skip  this step. In the next two commands, you need to provide the correct IP address for the API Gateway in your backend environment.  You can find the IP address using this command, you need the one listed in the **`EXTERNAL-IP`** column:
 
     ```shell
     $ kubectl -n ingress-nginx get service ingress-nginx-controller
@@ -92,4 +105,3 @@ Now that the account service is deployed, you need to expose it through the API 
     ```
 
     Your service is deployed in the Oracle Backend for Microservices and AI environment and using the Oracle Autonomous Database instance associated with the backend.
-

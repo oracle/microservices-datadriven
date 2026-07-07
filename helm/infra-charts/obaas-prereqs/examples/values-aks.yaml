@@ -1,0 +1,21 @@
+## Copyright (c) 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+
+## AKS-focused overrides for the obaas-prereqs chart.
+##
+## Usage:
+##   helm install <release> ./obaas-prereqs -n <namespace> -f obaas-prereqs/examples/values-aks.yaml
+##
+## Notes:
+## - This file keeps the generic cluster services enabled.
+## - The Oracle Database Operator is disabled by default because it is only needed
+##   when the obaas chart uses database.type=ADB-S.
+## - AKS may already provide metrics-server as a managed addon. If that addon is
+##   installed, set metrics-server.enabled=false below to avoid installing a
+##   second metrics-server from this chart.
+
+# By default, AKS addons will install and manage metrics-server. If you are managing metrics-server from AKS,
+# disable metrics-server in obaas-prereqs.
+metrics-server:
+  enabled: true
+

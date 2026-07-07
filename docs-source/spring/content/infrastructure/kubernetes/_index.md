@@ -8,7 +8,34 @@ resources:
     title: "OCI Cloud Shell icon"
 ---
 
-The Oracle Backend for Microservices and AI requires a Kubernetes cluster where the components are deployed.  You can bring your own cluster or, in OCI, have a [Oracle Kubernetes Engine](https://www.oracle.com/uk/cloud/cloud-native/container-engine-kubernetes/) (OKE) deployed for you.  
+The Oracle Backend for Microservices and AI requires a Kubernetes cluster where the components are deployed.  You can bring your own cluster or, in OCI, have a [Oracle Kubernetes Engine](https://www.oracle.com/uk/cloud/cloud-native/container-engine-kubernetes/) (OKE) deployed for you.
+
+## Kubernetes Namespaces
+
+The following table lists the namespaces getting created when deploying Oracle Backend for Microservices and AI.
+
+| Namespace                                  | Functionality                                                                                                                                                                              |
+|--------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|     admin-server                           |     Spring   Boot Admin is a monitoring tool that aims to visualize information provided   by Spring Boot Actuators                                                                        |
+|     apisix                                 | Apache APISIX API Gateway                                                                                                                                                                  |
+|     application                            |      Cloudbank demo application. NS is created when deploying the application.                                                                                                           |
+|     azn-server                             |     Spring   Boot Authentication Server. Used by the CLI (and REST API to authenticate and   authorize OBaaS users).                                                                       |
+|     cert-manager                           |      Cert-manager   creates TLS certificates for workloads in your Kubernetes. Required for the   DB Operator.                                                                             |
+|     coherence                              |      Coherence   Operator                                                                                                                                                                  |
+|     conductor-server                       |      Conductor   Workflow Server                                                                                                                                                           |
+|     config-server                          |     Spring   Cloud Config server with Oracle Database as the backend storage.                                                                                                              |
+|     eureka                                 |      Eureka   service discovery                                                                                                                                                            |
+|     external-secrets                       |      External   secrets operator                                                                                                                                                           |
+|     ingress-nginx                          |      NGINX   ingress controller/                                                                                                                                                           |
+|     kafka                                  |     Kafka   3.8.0 including Zookeeper                                                                                                                                                      |
+|     kaniko                                 |     Used   when deploying OBaaS to build OBaaS images.                                                                                                                                     |
+|     kube-state-metrics                     |     kube-state-metrics   collect a comprehensive set of metrics about the cluster, and publishes them   in prometheus format                                                               |
+|     metrics-server                         |     metrics-server is   a very lightweight metrics collector that just collects some basic resource   usage metrics, it is used by the horizontal pod autoscaler (among other   things)    |
+|     obaas-admin                            |      Admin   component of OBaaS. Deploying applications, managing OBaaS users (not DB   users)                                                                                             |
+|     observability                          |      Signoz   and OTEL collector                                                                                                                                                           |
+|     oracle-database-exporter               |     Unified   Observability for the Oracle Database. Exports Database Metrics in Prometheus   format.                                                                                      |
+|     oracle-database-operator-system        |     Oracle   Database Operator for Kubernetes                                                                                                                                              |
+|     otmm                                   |     Oracle   Transaction Manager for Microservices                                                                                                                                         |
 
 ## OKE Access
 
@@ -130,4 +157,4 @@ To add additional nodes to the OKE cluster, the Marketplace installation stack c
 ![OCI Plan Output](images/plan_output.png "OCI Plan Output")
 
 8. Run Apply after reviewing the proposed changes
-![OCI Apply Changes](images/apply.png "OCI Apply Changes")
+![OCI Apply Changes](images/apply.png "OCI Apply Changes"

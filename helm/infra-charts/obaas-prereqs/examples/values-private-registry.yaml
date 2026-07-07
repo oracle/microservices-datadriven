@@ -1,0 +1,255 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+
+# =============================================================================
+# Example: Private Registry Configuration for OBaaS Prerequisites Chart
+# =============================================================================
+#
+# This example shows how to configure all images to pull from a private
+# container registry (e.g., for air-gapped installations).
+#
+# IMPORTANT: This file is for the 'obaas-prereqs' chart only (cluster singletons).
+# For the 'obaas' chart, see the corresponding example in ../obaas/examples/
+#
+# Prerequisites:
+#   1. Create the image pull secret before installing:
+#      kubectl create secret docker-registry myregistry-secret \
+#        --docker-server=myregistry.example.com \
+#        --docker-username=<username> \
+#        --docker-password=<password> \
+#        --docker-email=<email> \
+#        -n <namespace>
+#
+#   2. Mirror the required images to your private registry
+#
+# Usage:
+#   helm install obaas-prereqs ./obaas-prereqs -n <namespace> -f examples/values-private-registry.yaml
+#
+# =============================================================================
+
+# This is to override the chart name.
+nameOverride: ""
+fullnameOverride: ""
+
+# -----------------------
+# -- Global Configuration
+# -----------------------
+global:
+  # All prerequisite components install into the release namespace (specified with -n flag)
+  # There is no global namespace override - components use the namespace you provide during install
+
+  # Image pull secret for private registry authentication
+  # This is automatically propagated to all subcharts via YAML anchors
+  imagePullSecrets: &imagePullSecrets 
+    - name: myregistry-secret
+
+# ------------------------------------
+# -- OBaaS Prerequisites Configuration
+# ------------------------------------
+
+# These are cluster-scoped singleton components that should only be installed once per cluster
+#
+# Image Override Pattern:
+# All image configurations are commented out by default to use upstream defaults.
+# To use a private registry or air-gapped installation, uncomment and set the image values.
+# Example: Change "registry.k8s.io" to "myregistry.example.com" for all components.
+
+# -------------------------
+# -- SubChart Configuration
+# -------------------------
+
+# =============================================================================
+# Oracle Database Operatior (and its prereq cert-manager)
+# =============================================================================
+# Default registry: quay.io
+# Has multiple components, each needs registry override
+
+oracle-database-operator:
+  enabled: true
+  # Empty namespace will cause the use of .Release.Namespace
+  namespace: ""
+  replicas: 1
+  # Image pull secrets for private registries (shared with cert-manager subchart)
+  imagePullSecrets: *imagePullSecrets
+  image:
+    repository: myregistry.example.com/database/operator
+    # Specify a version tag for reproducible deployments
+    tag: "2.0"
+    pullPolicy: IfNotPresent
+  # Deployment scope configuration
+  scope:
+    mode: cluster
+  # RBAC configuration
+  rbac:
+    nodeAccess: false
+  # Enable leader election for controller manager
+  leaderElection: true
+  # Pod Disruption Budget (only applies when replicas > 1)
+  pdb:
+    enabled: true
+    minAvailable: 1
+    # maxUnavailable: 1  # Alternative to minAvailable
+  # Wait job configuration for cert-manager webhook readiness (not passed to subchart)
+  certManagerWaitJob:
+    # Waits for cert-manager webhook before creating Issuer/Certificate resources
+    # Set to false only if cert-manager is known to be ready (e.g., pre-installed and running)
+    enabled: true
+    image:
+      repository: myregistry.example.com/kubectl
+      tag: "v1.28.0"
+      pullPolicy: IfNotPresent
+  # cert-manager subchart values (passed to subchart when enabled=true)
+  cert-manager:
+    enabled: true
+    # Empty namespace will cause the use of .Release.Namespace
+    namespace: ""
+    crds:
+      enabled: true
+      # Allow CRDs to be deleted on uninstall (WARNING: deletes all cert-manager resources)
+      keep: false
+    global:
+      imagePullSecrets: *imagePullSecrets
+    image:
+      repository: myregistry.example.com/jetstack/cert-manager-controller
+      tag: v1.20.2
+    webhook:
+      image:
+        repository: myregistry.example.com/jetstack/cert-manager-webhook
+        tag: v1.20.2
+    cainjector:
+      image:
+        repository: myregistry.example.com/jetstack/cert-manager-cainjector
+        tag: v1.20.2
+    startupapicheck:
+      image:
+        repository: myregistry.example.com/jetstack/cert-manager-startupapicheck
+        tag: v1.20.2
+
+# =============================================================================
+# external-secrets
+# =============================================================================
+# Default registry: ghcr.io
+# Uses full repository path
+
+external-secrets:
+  enabled: true
+  installCRDs: true
+  # Uses global.imagePullSecrets
+  imagePullSecrets: *imagePullSecrets
+  global:
+    imagePullSecrets: *imagePullSecrets
+  # Uncomment to override the default image repository
+  image:
+    repository: "myregistry.example.com/external-secrets/external-secrets"
+  webhook:
+    image:
+      repository: myregistry.example.com/external-secrets/external-secrets
+      pullPolicy: IfNotPresent
+    imagePullSecrets: *imagePullSecrets
+  certController:
+    image:
+      repository: myregistry.example.com/external-secrets/external-secrets
+      pullPolicy: IfNotPresent
+    imagePullSecrets: *imagePullSecrets
+
+# =============================================================================
+# metrics-server
+# =============================================================================
+# Default registry: registry.k8s.io
+# Uses full repository path
+
+metrics-server:
+  enabled: true
+  # Uses global.imagePullSecrets
+  # global:
+  imagePullSecrets: *imagePullSecrets
+  # Uncomment to override the default image repository
+  image:
+    repository: "myregistry.example.com/metrics-server/metrics-server"
+
+# =============================================================================
+# kube-state-metrics
+# =============================================================================
+# Default registry: registry.k8s.io
+
+kube-state-metrics:
+  enabled: true
+  imagePullSecrets: *imagePullSecrets
+  # global:
+  #   # Uses global.imagePullSecrets
+  #   imagePullSecrets: *imagePullSecrets
+  # Uncomment to override the default image
+  image:
+    registry: "myregistry.example.com"  # Default: registry.k8s.io
+    repository: "kube-state-metrics/kube-state-metrics"
+  # Control which namespaces it monitors
+  # releaseNamespace: false  # Set to true to only watch release namespace
+  # namespaces: ""  # Comma-separated list or yaml list of namespaces to watch
+  # namespacesDenylist: ""  # Namespaces to exclude from watching
+
+# =============================================================================
+# strimzi-kafka-operator
+# =============================================================================
+# Default registry: quay.io
+# Uses defaultImageRegistry for operator and Kafka images
+
+strimzi-kafka-operator:
+  enabled: true
+  # List of namespaces the operator should watch (empty = watch all namespaces)
+  watchNamespaces: []
+  # Set to true to watch all namespaces (recommended for multi-tenant OBaaS installations)
+  watchAnyNamespace: true
+  # Uncomment to override the default image registry and repository
+  defaultImageRegistry: "myregistry.example.com"  # Default: quay.io
+  defaultImageRepository: "strimzi"  # Default: strimzi
+  defaultImageTag: 0.51.0
+  image:
+    # Uses global.imagePullSecrets
+    imagePullSecrets: *imagePullSecrets
+    registry: myregistry.example.com
+    repository: strimzi
+    name: operator
+    tag: 0.51.0
+
+# =============================================================================
+# coherence-operator
+# =============================================================================
+# Default registry: container-registry.oracle.com/middleware
+
+coherence-operator:
+  enabled: true
+  # Uses global.imagePullSecrets
+  imagePullSecrets: *imagePullSecrets
+  # Operator image configuration
+  image:
+    registry: "myregistry.example.com/middleware"
+    name: "coherence-operator"
+    tag: "3.5.13"
+  # Default Coherence image for applications
+  defaultCoherenceImage:
+    registry: "myregistry.example.com/middleware"
+    name: "coherence-ce"
+    tag: "25.03.2"
+  # Operator replicas (HA by default)
+  replicas: 3
+  # Namespaces to watch (empty string = all namespaces)
+  # Override to limit operator scope: "namespace1,namespace2"
+  watchNamespaces: ""
+  # Override default resources if needed
+  resources: {}
+
+opentelemetry-operator:
+  enabled: true 
+  # Uses global.imagePullSecrets
+  imagePullSecrets: *imagePullSecrets
+  kubeRBACProxy:
+    image:
+      repository: "myregistry.example.com/brancz/kube-rbac-proxy"
+      tag: "v0.20.0"
+  manager:
+    collectorImage:
+      repository: "myregistry.example.com/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-k8s"
+      tag: "0.152.0"
+    image:
+      repository: "myregistry.example.com/open-telemetry/opentelemetry-operator"
+      tag: "0.152.0"

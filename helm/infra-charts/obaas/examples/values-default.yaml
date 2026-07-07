@@ -1,0 +1,68 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+# Example: Default Configuration
+# This is a minimal configuration with no overrides.
+# All components use their default settings and deploy to the release namespace.
+#
+# Prerequisites:
+#   Install obaas-prereqs chart once per cluster before installing this chart.
+#
+# Usage:
+#   helm upgrade --install obaas . -f examples/values-default.yaml -n obaas --create-namespace
+
+# -----------------------
+# -- Global Configuration
+global:
+  # No private registry credentials needed
+  imagePullSecrets: []
+
+# -----------------------
+# -- OBaaS Components
+# Default access uses Envoy Gateway. Legacy ingress-nginx is disabled unless explicitly enabled.
+
+# Service Discovery
+eureka:
+  enabled: true
+
+# API Gateway
+apisix:
+  enabled: true
+
+ingress-nginx:
+  enabled: false
+
+# Platform Services
+admin-server:
+  enabled: true
+
+# OTMM (MicroTX) components can be toggled independently. The console only
+# deploys when the coordinator and/or workflow server is also enabled.
+otmm:
+  coordinator:
+    enabled: true
+  workflowServer:
+    enabled: true
+  console:
+    enabled: true
+
+# Database (SIDB-FREE by default)
+# Database uses SIDB-FREE by default from values.yaml
+
+oracle-database-exporter:
+  enabled: true
+
+# Observability
+signoz:
+  enabled: true
+
+# AI Optimizer (disabled by default)
+ai-optimizer:
+  enabled: false
+
+# Config Server
+config-server:
+  enabled: true
+
+# Create Kafka cluster
+kafka:
+  enabled: false

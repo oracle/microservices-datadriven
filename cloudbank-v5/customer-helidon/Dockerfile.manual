@@ -1,0 +1,42 @@
+# 1st stage, build the app
+FROM container-registry.oracle.com/java/jdk-no-fee-term:21 AS build
+
+# Install maven
+WORKDIR /usr/share
+RUN set -x && \
+    curl -O https://archive.apache.org/dist/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz && \
+    tar -xvf apache-maven-*-bin.tar.gz && \
+    rm apache-maven-*-bin.tar.gz && \
+    mv apache-maven-* maven && \
+    ln -s /usr/share/maven/bin/mvn /bin/
+
+WORKDIR /helidon
+
+# Create a first layer to cache the "Maven World" in the local repository.
+ADD pom.xml .
+ADD src/assembly/jib-ready.xml src/assembly/jib-ready.xml
+RUN mvn package -Dmaven.test.skip -Declipselink.weave.skip -DskipOpenApiGenerate
+
+# Do the Maven build
+ADD src src
+RUN mvn package -DskipTests
+
+# 2nd stage, build the runtime image
+FROM container-registry.oracle.com/java/jdk-no-fee-term:21
+
+WORKDIR /helidon
+
+RUN groupadd -g 1000 appuser && \
+    useradd -u 1000 -g 1000 -d /helidon -s /sbin/nologin appuser && \
+    chown -R 1000:1000 /helidon
+
+# Copy the thin JAR and its runtime dependencies.
+COPY --from=build --chown=1000:1000 /helidon/target/*.jar app.jar
+COPY --from=build --chown=1000:1000 /helidon/target/libs libs
+
+USER 1000
+
+# Simple thin JAR execution; the manifest references libs/.
+CMD ["java", "-jar", "app.jar"]
+
+EXPOSE 8080

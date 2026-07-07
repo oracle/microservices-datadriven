@@ -28,10 +28,8 @@ The predefined variables are as follows:
   This tells the Eureka discovery client to make a local copy of the registry by fetching it from the Eureka server.
 - `eureka.client.service-url.defaultZone`, for example `http://eureka.eureka:8761/eureka`.  
   This is the default zone for the Eureka discovery client.
-- `zipkin.base-url`, for example `http://jaegertracing-collector.observability.svc.cluster.local:9411/api/v2/spans`.  
-  This is the URL of the Zipkin-compatible trace collector which can be used by your application to send trace data to the platform.
-- `otel.exporter.otlp.endpoint`, for example `http://open-telemetry-opentelemetry-collector.open-telemetry:4318/v1/traces`.  
-  This is the URL of the OpenTelemetry (OTLP protocol) trace collector which can be used by your application to send trace data to the platform.
+- `OTEL_EXPORTER_OTLP_ENDPOINT`, for example `http://obaas-signoz-otel-collector.observability:4318`.  
+  This is the URL of the OpenTelemetry (OTLP protocol) collector which can be used by your application to send observability data to the the SigNoz platform.
 - `config.server.url`, for example `http://config-server.config-server.svc.cluster.local:8080`.  
   This is the URL of the Spring Config Server provided by the platform.
 - `liquibase.datasource.username`, for example set to the key `db.username` in secret `admin-liquibasedb-secrets`.  

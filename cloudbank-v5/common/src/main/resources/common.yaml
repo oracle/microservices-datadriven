@@ -1,0 +1,93 @@
+# Copyright (c) 2025, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+spring:
+  threads:
+    virtual:
+      enabled: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${CLOUDBANK_SECURITY_JWK_SET_URI:http://azn-server:8080/oauth2/jwks}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.OracleDialect
+        format_sql: false
+    show-sql: false
+
+eureka:
+  instance:
+    hostname: ${spring.application.name}
+    preferIpAddress: true
+  client:
+    service-url:
+      defaultZone: ${eureka.service-url}
+    fetch-registry: true
+    register-with-eureka: true
+    enabled: true
+    
+management:
+  endpoint:
+    health:
+      show-details: when-authorized
+      show-components: when-authorized
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    distribution:
+      percentiles[http.server.requests]: 0.5, 0.90, 0.95, 0.99
+      percentiles-histogram[http.server.requests]: true
+      slo[http.server.requests]: 100ms, 250ms, 500ms, 1s, 2s, 5s, 10s, 30s
+      percentiles[http.client.requests]: 0.5, 0.90, 0.95, 0.99
+      percentiles-histogram[http.client.requests]: true
+      slo[http.client.requests]: 100ms, 250ms, 500ms, 1s, 2s, 5s, 10s, 30s
+  health:
+    probes:
+      enabled: true
+  info:
+    os:
+      enabled: false
+    env:
+      enabled: false
+    java:
+      enabled: false
+
+logging:
+  level:
+    root: INFO
+    com.example: INFO
+    org.springframework.web.filter.AbstractRequestLoggingFilter: INFO
+
+jdbc:
+  datasource-proxy:
+    query:
+      enable-logging: false
+      log-level: INFO
+    include-parameter-values: false
+
+request:
+  logging:
+    shouldLog: false
+    include-query-string: false
+    include-payload: false
+    max-payload-length: 0
+    include-headers: false
+    include-client-info: false
+
+cloudbank:
+  security:
+    require-internal-token: ${CLOUDBANK_SECURITY_REQUIRE_INTERNAL_TOKEN:true}
+    service-token:
+      enabled: ${CLOUDBANK_SECURITY_SERVICE_TOKEN_ENABLED:false}
+      token-uri: ${CLOUDBANK_SECURITY_SERVICE_TOKEN_URI:http://azn-server:8080/oauth2/token}
+      client-id: ${CLOUDBANK_SECURITY_SERVICE_TOKEN_CLIENT_ID:cloudbank-service-client}
+      client-secret: ${CLOUDBANK_SECURITY_SERVICE_TOKEN_CLIENT_SECRET:}
+      scope: ${CLOUDBANK_SECURITY_SERVICE_TOKEN_SCOPE:cloudbank.internal}

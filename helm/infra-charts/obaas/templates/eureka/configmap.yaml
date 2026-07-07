@@ -1,0 +1,20 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+{{- if .Values.eureka.enabled }}
+{{- $urls := list -}}
+{{- range $i := until (int .Values.eureka.replicas) -}}
+  {{- $urls = append $urls (printf "http://%s-eureka-%d.%s-eureka.%s.svc.cluster.local:8761/eureka" $.Release.Name $i $.Release.Name $.Release.Namespace) -}}
+{{- end }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-eureka-server
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Release.Name }}-eureka
+    app.kubernetes.io/component: service-discovery
+    app.kubernetes.io/part-of: {{ .Release.Name }}
+    {{- include "obaas.labels" . | nindent 4 }}
+data:
+  url: {{ join "," $urls | quote }}
+{{- end }}

@@ -1,0 +1,80 @@
+## Copyright (c) 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+# Example: Custom APISIX Plugins
+# Deploy custom Lua plugins into APISIX without building a custom image.
+#
+# How it works:
+#   1. extraConfigMaps (parent chart) creates a ConfigMap containing your Lua plugin files
+#   2. apisix.customPlugins (APISIX subchart) registers the plugins and mounts the ConfigMap
+#
+# IMPORTANT:
+# APISIX loads custom plugins as Lua modules named `apisix.plugins.<plugin-name>`.
+# With `luaPath: "/opts/custom_plugins/?.lua"`, the plugin files must be mounted at:
+#   /opts/custom_plugins/apisix/plugins/<plugin-name>.lua
+
+apisix:
+  enabled: true
+
+  apisix:
+    plugins:
+      - opentelemetry
+      - prometheus
+      # No need to list custom plugins here — customPlugins adds them automatically
+
+    customPlugins:
+      enabled: true
+      luaPath: "/opts/custom_plugins/?.lua"
+      plugins:
+        - name: "abd"
+          attrs: {}
+          configMap:
+            name: "apisix-custom-plugin"
+            mounts:
+              - key: "abd.lua"
+                path: "/opts/custom_plugins/apisix/plugins/abd.lua"
+        - name: "xyz"
+          attrs: {}
+          configMap:
+            name: "apisix-custom-plugin"
+            mounts:
+              - key: "xyz.lua"
+                path: "/opts/custom_plugins/apisix/plugins/xyz.lua"
+
+# ConfigMaps created by the parent chart
+# Each top-level key becomes a ConfigMap name, with nested keys as data entries
+extraConfigMaps:
+  apisix-custom-plugin:
+    abd.lua: |
+      local core = require("apisix.core")
+
+      local plugin_name = "abd"
+
+      local _M = {
+          version = 0.1,
+          priority = 2500,
+          name = plugin_name,
+          schema = {}
+      }
+
+      function _M.access(conf, ctx)
+          core.log.info("ABD plugin executed")
+      end
+
+      return _M
+    xyz.lua: |
+      local core = require("apisix.core")
+
+      local plugin_name = "xyz"
+
+      local _M = {
+          version = 0.1,
+          priority = 2501,
+          name = plugin_name,
+          schema = {}
+      }
+
+      function _M.access(conf, ctx)
+          core.log.info("XYZ plugin executed")
+      end
+
+      return _M

@@ -71,7 +71,7 @@ resources:
     title: "Load Balancer Options"
   - name: oci-stack-vault-options
     src: "oci-stack-vault-options.png"
-    title: "HashiCorp Vault Options - Standard Edition"
+    title: "Standard Edition"
   - name: azn-stack-app-info
     src: "azn-stack-app-info.png"
     title: "Access Information"
@@ -87,6 +87,15 @@ resources:
 Oracle Backend for Microservices and AI is available in the [OCI Marketplace](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911).
 
 - [Prerequisites](#prerequisites)
+- [OCI policies](#oci-policies)
+  - [Oracle Container Engine for Kubernetes](#oracle-container-engine-for-kubernetes)
+  - [VCN](#vcn)
+  - [Container Registry](#container-registry)
+  - [Object Storage](#object-storage)
+  - [Autonomous Database](#autonomous-database)
+  - [Vault](#vault)
+    - [Additional Vault](#additional-vault)
+  - [Oracle Resource Manager](#oracle-resource-manager)
 - [Summary of Components](#summary-of-components)
 - [Overview of the Setup Process](#overview-of-the-setup-process)
 - [Set Up the OCI Environment](#set-up-the-oci-environment)
@@ -100,9 +109,15 @@ You must meet the following prerequisites to use Oracle Backend for Microservice
 - An Oracle Cloud Infrastructure (OCI) account in a tenancy with sufficient quota to create the following:
 
   - An OCI Container Engine for Kubernetes cluster (OKE cluster), plus a node pool with three worker nodes.
+
+    - Each node should have 2 OCPUs and 32 GB of RAM.
+    - 750GB of block volume storage with a `Balanced` performance level.
+
   - A virtual cloud network (VCN) with at least two public IP's available.
   - A public load balancer.
   - An Oracle Autonomous Database Serverless instance.
+
+    - The instance should have 2 ECPUs and 20GB storage and 20GB backup storage.
   
 - At least one free OCI auth token (note that the maximum is two per user).
 
@@ -110,8 +125,11 @@ You must meet the following prerequisites to use Oracle Backend for Microservice
 
   - The Kubernetes command-line interface (kubectl). [Installing kubectl documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
   - Oracle Cloud Infrastructure command-line interface (CLI). [Quickstart - Installing the CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#Quickstart).
-  - Oracle Backend for Microservices and AI command-line interface (oractl). [Download oractl](https://github.com/oracle/microservices-datadriven/releases).
-  - [OPTIONAL]Oracle Backend for Microservices and AI VS Code Extension. [Download VS Code Extension](https://github.com/oracle/microservices-datadriven/releases).
+  - Oracle Backend for Microservices and AI command-line interface (oractl). [Download oractl](https://github.com/oracle/microservices-backend/releases/tag/OBAAS-1.4.0).
+  - [OPTIONAL]Oracle Backend for Microservices and AI VS Code Extension. [Download VS Code Extension](https://github.com/oracle/microservices-backend/releases/tag/OBAAS-1.4.0).
+  - [OPTIONAL]Oracle Backend for Microservices and AI IntelliJ plugin. [Download VS Code Extension](https://github.com/oracle/microservices-backend/releases/tag/OBAAS-1.4.0).
+
+You can use the [cost estimator for pricing](https://www.oracle.com/cloud/costestimator.html).
 
 ## OCI policies
 
@@ -206,31 +224,24 @@ Oracle Backend for Microservices and AI setup installs the following components.
 
 | Component                    | Version       | Description                                                                                 |
 |------------------------------|---------------|---------------------------------------------------------------------------------------------|
-| Alertmanager | v0.067.1 | Alertmanager |
 | Apache APISIX                | 3.9.1         | Provides full lifecycle API management.                                                     |
 | Apache Kafka                 | 3.8.0 | Provides distributed event streaming.                                                       |
 | cert-manager                 | 1.12.3        | Automates the management of certificates.                                                   |
 | Coherence Operator           | 3.3.5        | Provides in-memory data grid.                                                               |
 | Conductor Server             | 3.13.8        | Provides a Microservice orchestration platform.                                             |
-| Grafana                      | 11.1.4         | Provides the tool to examine, analyze, and monitor metrics.                                 |
-| HashiCorp Vault              | 1.17.2        | Provides a way to store and tightly control access to sensitive data.                       |
-| Jaeger Tracing               | 1.53.0        | Provides distributed tracing system for monitoring and troubleshooting distributed systems. |
 | Kube State Metrics | 2.10.1 | Collects metrics for the Kubernetes cluster     |
-| Loki                         | 2.6.1     | Provides log aggregation and search. |
 | Metrics server | 0.7.0  | Source of container resource metrics for Kubernetes built-in autoscaling pipeline |
 | NGINX Ingress Controller     | 1.10.1         | Provides traffic management solution for cloud‑native applications in Kubernetes.           |
 | OpenTelemetry Collector      | 0.107.0        | Collects process and export telemetry data.                                                 |
 | Oracle Database Observability Exporter | 1.3.1 | Exposes Oracle Database metrics in standard Prometheus format.                            |
 | Oracle Database Operator     | 1.1.0          | Helps reduce the time and complexity of deploying and managing Oracle databases.            |
 | Oracle Transaction Manager for Microservices | 24.2.1 | Manages distributed transactions to ensure consistency across Microservices.       |
-| Prometheus                   | 2.52.0        | Provides event monitoring and alerts.                                                       |
-| Prometheus Operator          | 0.74.0        | Provides management for Prometheus monitoring tools.                                        |
-| Promtail                     | 2.8.2     | Collects logs.                       |
+| SigNoz                     | 0.75.0     | Observability stack and Dashboards for logs, metrics and tracing.                       |
 | Spring Authorization Server  | 3.3.3  | Provides authentication and authorization for applications. |
 | Spring Boot Admin server     | 3.3.3         | Manages and monitors Spring Cloud applications.                                             |
 | Spring Cloud Config server   | 4.1.3      | Provides server-side support for an externalized configuration.                             |
 | Spring Eureka service registry | 4.1.3 | Provides service discovery capabilities.                                          |
-| Strimzi-Apache Kafka operator  | 0.36.1      | Manages Apache Kafka clusters.                                                              |
+| Strimzi-Apache Kafka operator  | 0.43.0      | Manages Apache Kafka clusters.                                                              |
 
 ## Overview of the Setup Process
 
@@ -283,11 +294,10 @@ To set up the OCI environment, process these steps:
 1. If you check the checkbox *Set Administrator Passwords* in the **Administrator Passwords** section you have the option to fill in the following passwords (if not they are autogenerated):
 
    - `APISIX Administrator Password` (optional) : Leave blank to auto-generate.
-   - `Grafana Administrator Password` (optional) : Leave blank to auto-generate.
+   - `SigNoz Administrator Password` (optional) : Leave blank to auto-generate.
    - `ORACTL Administrator Password` optional) : Leave blank to auto-generate. This is the password for the `obaas-admin` user.
    - `ORACTL User Password` (optional) : Leave blank to auto-generate. This is the password for the `obaas-user` user.
-   - `Alertmanager Administrator Password` (optional) : Leave blank to auto-generate. This is the admin password for the alertmanager.
-
+   
       <!-- spellchecker-disable -->
       {{< img name="oci-stack-passwords" size="large" lazy=false >}}
       <!-- spellchecker-enable -->
@@ -358,22 +368,6 @@ To set up the OCI environment, process these steps:
       <!-- spellchecker-enable -->
 
     > For more information on the *Bring Your Own Database* option for the Oracle Backend for Microservices and AI including the required values, please review the [Database](../infrastructure/database) documentation.
-
-1. (*Standard Edition Only*) If you check the checkbox *Enable Vault in Production Mode* in the section **Vault Options** you will be installing HashiCorp in **Production** mode otherwise the HashiCorp Vault be installed in **Development** mode.
-
-    Fill in the following Vault options. You have the option of creating a new OCI Vault or using an existing OCI Vault. The OCI Vault is only used in **Production** mode to auto-unseal the HashiCorp Vault (see documentation ...) Fill in the following information if you want to use an existing OCI Vault:
-
-   - `Vault Compartment (Optional)` : Select a compartment for the OCI Vault.
-   - `Existing Vault (Optional)` : Select an existing OCI Vault. If not selected a new OCI Vault be created.
-   - `Existing Vault Key (Optional)` : Select an existing OCI Vault key. If not selected a new OCI Vault Key will be created.
-
-      <!-- spellchecker-disable -->
-      {{< img name="oci-stack-vault-options" size="large" lazy=false >}}
-      <!-- spellchecker-enable -->
-
-   {{< hint type=[warning] icon=gdoc_check title=Warning >}}
-   **Never** run a **Development** mode HashiCorp Vault Server in a production environment. It is insecure and will lose data on every restart (since it stores data in-memory). It is only intended for development or experimentation.
-   {{< /hint >}}
 
 1. (*Standard Edition Only*) If you check the checkbox *Enable Container Registry Vulnerability Scanning* in the section **Additional Options** you will enable the automatic Vulnerability Scanning on images stored in the Oracle Container Registry.
 
@@ -460,7 +454,7 @@ To set up the local machine, process these steps:
 
 1. Install the Oracle Backend for Microservices and AI command-line.
 
-   The Oracle Backend for Microservices and AI command-line interface, `oractl`, is available for Linux and Mac systems. Download the binary that you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.1.3) page and add it to your PATH environment variable. You can rename the binary to remove the suffix.
+   The Oracle Backend for Microservices and AI command-line interface, `oractl`, is available for Linux and Mac systems. Download the binary that you want from the [Releases](https://github.com/oracle/microservices-backend/releases/tag/OBAAS-1.4.0) page and add it to your PATH environment variable. You can rename the binary to remove the suffix.
 
    If your environment is a Linux or Mac machine, run `chmod +x` on the downloaded binary. Also, if your environment is a Mac, run the following command. Otherwise, you get a security warning and the CLI does not work:
 

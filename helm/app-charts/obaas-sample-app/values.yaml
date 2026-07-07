@@ -1,0 +1,153 @@
+## Copyright (c) 2024, 2025, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+
+# -----------------------
+# -- Required Configuration
+
+image:
+  # -- (Required) Image repository
+  repository: ""
+  # -- (Required) Image tag
+  tag: ""
+  pullPolicy: Always
+
+obaas:
+  # -- (Required) Release name of the OBaaS platform installation
+  releaseName: ""
+  # -- (Required) Application framework: SPRING_BOOT or HELIDON
+  framework: ""
+
+# -----------------------
+# -- Helidon Configuration (required when framework=HELIDON)
+helidon:
+  datasource:
+    # -- (Required for Helidon) Datasource name matching application.yaml
+    name: ""
+
+# -----------------------
+# -- Optional Configuration
+
+replicaCount: 1
+
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 8080
+
+resources:
+  requests:
+    cpu: 100m
+env: []
+
+# -----------------------
+# -- Database Configuration
+
+database:
+  name: ""         # e.g., mydb (derives priv-authn, walletName, and authN.secretName)
+  # -- If authN/privAuthN is not specified this helm will try to use {{ database.name }}-{{ Release.Name }}...
+  # authN:
+  #   secretName: ""
+  #   usernameKey: "username"
+  #   passwordKey: "password"
+  #   serviceKey: "service"
+  #-- Specify privAuthN when you have pre-created this secret.
+  # privAuthN:
+  #   secretName: ""
+  #   usernameKey: "username"
+  #   passwordKey: "password"
+  #   serviceKey: "service"
+  # Advanced Queuing (AQ) permissions for messaging (e.g., JMS)
+  aq:
+    enabled: false
+  # SQLcl image for db-init job (only used when database.name is set)
+  sqlcl:
+    image:
+      repository: container-registry.oracle.com/database/sqlcl
+      tag: "26.1.2"
+
+
+eureka:
+  enabled: true
+
+configServer:
+  enabled: true
+
+otel:
+  enabled: true
+
+otmm:
+  enabled: false
+
+# -----------------------
+# -- Optional Overrides
+# Only needed if platform was installed with custom names
+
+# database:
+#   authN:
+#     usernameKey: ""     # default: username
+#     passwordKey: ""     # default: password
+#     serviceKey: ""      # default: service
+#   privAuthN:
+#     secretName: ""      # override derived: {{ database.name }}-db-priv-authn
+#   walletSecret: ""      # default: {{ obaas.releaseName }}-adb-tns-admin-{{ revision }}
+
+# eureka:
+#   serviceName: ""       # default: {{ obaas.releaseName }}-eureka
+#   port: 8761            # default: 8761
+
+# otel:
+#   endpoint: ""          # default: http://{{ obaas.releaseName }}-signoz-otel-collector:4318
+
+# otmm:
+#   configMapName: ""     # default: {{ obaas.releaseName }}-otmm-config
+#   urlKey: ""            # default: EXTERNAL_ADDR
+
+# springboot:
+#   profilesActive: ""    # default: default
+
+# -----------------------
+# -- Advanced Configuration
+
+serviceAccount:
+  create: false
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+podSecurityContext:
+  runAsNonRoot: true
+securityContext:
+  runAsNonRoot: true
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts: []
+  tls: []
+
+livenessProbe: {}
+readinessProbe: {}
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+volumes: []
+volumeMounts: []
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

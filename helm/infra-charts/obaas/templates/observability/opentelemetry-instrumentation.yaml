@@ -1,0 +1,23 @@
+{{- if .Values.signoz.enabled }}
+apiVersion: opentelemetry.io/v1alpha1
+kind: Instrumentation
+metadata:
+  name: traces-instrumentation
+spec:
+  exporter:
+    endpoint: http://{{ .Values.otelCollectorEndpoint | default (printf "%s-otel-collector:4317" (include "obaas.signoz.fullname" .)) }}
+  propagators:
+    - tracecontext
+    - baggage
+    - b3
+  sampler:
+    type: {{ .Values.signoz.instrumentation.sampler.type }}
+    {{- if .Values.signoz.instrumentation.sampler.argument }}
+    argument: {{ .Values.signoz.instrumentation.sampler.argument | quote }}
+    {{- end }}
+  {{- if .Values.signoz.instrumentation.java.env }}
+  java:
+    env:
+      {{- toYaml .Values.signoz.instrumentation.java.env | nindent 6 }}
+  {{- end }}
+{{- end }}

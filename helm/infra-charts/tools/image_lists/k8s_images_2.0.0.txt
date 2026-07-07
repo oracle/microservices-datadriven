@@ -1,0 +1,36 @@
+#
+# ============================================================================
+# Generated for private registry mirroring
+# Generated on: 2025-12-04T16:45:46Z
+# OBaaS Helm Charts - Complete Image List
+container-registry.oracle.com/database/observability-exporter:2.2.0
+container-registry.oracle.com/database/otmm:24.4.1
+container-registry.oracle.com/database/sqlcl:25.3.0
+container-registry.oracle.com/database/free:latest
+container-registry.oracle.com/database/operator:2.0
+container-registry.oracle.com/middleware/coherence-operator:3.5.6
+docker.io/altinity/clickhouse-operator:0.21.2
+docker.io/altinity/metrics-exporter:0.21.2
+docker.io/apache/apisix:3.14.1-ubuntu
+docker.io/bitnamilegacy/etcd:3.6.1
+docker.io/busybox:1.36
+docker.io/clickhouse/clickhouse-server:25.5.6
+docker.io/curlimages/curl:8.17.0
+docker.io/library/alpine:3.18.2
+docker.io/library/alpine/k8s:1.28.13
+docker.io/library/nginx:alpine
+docker.io/otel/opentelemetry-collector-contrib:0.139.0
+docker.io/signoz/signoz-otel-collector:v0.144.1
+docker.io/signoz/signoz:v0.113.0
+docker.io/signoz/zookeeper:3.7.1
+ghcr.io/external-secrets/external-secrets:v1.1.0
+container-registry.oracle.com/obaas/admin-server:2.0.0
+container-registry.oracle.com/obaas/dashboards:2.0.0
+container-registry.oracle.com/obaas/service-registry:2.0.0
+quay.io/strimzi/operator:0.45.1
+quay.io/jetstack/cert-manager-cainjector:v1.19.1
+quay.io/jetstack/cert-manager-controller:v1.19.1
+quay.io/jetstack/cert-manager-webhook:v1.19.1
+registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.17.0
+registry.k8s.io/metrics-server/metrics-server:v0.8.0
+registry.k8s.io/ingress-nginx/controller:v1.11.5
