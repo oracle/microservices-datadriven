@@ -159,6 +159,54 @@ kubectl -n my-namespace run kafka-consumer -ti \
     --from-beginning
 ```
 
+## Configuring TLS
+
+To configure a Kafka cluster with TLS, add a new listener with `tls=true` in the `Kafka` custom resource. By default, the Kafka cluster will sign certificates using the Strimzi cluster CA.
+
+```yaml
+listeners:
+  - name: tls
+    port: 9093
+    type: internal
+    tls: true
+```
+
+Strimzi will create the following secrets in the cluster namespace, prefixed by the cluster name: `clients-ca`, `clients-ca-cert`, `cluster-ca`, and `cluster-ca-cert`.
+
+### Trusting the cluster CA cert from internal clients
+
+Clients running in the Kubernetes cluster should mount the cluster CA cert to their client pod:
+
+```yaml
+volumes:
+  - name: cluster-ca
+    secret:
+      secretName: my-cluster-cluster-ca-cert
+
+containers:
+  - name: my-java-client
+    image: my-java-client:latest
+    volumeMounts:
+      - name: cluster-ca
+        mountPath: /etc/kafka/cluster-ca
+        readOnly: true
+```
+
+Then, configure the Kafka client to use TLS. The truststore password is stored in the `cluster-ca-cert` secret under the `ca.password` key:
+
+```properties
+bootstrap.servers=my-cluster-kafka-bootstrap:9093
+security.protocol=SSL
+
+ssl.truststore.location=/etc/kafka/cluster-ca/ca.p12
+ssl.truststore.password=<truststore-password>
+ssl.truststore.type=PKCS12
+```
+
+This must be configured in the relevant Kafka clients settings.
+
+Strimzi also supports mTLS and custom CA certificates. For additional Strimzi certificate documentation, see the [Strimzi security reference](https://github.com/IBM/strimzi-kafka-operator/tree/main/documentation/modules/security).
+
 ## Strimzi Custom Resources Reference
 
 | Resource | Purpose |
