@@ -205,6 +205,67 @@ ssl.truststore.type=PKCS12
 
 This must be configured in the relevant Kafka clients settings.
 
+### Configuring SASL_SSL with SCRAM
+
+SASL_SSL with SCRAM is configurable through the Kafka custom resource listeners. First, add a new SCRAM listener with TLS enabled:
+
+```yaml
+listeners:
+  - name: scram
+    port: 9094
+    type: internal
+    tls: true
+    authentication:
+      type: scram-sha-512
+```
+
+Create a KafkaUser for your cluster using SCRAM authentication:
+
+```yaml
+apiVersion: kafka.strimzi.io/v1
+kind: KafkaUser
+metadata:
+  name: scramuser
+  labels:
+    strimzi.io/cluster: my-cluster
+spec:
+  authentication:
+    type: scram-sha-512
+```
+
+This creates a `scramuser` secret with the password and jaas config. Clients running in the Kubernetes cluster should mount the cluster CA cert and scram user secrets:
+
+```yaml
+volumes:
+  - name: cluster-ca
+    secret:
+      secretName: my-cluster-cluster-ca-cert
+  - name: scram-user
+    secret:
+      secretName: scramuser
+containers:
+  - name: my-java-client
+    image: my-java-client:latest
+    volumeMounts:
+      - name: cluster-ca
+        mountPath: /etc/kafka/cluster-ca
+        readOnly: true
+      - name: scram-user
+        mountPath: /etc/kafka/scram-user
+        readOnly: true
+```
+
+Then, configure the client to use SASL_SSL with SCRAM-SHA-512:
+
+```properties
+security.protocol=SASL_SSL
+sasl.mechanism=SCRAM-SHA-512
+sasl.jaas.config=<jaas config from scramuser secret>
+ssl.truststore.location=/etc/kafka/cluster-ca/ca.p12
+ssl.truststore.password=<truststore password>
+ssl.truststore.type=PKCS12
+```
+
 Strimzi also supports mTLS and custom CA certificates. For additional Strimzi certificate documentation, see the [Strimzi security reference](https://github.com/IBM/strimzi-kafka-operator/tree/main/documentation/modules/security).
 
 ## Strimzi Custom Resources Reference
