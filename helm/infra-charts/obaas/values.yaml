@@ -402,7 +402,27 @@ config-server:
 otmm:
   commonConfiguration:
     externalURL: {}
-    security: {}
+    security:
+      enabled: false
+      clientSecretName: ""
+      identityProvider:
+        serverType: "other"
+        issuer: ""
+        jwksUri: ""
+        identityProviderUrl: ""
+        audience: ""
+        scopes: ""
+        adminUserRoles: ""
+        adminUserRolesPath: "roles"
+        policy:
+          claimsRolePaths: "roles"
+          roles:
+            superAdmin: "microtx-conductor-super-admin"
+            admin: "microtx-conductor-admin"
+            user: "microtx-conductor-user"
+            readOnlyUser: "microtx-conductor-read-only-user"
+            metadataManager: "microtx-conductor-metadata-manager"
+            worker: "microtx-conductor-worker"
   coordinator:
     enabled: true
     replicas: 1

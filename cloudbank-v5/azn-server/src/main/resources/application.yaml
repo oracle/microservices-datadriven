@@ -51,6 +51,14 @@ spring:
     enabled: ${RUN_LIQUIBASE:true}
 
 azn:
+  authorization-server:
+    issuer: ${AZN_AUTHORIZATION_SERVER_ISSUER:http://localhost:8080}
+    microtx-client:
+      id: ${AZN_AUTHORIZATION_SERVER_MICROTX_CLIENT_ID:microtx-workflow-client}
+      secret: ${AZN_AUTHORIZATION_SERVER_MICROTX_CLIENT_SECRET:}
+      scopes: ${AZN_AUTHORIZATION_SERVER_MICROTX_CLIENT_SCOPES:microtx.workflow}
+      roles: ${AZN_AUTHORIZATION_SERVER_MICROTX_CLIENT_ROLES:microtx-conductor-user,microtx-conductor-worker}
+      audience: ${AZN_AUTHORIZATION_SERVER_MICROTX_CLIENT_AUDIENCE:microtx-workflow}
   bootstrap-users:
     admin-password: ${OBAAS_ADMIN_PASSWORD:}
     user-password: ${OBAAS_USER_PASSWORD:}

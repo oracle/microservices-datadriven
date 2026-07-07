@@ -1,5 +1,5 @@
-"""Copyright (c) 2026, Oracle and/or its affiliates.
-Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl."""
+# Copyright (c) 2026, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
 
 """
 Core invention: generate all 4 patent annotation types for a given table.
@@ -331,7 +331,11 @@ if __name__ == "__main__":
     else:
         # Upsert into SCHEMA_EMBEDDINGS (creates row if absent, updates if present)
         from src.annotations.metadata_augmentor import augment_table
-        augment_table(args.table.upper(), ctx)
+        try:
+            augment_table(args.table.upper(), ctx)
+        except ValueError as exc:
+            console.print(f"[red]{exc}[/red]")
+            raise SystemExit(1) from exc
         # Re-generate for display
         lines = generate_annotations(args.table.upper(), ctx)
         if lines:

@@ -14,8 +14,13 @@ import com.nimbusds.jose.jwk.JWKSelector;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.jwt.JwsHeader;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
+import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -33,12 +38,14 @@ class SecurityConfigTest {
                 "openid,cloudbank.read,cloudbank.transfer",
                 "cloudbank-service-client", "ServiceClientSecret123!", "cloudbank.internal",
                 "cloudbank-test-client", "TestOnlyClientSecret123!", "cloudbank.test",
-                "cloudbank-admin-client", "AdminClientSecret123!", "cloudbank.admin");
+                "cloudbank-admin-client", "AdminClientSecret123!", "cloudbank.admin",
+                "microtx-workflow-client", "MicroTxClientSecret123!", "microtx.workflow");
 
         RegisteredClient client = repository.findByClientId("cloudbank-client");
         RegisteredClient serviceClient = repository.findByClientId("cloudbank-service-client");
         RegisteredClient testClient = repository.findByClientId("cloudbank-test-client");
         RegisteredClient adminClient = repository.findByClientId("cloudbank-admin-client");
+        RegisteredClient microtxClient = repository.findByClientId("microtx-workflow-client");
 
         assertThat(client).isNotNull();
         assertThat(client.getScopes()).contains(
@@ -56,6 +63,33 @@ class SecurityConfigTest {
         assertThat(testClient.getScopes()).containsExactlyInAnyOrder("cloudbank.test");
         assertThat(adminClient).isNotNull();
         assertThat(adminClient.getScopes()).containsExactlyInAnyOrder("cloudbank.admin");
+        assertThat(microtxClient).isNotNull();
+        assertThat(microtxClient.getScopes()).containsExactlyInAnyOrder("microtx.workflow");
+    }
+
+    @Test
+    void issuerIsStableAndMicroTxAccessTokenGetsRoles() {
+        SecurityConfig securityConfig = new SecurityConfig();
+        assertThat(securityConfig.authorizationServerSettings("http://azn-server.obaas.svc.cluster.local:8080")
+                .getIssuer())
+                .isEqualTo("http://azn-server.obaas.svc.cluster.local:8080");
+
+        RegisteredClient client = RegisteredClient.withId("microtx-id")
+                .clientId("microtx-workflow-client")
+                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+                .build();
+        JwtEncodingContext context = JwtEncodingContext.with(
+                JwsHeader.with(org.springframework.security.oauth2.jose.jws.SignatureAlgorithm.RS256),
+                JwtClaimsSet.builder())
+                .registeredClient(client)
+                .tokenType(OAuth2TokenType.ACCESS_TOKEN)
+                .build();
+
+        securityConfig.jwtTokenCustomizer("microtx-workflow-client",
+                "microtx-conductor-user,microtx-conductor-worker", "microtx-workflow").customize(context);
+
+        assertThat((Object) context.getClaims().build().getClaim("roles"))
+                .isEqualTo(java.util.List.of("microtx-conductor-user", "microtx-conductor-worker"));
     }
 
     @Test

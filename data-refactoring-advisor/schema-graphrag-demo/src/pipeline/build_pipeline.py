@@ -1,5 +1,5 @@
-"""Copyright (c) 2026, Oracle and/or its affiliates.
-Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl."""
+# Copyright (c) 2026, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
 
 """
 Full build pipeline orchestrator.
@@ -69,6 +69,7 @@ def _run_create_user(ctx: SchemaContext):
     """
     from src.workload.sts_loader import _get_admin_connection
     from src.config import settings
+    import oracledb
 
     schema = ctx.schema_name.upper()
     password = settings.adb_password
@@ -83,6 +84,20 @@ def _run_create_user(ctx: SchemaContext):
         f"GRANT EXECUTE ON dbms_xplan TO {schema}",
         f"GRANT ADMINISTER SQL TUNING SET TO {schema}",
     ]
+
+    def _get_sysdba_connection():
+        kwargs: dict = dict(
+            user="sys",
+            password=settings.adb_admin_password,
+            dsn=settings.adb_dsn,
+            mode=oracledb.AUTH_MODE_SYSDBA,
+        )
+        if settings.adb_wallet_location:
+            kwargs["config_dir"] = str(settings.wallet_path)
+            kwargs["wallet_location"] = str(settings.wallet_path)
+            if settings.adb_wallet_password:
+                kwargs["wallet_password"] = settings.adb_wallet_password
+        return oracledb.connect(**kwargs)
 
     conn = _get_admin_connection()
     try:
@@ -101,23 +116,46 @@ def _run_create_user(ctx: SchemaContext):
             else:
                 console.print(f"[yellow]  User {schema} already exists — skipping CREATE USER[/yellow]")
 
+            failed_grants: list[str] = []
             for grant in grants:
                 try:
                     cur.execute(grant)
                     console.print(f"[dim]  ✓ {grant}[/dim]")
                 except Exception as exc:  # noqa: BLE001
                     console.print(f"[yellow]  SKIP[/yellow] {grant} — {exc!s:.80}")
+                    if "ORA-01031" in str(exc):
+                        failed_grants.append(grant)
 
-            # Enable REST / Database Actions console access for this schema.
-            # ORDS_ADMIN.ENABLE_SCHEMA must run as ADMIN; it is idempotent.
-            cur.callproc("ORDS_ADMIN.ENABLE_SCHEMA", keywordParameters={
-                "p_enabled": True,
-                "p_schema": schema,
-                "p_url_mapping_type": "BASE_PATH",
-                "p_url_mapping_pattern": schema.lower(),
-                "p_auto_rest_auth": True,
-            })
-            console.print(f"[dim]  ✓ ORDS REST access enabled for {schema}[/dim]")
+            if failed_grants:
+                try:
+                    sys_conn = _get_sysdba_connection()
+                    try:
+                        with sys_conn.cursor() as sys_cur:
+                            for grant in failed_grants:
+                                sys_cur.execute(grant)
+                                console.print(f"[dim]  ✓ {grant} (SYSDBA retry)[/dim]")
+                        sys_conn.commit()
+                    finally:
+                        sys_conn.close()
+                except Exception as exc:  # noqa: BLE001
+                    console.print(
+                        "[yellow]  SKIP[/yellow] SYSDBA grant retry — "
+                        f"{exc!s:.100}"
+                    )
+
+            # Enable REST / Database Actions console access when ORDS is available.
+            # Local Oracle Free Docker images commonly do not include ORDS_ADMIN.
+            try:
+                cur.callproc("ORDS_ADMIN.ENABLE_SCHEMA", keywordParameters={
+                    "p_enabled": True,
+                    "p_schema": schema,
+                    "p_url_mapping_type": "BASE_PATH",
+                    "p_url_mapping_pattern": schema.lower(),
+                    "p_auto_rest_auth": True,
+                })
+                console.print(f"[dim]  ✓ ORDS REST access enabled for {schema}[/dim]")
+            except Exception as exc:  # noqa: BLE001
+                console.print(f"[yellow]  SKIP[/yellow] ORDS REST access — {exc!s:.80}")
 
         conn.commit()
     finally:
