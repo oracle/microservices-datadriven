@@ -71,6 +71,7 @@ spec:
 - Replication factors are set to 1 for single-node operation — for production, increase `replicas` and replication factors to 3+
 - Two listeners are configured: `plain` (port 9092, no TLS) and `tls` (port 9093, encrypted)
 - The `entityOperator` enables the Topic Operator and User Operator for declarative topic and user management
+- `KafkaNodePool` names are scoped to the **namespace**, not to the cluster — if you run multiple Kafka clusters in the same namespace, each node pool must have a unique name (e.g. `cluster-a-pool`, `cluster-b-pool`)
 
 ### Step 2: Deploy the Cluster
 
@@ -225,7 +226,7 @@ Create a KafkaUser for your cluster using SCRAM authentication:
 apiVersion: kafka.strimzi.io/v1
 kind: KafkaUser
 metadata:
-  name: scramuser
+  name: my-cluster-kafka-scram-user   # name also becomes the Secret name
   labels:
     strimzi.io/cluster: my-cluster
 spec:
@@ -233,7 +234,7 @@ spec:
     type: scram-sha-512
 ```
 
-This creates a `scramuser` secret with the password and jaas config. Clients running in the Kubernetes cluster should mount the cluster CA cert and scram user secrets:
+Strimzi creates a Secret with the same name as the KafkaUser (`my-cluster-kafka-scram-user`), containing the password and JAAS config. Clients running in the Kubernetes cluster should mount the cluster CA cert and scram user secrets:
 
 ```yaml
 volumes:
@@ -242,7 +243,7 @@ volumes:
       secretName: my-cluster-cluster-ca-cert
   - name: scram-user
     secret:
-      secretName: scramuser
+      secretName: my-cluster-kafka-scram-user
 containers:
   - name: my-java-client
     image: my-java-client:latest
@@ -260,7 +261,7 @@ Then, configure the client to use SASL_SSL with SCRAM-SHA-512:
 ```properties
 security.protocol=SASL_SSL
 sasl.mechanism=SCRAM-SHA-512
-sasl.jaas.config=<jaas config from scramuser secret>
+sasl.jaas.config=<value of sasl.jaas.config key in the my-cluster-kafka-scram-user Secret>
 ssl.truststore.location=/etc/kafka/cluster-ca/ca.p12
 ssl.truststore.password=<truststore password>
 ssl.truststore.type=PKCS12
