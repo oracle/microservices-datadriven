@@ -207,33 +207,7 @@ admin_key=$(
 )
 ```
 
-Configure or verify APISIX OpenTelemetry plugin metadata:
-
-The OBaaS chart enables the APISIX `opentelemetry` plugin and configures the SigNoz collector service. APISIX also requires runtime plugin metadata before route-level traces are emitted. If `plugin_metadata/opentelemetry` is already configured, you can skip this command.
-
-```bash
-curl -i http://127.0.0.1:9180/apisix/admin/plugin_metadata/opentelemetry \
-  -H "X-API-KEY: ${admin_key}" \
-  -X PUT \
-  -d '{
-    "trace_id_source": "random",
-    "resource": {
-      "service.name": "APISIX"
-    },
-    "collector": {
-      "address": "http://signoz-otel-collector:4318",
-      "request_timeout": 3
-    },
-    "batch_span_processor": {
-      "drop_on_queue_full": false,
-      "max_queue_size": 1024,
-      "batch_timeout": 2,
-      "inactive_timeout": 1,
-      "max_export_batch_size": 16
-    },
-    "set_ngx_var": false
-  }'
-```
+APISIX OpenTelemetry plugin metadata (`plugin_metadata/opentelemetry`) is registered automatically by a sidecar container in the APISIX pod on every install/upgrade — no manual step is required.
 
 Create the ORDS route:
 

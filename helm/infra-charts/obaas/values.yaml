@@ -127,6 +127,9 @@ ai-optimizer:
 eureka:
   enabled: true
   replicas: 3
+  # Keep Jetty server connections alive longer than APISIX/OpenResty's
+  # 60-second pooled connection lifetime to avoid reusing server-closed sockets.
+  connectionIdleTimeout: 90s
   image:
     repository: container-registry.oracle.com/obaas/service-registry
     tag: "2.1.0"
@@ -314,17 +317,19 @@ apisix:
     discovery:
       enabled: true
       registry:
-        # Eureka service discovery - connects to eureka StatefulSet via alias service
-        # (see templates/eureka/service-alias.yaml)
+        # Eureka service discovery - connects directly to each StatefulSet replica
+        # so APISIX can fail over within the same registry refresh cycle.
         eureka:
           host:
-            - "http://eureka:8761"
+            - "http://{{ .Release.Name }}-eureka-0.{{ .Release.Name }}-eureka.{{ .Release.Namespace }}.svc.cluster.local:8761"
+            - "http://{{ .Release.Name }}-eureka-1.{{ .Release.Name }}-eureka.{{ .Release.Namespace }}.svc.cluster.local:8761"
+            - "http://{{ .Release.Name }}-eureka-2.{{ .Release.Name }}-eureka.{{ .Release.Namespace }}.svc.cluster.local:8761"
           prefix: "/eureka/"
           fetch_interval: 30
           timeout:
             connect: 2000
-            send: 2000
-            read: 5000
+            send: 5000
+            read: 15000
           weight: 100
         # Kubernetes service discovery
         kubernetes: {}
@@ -339,6 +344,18 @@ apisix:
         resource:
           service.name: APISIX
         trace_id_source: x-request-id
+        # Consumed by templates/apisix/Job-apisix-plugin-metadata.yaml, which
+        # PUTs this whole opentelemetry block to the Admin API's runtime
+        # plugin_metadata store (a separate mechanism from pluginAttrs above,
+        # which only seeds the static config file). Kept here as the single
+        # source of truth rather than duplicated in a second config block.
+        batch_span_processor:
+          drop_on_queue_full: false
+          max_queue_size: 1024
+          batch_timeout: 2
+          inactive_timeout: 1
+          max_export_batch_size: 16
+        set_ngx_var: false
       prometheus:
         export_uri: /metrics
         metric_prefix: apisix_
@@ -376,6 +393,54 @@ apisix:
   initContainer:
     image: "docker.io/busybox"
     tag: "1.37"
+
+  # Sidecar that registers the opentelemetry plugin's runtime plugin_metadata
+  # via the Admin API. This must run as a sidecar (sharing the pod's network
+  # namespace) rather than a separate Job/pod, because the Admin API's
+  # allow_admin allowlist restricts callers to 127.0.0.1. It reads the
+  # collector/resource/batch_span_processor config back out of the already
+  # rendered config.yaml (plugin_attr.opentelemetry), which is the exact same
+  # values.yaml pluginAttrs.opentelemetry block above, so there is a single
+  # source of truth instead of a duplicated payload here.
+  extraContainers:
+    - name: apisix-plugin-metadata
+      image: "docker.io/alpine/k8s:1.28.13"
+      command: ["sh", "-c"]
+      args:
+        - |
+          set -e
+          until curl -s -o /dev/null http://127.0.0.1:9180/apisix/admin/routes; do
+            echo "Waiting for apisix admin API..."; sleep 5
+          done
+
+          admin_key=$(yq '.deployment.admin.admin_key[] | select(.name == "admin") | .key' /apisix-config/config.yaml)
+          if [ -z "$admin_key" ] || [ "$admin_key" = "null" ]; then
+            echo "ERROR: could not extract APISIX admin_key from mounted config"
+            exit 1
+          fi
+
+          payload=$(yq -o=json '.plugin_attr.opentelemetry' /apisix-config/config.yaml)
+
+          http_status=$(curl -s -o /dev/null -w "%{http_code}" \
+            http://127.0.0.1:9180/apisix/admin/plugin_metadata/opentelemetry \
+            -H "X-API-KEY: ${admin_key}" \
+            -X PUT \
+            -d "$payload")
+
+          unset admin_key
+
+          if [ "$http_status" -ge 200 ] && [ "$http_status" -lt 300 ]; then
+            echo "APISIX opentelemetry plugin_metadata configured successfully (HTTP ${http_status})"
+          else
+            echo "ERROR: failed to set plugin_metadata (HTTP ${http_status})"
+            exit 1
+          fi
+
+          exec sleep infinity
+      volumeMounts:
+        - name: apisix-config
+          mountPath: /apisix-config
+          readOnly: true
 
 # Admin Server
 admin-server:
