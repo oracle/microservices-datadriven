@@ -13,6 +13,19 @@ Oracle Backend for Microservices and AI includes the Spring Boot Eureka service 
 
 Spring Boot Eureka Server will be installed if the `eureka.enabled` is set to `true` in the `values.yaml` file. The default namespace for Spring Boot Eureka Server is `eureka`.
 
+### Connection idle timeout
+
+The Eureka server's Jetty connection idle timeout defaults to 90 seconds. This is longer than APISIX/OpenResty's 60-second pooled connection lifetime and prevents APISIX from attempting to reuse a connection that Eureka has already closed.
+
+You can override the timeout in your OBaaS values file:
+
+```yaml
+eureka:
+  connectionIdleTimeout: 90s
+```
+
+Keep this value longer than the APISIX/OpenResty pooled connection lifetime. Lower values can cause intermittent `failed to fetch registry ...: closed` messages while APISIX refreshes the Eureka registry.
+
 ## Access Eureka Web User Interface
 
 To access the Eureka Web User Interface, use kubectl port-forward to create a secure channel to `service/eureka`. Run the following command to establish the secure tunnel (replace the example namespace `obaas-dev` with the namespace where the Spring Boot Eureka Server is deployed):

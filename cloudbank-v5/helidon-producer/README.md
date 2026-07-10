@@ -75,13 +75,17 @@ helm upgrade --install helidon-producer obaas/obaas-sample-app \
 
 ### 3. Testing the Endpoint
 You can verify the deployment using the included `./test-endpoints.sh` script. This script automates the full authentication and delivery flow:
-1. Extacts the client credentials from the `otelopupgrd-azn-server-auth` secret.
-2. Uses port-forwarding to request an OAuth2 Bearer token from the `azn-server`. *(Note: Due to ingress routing logic in OBaaS, this curl request must explicitly include the `-H "Host: azn-server:8080"` header).*
-3. Port-forwards the `helidon-producer` pod and uses the Bearer token to authorize the `POST` request.
+1. Reads the service client credentials from the supplied `*-azn-server-auth` secret. If the secret name is omitted, the script continues only when the namespace contains exactly one matching secret.
+2. Uses port-forwarding to request an OAuth2 bearer token from `azn-server`.
+3. Port-forwards `helidon-producer`, sends an authenticated `POST /post`, and verifies that it returns HTTP `200`.
 
 ```bash
-./test-endpoints.sh obaas
+./test-endpoints.sh obaas localhost:18080 helmtest-azn-server-auth
 ```
+
+The script defaults to local ports `19081` for `azn-server` and `18080` for
+`helidon-producer`, and fails clearly if either requested port is already in
+use. Set `AZN_LOCAL_PORT` or pass a different producer URL when needed.
 
 ### 4. Security Context Requirements
 When deploying to OBaaS, the environment enforces strict Pod Security Standards. The OpenTelemetry operator injects an init container to copy the Java agent, which will fail with a `CreateContainerConfigError` if it attempts to run as root.
@@ -102,10 +106,20 @@ The OBaaS authorization server (`azn-server`) issues permissions via the `scope`
 To properly secure endpoints, the `helidon-producer` uses:
 1.  **`@Authenticated`**: Ensures a valid MP-JWT is present without enforcing rigid group mapping.
 2.  **Manual Scope Checking**: Injects the `JsonWebToken` and checks for the required scope (e.g., `cloudbank.internal`) manually within the endpoint code.
-3.  **Dynamic Issuer Verification**: The JWT issuer is dynamically configured with a fallback in `microprofile-config.properties`:
-    ```properties
-    mp.jwt.verify.issuer=${MP_JWT_VERIFY_ISSUER:http://azn-server:8080}
+3.  **Dynamic Issuer Verification**: MicroProfile JWT compares the token issuer exactly. CloudBank configures `azn-server` with the namespace-qualified issuer `http://azn-server.<namespace>.svc.cluster.local:8080`, so the producer must use the same value. The Helm values obtain the namespace through the Kubernetes Downward API and configure both issuer and JWK URI:
+    ```yaml
+    env:
+      - name: POD_NAMESPACE
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.namespace
+      - name: MP_JWT_VERIFY_ISSUER
+        value: "http://azn-server.$(POD_NAMESPACE).svc.cluster.local:8080"
+      - name: CLOUDBANK_SECURITY_JWK_SET_URI
+        value: "http://azn-server.$(POD_NAMESPACE).svc.cluster.local:8080/oauth2/jwks"
     ```
+
+    For non-Kubernetes execution, set `MP_JWT_VERIFY_ISSUER` and `CLOUDBANK_SECURITY_JWK_SET_URI` explicitly before starting the application.
 
 ## Observability Dashboards
 
@@ -135,4 +149,3 @@ This project is configured for full **Log-Trace Correlation** in SigNoz, allowin
 *   **JUL-to-SLF4J Bridge**: We use the `jul-to-slf4j` bridge and the `ProducerApplication` class to intercept Helidon's internal `java.util.logging` calls. This ensures that even internal Helidon logs follow our JSON format.
 *   **Automatic Context Injection**: The OpenTelemetry Java Agent automatically injects the active `trace_id` and `span_id` into the Logback Mapped Diagnostic Context (MDC) for every log entry.
 *   **SigNoz Integration**: SigNoz parses these JSON fields and automatically provides a "View Trace" button in the log details view, enabling seamless navigation between your logs and distributed traces.
-
