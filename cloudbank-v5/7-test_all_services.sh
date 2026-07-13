@@ -141,8 +141,8 @@ Options:
   --local-port PORT               Local port for APISIX port-forward (default: 19080)
   --auth-local-port PORT          Local port for azn-server auth-code flow (default: 19081)
   --service-base-port PORT        First local port for direct service health checks (default: 19100)
-  --from-account ACCOUNT_ID       Source account for transfer test
-  --to-account ACCOUNT_ID         Destination account for deposit/transfer tests
+  --from-account ACCOUNT_ID       Source account owned by --owner-username for transfer test
+  --to-account ACCOUNT_ID         Destination account owned by --owner-username for deposit/transfer tests
   --owner-username USERNAME       Seeded customer/account owner username (default: qwertysdwr)
   --owner-password PASSWORD       Password to create/reset for owner username (default: generated at runtime)
   --read-only                     Skip mutating check deposit, check clear, and transfer tests
@@ -686,12 +686,26 @@ test_routed_service_apis() {
         "${GATEWAY_URL}/api/v1/accounts")
     record_status "account list" "200" "$status_code"
 
+    local from_account_provided=false
+    local to_account_provided=false
+    [[ -n "$FROM_ACCOUNT_ID" ]] && from_account_provided=true
+    [[ -n "$TO_ACCOUNT_ID" ]] && to_account_provided=true
+
     if [[ -z "$FROM_ACCOUNT_ID" ]]; then
         FROM_ACCOUNT_ID=$(jq -r '[.[] | select((.accountBalance // 0) > 1) | .accountId][0] // empty' "$LAST_OUT" 2>/dev/null)
     fi
     if [[ -z "$TO_ACCOUNT_ID" ]]; then
         TO_ACCOUNT_ID=$(jq -r --argjson from "${FROM_ACCOUNT_ID:-0}" \
             '[.[] | select(.accountId != $from) | .accountId][0] // empty' "$LAST_OUT" 2>/dev/null)
+    fi
+
+    if [[ "$from_account_provided" == true ]] && ! jq -e --arg id "$FROM_ACCOUNT_ID" \
+        'any(.[]; (.accountId | tostring) == $id)' "$LAST_OUT" >/dev/null 2>&1; then
+        record_failure "from account ownership" "${FROM_ACCOUNT_ID} is not visible to ${OWNER_USERNAME}"
+    fi
+    if [[ "$to_account_provided" == true ]] && ! jq -e --arg id "$TO_ACCOUNT_ID" \
+        'any(.[]; (.accountId | tostring) == $id)' "$LAST_OUT" >/dev/null 2>&1; then
+        record_failure "to account ownership" "${TO_ACCOUNT_ID} is not visible to ${OWNER_USERNAME}"
     fi
 
     local first_customer_id

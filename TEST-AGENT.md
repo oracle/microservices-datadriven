@@ -208,6 +208,7 @@ Platform checks:
 CloudBank checks:
 
 - Run the automated secured smoke test from `CBV5-AGENT.md` first and preserve its full output.
+- For CloudBank all-services tests, account IDs used with `--from-account` and `--to-account` must be accounts visible to the `--owner-username` user token used by the script. Do not guess seeded account IDs across environments. Prefer letting `cloudbank-v5/7-test_all_services.sh` auto-discover accounts, or first run it with `--read-only` and reuse the reported `account discovery from=<id> to=<id>` pair for the full mutating run.
 - When the run must validate Helidon observability, deploy `customer-helidon` instead of the Spring `customer` service so the workload includes both Spring Boot and Helidon services.
 - Use `CBV5-AGENT.md` for the standard CloudBank deployment flow and `cloudbank-v5/customer-helidon/README.md` only for the `customer-helidon` build, values, deployment, and service-specific verification details.
 - When `customer-helidon` is selected, preserve evidence that the `/api/v1/customer*` route targets the Helidon customer service and that customer API smoke tests still pass.
@@ -238,6 +239,7 @@ Required readiness checks:
 - Traces: prove at least one recent CloudBank trace exists and includes more than one CloudBank service when a workflow crosses services.
 - Logs: prove recent logs exist for `<application-namespace>` and at least one CloudBank service.
 - Metrics: prove recent metric series exist for HTTP traffic, JVM, Spring, Helidon when deployed, APISIX or gateway traffic, Kubernetes pod or node metrics, and database metrics where those components are installed.
+- Collector logs: when OpenTelemetry collectors are deployed, collect current and previous logs for the SigNoz collector, the k8s-infra collector deployment, and the k8s-infra collector agent pods before marking observability evidence complete.
 - Dashboard-specific data: for every required dashboard screenshot, identify at least one metric, trace, log query, or table on that dashboard that has data before capture.
 - Screenshot-specific data: after capture, inspect the screenshot companion DOM text and validation metadata for each required dashboard. A dashboard page load is not enough; the validation artifact must show at least one data-bearing panel, table row, plotted series, legend, service name, endpoint, metric value, or non-zero/current sample that matches the dashboard's purpose.
 

@@ -71,6 +71,7 @@ spec:
 - Replication factors are set to 1 for single-node operation — for production, increase `replicas` and replication factors to 3+
 - Two listeners are configured: `plain` (port 9092, no TLS) and `tls` (port 9093, encrypted)
 - The `entityOperator` enables the Topic Operator and User Operator for declarative topic and user management
+- `KafkaNodePool` names are scoped to the **namespace**, not to the cluster — if you run multiple Kafka clusters in the same namespace, each node pool must have a unique name (e.g. `cluster-a-pool`, `cluster-b-pool`)
 
 ### Step 2: Deploy the Cluster
 
@@ -158,6 +159,115 @@ kubectl -n my-namespace run kafka-consumer -ti \
     --topic my-topic \
     --from-beginning
 ```
+
+## Configuring TLS
+
+To configure a Kafka cluster with TLS, add a new listener with `tls=true` in the `Kafka` custom resource. By default, the Kafka cluster will sign certificates using the Strimzi cluster CA.
+
+```yaml
+listeners:
+  - name: tls
+    port: 9093
+    type: internal
+    tls: true
+```
+
+Strimzi will create the following secrets in the cluster namespace, prefixed by the cluster name: `clients-ca`, `clients-ca-cert`, `cluster-ca`, and `cluster-ca-cert`.
+
+### Trusting the cluster CA cert from internal clients
+
+Clients running in the Kubernetes cluster should mount the cluster CA cert to their client pod:
+
+```yaml
+volumes:
+  - name: cluster-ca
+    secret:
+      secretName: my-cluster-cluster-ca-cert
+
+containers:
+  - name: my-java-client
+    image: my-java-client:latest
+    volumeMounts:
+      - name: cluster-ca
+        mountPath: /etc/kafka/cluster-ca
+        readOnly: true
+```
+
+Then, configure the Kafka client to use TLS. The truststore password is stored in the `cluster-ca-cert` secret under the `ca.password` key:
+
+```properties
+bootstrap.servers=my-cluster-kafka-bootstrap:9093
+security.protocol=SSL
+
+ssl.truststore.location=/etc/kafka/cluster-ca/ca.p12
+ssl.truststore.password=<truststore-password>
+ssl.truststore.type=PKCS12
+```
+
+This must be configured in the relevant Kafka clients settings.
+
+### Configuring SASL_SSL with SCRAM
+
+SASL_SSL with SCRAM is configurable through the Kafka custom resource listeners. First, add a new SCRAM listener with TLS enabled:
+
+```yaml
+listeners:
+  - name: scram
+    port: 9094
+    type: internal
+    tls: true
+    authentication:
+      type: scram-sha-512
+```
+
+Create a KafkaUser for your cluster using SCRAM authentication:
+
+```yaml
+apiVersion: kafka.strimzi.io/v1
+kind: KafkaUser
+metadata:
+  name: my-cluster-kafka-scram-user   # name also becomes the Secret name
+  labels:
+    strimzi.io/cluster: my-cluster
+spec:
+  authentication:
+    type: scram-sha-512
+```
+
+Strimzi creates a Secret with the same name as the KafkaUser (`my-cluster-kafka-scram-user`), containing the password and JAAS config. Clients running in the Kubernetes cluster should mount the cluster CA cert and scram user secrets:
+
+```yaml
+volumes:
+  - name: cluster-ca
+    secret:
+      secretName: my-cluster-cluster-ca-cert
+  - name: scram-user
+    secret:
+      secretName: my-cluster-kafka-scram-user
+containers:
+  - name: my-java-client
+    image: my-java-client:latest
+    volumeMounts:
+      - name: cluster-ca
+        mountPath: /etc/kafka/cluster-ca
+        readOnly: true
+      - name: scram-user
+        mountPath: /etc/kafka/scram-user
+        readOnly: true
+```
+
+Then, configure the client to use SASL_SSL with SCRAM-SHA-512:
+
+```properties
+security.protocol=SASL_SSL
+sasl.mechanism=SCRAM-SHA-512
+sasl.jaas.config=<value of sasl.jaas.config key in the my-cluster-kafka-scram-user Secret>
+ssl.truststore.location=/etc/kafka/cluster-ca/ca.p12
+ssl.truststore.password=<truststore password>
+ssl.truststore.type=PKCS12
+```
+
+Strimzi also supports mTLS and custom CA certificates. For additional Strimzi certificate documentation, see the [Strimzi security reference](https://github.com/IBM/strimzi-kafka-operator/tree/main/documentation/modules/security).
 
 ## Strimzi Custom Resources Reference
 
