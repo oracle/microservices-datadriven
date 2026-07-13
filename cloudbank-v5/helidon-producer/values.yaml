@@ -15,6 +15,12 @@ helidon:
     name: "producer"
 
 env:
+  # Resolve the namespace at runtime so the JWT issuer exactly matches the
+  # namespace-qualified issuer configured by the CloudBank azn-server.
+  - name: POD_NAMESPACE
+    valueFrom:
+      fieldRef:
+        fieldPath: metadata.namespace
   - name: OTEL_SERVICE_NAME
     value: "helidon-producer"
   - name: OTEL_INSTRUMENTATION_KAFKA_METRICS_ENABLED
@@ -23,6 +29,10 @@ env:
     value: "obaas-kafka-cluster-kafka-bootstrap:9092"
   - name: KAFKA_TOPIC
     value: "my-topic"
+  - name: MP_JWT_VERIFY_ISSUER
+    value: "http://azn-server.$(POD_NAMESPACE).svc.cluster.local:8080"
+  - name: CLOUDBANK_SECURITY_JWK_SET_URI
+    value: "http://azn-server.$(POD_NAMESPACE).svc.cluster.local:8080/oauth2/jwks"
 
 database:
   authN:

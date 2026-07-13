@@ -1,5 +1,5 @@
-"""Copyright (c) 2026, Oracle and/or its affiliates.
-Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl."""
+# Copyright (c) 2026, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
 
 """
 Basic SQL parse-check before executing Select AI output.

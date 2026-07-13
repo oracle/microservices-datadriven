@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Improve APISIX Eureka discovery resilience by configuring direct endpoints for all three Eureka replicas and increasing registry send and read timeouts.
+- Keep Eureka Jetty connections open for 90 seconds by default, longer than APISIX/OpenResty's pooled connection lifetime, to avoid intermittent registry refresh failures caused by stale keepalive connections.
+- Automatically register the required APISIX `opentelemetry` plugin_metadata via a sidecar container in the APISIX pod, eliminating the manual admin-API curl workaround and the recurring "plugin_metadata is required" warning.
+
 ## 0.0.1 - Feb 18, 2026
 
 AppVersion: 2.0.0

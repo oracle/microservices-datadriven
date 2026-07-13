@@ -2396,7 +2396,7 @@
       "description": "",
       "id": "d1c46deb-40f9-4fb8-9dd6-65c7a18800c6",
       "panelTypes": "row",
-      "title": "JDK24+ Virtual Threads"
+      "title": "Helidon Virtual Threads"
     },
     {
       "bucketCount": 30,
@@ -2416,10 +2416,10 @@
             {
               "aggregateAttribute": {
                 "dataType": "float64",
-                "id": "vthreads_scheduler_pool_size--float64--Gauge--true",
+                "id": "vthreads_count--float64--Gauge--true",
                 "isColumn": true,
                 "isJSON": false,
-                "key": "vthreads_scheduler_pool_size",
+                "key": "vthreads_count",
                 "type": "Gauge"
               },
               "aggregateOperator": "latest",
@@ -2433,7 +2433,7 @@
               "functions": [],
               "groupBy": [],
               "having": [],
-              "legend": "",
+              "legend": "Active Virtual Threads",
               "limit": null,
               "orderBy": [],
               "queryName": "A",
@@ -2460,8 +2460,8 @@
         "promql": [
           {
             "name": "A",
-            "query": "sum(vthreads_scheduler_pool_size{namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
-            "legend": "vthreads_scheduler_pool_size"
+            "query": "sum(vthreads_count{namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
+            "legend": "Active Virtual Threads"
           }
         ],
         "queryType": "promql"
@@ -2525,7 +2525,7 @@
       "stackedBarChart": false,
       "thresholds": [],
       "timePreferance": "GLOBAL_TIME",
-      "title": "VT Pool Size",
+      "title": "Active Virtual Threads",
       "yAxisUnit": "none"
     },
     {
@@ -2546,10 +2546,10 @@
             {
               "aggregateAttribute": {
                 "dataType": "float64",
-                "id": "vthreads_scheduler_parallelism--float64--Gauge--true",
+                "id": "vthreads_starts--float64--Gauge--true",
                 "isColumn": true,
                 "isJSON": false,
-                "key": "vthreads_scheduler_parallelism",
+                "key": "vthreads_starts",
                 "type": "Gauge"
               },
               "aggregateOperator": "latest",
@@ -2563,7 +2563,7 @@
               "functions": [],
               "groupBy": [],
               "having": [],
-              "legend": "",
+              "legend": "Virtual Thread Starts",
               "limit": null,
               "orderBy": [],
               "queryName": "A",
@@ -2590,8 +2590,8 @@
         "promql": [
           {
             "name": "A",
-            "query": "sum(vthreads_scheduler_parallelism{namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
-            "legend": "vthreads_scheduler_parallelism"
+            "query": "sum(vthreads_starts{namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
+            "legend": "Virtual Thread Starts"
           }
         ],
         "queryType": "promql"
@@ -2655,7 +2655,7 @@
       "stackedBarChart": false,
       "thresholds": [],
       "timePreferance": "GLOBAL_TIME",
-      "title": "Target Parallelism",
+      "title": "Virtual Thread Starts",
       "yAxisUnit": "none"
     },
     {
@@ -2676,15 +2676,15 @@
             {
               "aggregateAttribute": {
                 "dataType": "float64",
-                "id": "vthreads_scheduler_parallelism--float64--Gauge--true",
+                "id": "vthreads_pinned--float64--Gauge--true",
                 "isColumn": true,
                 "isJSON": false,
-                "key": "vthreads_scheduler_parallelism",
+                "key": "vthreads_pinned",
                 "type": "Gauge"
               },
               "aggregateOperator": "latest",
               "dataSource": "metrics",
-              "disabled": true,
+              "disabled": false,
               "expression": "A",
               "filters": {
                 "items": [],
@@ -2693,7 +2693,7 @@
               "functions": [],
               "groupBy": [],
               "having": [],
-              "legend": "",
+              "legend": "Pinned Virtual Threads",
               "limit": null,
               "orderBy": [],
               "queryName": "A",
@@ -2704,48 +2704,9 @@
               "filter": {
                 "expression": ""
               }
-            },
-            {
-              "aggregateAttribute": {
-                "dataType": "float64",
-                "id": "vthreads_scheduler_pool_size--float64--Gauge--true",
-                "isColumn": true,
-                "isJSON": false,
-                "key": "vthreads_scheduler_pool_size",
-                "type": "Gauge"
-              },
-              "aggregateOperator": "latest",
-              "dataSource": "metrics",
-              "disabled": true,
-              "expression": "B",
-              "filters": {
-                "items": [],
-                "op": "AND"
-              },
-              "functions": [],
-              "groupBy": [],
-              "having": [],
-              "legend": "",
-              "limit": null,
-              "orderBy": [],
-              "queryName": "B",
-              "reduceTo": "last",
-              "spaceAggregation": "avg",
-              "stepInterval": 60,
-              "timeAggregation": "latest",
-              "filter": {
-                "expression": ""
-              }
             }
           ],
-          "queryFormulas": [
-            {
-              "disabled": false,
-              "expression": "B/A",
-              "legend": "",
-              "queryName": "F1"
-            }
-          ]
+          "queryFormulas": []
         },
         "clickhouse_sql": [
           {
@@ -2759,8 +2720,8 @@
         "promql": [
           {
             "name": "A",
-            "query": "(avg(vthreads_scheduler_pool_size{namespace=~\"$namespace\", mp_app=~\"$app_name\"}))/(sum(vthreads_scheduler_parallelism{namespace=~\"$namespace\", mp_app=~\"$app_name\"}))",
-            "legend": ""
+            "query": "sum(vthreads_pinned{namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
+            "legend": "Pinned Virtual Threads"
           }
         ],
         "queryType": "promql"
@@ -2824,8 +2785,8 @@
       "stackedBarChart": false,
       "thresholds": [],
       "timePreferance": "GLOBAL_TIME",
-      "title": "VT Pool Used",
-      "yAxisUnit": "percentunit"
+      "title": "Pinned Virtual Threads",
+      "yAxisUnit": "none"
     },
     {
       "bucketCount": 30,
@@ -2845,15 +2806,15 @@
             {
               "aggregateAttribute": {
                 "dataType": "float64",
-                "id": "vthreads_scheduler_queued_virtual_thread_count--float64--Gauge--true",
+                "id": "vthreads_submitFailures--float64--Gauge--true",
                 "isColumn": true,
                 "isJSON": false,
-                "key": "vthreads_scheduler_queued_virtual_thread_count",
+                "key": "vthreads_submitFailures",
                 "type": "Gauge"
               },
               "aggregateOperator": "latest",
               "dataSource": "metrics",
-              "disabled": true,
+              "disabled": false,
               "expression": "A",
               "filters": {
                 "items": [],
@@ -2862,7 +2823,7 @@
               "functions": [],
               "groupBy": [],
               "having": [],
-              "legend": "",
+              "legend": "Submit Failures",
               "limit": null,
               "orderBy": [],
               "queryName": "A",
@@ -2889,8 +2850,8 @@
         "promql": [
           {
             "name": "A",
-            "query": "sum(vthreads_scheduler_queued_virtual_thread_count{namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
-            "legend": "vthreads_scheduler_queued_virtual_thread_count"
+            "query": "sum(vthreads_submitFailures{namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
+            "legend": "Submit Failures"
           }
         ],
         "queryType": "promql"
@@ -2954,7 +2915,7 @@
       "stackedBarChart": false,
       "thresholds": [],
       "timePreferance": "GLOBAL_TIME",
-      "title": "Current Queued VT",
+      "title": "Submit Failures",
       "yAxisUnit": "none"
     },
     {
@@ -2975,10 +2936,10 @@
             {
               "aggregateAttribute": {
                 "dataType": "float64",
-                "id": "vthreads_scheduler_mounted_virtual_thread_count--float64--Gauge--true",
+                "id": "vthreads_count--float64--Gauge--true",
                 "isColumn": true,
                 "isJSON": false,
-                "key": "vthreads_scheduler_mounted_virtual_thread_count",
+                "key": "vthreads_count",
                 "type": "Gauge"
               },
               "aggregateOperator": "sum",
@@ -2992,7 +2953,7 @@
               "functions": [],
               "groupBy": [],
               "having": [],
-              "legend": "Current Virtual Threads Mounted ",
+              "legend": "Active Virtual Threads",
               "limit": null,
               "orderBy": [],
               "queryName": "A",
@@ -3019,8 +2980,8 @@
         "promql": [
           {
             "name": "A",
-            "query": "sum(vthreads_scheduler_mounted_virtual_thread_count{namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
-            "legend": "Current Virtual Threads Mounted "
+            "query": "sum(vthreads_count{namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
+            "legend": "Active Virtual Threads"
           }
         ],
         "queryType": "promql"
@@ -3084,8 +3045,8 @@
       "stackedBarChart": false,
       "thresholds": [],
       "timePreferance": "GLOBAL_TIME",
-      "title": "Current Virtual Threads Mounted ",
-      "yAxisUnit": "short"
+      "title": "Active Virtual Threads Over Time",
+      "yAxisUnit": "none"
     },
     {
       "bucketCount": 30,
@@ -3105,11 +3066,11 @@
             {
               "aggregateAttribute": {
                 "dataType": "float64",
-                "id": "vthreads_scheduler_mounted_virtual_thread_count--float64--Gauge--true",
+                "id": "vthreads_recentPinned_seconds--float64--Summary--true",
                 "isColumn": true,
                 "isJSON": false,
-                "key": "vthreads_scheduler_mounted_virtual_thread_count",
-                "type": "Gauge"
+                "key": "vthreads_recentPinned_seconds",
+                "type": "Summary"
               },
               "aggregateOperator": "latest",
               "dataSource": "metrics",
@@ -3122,7 +3083,7 @@
               "functions": [],
               "groupBy": [],
               "having": [],
-              "legend": "Current Virtual Threads Mounted ",
+              "legend": "Pinned Duration p95",
               "limit": null,
               "orderBy": [],
               "queryName": "A",
@@ -3149,8 +3110,8 @@
         "promql": [
           {
             "name": "A",
-            "query": "sum(vthreads_scheduler_mounted_virtual_thread_count{namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
-            "legend": "Current Virtual Threads Mounted "
+            "query": "max(vthreads_recentPinned_seconds{namespace=~\"$namespace\", mp_app=~\"$app_name\", quantile=\"0.95\"})",
+            "legend": "Pinned Duration p95"
           }
         ],
         "queryType": "promql"
@@ -3214,8 +3175,8 @@
       "stackedBarChart": false,
       "thresholds": [],
       "timePreferance": "GLOBAL_TIME",
-      "title": "Current Virtual Threads Mounted ",
-      "yAxisUnit": "short"
+      "title": "Pinned Duration p95",
+      "yAxisUnit": "s"
     }
   ]
 }

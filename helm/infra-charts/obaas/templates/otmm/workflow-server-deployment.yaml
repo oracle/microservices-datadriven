@@ -161,8 +161,14 @@ spec:
 
             # Security configuration
             {{- if eq .Values.otmm.commonConfiguration.security.enabled true }}
+            - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
+              value: {{ .Values.otmm.commonConfiguration.security.identityProvider.issuer | quote }}
             - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI
               value: {{ .Values.otmm.commonConfiguration.security.identityProvider.jwksUri | quote }}
+            {{- if .Values.otmm.commonConfiguration.security.identityProvider.audience }}
+            - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_AUDIENCES
+              value: {{ .Values.otmm.commonConfiguration.security.identityProvider.audience | quote }}
+            {{- end }}
             - name: POLICY_SECURITY_CLAIMS_ROLE_PATHS
               value: {{ .Values.otmm.workflowServer.security.identityProvider.policy.claimsRolePaths | quote }}
             - name: POLICY_SECURITY_ROLE_SUPER_ADMIN
@@ -177,6 +183,8 @@ spec:
               value: {{ .Values.otmm.workflowServer.security.identityProvider.policy.roles.metadataManager | quote }}
             - name: POLICY_SECURITY_ROLE_WORKER
               value: {{ .Values.otmm.workflowServer.security.identityProvider.policy.roles.worker | quote }}
+            - name: CONDUCTOR_SECURITY_ENABLED
+              value: "true"
             {{- else }}
             - name: CONDUCTOR_SECURITY_ENABLED
               value: "false"

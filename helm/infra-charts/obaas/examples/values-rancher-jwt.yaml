@@ -1,0 +1,94 @@
+## Copyright (c) 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+
+# Rancher Desktop functional JWT/MicroTx evaluation.
+# This intentionally uses the in-cluster SIDB-FREE database and public dependency images.
+
+global:
+  imagePullSecrets: []
+
+database:
+  type: "SIDB-FREE"
+
+gateway-helm:
+  enabled: true
+
+ingress-nginx:
+  enabled: false
+
+eureka:
+  enabled: true
+  replicas: 1
+
+apisix:
+  enabled: true
+
+admin-server:
+  enabled: true
+
+config-server:
+  enabled: true
+
+oracle-database-exporter:
+  enabled: true
+
+signoz:
+  enabled: true
+
+k8s-infra:
+  global:
+    cloud: others
+    clusterName: rancher-desktop
+    deploymentEnvironment: rancher-jwt
+
+kafka:
+  enabled: true
+  version: 4.2.0
+  metadataVersion: 4.2-IV1
+
+otmm:
+  commonConfiguration:
+    security:
+      enabled: true
+      identityProvider:
+        serverType: other
+        issuer: "http://azn-server.obaas.svc.cluster.local:8080"
+        jwksUri: "http://azn-server.obaas.svc.cluster.local:8080/oauth2/jwks"
+        identityProviderUrl: "http://azn-server.obaas.svc.cluster.local:8080/oauth2/token"
+        audience: "microtx-workflow"
+        adminUserRoles: "microtx-conductor-admin"
+        adminUserRolesPath: "roles"
+        policy:
+          claimsRolePaths: "roles"
+          roles:
+            superAdmin: "microtx-conductor-super-admin"
+            admin: "microtx-conductor-admin"
+            user: "microtx-conductor-user"
+            readOnlyUser: "microtx-conductor-read-only-user"
+            metadataManager: "microtx-conductor-metadata-manager"
+            worker: "microtx-conductor-worker"
+
+  coordinator:
+    enabled: true
+
+  workflowServer:
+    enabled: true
+    security:
+      identityProvider:
+        policy:
+          claimsRolePaths: "roles"
+          roles:
+            superAdmin: "microtx-conductor-super-admin"
+            admin: "microtx-conductor-admin"
+            user: "microtx-conductor-user"
+            readOnlyUser: "microtx-conductor-read-only-user"
+            metadataManager: "microtx-conductor-metadata-manager"
+            worker: "microtx-conductor-worker"
+
+  # The API validation does not require the browser console. Enable it separately
+  # after registering an authorization-code client and cookie-encryption Secret.
+  console:
+    enabled: false
+
+ai-optimizer:
+  enabled: false
