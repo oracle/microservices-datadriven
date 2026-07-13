@@ -123,6 +123,9 @@ eureka:
     imagePullSecrets: *imagePullSecrets
   enabled: true
   replicas: 3
+  # Keep Jetty server connections alive longer than APISIX/OpenResty's
+  # 60-second pooled connection lifetime to avoid reusing server-closed sockets.
+  connectionIdleTimeout: 90s
   image:
     repository: myregistry.example.com/obaas/service-registry
     tag: "2.1.0"
@@ -466,17 +469,19 @@ apisix:
     discovery:
       enabled: true
       registry:
-        # Eureka service discovery - connects to eureka StatefulSet via alias service
-        # (see templates/eureka/service-alias.yaml)
+        # Eureka service discovery - connects directly to each StatefulSet replica
+        # so APISIX can fail over within the same registry refresh cycle.
         eureka:
           host:
-            - "http://eureka:8761"
+            - "http://{{ .Release.Name }}-eureka-0.{{ .Release.Name }}-eureka.{{ .Release.Namespace }}.svc.cluster.local:8761"
+            - "http://{{ .Release.Name }}-eureka-1.{{ .Release.Name }}-eureka.{{ .Release.Namespace }}.svc.cluster.local:8761"
+            - "http://{{ .Release.Name }}-eureka-2.{{ .Release.Name }}-eureka.{{ .Release.Namespace }}.svc.cluster.local:8761"
           prefix: "/eureka/"
           fetch_interval: 30
           timeout:
             connect: 2000
-            send: 2000
-            read: 5000
+            send: 5000
+            read: 15000
           weight: 100
         # Kubernetes service discovery
         kubernetes: {}

@@ -47,6 +47,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
 import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
@@ -54,6 +55,8 @@ import org.springframework.security.oauth2.server.authorization.config.annotatio
 import org.springframework.security.oauth2.server.authorization.config.annotation.web.configurers.OAuth2AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
+import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
@@ -73,6 +76,9 @@ public class SecurityConfig {
     private static final String DEFAULT_TEST_CLIENT_SCOPES = "cloudbank.test";
     private static final String DEFAULT_ADMIN_CLIENT_ID = "cloudbank-admin-client";
     private static final String DEFAULT_ADMIN_CLIENT_SCOPES = "cloudbank.admin";
+    private static final String DEFAULT_MICROTX_CLIENT_ID = "microtx-workflow-client";
+    private static final String DEFAULT_MICROTX_CLIENT_SCOPES = "microtx.workflow";
+    private static final String DEFAULT_MICROTX_ROLES = "microtx-conductor-user,microtx-conductor-worker";
 
     public static final String ROLE_HIERARCHY = "ROLE_ADMIN > ROLE_USER\n"
             + "ROLE_ADMIN > ROLE_CONFIG_EDITOR\n"
@@ -256,7 +262,12 @@ public class SecurityConfig {
             @Value("${azn.authorization-server.admin-client.id:" + DEFAULT_ADMIN_CLIENT_ID + "}") String adminClientId,
             @Value("${azn.authorization-server.admin-client.secret:}") String adminClientSecret,
             @Value("${azn.authorization-server.admin-client.scopes:" + DEFAULT_ADMIN_CLIENT_SCOPES + "}")
-                    String adminClientScopes) {
+                    String adminClientScopes,
+            @Value("${azn.authorization-server.microtx-client.id:" + DEFAULT_MICROTX_CLIENT_ID + "}")
+                    String microtxClientId,
+            @Value("${azn.authorization-server.microtx-client.secret:}") String microtxClientSecret,
+            @Value("${azn.authorization-server.microtx-client.scopes:" + DEFAULT_MICROTX_CLIENT_SCOPES + "}")
+                    String microtxClientScopes) {
         if (!StringUtils.hasText(clientSecret)) {
             throw new IllegalStateException("azn.authorization-server.default-client.secret must be set when "
                     + "azn.authorization-server.default-client.enabled=true");
@@ -284,6 +295,8 @@ public class SecurityConfig {
                 testClientId, testClientSecret, testClientScopes);
         addClientCredentialsClient(registeredClients, passwordEncoder,
                 adminClientId, adminClientSecret, adminClientScopes);
+        addClientCredentialsClient(registeredClients, passwordEncoder,
+                microtxClientId, microtxClientSecret, microtxClientScopes);
 
         return new InMemoryRegisteredClientRepository(registeredClients);
     }
@@ -293,8 +306,37 @@ public class SecurityConfig {
      * @return the AuthorizationServerSettings
      */
     @Bean
-    public AuthorizationServerSettings authorizationServerSettings() {
-        return AuthorizationServerSettings.builder().build();
+    public AuthorizationServerSettings authorizationServerSettings(
+            @Value("${azn.authorization-server.issuer:http://localhost:8080}") String issuer) {
+        return AuthorizationServerSettings.builder().issuer(issuer).build();
+    }
+
+    /**
+     * Add the role claim expected by MicroTx Workflows to the dedicated client token.
+     *
+     * @param microtxClientId configured MicroTx client id.
+     * @param microtxRoles comma-delimited role names.
+     * @return token customizer.
+     */
+    @Bean
+    public OAuth2TokenCustomizer<JwtEncodingContext> jwtTokenCustomizer(
+            @Value("${azn.authorization-server.microtx-client.id:" + DEFAULT_MICROTX_CLIENT_ID + "}")
+                    String microtxClientId,
+            @Value("${azn.authorization-server.microtx-client.roles:" + DEFAULT_MICROTX_ROLES + "}")
+                    String microtxRoles,
+            @Value("${azn.authorization-server.microtx-client.audience:microtx-workflow}")
+                    String microtxAudience) {
+        List<String> roles = Arrays.stream(microtxRoles.split(","))
+                .map(String::trim)
+                .filter(StringUtils::hasText)
+                .toList();
+        return context -> {
+            if (OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())
+                && microtxClientId.equals(context.getRegisteredClient().getClientId())) {
+                context.getClaims().claim("roles", roles);
+                context.getClaims().audience(List.of(microtxAudience));
+            }
+        };
     }
 
     /**

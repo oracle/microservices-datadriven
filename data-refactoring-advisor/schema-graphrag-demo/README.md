@@ -142,6 +142,24 @@ cp .env.example .env
 | `ADB_ADMIN_USER` | `admin` (default for ADB) |
 | `ADB_ADMIN_PASSWORD` | Your ADB ADMIN password — used for the STS cursor-cache load step |
 
+For a local Oracle Free Docker container started with:
+
+```bash
+docker run -d -p 1521:1521 -e ORACLE_PASSWORD=Welcome12345 gvenzl/oracle-free:latest-faststart
+```
+
+use:
+
+```env
+ADB_DSN=localhost:1521/FREEPDB1
+ADB_USER=UNIV_SCHEMARAG
+ADB_PASSWORD=Welcome12345
+ADB_WALLET_LOCATION=
+ADB_WALLET_PASSWORD=
+ADB_ADMIN_USER=system
+ADB_ADMIN_PASSWORD=Welcome12345
+```
+
 **LLM configuration**
 
 The pipeline defaults to Claude (Opus for SQL generation, Haiku for table retrieval) but works with any LLM — swap in GPT-4, Gemini, or a local model by updating these variables and the corresponding client code in `src/nl2sql/claude_client_ai.py`.
@@ -167,7 +185,11 @@ The affinity score between two tables is a **Jaccard-based coefficient** compute
 
 ### Database Setup
 
-**Step 1 — Run as ADMIN using SQLcl:**
+Use one of the following setup paths before running the workload pipeline.
+
+**Option A — ADB / SQLcl setup**
+
+Run as ADMIN using SQLcl:
 
 Start SQLcl from your terminal:
 
@@ -193,15 +215,30 @@ DEFINE ADB_PASSWORD=Welcome12345
 
 > Replace `/path/to/Wallet_yourdb.zip` with the full path to your wallet zip file, `yourdb_high` with your ADB service name (found inside the wallet's `tnsnames.ora`), and `Welcome12345` with the value of `ADB_PASSWORD` in your `.env` file.
 
-### Build Pipeline
+After this SQLcl setup, continue with the build pipeline below.
 
-Each step can be run individually or all at once:
+**Option B — Python setup for local Docker or fresh databases**
+
+If you want the Python pipeline to create the schema owner and tables from your `.env` settings, run:
 
 ```bash
-# Full pipeline (all 6 steps)
+python -m src.pipeline.build_pipeline --schema university --step user
+python -m src.pipeline.build_pipeline --schema university --step ddl
+```
+
+The `user` step connects as `ADB_ADMIN_USER` and creates `UNIV_SCHEMARAG` plus the required grants. On local Oracle Free Docker, if `system` cannot grant package privileges directly, the step retries those grants as `SYSDBA` using the same `ADB_ADMIN_PASSWORD`. The `ddl` step connects as `UNIV_SCHEMARAG` and creates the university schema tables. These steps are useful for a brand-new local Oracle Docker container.
+
+### Build Pipeline
+
+After Database Setup, each build step can be run individually or all at once:
+
+```bash
+# Full build pipeline (seed, workload, graph extraction, annotations)
 python -m src.pipeline.build_pipeline --schema university
 
 # Individual steps
+python -m src.pipeline.build_pipeline --schema university --step user       # create schema user + grants
+python -m src.pipeline.build_pipeline --schema university --step ddl        # create schema tables
 python -m src.pipeline.build_pipeline --schema university --step seed
 python -m src.pipeline.build_pipeline --schema university --step sts
 python -m src.pipeline.build_pipeline --schema university --step extract
@@ -378,12 +415,12 @@ python -m src.annotations.annotation_generator --table ENRL_REC
 # Bridge table — verify BRIDGES RegistrarCore:FinancialAid
 python -m src.annotations.annotation_generator --table STU_FA_XREF
 
-# Legacy isolated table — IN_COMMUNITY Legacy and JOINS_WITH LEGACY_CRS_TBL only
-python -m src.annotations.annotation_generator --table OLD_GRADE_ARCH
+# Opaque work table — verify BRIDGES Bursar:RegistrarCore and join paths through ENRL_REC
+python -m src.annotations.annotation_generator --table ACAD_EXCEPTION_WRK
 ```
 
 Expected for ENRL_REC: `IN_COMMUNITY`, `IS_HUB`, `JOINS_WITH` (×4+), affinity levels, `JOINS_PATH` chains.
-Expected for OLD_GRADE_ARCH: `IN_COMMUNITY Legacy` and `JOINS_WITH LEGACY_CRS_TBL` only — no FINANCIAL_AID_APPLICATION, BURS_STUDENT_ACCOUNT, or STU_MST annotations.
+Expected for ACAD_EXCEPTION_WRK: `BRIDGES Bursar:RegistrarCore`, `JOINS_WITH ENRL_REC`, and `JOINS_PATH STU_MST→ENRL_REC→ACAD_EXCEPTION_WRK`.
 
 ### CLI Spot-Checks
 
@@ -394,9 +431,9 @@ python -m src.annotations.annotation_generator --table ENRL_REC
 # Bridge table — should show BRIDGES RegistrarCore:FinancialAid
 python -m src.annotations.annotation_generator --table STU_FA_XREF
 
-# Legacy isolated — should show IN_COMMUNITY Legacy + JOINS_WITH LEGACY_CRS_TBL only
-# Must NOT contain: FINANCIAL_AID_APPLICATION, BURS_STUDENT_ACCOUNT, STU_MST
-python -m src.annotations.annotation_generator --table OLD_GRADE_ARCH
+# Opaque work table — should show BRIDGES Bursar:RegistrarCore
+# Must contain: STU_MST→ENRL_REC→ACAD_EXCEPTION_WRK
+python -m src.annotations.annotation_generator --table ACAD_EXCEPTION_WRK
 
 # Side-by-side NL2SQL comparison
 python -m src.pipeline.query_pipeline \
@@ -1079,4 +1116,26 @@ The following improvements have been identified for future development:
 
 11. **Join column pairs in JOINS_PATH annotations** — The sqlglot AST already contains the ON condition for every JOIN clause (`e.ER_ID = a.AEW_ENRL_KEY`), but the current `join_path_extractor.py` discards it after extracting table names. Capturing and storing these column pairs (with alias resolution) would allow JOINS_PATH annotations to express not just which tables to join but exactly how — e.g. `[ENRL_REC JOINS_PATH STU_MST(STU_ID→ER_STU_ID)→ENRL_REC(ER_ID→AEW_ENRL_KEY)→ACAD_EXCEPTION_WRK]`. This is most valuable for XX_ extension tables where column name mismatches (`SOURCE_CCID` → `CODE_COMBINATION_ID`) are not inferrable from naming conventions alone. Requires changes to `src/graph/join_path_extractor.py`, a `join_conditions CLOB` column added to `UNIV_JOIN_PATHS`, and updated formatting in `src/annotations/annotation_generator.py`.
 
-10. **Oracle Free Docker — full community coverage** — Oracle Free's 2 GB SGA cap (shared pool ~300–400 MB) causes cursor cache eviction during the STS workload step: only ~540 of ~722 statements survive before `LOAD_SQLSET` runs, resulting in 22 annotated tables instead of the full ~55 on ADB. The fix is to increase the shared pool floor (`ALTER SYSTEM SET shared_pool_size = 512M SCOPE=BOTH`) then re-run `--step sts → extract → community → joinpaths → annotate`. Until this is done, Scenario 1 SchemaRAG fails on Docker (Haiku does not see enough annotation context to select `ENRL_REC`), though all other scenarios pass.
+10. **Oracle Free Docker — full community coverage** — Oracle Free's constrained SGA can leave the shared pool too small for this demo workload, causing cursor cache eviction during the STS workload step: only ~540 of ~722 statements may survive before `LOAD_SQLSET` runs, resulting in 22 annotated tables instead of the full ~55 on ADB. The fix is to increase the shared pool floor to the largest value valid for the root container's `sga_target`, then re-run `--step sts → extract → community → joinpaths → annotate`. Connect to the root service as SYSDBA and check the limit:
+
+    ```bash
+    sql sys/<password>@//localhost:1521/FREE as sysdba
+    ```
+
+    ```sql
+    SHOW PARAMETER sga_target
+    SHOW PARAMETER shared_pool_size
+    ```
+
+    Oracle requires `shared_pool_size` to be smaller than 20% of the root container's `sga_target`. For example, with `sga_target=1536M`, `512M` and `384M` are invalid, while this setting is valid and has been observed to raise the actual shared pool from ~104M to ~400M:
+
+    ```sql
+    ALTER SYSTEM SET shared_pool_size = 256M SCOPE=BOTH;
+
+    SELECT pool, ROUND(SUM(bytes)/1024/1024) AS mb
+    FROM v$sgastat
+    WHERE pool = 'shared pool'
+    GROUP BY pool;
+    ```
+
+    Until this is done, Scenario 1 SchemaRAG can fail on Docker because Haiku does not see enough annotation context to select `ENRL_REC`, though all other scenarios may pass.

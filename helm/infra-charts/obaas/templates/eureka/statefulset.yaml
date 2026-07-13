@@ -56,6 +56,8 @@ spec:
             configMapKeyRef:
               name: {{ .Release.Name }}-eureka-server
               key: url
+        - name: SERVER_JETTY_CONNECTION_IDLE_TIMEOUT
+          value: {{ .Values.eureka.connectionIdleTimeout | quote }}
         {{- if .Values.signoz.enabled }}
         - name: OTEL_EXPORTER_OTLP_ENDPOINT
           value: "http://{{ .Release.Name }}-signoz-otel-collector.{{ .Release.Namespace }}:4318"
