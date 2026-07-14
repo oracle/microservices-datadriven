@@ -38,7 +38,7 @@ metadata:
   name: mysample-cluster
 spec:
   replicas: 3
-  image: ghcr.io/oracle/coherence-ce:22.06.7
+  image: ghcr.io/oracle/coherence-ce:22.06.13
   coherence:
     cacheConfig: coherence-cache-config.xml
   jvm:
@@ -58,7 +58,7 @@ metadata:
   name: mysample-cluster
 spec:
   replicas: 3
-  image: ghcr.io/oracle/coherence-ce:22.06.7
+  image: ghcr.io/oracle/coherence-ce:22.06.13
   coherence:
     cacheConfig: coherence-cache-config.xml
     persistence:
