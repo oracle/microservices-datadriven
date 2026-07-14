@@ -17,7 +17,7 @@ container-registry.oracle.com/obaas/service-registry:2.1.0
 docker.io/alpine/k8s:1.28.13
 docker.io/altinity/clickhouse-operator:0.21.2
 docker.io/altinity/metrics-exporter:0.21.2
-docker.io/apache/apisix:3.16.0-ubuntu
+docker.io/apache/apisix:3.17.0-ubuntu
 docker.io/bitnamilegacy/etcd:3.6.1
 docker.io/busybox:1.37
 docker.io/clickhouse/clickhouse-server:25.5.6
@@ -37,4 +37,3 @@ quay.io/strimzi/kafka:0.51.0-kafka-4.2.0
 quay.io/strimzi/operator:0.51.0
 registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.17.0
 registry.k8s.io/metrics-server/metrics-server:v0.8.1
-
