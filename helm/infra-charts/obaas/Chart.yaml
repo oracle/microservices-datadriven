@@ -22,7 +22,7 @@ appVersion: "2.1.1"
 dependencies:
   - name: gateway-helm
     repository: "file://charts/gateway-helm"
-    version: "1.8.1"
+    version: "1.8.2"
     condition: gateway-helm.enabled
   - name: ingress-nginx
     version: "4.15.1"

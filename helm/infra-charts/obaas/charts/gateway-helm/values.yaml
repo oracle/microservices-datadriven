@@ -11,7 +11,7 @@ global:
   images:
     envoyGateway:
       # This is the full image name including the hub, repo, and tag.
-      image: "docker.io/envoyproxy/gateway:v1.8.1"
+      image: "docker.io/envoyproxy/gateway:v1.8.2"
       # Specify image pull policy if default behavior isn't desired.
       # Default behavior: latest images will be Always else IfNotPresent.
       pullPolicy: Always
@@ -19,7 +19,7 @@ global:
       pullSecrets: []
     ratelimit:
       # This is the full image name including the hub, repo, and tag.
-      image: "docker.io/envoyproxy/ratelimit:3fb70258"
+      image: "docker.io/envoyproxy/ratelimit:master"
       # Specify image pull policy if default behavior isn't desired.
       # Default behavior: latest images will be Always else IfNotPresent.
       pullPolicy: IfNotPresent
@@ -28,12 +28,17 @@ global:
     envoyProxy:
       # This is the full image name including the hub, repo, and tag for the Envoy Proxy data plane.
       # If not specified, uses the default image built into envoy-gateway.
-      image: "docker.io/envoyproxy/envoy:distroless-v1.38.1"
+      image: "docker.io/envoyproxy/envoy:distroless-v1.38.3"
       # Specify image pull policy if default behavior isn't desired.
       # Default behavior: IfNotPresent.
       pullPolicy: IfNotPresent
       # List of secrets in the same namespace of the component that can be used to pull images from private repositories.
       pullSecrets: []
+
+# Values for CRDs dependency
+crds:
+  # -- Install Envoy Gateway CRDs, Gateway API CRDs, and Gateway API safe upgrade policy resources. Set to false when these resources are managed separately.
+  enabled: true
 
 # -- Labels to apply to all resources
 commonLabels: {}
@@ -63,13 +68,21 @@ deployment:
       allowPrivilegeEscalation: false
       capabilities:
         drop:
-        - ALL
+          - ALL
       privileged: false
+      readOnlyRootFilesystem: true
       runAsNonRoot: true
       runAsGroup: 65532
       runAsUser: 65532
       seccompProfile:
         type: RuntimeDefault
+    # -- Volume source for the Wasm module cache mounted at /var/lib/eg/wasm. Defaults to an emptyDir when left empty.
+    # Example: persist the Wasm module cache across controller restarts by backing it with a PersistentVolumeClaim:
+    #   wasmCacheVolume:
+    #     persistentVolumeClaim:
+    #       claimName: envoy-gateway-wasm-cache
+    strategy: {}
+    wasmCacheVolume: {}
   ports:
     - name: grpc
       port: 18000
@@ -108,6 +121,7 @@ deployment:
       runAsNonRoot: true
       runAsGroup: 65532
       runAsUser: 65532
+      fsGroup: 65532
       seccompProfile:
         type: RuntimeDefault
 
@@ -128,7 +142,7 @@ hpa:
   behavior: {}
 
 config:
-# -- EnvoyGateway configuration. Visit https://gateway.envoyproxy.io/docs/api/extension_types/#envoygateway to view all options.
+  # -- EnvoyGateway configuration. Visit https://gateway.envoyproxy.io/docs/api/extension_types/#envoygateway to view all options.
   envoyGateway:
     gateway:
       controllerName: gateway.envoyproxy.io/gatewayclass-controller
@@ -155,6 +169,13 @@ certgen:
     pod:
       annotations: {}
       labels: {}
+      securityContext:
+        runAsNonRoot: true
+        runAsGroup: 65532
+        runAsUser: 65532
+        fsGroup: 65532
+        seccompProfile:
+          type: RuntimeDefault
     resources: {}
     affinity: {}
     tolerations: []
@@ -164,7 +185,7 @@ certgen:
       allowPrivilegeEscalation: false
       capabilities:
         drop:
-        - ALL
+          - ALL
       privileged: false
       readOnlyRootFilesystem: true
       runAsNonRoot: true
