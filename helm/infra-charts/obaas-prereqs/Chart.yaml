@@ -13,7 +13,7 @@ maintainers:
 # This is the chart version.
 version: 0.1.0
 # This is the version number of the application being deployed.
-appVersion: "2.1.0"
+appVersion: "2.1.1"
 
 # SubCharts - Cluster-scoped singleton infrastructure
 dependencies:
