@@ -1,0 +1,21 @@
+## ARM64 OCI image overrides for the 2.1.0 test cluster.
+
+global:
+  imagePullSecretName: ocir-pull
+  imagePullSecrets:
+    - ocir-pull
+
+eureka:
+  image:
+    repository: phx.ocir.io/maacloud/obaas-arm64/eureka
+    tag: "2.1.0"
+
+admin-server:
+  image:
+    repository: phx.ocir.io/maacloud/obaas-arm64/admin-server
+    tag: "2.1.0"
+
+config-server:
+  image:
+    repository: phx.ocir.io/maacloud/obaas-arm64/config-server
+    tag: "2.1.0"

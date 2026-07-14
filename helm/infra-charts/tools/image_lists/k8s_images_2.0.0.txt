@@ -3,7 +3,7 @@
 # Generated for private registry mirroring
 # Generated on: 2025-12-04T16:45:46Z
 # OBaaS Helm Charts - Complete Image List
-container-registry.oracle.com/database/observability-exporter:2.2.0
+container-registry.oracle.com/database/observability-exporter:2.4.2
 container-registry.oracle.com/database/otmm:24.4.1
 container-registry.oracle.com/database/sqlcl:25.3.0
 container-registry.oracle.com/database/free:latest
