@@ -11,9 +11,9 @@ maintainers:
     email: obaas_ww@oracle.com
     url: https://oracle.github.io/microservices-backend
 # This is the chart version.
-version: 0.1.0
+version: 0.1.1
 # This is the version number of the application being deployed.
-appVersion: "2.1.0"
+appVersion: "2.1.1"
 
 # SubCharts
 # Note: Cluster-singleton prerequisites (oracle-database-operator, external-secrets, metrics-server,
