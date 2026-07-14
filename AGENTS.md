@@ -152,7 +152,7 @@ The OBaaS install docs use:
 ```bash
 helm install \
   cert-manager oci://quay.io/jetstack/charts/cert-manager \
-  --version v1.20.2 \
+  --version v1.21.0 \
   --namespace cert-manager \
   --create-namespace \
   --set crds.enabled=true \
@@ -693,7 +693,7 @@ Skip this step only if cert-manager is already installed and healthy.
 ```bash
 helm install \
   cert-manager oci://quay.io/jetstack/charts/cert-manager \
-  --version v1.20.2 \
+  --version v1.21.0 \
   --namespace cert-manager \
   --create-namespace \
   --set crds.enabled=true \

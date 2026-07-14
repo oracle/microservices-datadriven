@@ -111,19 +111,19 @@ oracle-database-operator:
       imagePullSecrets: *imagePullSecrets
     image:
       repository: myregistry.example.com/jetstack/cert-manager-controller
-      tag: v1.20.2
+      tag: v1.21.0
     webhook:
       image:
         repository: myregistry.example.com/jetstack/cert-manager-webhook
-        tag: v1.20.2
+        tag: v1.21.0
     cainjector:
       image:
         repository: myregistry.example.com/jetstack/cert-manager-cainjector
-        tag: v1.20.2
+        tag: v1.21.0
     startupapicheck:
       image:
         repository: myregistry.example.com/jetstack/cert-manager-startupapicheck
-        tag: v1.20.2
+        tag: v1.21.0
 
 # =============================================================================
 # external-secrets
