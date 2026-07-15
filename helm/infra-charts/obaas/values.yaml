@@ -746,9 +746,11 @@ signoz:
     image:
       registry: docker.io
       repository: signoz/signoz-otel-collector
-    # Override podAnnotations to tune or disable collector self-scrape.
-    # The SigNoz subchart default scrapes collector metrics on port 8888.
-    # podAnnotations: {}
+    # The collector metrics endpoint listens on localhost, while pod discovery
+    # targets the pod IP. The Prometheus receiver discovers only annotations
+    # whose scrape value is `true`, so disable its self-scrape explicitly.
+    podAnnotations:
+      signoz.io/scrape: "false"
     # ClusterRole rules for Kubernetes service discovery (prometheus receiver)
     clusterRole:
       rules:
