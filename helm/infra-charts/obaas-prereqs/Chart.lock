@@ -16,9 +16,9 @@ dependencies:
   version: 3.5.14
 - name: opentelemetry-operator
   repository: https://open-telemetry.github.io/opentelemetry-helm-charts
-  version: 0.114.1
+  version: 0.119.0
 - name: oracle-database-operator
   repository: file://charts/oracle-database-operator
   version: 0.2.0
-digest: sha256:6bbe3615547e6e8b9d93227521ca9821b257fd31dc187a95739c0669417c99c2
-generated: "2026-07-14T12:50:12.7883-05:00"
+digest: sha256:ea707d49f5c4f7f4c1002c9f4c89fc58545ddabf9666e37a407a3a48a44ab869
+generated: "2026-07-15T15:50:22.665683-05:00"
