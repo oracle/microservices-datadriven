@@ -604,7 +604,10 @@ signoz:
     clusterRole:
       rules:
         - apiGroups: [""]
-          resources: ["pods", "namespaces", "nodes", "services", "endpoints", "events"]
+          resources: ["pods", "namespaces", "nodes", "services", "events"]
+          verbs: ["get", "list", "watch"]
+        - apiGroups: ["discovery.k8s.io"]
+          resources: ["endpointslices"]
           verbs: ["get", "list", "watch"]
         - apiGroups: ["apps"]
           resources: ["replicasets"]
@@ -631,12 +634,12 @@ signoz:
             scrape_configs:
               - job_name: kube-state-metrics
                 kubernetes_sd_configs:
-                  - role: endpoints
+                  - role: endpointslice
                 relabel_configs:
                   - source_labels: [__meta_kubernetes_service_name]
                     action: keep
                     regex: .*kube-state-metrics
-                  - source_labels: [__meta_kubernetes_endpoint_port_name]
+                  - source_labels: [__meta_kubernetes_endpointslice_port_name]
                     action: keep
                     regex: http
               - job_name: apisix
