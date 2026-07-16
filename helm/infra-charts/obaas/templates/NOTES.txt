@@ -96,7 +96,7 @@ APISIX API Gateway:
 {{- if .Values.signoz.enabled }}
 
 SigNoz Observability:
-  Frontend: {{ .Release.Name }}-signoz.{{ .Release.Namespace }}.svc.cluster.local:3301
+  Frontend: {{ .Release.Name }}-signoz.{{ .Release.Namespace }}.svc.cluster.local:8080
   OTEL Collector: {{ .Release.Name }}-signoz-otel-collector.{{ .Release.Namespace }}.svc.cluster.local:4318
 {{- if .Values.signoz.auth.existingSecret }}
   Credentials: Check secret '{{ .Values.signoz.auth.existingSecret }}'

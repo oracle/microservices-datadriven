@@ -196,7 +196,12 @@ main() {
     # Ensure output directory exists
     mkdir -p "$IMAGE_LISTS_DIR"
 
-    # Collect images
+    # jsonpath template: emit one image per line (containers + initContainers),
+    # each terminated with an explicit newline so kubectl invocations can never
+    # run together without a separator.
+    local image_jsonpath='{range .items[*]}{range .spec.containers[*]}{.image}{"\n"}{end}{range .spec.initContainers[*]}{.image}{"\n"}{end}{end}'
+
+    # Write header first, outside the sort pipeline, so it keeps its order
     {
         echo "# OBaaS Helm Charts - Complete Image List"
         echo "# Generated for private registry mirroring"
@@ -204,19 +209,20 @@ main() {
         echo "#"
         echo "# ============================================================================"
         echo ""
+    } > "$OUTPUT_FILE"
 
+    # Collect images
+    {
         if [[ "$ALL_NAMESPACES" == "true" ]]; then
             # Get all images from all namespaces
-            kubectl get pods -A -o jsonpath="{.items[*].spec.containers[*].image}" | tr ' ' '\n'
-            kubectl get pods -A -o jsonpath="{.items[*].spec.initContainers[*].image}" | tr ' ' '\n'
+            kubectl get pods -A -o jsonpath="$image_jsonpath"
         else
             # Get images from specified namespaces
             for ns in "${NAMESPACES[@]}"; do
-                kubectl get pods -n "$ns" -o jsonpath="{.items[*].spec.containers[*].image}" 2>/dev/null | tr ' ' '\n'
-                kubectl get pods -n "$ns" -o jsonpath="{.items[*].spec.initContainers[*].image}" 2>/dev/null | tr ' ' '\n'
+                kubectl get pods -n "$ns" -o jsonpath="$image_jsonpath" 2>/dev/null
             done
         fi
-    } | grep -v '^\s*$' | sort -u > "$OUTPUT_FILE"
+    } | grep -v '^\s*$' | grep -v 'oke-public-' | sort -u >> "$OUTPUT_FILE"
 
     # Count images
     local count
