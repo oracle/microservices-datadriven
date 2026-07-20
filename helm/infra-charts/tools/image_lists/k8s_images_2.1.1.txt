@@ -37,6 +37,4 @@ quay.io/strimzi/kafka:1.1.0-kafka-4.2.0
 quay.io/strimzi/operator:1.1.0
 registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.17.0
 registry.k8s.io/metrics-server/metrics-server:v0.8.1
-sjc.ocir.io/maacloud/andytael/admin-server:2.1.1
-sjc.ocir.io/maacloud/andytael/config-server:2.1.1
-sjc.ocir.io/maacloud/andytael/eureka:2.1.1
+
