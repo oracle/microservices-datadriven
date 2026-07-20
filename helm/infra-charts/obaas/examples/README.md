@@ -145,7 +145,38 @@ helm upgrade --install obaas . \
 With release name `obaas`, Kafka clients can use `obaas-kafka-cluster-kafka-bootstrap:9092`.
 The chart also creates the stable alias `kafka-bootstrap:9092`.
 
-### 8. Private Registry Configuration (`values-private-registry.yaml`)
+### 8. Coherence Enabled Configuration (`values-coherence.yaml`)
+
+Create a three-member Coherence cluster managed by the Coherence Operator in the OBaaS release namespace.
+
+**Use case:** Coherence integration testing and development workloads that require a distributed cache or data grid
+
+**Prerequisites:**
+1. Install `obaas-prereqs` once per cluster.
+2. Keep `coherence-operator` enabled in `obaas-prereqs`.
+3. Ensure the Coherence Operator watches the OBaaS release namespace.
+
+**Installation:**
+```bash
+helm upgrade --install obaas . \
+  -f examples/values-coherence.yaml \
+  -n obaas \
+  --create-namespace
+```
+
+Set `coherence.name` to a DNS-compatible name unique within the release
+namespace. This example uses `mysample-cluster`; replace it with the name for
+your cluster. Verify it and its members with:
+
+```bash
+kubectl get coherence <coherence-cluster-name> -n obaas
+kubectl get pods -n obaas
+```
+
+The example is ephemeral. Add `coherence.coherence.persistence` with a suitable
+StorageClass and volume size when durable Coherence data is required.
+
+### 9. Private Registry Configuration (`values-private-registry.yaml`)
 
 Use a private container registry for all images with authentication.
 

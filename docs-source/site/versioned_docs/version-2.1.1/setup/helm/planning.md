@@ -80,6 +80,16 @@ kafka:
   enabled: true
 ```
 
+To create a Coherence cluster for an OBaaS instance, keep `coherence-operator` enabled in the cluster-wide `obaas-prereqs` chart, then enable Coherence in the namespace-scoped `obaas` chart. The `values-coherence.yaml` example creates a three-member, ephemeral cluster:
+
+```yaml
+coherence:
+  enabled: true
+  name: mysample-cluster
+```
+
+Configure `coherence.coherence.persistence` with a StorageClass and volume size when the cluster requires durable data. The Coherence Operator and its CRDs are installed once per cluster; each enabled OBaaS release creates its own Coherence custom resource in that release namespace.
+
 Note that most components also have additional configuration, and some have optional sub-components that you may also enable or disable as desired.
 
 ## Plan any customizations

@@ -147,24 +147,60 @@ EXECUTE WITH GRANT OPTION on:
 
 OBaaS requires cert-manager. If cert-manager is not already installed and healthy in the cluster, install it before `obaas-prereqs`.
 
+An installation is healthy only when both the Kubernetes components are ready and
+the Helm release reports `STATUS: deployed`. Healthy pods alone are not sufficient:
+cert-manager uses a post-install startup-check Job, and an interrupted Helm client
+can leave a release `pending-install` or leave running resources with no release
+record.
+
+Run Helm in the foreground. The caller's execution timeout must exceed Helm's
+timeout, and automation must retain Helm's exit code and output. Do not use
+`--no-hooks` to bypass the startup check.
+
 The OBaaS install docs use:
 
 ```bash
-helm install \
-  cert-manager oci://quay.io/jetstack/charts/cert-manager \
-  --version v1.21.0 \
-  --namespace cert-manager \
-  --create-namespace \
-  --set crds.enabled=true \
-  --set crds.keep=false
+helm upgrade --install cert-manager oci://quay.io/jetstack/charts/cert-manager \
+    --version v1.21.0 \
+    --namespace cert-manager \
+    --create-namespace \
+    --set crds.enabled=true \
+    --set crds.keep=false \
+    --wait \
+    --wait-for-jobs \
+    --timeout 10m
 ```
 
 Verify:
 
 ```bash
+helm status cert-manager -n cert-manager
 kubectl get pods -n cert-manager
+kubectl wait --for=condition=Available deployment --all \
+  -n cert-manager --timeout=5m
 kubectl get crd | grep cert-manager
 ```
+
+Do not continue to `obaas-prereqs` unless `helm status` reports
+`STATUS: deployed`.
+
+If Helm reports `pending-install` or `release: not found`, stop before installing
+OBaaS prerequisites. Collect `helm status`, `helm history`, the cert-manager Job
+list and relevant Job logs, deployment readiness, and namespace events. Do not
+delete cert-manager workloads or CRDs merely to clear Helm state.
+
+When workloads are healthy but `helm status` reports `release: not found`, inspect
+the Helm ownership metadata before retrying `helm upgrade --install`:
+
+```bash
+kubectl get deployment cert-manager -n cert-manager \
+  -o jsonpath='{.metadata.labels.app\.kubernetes\.io/managed-by}{"\\n"}{.metadata.annotations.meta\.helm\.sh/release-name}{"\\n"}{.metadata.annotations.meta\.helm\.sh/release-namespace}{"\\n"}'
+```
+
+Retry only when existing resources are owned by the `cert-manager` release in the
+`cert-manager` namespace. If Helm reports an ownership conflict, escalate for a
+controlled metadata reconciliation; do not perform destructive cleanup
+automatically.
 
 ### Private Registry Or Air-Gapped Requirements
 
@@ -688,24 +724,32 @@ to the public chart install commands.
 
 ### Step 3: Install cert-manager If Needed
 
-Skip this step only if cert-manager is already installed and healthy.
+Skip this step only if cert-manager is already healthy and
+`helm status cert-manager -n cert-manager` reports `STATUS: deployed`.
 
 ```bash
-helm install \
-  cert-manager oci://quay.io/jetstack/charts/cert-manager \
-  --version v1.21.0 \
-  --namespace cert-manager \
-  --create-namespace \
-  --set crds.enabled=true \
-  --set crds.keep=false
+helm upgrade --install cert-manager oci://quay.io/jetstack/charts/cert-manager \
+    --version v1.21.0 \
+    --namespace cert-manager \
+    --create-namespace \
+    --set crds.enabled=true \
+    --set crds.keep=false \
+    --wait \
+    --wait-for-jobs \
+    --timeout 10m
 ```
 
 Verify:
 
 ```bash
+helm status cert-manager -n cert-manager
 kubectl get pods -n cert-manager
 kubectl wait --for=condition=Available deployment --all -n cert-manager --timeout=5m
+kubectl get crd | grep cert-manager
 ```
+
+Do not install `obaas-prereqs` if the Helm release is pending, missing, or failed.
+Follow the cert-manager recovery guidance above.
 
 ### Step 4: Install Cluster Prerequisites Once
 

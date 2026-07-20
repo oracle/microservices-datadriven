@@ -923,6 +923,28 @@ kafka:
   version: 4.2.0
   metadataVersion: 4.2-IV1
 
+# Create a Coherence cluster in the OBaaS release namespace. The Coherence
+# Operator is installed once per cluster by the obaas-prereqs chart.
+coherence:
+  enabled: false
+  # Optional name for the Coherence custom resource. Leave empty to use
+  # <helm-release-name>-coherence-cluster.
+  name: ""
+  # A three-member cluster is suitable for development and integration testing.
+  replicas: 3
+  # Leave empty to use the Coherence Operator's configured default image.
+  image: ""
+  imagePullSecrets: []
+  jvm:
+    memory:
+      heapSize: 512m
+  ports:
+    - name: http
+      port: 8080
+  # Optional Coherence CR spec fields, for example cacheConfig or persistence.
+  coherence: {}
+  resources: {}
+
 ## Example for APISIX custom plugins:
 # extraConfigMaps:
 #   apisix-custom-plugin:
