@@ -41,6 +41,28 @@
         "extraIngress": { "type": "array" },
         "extraEgress": { "type": "array" }
       }
+    },
+    "coherence": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "name": { "type": "string" },
+        "replicas": { "type": "integer", "minimum": 1 },
+        "image": { "type": "string" },
+        "imagePullSecrets": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              { "type": "string" },
+              { "type": "object", "properties": { "name": { "type": "string" } }, "required": ["name"] }
+            ]
+          }
+        },
+        "jvm": { "type": "object" },
+        "ports": { "type": "array" },
+        "coherence": { "type": "object" },
+        "resources": { "type": "object" }
+      }
     }
   }
 }

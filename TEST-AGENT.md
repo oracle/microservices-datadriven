@@ -100,6 +100,9 @@ For failures, also capture:
 - `kubectl describe` for the failing resource.
 - Current and previous pod logs.
 - Related jobs and job logs.
+- For cert-manager install failures, Helm status and history, cert-manager Job
+  status/logs, deployment readiness, and cert-manager namespace events. Do not
+  treat healthy pods as a passing result when the Helm release is pending or absent.
 - For MicroTx Workflow Server failures, workflow server logs, health endpoint output, service/endpoints output, Helm values, latest `obaas-run-sql-*` job logs, and database privilege diagnostics for the application user.
 - Namespace events sorted by time.
 - Helm release status.
@@ -134,7 +137,7 @@ Use this matrix as the master list for each run. Mark each test `Pass`, `Fail`, 
 | PRE-005 | Preflight | Verify storage classes and RWX support decision. | Selected storage class and RWX status are recorded. | storageclass output |
 | PRE-006 | Preflight | Verify external access strategy. | Envoy Gateway default, explicit ingress-nginx opt-in, both, or port-forward-only path is documented. | service, ingress, gateway output |
 | PRE-007 | Preflight | Verify chart source. | Local 2.1.0 chart paths are used unless public charts match target version. | Chart.yaml and Helm search output |
-| INST-001 | Install | Install or verify cert-manager. | cert-manager deployments are available and CRDs exist. | pod, wait, CRD output |
+| INST-001 | Install | Install or verify cert-manager. | Helm reports `deployed`; cert-manager deployments are available; CRDs exist. A pending or missing Helm release is a failure even if pods are running. | Helm status, pod, wait, CRD output; on failure also capture Job logs and events |
 | INST-002 | Install | Install `obaas-prereqs` once. | Release deployed and prerequisite pods healthy. | Helm status and pod output |
 | INST-003 | Install | Install OBaaS. | Release deployed and OBaaS pods healthy. | Helm status and pod output |
 | INST-004 | Install | Verify no unexpected failed jobs or PVC problems. | Jobs succeeded and PVCs bound. | jobs, PVCs, events |
