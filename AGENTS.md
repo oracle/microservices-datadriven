@@ -383,7 +383,7 @@ For `ADB-S` and other external Autonomous Database deployments:
 database:
   type: "ADB-S"
   privAuthN:
-    secretName: "db-priv-authn"
+    secretName: "<db-name>-db-priv-authn"
     # secretNamespace: "<secret-namespace>"
   oci:
     ocid: "<adb-ocid>"
@@ -408,7 +408,7 @@ Alternatively, use OKE Workload Identity instead of API key authentication when 
 Create the privileged `ADMIN` secret:
 
 ```bash
-kubectl -n <application-namespace> create secret generic db-priv-authn \
+kubectl -n <application-namespace> create secret generic <db-name>-db-priv-authn \
   --from-literal=username=ADMIN \
   --from-literal=password=<admin-password> \
   --from-literal=service=<db-name>_tp
@@ -440,7 +440,7 @@ database:
     port: "1521"
     service_name: "<service-name>"
   privAuthN:
-    secretName: "db-priv-authn"
+    secretName: "<db-name>-db-priv-authn"
     # secretNamespace: "<secret-namespace>"
 ```
 
@@ -449,7 +449,7 @@ Use `database.privAuthN.secretNamespace` when the privileged credential secret i
 Create the privileged non-ADB secret:
 
 ```bash
-kubectl -n <application-namespace> create secret generic db-priv-authn \
+kubectl -n <application-namespace> create secret generic <db-name>-db-priv-authn \
   --from-literal=username=SYSTEM \
   --from-literal=password=<system-password> \
   --from-literal=service=<service-name>
