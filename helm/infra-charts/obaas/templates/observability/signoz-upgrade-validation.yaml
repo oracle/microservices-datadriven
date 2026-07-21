@@ -1,0 +1,5 @@
+{{/*
+Render-time validation for the SigNoz two-stage upgrade workflow.
+This template intentionally emits no Kubernetes resource.
+*/}}
+{{- include "obaas.signozUpgrade.validate" . -}}

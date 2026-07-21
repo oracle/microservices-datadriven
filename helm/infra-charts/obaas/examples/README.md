@@ -167,6 +167,39 @@ kubectl create secret docker-registry myregistry-secret \
 helm upgrade --install obaas . -f examples/values-private-registry.yaml
 ```
 
+### 9. SigNoz 0.133.0 Two-Stage Upgrade Profiles
+
+The files `values-signoz-0.133-stage1.yaml` and `values-signoz-0.133-stage2.yaml`
+select the two steps of the planned SigNoz upgrade workflow. Always layer the
+selected profile after the customer's normal values files and use the same Helm
+release name and namespace for both commands.
+
+Stage 1 creates and validates CSI snapshots, upgrades ClickHouse, and records a
+completion marker. Stage 2 refuses to run without that validated marker, upgrades
+SigNoz to `0.133.0` and the collector to `0.144.6`, runs the official telemetry
+migrations, removes obsolete OIDC mock resources, reruns login/dashboard setup,
+and validates historical plus newly ingested telemetry. Full OKE upgrade and fresh
+install validation are still required before release.
+
+Stage 1 snapshots are retained independently of the Helm hook and may incur storage
+charges. Helm does not delete them automatically.
+
+```bash
+# Stage 1 profile (snapshots, ClickHouse upgrade, validation, and marker)
+helm upgrade obaas . \
+  -n obaas \
+  --timeout 30m \
+  -f <customer-values-file> \
+  -f examples/values-signoz-0.133-stage1.yaml
+
+# Stage 2 profile (gate, SigNoz upgrade, cleanup, migrations, and validation)
+helm upgrade obaas . \
+  -n obaas \
+  --timeout 30m \
+  -f <customer-values-file> \
+  -f examples/values-signoz-0.133-stage2.yaml
+```
+
 ## Customizing Examples
 
 You can combine examples or create your own custom values file:

@@ -22,12 +22,15 @@ docker.io/apache/apisix:3.17.0-ubuntu
 docker.io/bitnamilegacy/etcd:3.6.1
 docker.io/busybox:1.37
 docker.io/clickhouse/clickhouse-server:25.5.6
+docker.io/clickhouse/clickhouse-server:25.12.5
 docker.io/curlimages/curl:8.20.0
 docker.io/envoyproxy/envoy:distroless-v1.38.3
 docker.io/envoyproxy/gateway:v1.8.2
 docker.io/otel/opentelemetry-collector-contrib:0.139.0
 docker.io/signoz/signoz-otel-collector:v0.144.1
+docker.io/signoz/signoz-otel-collector:v0.144.6
 docker.io/signoz/signoz:v0.113.0
+docker.io/signoz/signoz:v0.133.0
 docker.io/signoz/zookeeper:3.7.1
 ghcr.io/external-secrets/external-secrets:v2.6.0
 ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator:0.154.0
@@ -39,4 +42,3 @@ quay.io/strimzi/kafka:0.51.0-kafka-4.2.0
 quay.io/strimzi/operator:0.51.0
 registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.17.0
 registry.k8s.io/metrics-server/metrics-server:v0.8.1
-
