@@ -2284,7 +2284,7 @@
                   "reduceTo": "avg",
                   "spaceAggregation": "sum",
                   "temporality": "",
-                  "timeAggregation": "increase"
+                  "timeAggregation": "rate"
                 }
               ],
               "dataSource": "metrics",
@@ -2324,7 +2324,7 @@
         "promql": [
           {
             "name": "B",
-            "query": "sum(increase(requests_count_total{namespace=~\"$namespace\", mp_app=~\"$app_name\"}[5m]))",
+            "query": "sum(rate(requests_count_total{namespace=~\"$namespace\", mp_app=~\"$app_name\"}[5m]))",
             "legend": "Requests Per Second"
           }
         ],
