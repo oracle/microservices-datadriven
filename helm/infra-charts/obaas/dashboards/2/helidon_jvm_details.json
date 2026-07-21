@@ -2422,7 +2422,7 @@
                 "key": "vthreads_count",
                 "type": "Gauge"
               },
-              "aggregateOperator": "latest",
+              "aggregateOperator": "max",
               "dataSource": "metrics",
               "disabled": false,
               "expression": "A",
@@ -2433,14 +2433,14 @@
               "functions": [],
               "groupBy": [],
               "having": [],
-              "legend": "Active Virtual Threads",
+              "legend": "Peak Active Virtual Threads",
               "limit": null,
               "orderBy": [],
               "queryName": "A",
-              "reduceTo": "last",
+              "reduceTo": "max",
               "spaceAggregation": "sum",
               "stepInterval": 60,
-              "timeAggregation": "latest",
+              "timeAggregation": "max",
               "filter": {
                 "expression": ""
               }
@@ -2525,7 +2525,7 @@
       "stackedBarChart": false,
       "thresholds": [],
       "timePreferance": "GLOBAL_TIME",
-      "title": "Active Virtual Threads",
+      "title": "Peak Active Virtual Threads",
       "yAxisUnit": "none"
     },
     {
@@ -2682,7 +2682,7 @@
                 "key": "vthreads_pinned",
                 "type": "Gauge"
               },
-              "aggregateOperator": "latest",
+              "aggregateOperator": "max",
               "dataSource": "metrics",
               "disabled": false,
               "expression": "A",
@@ -2693,14 +2693,14 @@
               "functions": [],
               "groupBy": [],
               "having": [],
-              "legend": "Pinned Virtual Threads",
+              "legend": "Peak Pinned Virtual Threads",
               "limit": null,
               "orderBy": [],
               "queryName": "A",
-              "reduceTo": "last",
+              "reduceTo": "max",
               "spaceAggregation": "sum",
               "stepInterval": 60,
-              "timeAggregation": "latest",
+              "timeAggregation": "max",
               "filter": {
                 "expression": ""
               }
@@ -2785,7 +2785,7 @@
       "stackedBarChart": false,
       "thresholds": [],
       "timePreferance": "GLOBAL_TIME",
-      "title": "Pinned Virtual Threads",
+      "title": "Peak Pinned Virtual Threads",
       "yAxisUnit": "none"
     },
     {
