@@ -9,6 +9,56 @@ sidebar_position: 1
 
 Apache APISIX will be installed if the `apisix.enabled` is set to `true` in the `values.yaml` file. The default namespace for Apache APISIX is `apisix`.
 
+## Configure APISIX for multiple Eureka replicas
+
+By default, OBaaS deploys three Eureka replicas. APISIX connects directly to each
+Eureka StatefulSet pod so that it can refresh the service registry and fail over
+to another Eureka replica.
+
+If you change `eureka.replicas`, also update
+`apisix.apisix.discovery.registry.eureka.host`. Include one host entry for every
+Eureka replica, numbered from `0` through `eureka.replicas - 1`.
+
+For example, the following values configure five Eureka replicas:
+
+```yaml
+eureka:
+  replicas: 5
+
+apisix:
+  apisix:
+    discovery:
+      registry:
+        eureka:
+          host:
+            - "http://{{ .Release.Name }}-eureka-0.{{ .Release.Name }}-eureka.{{ .Release.Namespace }}.svc.cluster.local:8761"
+            - "http://{{ .Release.Name }}-eureka-1.{{ .Release.Name }}-eureka.{{ .Release.Namespace }}.svc.cluster.local:8761"
+            - "http://{{ .Release.Name }}-eureka-2.{{ .Release.Name }}-eureka.{{ .Release.Namespace }}.svc.cluster.local:8761"
+            - "http://{{ .Release.Name }}-eureka-3.{{ .Release.Name }}-eureka.{{ .Release.Namespace }}.svc.cluster.local:8761"
+            - "http://{{ .Release.Name }}-eureka-4.{{ .Release.Name }}-eureka.{{ .Release.Namespace }}.svc.cluster.local:8761"
+          prefix: "/eureka/"
+```
+
+Apply the updated values with Helm:
+
+```shell
+helm upgrade --install <app-release> helm/infra-charts/obaas \
+  --namespace <application-namespace> \
+  --create-namespace \
+  -f <values-file>
+```
+
+Verify that the APISIX ConfigMap includes an endpoint for each Eureka replica:
+
+```shell
+kubectl -n <application-namespace> get configmap <app-release>-apisix \
+  -o yaml | yq '.data."config.yaml"' \
+  | yq '.discovery.registry.eureka.host'
+```
+
+The command should return five endpoints for the example configuration, from
+`<app-release>-eureka-0` through `<app-release>-eureka-4`.
+
 ## Accessing Apache APISIX
 
 Oracle Backend for Microservices and AI deploys the Apache APISIX Gateway and Dashboard in the `apisix` namespace by default. The gateway is exposed via an external load balancer and an ingress controller.
