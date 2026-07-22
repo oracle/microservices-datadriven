@@ -13,6 +13,16 @@ Oracle Backend for Microservices and AI includes the Spring Boot Eureka service 
 
 Spring Boot Eureka Server will be installed if the `eureka.enabled` is set to `true` in the `values.yaml` file. The default namespace for Spring Boot Eureka Server is `eureka`.
 
+### Scaling Eureka replicas
+
+By default, OBaaS deploys three Eureka replicas. You can change the number of
+replicas with `eureka.replicas`.
+
+When APISIX is enabled, update the APISIX Eureka discovery host list to include
+each Eureka replica. See [Configure APISIX for multiple Eureka
+replicas](./apacheapisix.md#configure-apisix-for-multiple-eureka-replicas) for
+the required configuration.
+
 ### Connection idle timeout
 
 The Eureka server's Jetty connection idle timeout defaults to 90 seconds. This is longer than APISIX/OpenResty's 60-second pooled connection lifetime and prevents APISIX from attempting to reuse a connection that Eureka has already closed.
