@@ -160,15 +160,13 @@ timeout, and automation must retain Helm's exit code and output. Do not use
 The OBaaS install docs use:
 
 ```bash
-helm upgrade --install cert-manager oci://quay.io/jetstack/charts/cert-manager \
-    --version v1.21.0 \
-    --namespace cert-manager \
-    --create-namespace \
-    --set crds.enabled=true \
-    --set crds.keep=false \
-    --wait \
-    --wait-for-jobs \
-    --timeout 10m
+helm install \
+  cert-manager oci://quay.io/jetstack/charts/cert-manager \
+  --version v1.20.2 \
+  --namespace cert-manager \
+  --create-namespace \
+  --set crds.enabled=true \
+  --set crds.keep=false
 ```
 
 Verify:
@@ -728,15 +726,13 @@ Skip this step only if cert-manager is already healthy and
 `helm status cert-manager -n cert-manager` reports `STATUS: deployed`.
 
 ```bash
-helm upgrade --install cert-manager oci://quay.io/jetstack/charts/cert-manager \
-    --version v1.21.0 \
-    --namespace cert-manager \
-    --create-namespace \
-    --set crds.enabled=true \
-    --set crds.keep=false \
-    --wait \
-    --wait-for-jobs \
-    --timeout 10m
+helm install \
+  cert-manager oci://quay.io/jetstack/charts/cert-manager \
+  --version v1.20.2 \
+  --namespace cert-manager \
+  --create-namespace \
+  --set crds.enabled=true \
+  --set crds.keep=false
 ```
 
 Verify:

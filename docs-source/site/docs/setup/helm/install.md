@@ -210,16 +210,13 @@ helm repo update
 OBaaS requires [cert-manager](https://cert-manager.io/) as a prerequisite. If you do not have cert-manager installed on your cluster, install it now:
 
 ```shell
-helm upgrade --install cert-manager oci://quay.io/jetstack/charts/cert-manager \
-    --version v1.21.0 \
-    --namespace cert-manager \
-    --create-namespace \
-    --set crds.enabled=true \
-    --set crds.keep=false \
-    --wait \
-    --wait-for-jobs \
-    --timeout 10m
-    --debug
+helm install \
+  cert-manager oci://quay.io/jetstack/charts/cert-manager \
+  --version v1.20.2 \
+  --namespace cert-manager \
+  --create-namespace \
+  --set crds.enabled=true \
+  --set crds.keep=false
 ```
 
 #### Step 2: Install Prerequisites (Once Per Cluster)
