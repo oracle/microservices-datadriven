@@ -1,6 +1,6 @@
-# OBaaS 2.1.0 Installation Guide For AI Agents
+# OBaaS 2.1.1 Installation Guide For AI Agents
 
-This guide tells an AI agent how to plan, prepare, install, and verify Oracle Backend for Microservices and AI, commonly called OBaaS, version 2.1.0. In the product documentation, this version is the `next` documentation stream.
+This guide tells an AI agent how to plan, prepare, install, and verify Oracle Backend for Microservices and AI, commonly called OBaaS, version 2.1.1. In the product documentation, this version is the `next` documentation stream.
 
 ## Source Rules
 
@@ -12,7 +12,7 @@ This guide tells an AI agent how to plan, prepare, install, and verify Oracle Ba
 - Treat the public docs entry point as the same content represented locally under `docs-source/site/docs/intro.md` and the setup pages under `docs-source/site/docs/setup/helm/`.
 - Treat Helm chart defaults and examples under `helm/infra-charts` as the source of truth for chart value names and installable optional components.
 - For the currently in-development OBaaS version, install, render, lint, and test with the local chart paths under `helm/infra-charts`, not with public Helm repository references, unless the public Helm repository has already published charts whose `APP VERSION` or `appVersion` matches the target version.
-- OBaaS 2.1.0 is currently an in-development target in this repository. Its local charts are `helm/infra-charts/obaas-prereqs` and `helm/infra-charts/obaas`; do not install `obaas/obaas-prereqs` or `obaas/obaas` from the public repository for a 2.1.0 test while the public repository still advertises an older application version such as 2.0.0.
+- OBaaS 2.1.1 is currently an in-development target in this repository. Its local charts are `helm/infra-charts/obaas-prereqs` and `helm/infra-charts/obaas`; do not install `obaas/obaas-prereqs` or `obaas/obaas` from the public repository for a 2.1.1 test while the public repository still advertises an older application version.
 
 ## Before You Start
 
@@ -48,7 +48,7 @@ kubectl get nodes
 
 ### Kubernetes Cluster
 
-OBaaS 2.1.0 requires a CNCF-compliant Kubernetes cluster. The `next` prerequisites documentation states:
+OBaaS 2.1.1 requires a CNCF-compliant Kubernetes cluster. The `next` prerequisites documentation states:
 
 - Kubernetes 1.34 or later.
 - At least 3 worker nodes.
@@ -160,15 +160,13 @@ timeout, and automation must retain Helm's exit code and output. Do not use
 The OBaaS install docs use:
 
 ```bash
-helm upgrade --install cert-manager oci://quay.io/jetstack/charts/cert-manager \
-    --version v1.21.0 \
-    --namespace cert-manager \
-    --create-namespace \
-    --set crds.enabled=true \
-    --set crds.keep=false \
-    --wait \
-    --wait-for-jobs \
-    --timeout 10m
+helm install \
+  cert-manager oci://quay.io/jetstack/charts/cert-manager \
+  --version v1.21.0 \
+  --namespace cert-manager \
+  --create-namespace \
+  --set crds.enabled=true \
+  --set crds.keep=false
 ```
 
 Verify:
@@ -218,7 +216,7 @@ cd helm/infra-charts/tools
 ./mirror-images.sh myregistry.example.com
 ```
 
-The image list for this version is available under `helm/infra-charts/tools/image_lists/k8s_images_2.1.0.txt`.
+The image list for this version is available under `helm/infra-charts/tools/image_lists/k8s_images_2.1.1.txt`.
 
 ## Planning The Installation
 
@@ -324,7 +322,7 @@ OBaaS uses two Helm charts.
 
 ### Choose And Layer Values Files
 
-Start from the closest example and add only the overrides needed for the environment. For an in-development version such as the current 2.1.0 work, use the local chart path:
+Start from the closest example and add only the overrides needed for the environment. For an in-development version such as the current 2.1.1 work, use the local chart path:
 
 ```bash
 helm upgrade --install <app-release> helm/infra-charts/obaas \
@@ -383,7 +381,7 @@ For `ADB-S` and other external Autonomous Database deployments:
 database:
   type: "ADB-S"
   privAuthN:
-    secretName: "db-priv-authn"
+    secretName: "<db-name>-db-priv-authn"
     # secretNamespace: "<secret-namespace>"
   oci:
     ocid: "<adb-ocid>"
@@ -408,7 +406,7 @@ Alternatively, use OKE Workload Identity instead of API key authentication when 
 Create the privileged `ADMIN` secret:
 
 ```bash
-kubectl -n <application-namespace> create secret generic db-priv-authn \
+kubectl -n <application-namespace> create secret generic <db-name>-db-priv-authn \
   --from-literal=username=ADMIN \
   --from-literal=password=<admin-password> \
   --from-literal=service=<db-name>_tp
@@ -440,7 +438,7 @@ database:
     port: "1521"
     service_name: "<service-name>"
   privAuthN:
-    secretName: "db-priv-authn"
+    secretName: "<db-name>-db-priv-authn"
     # secretNamespace: "<secret-namespace>"
 ```
 
@@ -449,7 +447,7 @@ Use `database.privAuthN.secretNamespace` when the privileged credential secret i
 Create the privileged non-ADB secret:
 
 ```bash
-kubectl -n <application-namespace> create secret generic db-priv-authn \
+kubectl -n <application-namespace> create secret generic <db-name>-db-priv-authn \
   --from-literal=username=SYSTEM \
   --from-literal=password=<system-password> \
   --from-literal=service=<service-name>
@@ -461,7 +459,7 @@ Before installing with `database.type: OTHER`, verify the privileged user has th
 
 ### Cluster Access Values
 
-OBaaS 2.1.0 supports both Gateway API through Envoy Gateway and Ingress API through ingress-nginx. Envoy Gateway is enabled by default. ingress-nginx is deprecated and disabled by default; enable it only when an environment still requires the legacy Ingress API path.
+OBaaS 2.1.1 supports both Gateway API through Envoy Gateway and Ingress API through ingress-nginx. Envoy Gateway is enabled by default. ingress-nginx is deprecated and disabled by default; enable it only when an environment still requires the legacy Ingress API path.
 
 Enable Envoy Gateway:
 
@@ -710,14 +708,14 @@ helm/infra-charts/obaas-prereqs
 helm/infra-charts/obaas
 ```
 
-For the current 2.1.0 development stream, the local charts have `appVersion: 2.1.0-build.12` and chart `version: 0.0.13`. If the public Helm repository still reports `APP VERSION` as 2.0.0 or any other non-2.1.0 value, do not install or test with `obaas/obaas-prereqs` or `obaas/obaas`; use the local chart paths above.
+For the current 2.1.1 development stream, the local charts have `appVersion: 2.1.1` and chart `version: 0.1.1`. If the public Helm repository does not report `APP VERSION: 2.1.1`, do not install or test with `obaas/obaas-prereqs` or `obaas/obaas`; use the local chart paths above.
 
 Once the public repository publishes charts whose `APP VERSION` matches the target version, public chart references may be used. Use the chart version that corresponds to the target OBaaS application version.
 
 For local chart installs, pin the repository checkout or commit and verify the `version` and `appVersion` fields in each local `Chart.yaml`. For public repository installs, where strict pinning is required after the target version has been published, add:
 
 ```bash
---version 0.0.13
+--version 0.1.1
 ```
 
 to the public chart install commands.
@@ -728,15 +726,13 @@ Skip this step only if cert-manager is already healthy and
 `helm status cert-manager -n cert-manager` reports `STATUS: deployed`.
 
 ```bash
-helm upgrade --install cert-manager oci://quay.io/jetstack/charts/cert-manager \
-    --version v1.21.0 \
-    --namespace cert-manager \
-    --create-namespace \
-    --set crds.enabled=true \
-    --set crds.keep=false \
-    --wait \
-    --wait-for-jobs \
-    --timeout 10m
+helm install \
+  cert-manager oci://quay.io/jetstack/charts/cert-manager \
+  --version v1.21.0 \
+  --namespace cert-manager \
+  --create-namespace \
+  --set crds.enabled=true \
+  --set crds.keep=false
 ```
 
 Verify:
