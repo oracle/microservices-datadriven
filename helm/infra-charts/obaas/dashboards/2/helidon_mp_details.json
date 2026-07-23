@@ -194,7 +194,7 @@
         "promql": [
           {
             "name": "A",
-            "query": "sum(memory_usedHeap_bytes{namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
+            "query": "count(last_over_time(jvm_uptime_seconds{namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
             "legend": ""
           }
         ],
@@ -331,7 +331,7 @@
         "promql": [
           {
             "name": "A",
-            "query": "sum(memory_maxHeap_bytes{namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
+            "query": "sum(last_over_time(memory_maxHeap_bytes{namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
             "legend": ""
           }
         ],
@@ -396,7 +396,7 @@
       "stackedBarChart": false,
       "thresholds": [],
       "timePreferance": "GLOBAL_TIME",
-      "title": "Total Heap Available",
+      "title": "Total Heap Max",
       "yAxisUnit": "decbytes"
     },
     {
@@ -507,7 +507,7 @@
         "promql": [
           {
             "name": "A",
-            "query": "(sum(memory_usedHeap_bytes{namespace=~\"$namespace\", mp_app=~\"$app_name\"}))/(sum(memory_maxHeap_bytes{namespace=~\"$namespace\", mp_app=~\"$app_name\"}))",
+            "query": "sum(last_over_time(memory_usedHeap_bytes{namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m])) / sum(last_over_time(memory_maxHeap_bytes{namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
             "legend": ""
           }
         ],
@@ -664,7 +664,7 @@
               "having": {
                 "expression": ""
               },
-              "legend": "Total Heap Available",
+              "legend": "Total Heap Max",
               "limit": null,
               "orderBy": [],
               "queryName": "B",
@@ -696,7 +696,7 @@
           {
             "name": "B",
             "query": "sum(memory_maxHeap_bytes{namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
-            "legend": "Total Heap Available"
+            "legend": "Total Heap Max"
           }
         ],
         "queryType": "promql"
@@ -817,7 +817,7 @@
               "having": {
                 "expression": ""
               },
-              "legend": "Total Heap Used Last",
+              "legend": "Current Heap Used",
               "limit": null,
               "orderBy": [],
               "queryName": "A",
@@ -849,7 +849,7 @@
               "having": {
                 "expression": ""
               },
-              "legend": "Total Heap Available Last",
+              "legend": "Current Heap Max",
               "limit": null,
               "orderBy": [],
               "queryName": "B",
@@ -881,7 +881,7 @@
               "having": {
                 "expression": ""
               },
-              "legend": "Total Heap Used Max",
+              "legend": "Peak Heap Used (5m)",
               "limit": null,
               "orderBy": [],
               "queryName": "C",
@@ -913,7 +913,7 @@
               "having": {
                 "expression": ""
               },
-              "legend": "Total Heap Available Max",
+              "legend": "Peak Heap Max (5m)",
               "limit": null,
               "orderBy": [],
               "queryName": "D",
@@ -939,23 +939,23 @@
         "promql": [
           {
             "name": "A",
-            "query": "sum(memory_usedHeap_bytes{namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
-            "legend": "Total Heap Used Last"
+            "query": "sum(last_over_time(memory_usedHeap_bytes{namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
+            "legend": "Current Heap Used"
           },
           {
             "name": "B",
-            "query": "sum(memory_maxHeap_bytes{namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
-            "legend": "Total Heap Available Last"
+            "query": "sum(last_over_time(memory_maxHeap_bytes{namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
+            "legend": "Current Heap Max"
           },
           {
             "name": "C",
-            "query": "sum(memory_usedHeap_bytes{namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
-            "legend": "Total Heap Used Max"
+            "query": "sum(max_over_time(memory_usedHeap_bytes{namespace=~\"$namespace\",mp_app=~\"$app_name\"}[5m]))",
+            "legend": "Peak Heap Used (5m)"
           },
           {
             "name": "D",
-            "query": "sum(memory_maxHeap_bytes{namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
-            "legend": "Total Heap Available Max"
+            "query": "sum(max_over_time(memory_maxHeap_bytes{namespace=~\"$namespace\",mp_app=~\"$app_name\"}[5m]))",
+            "legend": "Peak Heap Max (5m)"
           }
         ],
         "queryType": "promql"
@@ -1019,7 +1019,7 @@
       "stackedBarChart": false,
       "thresholds": [],
       "timePreferance": "GLOBAL_TIME",
-      "title": "Memory Usage",
+      "title": "Memory Usage (Current and 5m Peak)",
       "yAxisUnit": "decbytes"
     },
     {
@@ -1236,7 +1236,7 @@
         "promql": [
           {
             "name": "A",
-            "query": "sum(memory_usedHeap_bytes{namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
+            "query": "sum(last_over_time(memory_usedHeap_bytes{namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
             "legend": ""
           }
         ],
