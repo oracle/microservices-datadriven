@@ -1,6 +1,6 @@
 # OBaaS Helm Charts - Complete Image List
 # Generated for private registry mirroring
-# Generated on: 2026-07-16T18:39:07Z
+# Generated on: 2026-07-20T18:03:29Z
 #
 # ============================================================================
 
@@ -11,10 +11,7 @@ container-registry.oracle.com/database/observability-exporter:2.4.2
 container-registry.oracle.com/database/operator:2.1.0
 container-registry.oracle.com/database/sqlcl:26.2.0
 container-registry.oracle.com/middleware/coherence-operator:3.5.14
-container-registry.oracle.com/obaas/admin-server:2.1.0
-container-registry.oracle.com/obaas/config-server:2.1.0
 container-registry.oracle.com/obaas/dashboards:2.1.0
-container-registry.oracle.com/obaas/service-registry:2.1.0
 docker.io/alpine/k8s:1.28.13
 docker.io/altinity/clickhouse-operator:0.21.2
 docker.io/altinity/metrics-exporter:0.21.2
@@ -32,13 +29,14 @@ docker.io/signoz/signoz-otel-collector:v0.144.6
 docker.io/signoz/signoz:v0.113.0
 docker.io/signoz/signoz:v0.134.0
 docker.io/signoz/zookeeper:3.7.1
-ghcr.io/external-secrets/external-secrets:v2.6.0
+ghcr.io/external-secrets/external-secrets:v2.8.0
 ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator:0.154.0
+ghcr.io/oracle/coherence-ce:22.06.13
 quay.io/jetstack/cert-manager-cainjector:v1.21.0
 quay.io/jetstack/cert-manager-controller:v1.21.0
 quay.io/jetstack/cert-manager-webhook:v1.21.0
 quay.io/jetstack/cert-manager-startupapicheck:v1.21.0
-quay.io/strimzi/kafka:0.51.0-kafka-4.2.0
-quay.io/strimzi/operator:0.51.0
+quay.io/strimzi/kafka:1.1.0-kafka-4.2.0
+quay.io/strimzi/operator:1.1.0
 registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.17.0
 registry.k8s.io/metrics-server/metrics-server:v0.8.1

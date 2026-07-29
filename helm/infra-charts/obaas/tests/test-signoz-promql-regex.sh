@@ -78,13 +78,13 @@ done
 # The JVM details request-rate panel must report a per-second rate. `increase`
 # returns the total requests in the lookback window and must not be labeled RPS.
 jvm_dashboard="${CHART_DIR}/dashboards/2/helidon_jvm_details.json"
-grep -Fq 'sum(rate(requests_count_total{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"}[5m]))' \
+grep -Fq 'sum(rate(requests_count_total{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"}[1m]))' \
   "${jvm_dashboard}" || {
   echo "Helidon JVM Requests Per Second panel does not use rate()" >&2
   exit 1
 }
 
-if grep -Fq 'sum(increase(requests_count_total{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"}[5m]))' \
+if grep -Fq 'sum(increase(requests_count_total{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"}' \
   "${jvm_dashboard}"; then
   echo "Helidon JVM Requests Per Second panel still uses increase()" >&2
   exit 1

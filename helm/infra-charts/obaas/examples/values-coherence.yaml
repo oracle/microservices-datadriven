@@ -1,0 +1,87 @@
+## Copyright (c) 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+# Example: Coherence Enabled Configuration
+# This configuration creates a three-member Coherence cluster in the OBaaS
+# Helm release namespace. The cluster is managed by the Coherence Operator.
+#
+# Prerequisites:
+#   Install obaas-prereqs once per cluster before installing this chart.
+#   Keep coherence-operator enabled in obaas-prereqs.
+#   Ensure the Coherence Operator watches the namespace where this chart is installed.
+#
+# Usage:
+#   helm upgrade --install obaas . \
+#     -f examples/values-coherence.yaml \
+#     -n obaas \
+#     --create-namespace
+#
+# Verification:
+#   kubectl get coherence -n obaas
+#   kubectl get pods -n obaas
+
+# -----------------------
+# -- Global Configuration
+global:
+  # No private registry credentials needed
+  imagePullSecrets: []
+
+# -----------------------
+# -- OBaaS Components
+# Default access uses Envoy Gateway. Legacy ingress-nginx is disabled unless explicitly enabled.
+
+# Service Discovery
+eureka:
+  enabled: true
+
+# API Gateway
+apisix:
+  enabled: true
+
+ingress-nginx:
+  enabled: false
+
+# Platform Services
+admin-server:
+  enabled: true
+
+# OTMM (MicroTX) components can be toggled independently. The console only
+# deploys when the coordinator and/or workflow server is also enabled.
+otmm:
+  coordinator:
+    enabled: true
+  workflowServer:
+    enabled: true
+  console:
+    enabled: true
+
+# Database (SIDB-FREE by default)
+# Database uses SIDB-FREE by default from values.yaml
+
+oracle-database-exporter:
+  enabled: true
+
+# Observability
+signoz:
+  enabled: true
+
+# AI Optimizer (disabled by default)
+ai-optimizer:
+  enabled: false
+
+# Config Server
+config-server:
+  enabled: true
+
+# Create a Coherence Operator-managed cluster. The image is deliberately
+# omitted so that the operator uses its configured default Coherence image.
+coherence:
+  enabled: true
+  # Choose a DNS-compatible name unique within the release namespace.
+  name: mysample-cluster
+  replicas: 3
+  jvm:
+    memory:
+      heapSize: 512m
+  ports:
+    - name: http
+      port: 8080

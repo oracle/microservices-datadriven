@@ -450,7 +450,7 @@
                 "key": "memory_usedHeap_bytes",
                 "type": "Gauge"
               },
-              "aggregateOperator": "latest",
+              "aggregateOperator": "max",
               "dataSource": "metrics",
               "disabled": false,
               "expression": "A",
@@ -488,7 +488,7 @@
         "promql": [
           {
             "name": "A",
-            "query": "sum(memory_usedHeap_bytes{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
+            "query": "sum(last_over_time(memory_usedHeap_bytes{kubernetes_namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
             "legend": "memory_usedHeap_bytes"
           }
         ],
@@ -618,7 +618,7 @@
         "promql": [
           {
             "name": "A",
-            "query": "sum(memory_maxHeap_bytes{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
+            "query": "sum(last_over_time(memory_maxHeap_bytes{kubernetes_namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
             "legend": "memory_maxHeap_bytes"
           }
         ],
@@ -683,7 +683,7 @@
       "stackedBarChart": false,
       "thresholds": [],
       "timePreferance": "GLOBAL_TIME",
-      "title": "Total Heap Available",
+      "title": "Total Heap Max",
       "yAxisUnit": "decbytes"
     },
     {
@@ -787,7 +787,7 @@
         "promql": [
           {
             "name": "A",
-            "query": "(sum(memory_usedHeap_bytes{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"}))/(sum(memory_maxHeap_bytes{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"}))",
+            "query": "sum(last_over_time(memory_usedHeap_bytes{kubernetes_namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m])) / sum(last_over_time(memory_maxHeap_bytes{kubernetes_namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
             "legend": ""
           }
         ],
@@ -931,7 +931,7 @@
         "promql": [
           {
             "name": "A",
-            "query": "avg(thread_count{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
+            "query": "sum(last_over_time(thread_count{kubernetes_namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
             "legend": "thread_count"
           }
         ],
@@ -1061,7 +1061,7 @@
         "promql": [
           {
             "name": "A",
-            "query": "sum(jvm_uptime_seconds{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
+            "query": "max(last_over_time(jvm_uptime_seconds{kubernetes_namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
             "legend": "jvm_uptime_seconds"
           }
         ],
@@ -1126,7 +1126,7 @@
       "stackedBarChart": false,
       "thresholds": [],
       "timePreferance": "GLOBAL_TIME",
-      "title": "JVM Uptime",
+      "title": "JVM Uptime (Longest Running)",
       "yAxisUnit": "s"
     },
     {
@@ -1168,7 +1168,7 @@
               "limit": null,
               "orderBy": [],
               "queryName": "A",
-              "reduceTo": "sum",
+              "reduceTo": "last",
               "spaceAggregation": "sum",
               "stepInterval": 60,
               "timeAggregation": "increase",
@@ -1256,7 +1256,7 @@
       "stackedBarChart": false,
       "thresholds": [],
       "timePreferance": "GLOBAL_TIME",
-      "title": "Total GC's",
+      "title": "GC Collections (Last 5m)",
       "yAxisUnit": "none"
     },
     {
@@ -1310,7 +1310,7 @@
               "limit": null,
               "orderBy": [],
               "queryName": "A",
-              "reduceTo": "sum",
+              "reduceTo": "last",
               "spaceAggregation": "sum",
               "stepInterval": 60,
               "timeAggregation": "increase",
@@ -1398,7 +1398,7 @@
       "stackedBarChart": false,
       "thresholds": [],
       "timePreferance": "GLOBAL_TIME",
-      "title": "Total GC Time",
+      "title": "GC Time (Last 5m)",
       "yAxisUnit": "s"
     },
     {
@@ -1468,7 +1468,7 @@
               "functions": [],
               "groupBy": [],
               "having": [],
-              "legend": "Total Heap Available",
+              "legend": "Total Heap Max",
               "limit": null,
               "orderBy": [],
               "queryName": "B",
@@ -1501,7 +1501,7 @@
           {
             "name": "B",
             "query": "sum(memory_maxHeap_bytes{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
-            "legend": "Total Heap Available"
+            "legend": "Total Heap Max"
           }
         ],
         "queryType": "promql"
@@ -1614,7 +1614,7 @@
               "functions": [],
               "groupBy": [],
               "having": [],
-              "legend": "Total Heap Used Last",
+              "legend": "Current Heap Used",
               "limit": null,
               "orderBy": [],
               "queryName": "A",
@@ -1646,7 +1646,7 @@
               "functions": [],
               "groupBy": [],
               "having": [],
-              "legend": "Total Heap Available Last",
+              "legend": "Current Heap Max",
               "limit": null,
               "orderBy": [],
               "queryName": "B",
@@ -1667,7 +1667,7 @@
                 "key": "memory_usedHeap_bytes",
                 "type": "Gauge"
               },
-              "aggregateOperator": "max",
+              "aggregateOperator": "latest",
               "dataSource": "metrics",
               "disabled": false,
               "expression": "C",
@@ -1678,7 +1678,7 @@
               "functions": [],
               "groupBy": [],
               "having": [],
-              "legend": "Total Heap Used Max",
+              "legend": "Peak Heap Used (5m)",
               "limit": null,
               "orderBy": [],
               "queryName": "C",
@@ -1710,7 +1710,7 @@
               "functions": [],
               "groupBy": [],
               "having": [],
-              "legend": "Total Heap Available Max",
+              "legend": "Peak Heap Max (5m)",
               "limit": null,
               "orderBy": [],
               "queryName": "D",
@@ -1737,23 +1737,23 @@
         "promql": [
           {
             "name": "A",
-            "query": "sum(memory_usedHeap_bytes{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
-            "legend": "Total Heap Used Last"
+            "query": "sum(last_over_time(memory_usedHeap_bytes{kubernetes_namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
+            "legend": "Current Heap Used"
           },
           {
             "name": "B",
-            "query": "sum(memory_maxHeap_bytes{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
-            "legend": "Total Heap Available Last"
+            "query": "sum(last_over_time(memory_maxHeap_bytes{kubernetes_namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
+            "legend": "Current Heap Max"
           },
           {
             "name": "C",
-            "query": "sum(memory_usedHeap_bytes{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
-            "legend": "Total Heap Used Max"
+            "query": "sum(max_over_time(memory_usedHeap_bytes{kubernetes_namespace=~\"$namespace\",mp_app=~\"$app_name\"}[5m]))",
+            "legend": "Peak Heap Used (5m)"
           },
           {
             "name": "D",
-            "query": "sum(memory_maxHeap_bytes{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
-            "legend": "Total Heap Available Max"
+            "query": "sum(max_over_time(memory_maxHeap_bytes{kubernetes_namespace=~\"$namespace\",mp_app=~\"$app_name\"}[5m]))",
+            "legend": "Peak Heap Max (5m)"
           }
         ],
         "queryType": "promql"
@@ -1817,7 +1817,7 @@
       "stackedBarChart": false,
       "thresholds": [],
       "timePreferance": "GLOBAL_TIME",
-      "title": "Memory Usage",
+      "title": "Memory Usage (Current and 5m Peak)",
       "yAxisUnit": "decbytes"
     },
     {
@@ -2124,7 +2124,7 @@
               "functions": [],
               "groupBy": [],
               "having": [],
-              "legend": "CPU Load Average Last",
+              "legend": "Current CPU Load",
               "limit": null,
               "orderBy": [],
               "queryName": "A",
@@ -2156,7 +2156,7 @@
               "functions": [],
               "groupBy": [],
               "having": [],
-              "legend": "CPU Load Average Max",
+              "legend": "Peak CPU Load (5m)",
               "limit": null,
               "orderBy": [],
               "queryName": "B",
@@ -2183,13 +2183,13 @@
         "promql": [
           {
             "name": "A",
-            "query": "sum(cpu_systemLoadAverage{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
-            "legend": "CPU Load Average Last"
+            "query": "sum(last_over_time(cpu_systemLoadAverage{kubernetes_namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
+            "legend": "Current CPU Load"
           },
           {
             "name": "B",
-            "query": "sum(cpu_systemLoadAverage{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
-            "legend": "CPU Load Average Max"
+            "query": "sum(max_over_time(cpu_systemLoadAverage{kubernetes_namespace=~\"$namespace\",mp_app=~\"$app_name\"}[5m]))",
+            "legend": "Peak CPU Load (5m)"
           }
         ],
         "queryType": "promql"
@@ -2284,7 +2284,7 @@
                   "reduceTo": "avg",
                   "spaceAggregation": "sum",
                   "temporality": "",
-                  "timeAggregation": "increase"
+                  "timeAggregation": "rate"
                 }
               ],
               "dataSource": "metrics",
@@ -2324,7 +2324,7 @@
         "promql": [
           {
             "name": "B",
-            "query": "sum(rate(requests_count_total{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"}[5m]))",
+            "query": "sum(rate(requests_count_total{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"}[1m]))",
             "legend": "Requests Per Second"
           }
         ],
@@ -2422,7 +2422,7 @@
                 "key": "vthreads_count",
                 "type": "Gauge"
               },
-              "aggregateOperator": "latest",
+              "aggregateOperator": "max",
               "dataSource": "metrics",
               "disabled": false,
               "expression": "A",
@@ -2433,7 +2433,7 @@
               "functions": [],
               "groupBy": [],
               "having": [],
-              "legend": "Active Virtual Threads",
+              "legend": "Current Active Virtual Threads",
               "limit": null,
               "orderBy": [],
               "queryName": "A",
@@ -2460,8 +2460,8 @@
         "promql": [
           {
             "name": "A",
-            "query": "sum(vthreads_count{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
-            "legend": "Active Virtual Threads"
+            "query": "sum(last_over_time(vthreads_count{kubernetes_namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
+            "legend": "Current Active Virtual Threads"
           }
         ],
         "queryType": "promql"
@@ -2525,7 +2525,7 @@
       "stackedBarChart": false,
       "thresholds": [],
       "timePreferance": "GLOBAL_TIME",
-      "title": "Active Virtual Threads",
+      "title": "Current Active Virtual Threads",
       "yAxisUnit": "none"
     },
     {
@@ -2590,7 +2590,7 @@
         "promql": [
           {
             "name": "A",
-            "query": "sum(vthreads_starts{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
+            "query": "sum(last_over_time(vthreads_starts{kubernetes_namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
             "legend": "Virtual Thread Starts"
           }
         ],
@@ -2693,7 +2693,7 @@
               "functions": [],
               "groupBy": [],
               "having": [],
-              "legend": "Pinned Virtual Threads",
+              "legend": "Current Pinned Virtual Threads",
               "limit": null,
               "orderBy": [],
               "queryName": "A",
@@ -2720,8 +2720,8 @@
         "promql": [
           {
             "name": "A",
-            "query": "sum(vthreads_pinned{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
-            "legend": "Pinned Virtual Threads"
+            "query": "sum(last_over_time(vthreads_pinned{kubernetes_namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
+            "legend": "Current Pinned Virtual Threads"
           }
         ],
         "queryType": "promql"
@@ -2785,7 +2785,7 @@
       "stackedBarChart": false,
       "thresholds": [],
       "timePreferance": "GLOBAL_TIME",
-      "title": "Pinned Virtual Threads",
+      "title": "Current Pinned Virtual Threads",
       "yAxisUnit": "none"
     },
     {
@@ -2850,7 +2850,7 @@
         "promql": [
           {
             "name": "A",
-            "query": "sum(vthreads_submitFailures{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
+            "query": "sum(last_over_time(vthreads_submitFailures{kubernetes_namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
             "legend": "Submit Failures"
           }
         ],
@@ -3110,7 +3110,7 @@
         "promql": [
           {
             "name": "A",
-            "query": "max(vthreads_recentPinned_seconds{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\", quantile=\"0.95\"})",
+            "query": "max(last_over_time(vthreads_recentPinned_seconds{kubernetes_namespace=~\"$namespace\",mp_app=~\"$app_name\",quantile=\"0.95\"}[2m]))",
             "legend": "Pinned Duration p95"
           }
         ],

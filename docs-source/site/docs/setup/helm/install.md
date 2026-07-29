@@ -21,6 +21,7 @@ This document describes how to deploy OBaaS to an existing Kubernetes cluster us
   - [SigNoz Existing Secret](#signoz-existing-secret-values-signoz-existing-secretyaml) — Pre-provisioned SigNoz credentials
   - [SigNoz Cold Storage](#signoz-cold-storage-values-signoz-cold-storageyaml) — Offload older observability data to S3-compatible object storage
   - [Kafka Enabled](#kafka-enabled-configuration-values-kafkayaml) — Create a Strimzi-managed Kafka cluster
+  - [Coherence Enabled](#coherence-enabled-configuration-values-coherenceyaml) — Create a Coherence Operator-managed cluster
   - [Private Registry](#private-registry-configuration-values-private-registryyaml) — Air-gapped and corporate registry setups
   - [Combining Examples](#combining-examples) — Layer multiple value files together
 - [Uninstallation](#uninstallation) — Teardown instructions
@@ -39,6 +40,7 @@ Choose the example values file that best matches your deployment scenario:
 - `values-signoz-existing-secret.yaml` - Pre-provisioned SigNoz admin credentials
 - `values-signoz-cold-storage.yaml` - Long-term observability retention using S3-compatible object storage
 - `values-kafka.yaml` - Strimzi-managed Kafka cluster for Kafka workloads and observability
+- `values-coherence.yaml` - Coherence Operator-managed cluster for distributed-cache and data-grid workloads
 - `values-private-registry.yaml` - Air-gapped or private registry environments
 
 If you are unsure where to start, use `values-sidb-free.yaml` for evaluation or `values-existing-adb.yaml` for an external OCI Autonomous Database deployment.
@@ -54,6 +56,7 @@ The deployment uses a two-chart architecture. The charts are separated because t
 - **metrics-server** - Container resource metrics
 - **kube-state-metrics** - Kubernetes object metrics
 - **strimzi-kafka-operator** - Kafka cluster operator
+- **coherence-operator** - Coherence cluster operator
 - **oraoperator** - Oracle Database Operator for Kubernetes
 
 :::danger[Warning]
@@ -70,6 +73,7 @@ Attempting to install the obaas-prereqs chart multiple times will cause CRD vers
 - **Spring Boot Admin** - Application monitoring
 - **OTMM** - Transaction manager for microservices, including MicroTX Workflow for service orchestration
 - **Kafka cluster** - Optional namespace-scoped Kafka custom resource managed by the Strimzi operator from `obaas-prereqs`
+- **Coherence cluster** - Optional namespace-scoped Coherence custom resource managed by the Coherence Operator from `obaas-prereqs`
 
 Each instance operates independently in its own namespace with its own gateway resources and observability stack. Deprecated ingress-nginx is installed only when explicitly enabled.
 
@@ -80,16 +84,19 @@ Cluster
 │   ├── external-secrets
 │   ├── metrics-server
 │   ├── kube-state-metrics
-│   └── strimzi-kafka-operator (manages Kafka CRs across all namespaces)
+│   ├── strimzi-kafka-operator (manages Kafka CRs across all namespaces)
+│   └── coherence-operator (manages Coherence CRs across all namespaces)
 ├── tenant1 namespace (OBaaS instance 1)
 │   ├── Envoy Gateway resources
-│   ├── APISIX, Eureka, Coherence, etc.
+│   ├── APISIX, Eureka, and other OBaaS services
 │   ├── Kafka cluster (CR managed by Strimzi)
+│   ├── Coherence cluster (CR managed by Coherence Operator)
 │   └── Signoz + ClickHouse
 └── tenant2 namespace (OBaaS instance 2)
     ├── Envoy Gateway resources
-    ├── APISIX, Eureka, Coherence, etc.
+    ├── APISIX, Eureka, and other OBaaS services
     ├── Kafka cluster (CR managed by Strimzi)
+    ├── Coherence cluster (CR managed by Coherence Operator)
     └── Signoz + ClickHouse
 ```
 
@@ -279,6 +286,7 @@ Several example configurations are provided for comparison.
 | `values-signoz-existing-secret.yaml` | GitOps and pre-created credentials | Depends | Uses an existing SigNoz secret |
 | `values-signoz-cold-storage.yaml` | Long-term observability retention | Depends | Uses S3-compatible object storage |
 | `values-kafka.yaml` | Kafka workloads and observability testing | Depends | Creates a Strimzi-managed Kafka cluster |
+| `values-coherence.yaml` | Coherence integration and distributed-cache testing | Depends | Creates a Coherence Operator-managed cluster |
 | `values-private-registry.yaml` | Air-gapped and private registry installs | Depends | Mirrors images to a private registry |
 
 The OBaaS chart selects the database mode with `database.type`. The supported values are `SIDB-FREE`, `ADB-FREE`, `ADB-S`, and `OTHER`; choose the example values file that matches the database deployment you plan to use.
@@ -581,6 +589,34 @@ helm upgrade --install <app-release> obaas/obaas \
 ```
 
 With release name `obaas`, Kafka clients can use `obaas-kafka-cluster-kafka-bootstrap:9092`. The chart also creates the stable alias `kafka-bootstrap:9092`.
+
+#### Coherence Enabled Configuration (`values-coherence.yaml`)
+
+Creates a three-member, ephemeral Coherence cluster in the OBaaS release namespace. This is useful for Coherence integration testing and development workloads that require a distributed cache or data grid.
+
+**Prerequisites:**
+
+1. Install `obaas-prereqs` once per cluster.
+1. Keep `coherence-operator` enabled in `obaas-prereqs`.
+1. Ensure the Coherence Operator watches the OBaaS release namespace.
+
+**Installation:**
+
+```bash
+helm upgrade --install <app-release> obaas/obaas \
+  -f examples/values-coherence.yaml \
+  -n <application-namespace> \
+  --create-namespace [--debug]
+```
+
+Set `coherence.name` to a DNS-compatible name unique within the release namespace. The provided example uses `mysample-cluster`; replace it with the name for your cluster. Verify the resource and its members with:
+
+```bash
+kubectl get coherence <coherence-cluster-name> -n <application-namespace>
+kubectl get pods -n <application-namespace>
+```
+
+The example does not create persistent storage. Configure `coherence.coherence.persistence` with a suitable StorageClass and volume size when durable Coherence data is required.
 
 #### Private Registry Configuration (`values-private-registry.yaml`)
 

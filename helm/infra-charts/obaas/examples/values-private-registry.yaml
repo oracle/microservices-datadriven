@@ -73,6 +73,12 @@ global:
         registry: myregistry.example.com
         repository: alpine/k8s
         tag: "1.28.13"
+    nginx:
+      image:
+        registry: myregistry.example.com
+        repository: nginx
+        tag: "alpine"
+
 # =============================================================================
 # OBaaS Components Configuration
 # =============================================================================
@@ -118,7 +124,7 @@ eureka:
   connectionIdleTimeout: 90s
   image:
     repository: myregistry.example.com/obaas/service-registry
-    tag: "2.1.0"
+    tag: "2.1.1"
   # Override default resources if needed (defaults: cpu 250m-500m, memory 1Gi-1200Mi)
   resources: {}
 
@@ -130,7 +136,7 @@ admin-server:
   replicas: 1
   image:
     repository: myregistry.example.com/obaas/admin-server
-    tag: "2.1.0"
+    tag: "2.1.1"
   # Override default resources if needed (defaults: cpu 250m-500m, memory 256Mi-512Mi)
   # resources: {}
 
@@ -142,7 +148,7 @@ config-server:
   replicas: 1
   image:
     repository: myregistry.example.com/obaas/config-server
-    tag: "2.1.0"
+    tag: "2.1.1"
   # Override default resources if needed (defaults: cpu 250m-500m, memory 256Mi-512Mi)
   # resources: {}
 
@@ -186,7 +192,7 @@ oracle-database-exporter:
   # Busybox sidecar for tailing alert.log
   busybox:
     repository: myregistry.example.com/busybox
-    tag: "1.36"
+    tag: "1.37"
   # Override default resources if needed (defaults: cpu 250m-500m, memory 64Mi-128Mi)
   # resources: {}
 
@@ -520,7 +526,7 @@ apisix:
   # Init container image
   initContainer:
     image: "myregistry.example.com/busybox"
-    tag: "1.36"
+    tag: "1.37"
 
 
 # =============================================================================
@@ -544,7 +550,7 @@ signoz:
       image:
         registry: myregistry.example.com
         repository: busybox
-        tag: 1.36
+        tag: 1.37
   # Authentication configuration for SigNoz admin user
   auth:
     # Existing secret configuration
@@ -565,7 +571,25 @@ signoz:
         image:
           registry: myregistry.example.com
           repository: busybox
-          tag: "1.36"
+          tag: "1.37"
+  schemaMigrator:
+    image:
+      registry: myregistry.example.com
+      repository: signoz/signoz-schema-migrator
+    initContainers:
+      init:
+        image:
+          registry: myregistry.example.com
+          repository: busybox
+          tag: "1.37"
+      chReady:
+        image:
+          registry: myregistry.example.com
+          repository: clickhouse/clickhouse-server
+      wait:
+        image:
+          registry: myregistry.example.com
+          repository: groundnuty/k8s-wait-for
   telemetryStoreMigrator:
     enabled: true
   otelCollector:

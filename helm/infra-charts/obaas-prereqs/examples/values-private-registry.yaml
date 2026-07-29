@@ -74,7 +74,7 @@ oracle-database-operator:
   image:
     repository: myregistry.example.com/database/operator
     # Specify a version tag for reproducible deployments
-    tag: "2.0"
+    tag: "2.1.0"
     pullPolicy: IfNotPresent
   # Deployment scope configuration
   scope:
@@ -202,14 +202,14 @@ strimzi-kafka-operator:
   # Uncomment to override the default image registry and repository
   defaultImageRegistry: "myregistry.example.com"  # Default: quay.io
   defaultImageRepository: "strimzi"  # Default: strimzi
-  defaultImageTag: 0.51.0
+  defaultImageTag: 1.1.0
   image:
     # Uses global.imagePullSecrets
     imagePullSecrets: *imagePullSecrets
     registry: myregistry.example.com
     repository: strimzi
     name: operator
-    tag: 0.51.0
+    tag: 1.1.0
 
 # =============================================================================
 # coherence-operator
@@ -229,7 +229,7 @@ coherence-operator:
   defaultCoherenceImage:
     registry: "myregistry.example.com/middleware"
     name: "coherence-ce"
-    tag: "25.06.13"
+    tag: "22.06.13"
   # Operator replicas (HA by default)
   replicas: 3
   # Namespaces to watch (empty string = all namespaces)
@@ -242,14 +242,10 @@ opentelemetry-operator:
   enabled: true 
   # Uses global.imagePullSecrets
   imagePullSecrets: *imagePullSecrets
-  kubeRBACProxy:
-    image:
-      repository: "myregistry.example.com/brancz/kube-rbac-proxy"
-      tag: "v0.20.0"
   manager:
     collectorImage:
       repository: "myregistry.example.com/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-k8s"
-      tag: "0.152.0"
+      tag: "0.154.0"
     image:
       repository: "myregistry.example.com/open-telemetry/opentelemetry-operator"
-      tag: "0.152.0"
+      tag: "0.154.0"

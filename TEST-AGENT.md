@@ -1,6 +1,6 @@
 # OBaaS And CloudBank Test Agent Runbook
 
-This guide tells an AI agent how to deploy, test, collect evidence, and report on Oracle Backend for Microservices and AI (OBaaS) 2.1.0 with the CloudBank v5 sample workload.
+This guide tells an AI agent how to deploy, test, collect evidence, and report on Oracle Backend for Microservices and AI (OBaaS) 2.1.1 with the CloudBank v5 sample workload.
 
 The expected output of a test run is a completed report created from the template in this file, plus an evidence directory containing command output, logs, screenshots, and vulnerability scan results.
 
@@ -8,7 +8,7 @@ The expected output of a test run is a completed report created from the templat
 
 Use only these sources for installation and test truth:
 
-- `AGENTS.md` for OBaaS 2.1.0 planning, installation, and verification.
+- `AGENTS.md` for OBaaS 2.1.1 planning, installation, and verification.
 - `CBV5-AGENT.md` for CloudBank v5 deployment, testing, and cleanup.
 - `docs-source/site/docs`, especially `intro.md`, `setup/helm/`, `platform/`, and `observability/`.
 - `helm/infra-charts/obaas-prereqs` and `helm/infra-charts/obaas`.
@@ -18,7 +18,7 @@ Use only these sources for installation and test truth:
 - The task list provided with this guide.
 - The SigNoz Services evidence checklist in this guide.
 
-Use only the OBaaS `next` documentation stream for 2.1.0. Do not use 2.0.0 behavior, older CloudBank documentation, or unrelated repository directories.
+Use only the OBaaS `next` documentation stream for 2.1.1. Do not use 2.1.0 or older behavior, older CloudBank documentation, or unrelated repository directories.
 
 Do not duplicate command syntax, values-file policy, secrets policy, or cleanup procedure from `AGENTS.md` or `CBV5-AGENT.md` in this file. If those guides conflict with this guide, treat them as canonical for deployment mechanics and treat this guide as canonical for test scope, evidence, and reporting.
 
@@ -36,6 +36,7 @@ Collect and record these values before any mutating command:
 | `<app-release>` | Helm release for the OBaaS application chart, for example `obaas`. |
 | `<prereqs-values-file>` | Values file for the prerequisites chart, if any. |
 | `<app-values-file>` | Values file for the OBaaS application chart. |
+| `<obaas-chart-version>` | Expected local chart version, `0.1.1`, recorded from both local `Chart.yaml` files. |
 | `<database-type>` | `SIDB-FREE`, `ADB-FREE`, `ADB-S`, or `OTHER`. |
 | `<storage-class>` | StorageClass selected for persistent components. |
 | `<access-path>` | Envoy Gateway by default, deprecated ingress-nginx when explicitly enabled, both, existing external access, or port-forward-only. |
@@ -45,6 +46,9 @@ Collect and record these values before any mutating command:
 | `<cloudbank-registry>` | Explicit image registry path, if not using OCIR auto-detection. |
 | `<cloudbank-customer-implementation>` | `customer` for the Spring service, or `customer-helidon` when Helidon dashboard validation is required. |
 | `<kafka-load-workload>` | Kafka load source when Kafka dashboards are required, for example `helidon-producer` and `helidon-consumer`. |
+| `<eureka-replicas>` | Effective `eureka.replicas` value; default is `3`. |
+| `<coherence-enabled>` | Whether the optional, deprecated Coherence cluster is enabled through `coherence.enabled`. |
+| `<coherence-cluster-name>` | Effective Coherence CR name and persistence decision when Coherence is enabled. |
 | `<otmm-coordinator-enabled>` | Whether the optional OTMM/MicroTx coordinator is enabled through `otmm.coordinator.enabled`. |
 | `<otmm-workflow-server-enabled>` | Whether the optional MicroTx Workflow Server is enabled through `otmm.workflowServer.enabled`. |
 | `<otmm-console-enabled>` | Whether the optional OTMM console is requested through `otmm.console.enabled`; it renders only when `otmm.coordinator.enabled` or `otmm.workflowServer.enabled` is also true. |
@@ -100,6 +104,9 @@ For failures, also capture:
 - `kubectl describe` for the failing resource.
 - Current and previous pod logs.
 - Related jobs and job logs.
+- For cert-manager install failures, Helm status and history, cert-manager Job
+  status/logs, deployment readiness, and cert-manager namespace events. Do not
+  treat healthy pods as a passing result when the Helm release is pending or absent.
 - For MicroTx Workflow Server failures, workflow server logs, health endpoint output, service/endpoints output, Helm values, latest `obaas-run-sql-*` job logs, and database privilege diagnostics for the application user.
 - Namespace events sorted by time.
 - Helm release status.
@@ -133,8 +140,9 @@ Use this matrix as the master list for each run. Mark each test `Pass`, `Fail`, 
 | PRE-004 | Preflight | Verify cluster capacity policy. | Full validation meets requirements, or local deviations are recorded. | node describe |
 | PRE-005 | Preflight | Verify storage classes and RWX support decision. | Selected storage class and RWX status are recorded. | storageclass output |
 | PRE-006 | Preflight | Verify external access strategy. | Envoy Gateway default, explicit ingress-nginx opt-in, both, or port-forward-only path is documented. | service, ingress, gateway output |
-| PRE-007 | Preflight | Verify chart source. | Local 2.1.0 chart paths are used unless public charts match target version. | Chart.yaml and Helm search output |
-| INST-001 | Install | Install or verify cert-manager. | cert-manager deployments are available and CRDs exist. | pod, wait, CRD output |
+| PRE-007 | Preflight | Verify chart source and version. | Both local charts report chart version `0.1.1` and app version `2.1.1`; local paths are used unless public charts report app version `2.1.1`. | Chart.yaml and Helm search output |
+| PRE-008 | Preflight | Render selected chart values. | `helm lint` and `helm template` succeed for both charts; rendered output reflects selected optional components. | lint and rendered-manifest output |
+| INST-001 | Install | Install or verify cert-manager. | Helm reports `deployed`; cert-manager deployments are available; CRDs exist. A pending or missing Helm release is a failure even if pods are running. | Helm status, pod, wait, CRD output; on failure also capture Job logs and events |
 | INST-002 | Install | Install `obaas-prereqs` once. | Release deployed and prerequisite pods healthy. | Helm status and pod output |
 | INST-003 | Install | Install OBaaS. | Release deployed and OBaaS pods healthy. | Helm status and pod output |
 | INST-004 | Install | Verify no unexpected failed jobs or PVC problems. | Jobs succeeded and PVCs bound. | jobs, PVCs, events |
@@ -149,6 +157,9 @@ Use this matrix as the master list for each run. Mark each test `Pass`, `Fail`, 
 | PLAT-009 | Platform | Verify optional AI Optimizer. | AI Optimizer pods and required secrets exist when enabled. | pod, secret output |
 | PLAT-010 | Platform | Verify optional MicroTx Workflow Server. | When enabled, workflow server is healthy, Flyway migration succeeds, and no Oracle privilege error is present; otherwise marked `Not Applicable` with values evidence. | Helm values, pod, service, health endpoint, logs |
 | PLAT-011 | Platform | Verify optional OTMM console. | When `otmm.console.enabled=true` and either coordinator or workflow server is enabled, console is healthy and reachable at `/consoleui/`; otherwise marked `Not Applicable` with values evidence. | Helm values, pod, service, `/consoleui/` HTTP output, screenshot |
+| PLAT-012 | Platform | Verify APISIX OpenTelemetry runtime metadata. | The `apisix-plugin-metadata` sidecar reports success and the APISIX Admin API returns OpenTelemetry plugin metadata. | sidecar logs and Admin API output |
+| PLAT-013 | Platform | Verify Eureka/APISIX replica alignment. | The APISIX Eureka discovery host list contains one StatefulSet-pod endpoint for every effective Eureka replica. | Helm values, rendered ConfigMap, running ConfigMap |
+| PLAT-014 | Platform | Verify optional Coherence cluster. | When enabled, the operator and CRD are ready and the release-owned Coherence CR reaches its requested member count; otherwise marked `Not Applicable` with values evidence. | Helm values, CRD/operator, Coherence CR and pod output |
 | CB-001 | CloudBank | Run CloudBank prerequisite checks. | Build and deploy checks pass. | script output |
 | CB-002 | CloudBank | Build and publish or load images. | Images for the selected CloudBank services are available to the cluster. | build/push output |
 | CB-003 | CloudBank | Create CloudBank secrets. | Expected DB, OAuth, and signing-key secrets exist. | secret list |
@@ -162,6 +173,7 @@ Use this matrix as the master list for each run. Mark each test `Pass`, `Fail`, 
 | CB-011 | CloudBank | Check deposit workflow. | Deposit returns success and check service logs show receipt. | curl and logs |
 | CB-012 | CloudBank | Check journal and clearance workflow. | Journal moves from pending to deposit after clear. | curl and logs |
 | CB-013 | CloudBank | Check transfer workflow. | Balances change correctly and transfer logs show LRA lifecycle. | curl and logs |
+| CB-014 | CloudBank | Run full all-services validation. | `7-test_all_services.sh` passes for `Full Validation`; local-functional runs may mark it `Not Applicable` with tier evidence. | full script output |
 | OBS-001 | Observability | Log in to SigNoz. | SigNoz UI login succeeds. | screenshot |
 | OBS-002 | Observability | Verify SigNoz Services view. | Platform and CloudBank services appear for recent time window. | screenshot |
 | OBS-003 | Observability | Verify Services table columns. | P99 latency, error rate, and operations per second are populated. | screenshot |
@@ -178,6 +190,7 @@ Use this matrix as the master list for each run. Mark each test `Pass`, `Fail`, 
 | OBS-014 | Observability | Verify messaging queues view. | Messaging Queues view is accessible and populated when queue/Kafka data exists. | screenshot |
 | OBS-015 | Observability | Verify telemetry data before dashboard capture. | Metrics, logs, and traces exist for required services in the selected time window before screenshots are taken. | curl/API/SQL output |
 | OBS-016 | Observability | Validate captured screenshots. | Screenshot guardrails prove the expected page was captured and required dashboards contain data. | validation report |
+| OBS-017 | Observability | Verify collector scrape health. | Collector logs show EndpointSlice-based kube-state-metrics discovery with no repeated collector self-scrape or deprecated v1 endpoint warnings. | current and previous collector logs, scrape evidence |
 | SEC-001 | Security | Scan OBaaS images. | Scanner completes and critical/high findings are triaged. | scan report |
 | SEC-002 | Security | Scan CloudBank images. | Scanner completes and critical/high findings are triaged. | scan report |
 | SEC-003 | Security | Record scanner metadata. | Scanner name, version, DB date, image tags, and digests are recorded. | scan output |
@@ -196,7 +209,8 @@ Platform checks:
 
 - APISIX gateway must be reachable through the selected access path or a documented local port-forward.
 - APISIX admin API must show the route set expected after CloudBank route creation.
-- Eureka must show the OBaaS platform services and all selected CloudBank services after deployment.
+- APISIX OpenTelemetry metadata must be configured by the `apisix-plugin-metadata` sidecar and retrievable from the Admin API before APISIX tracing is marked healthy.
+- Eureka must show the OBaaS platform services and all selected CloudBank services after deployment. Record the effective `eureka.replicas` value and verify that APISIX lists a numbered StatefulSet-pod host for every replica; changing the replica count without updating that list is a failure.
 - Config Server must respond. If no test property is seeded, record that the server is reachable and that no config data validation was performed.
 - Spring Boot Admin must show monitored Spring services and health status.
 - OTMM/MicroTx coordinator is optional and controlled by `otmm.coordinator.enabled`. Test the coordinator runtime on every run where it is enabled or installed. If it is disabled, mark the related rows `Not Applicable` and preserve values evidence proving it was disabled. If MicroTx is known to fail in the tested OBaaS build, do not skip the test when enabled; run it, mark the status `Fail` or `Waived` according to operator policy, and record the version-specific failure, logs, workflow output, and recommended retest trigger.
@@ -204,10 +218,12 @@ Platform checks:
 - Workflow server logs must show successful startup and successful Flyway schema migration or validation. Search and record whether the logs contain `ORA-01031`, `FlywayException`, failed database login, missing database secret, or missing service-name evidence.
 - The MicroTx Workflow Server uses the OBaaS application database secret and application schema. If Flyway DDL fails, collect the latest `obaas-run-sql-*` job logs and verify the application user has schema DDL privileges and quota before marking the issue as an application failure.
 - Treat the optional OTMM console as a separate component. The console web UI is served from `/consoleui/` on the `obaas-otmm-console` service, not from the service root. For example, from inside the cluster use `http://obaas-otmm-console.<application-namespace>.svc.cluster.local:5001/consoleui/`; with a local port-forward use `kubectl -n <application-namespace> port-forward svc/obaas-otmm-console 15001:5001` and open `http://127.0.0.1:15001/consoleui/`. The service root `/` may return `404 Endpoint not found` and should not by itself be treated as console failure. Do not use a healthy console screenshot as evidence that the workflow server is installed or that workflow database migrations succeeded.
+- Coherence is optional and deprecated. When `coherence.enabled=true`, verify the cluster-wide Coherence Operator deployment and CRD before installing, then verify the release-owned Coherence CR, requested member pods, namespace watch scope, and persistence decision. When disabled, mark `PLAT-014` as `Not Applicable` with values evidence.
 
 CloudBank checks:
 
 - Run the automated secured smoke test from `CBV5-AGENT.md` first and preserve its full output.
+- For `Full Validation`, run and preserve the output of `cloudbank-v5/7-test_all_services.sh` after the smoke test. A `Local Functional` run may mark this test `Not Applicable` only when the report records that tier and reason.
 - For CloudBank all-services tests, account IDs used with `--from-account` and `--to-account` must be accounts visible to the `--owner-username` user token used by the script. Do not guess seeded account IDs across environments. Prefer letting `cloudbank-v5/7-test_all_services.sh` auto-discover accounts, or first run it with `--read-only` and reuse the reported `account discovery from=<id> to=<id>` pair for the full mutating run.
 - When the run must validate Helidon observability, deploy `customer-helidon` instead of the Spring `customer` service so the workload includes both Spring Boot and Helidon services.
 - Use `CBV5-AGENT.md` for the standard CloudBank deployment flow and `cloudbank-v5/customer-helidon/README.md` only for the `customer-helidon` build, values, deployment, and service-specific verification details.
@@ -239,7 +255,7 @@ Required readiness checks:
 - Traces: prove at least one recent CloudBank trace exists and includes more than one CloudBank service when a workflow crosses services.
 - Logs: prove recent logs exist for `<application-namespace>` and at least one CloudBank service.
 - Metrics: prove recent metric series exist for HTTP traffic, JVM, Spring, Helidon when deployed, APISIX or gateway traffic, Kubernetes pod or node metrics, and database metrics where those components are installed.
-- Collector logs: when OpenTelemetry collectors are deployed, collect current and previous logs for the SigNoz collector, the k8s-infra collector deployment, and the k8s-infra collector agent pods before marking observability evidence complete.
+- Collector logs: when OpenTelemetry collectors are deployed, collect current and previous logs for the SigNoz collector, the k8s-infra collector deployment, and the k8s-infra collector agent pods before marking observability evidence complete. Confirm kube-state-metrics discovery uses EndpointSlices and investigate repeated collector self-scrape failures or deprecated v1 endpoint warnings; neither may be present in a passing `OBS-017` result.
 - Dashboard-specific data: for every required dashboard screenshot, identify at least one metric, trace, log query, or table on that dashboard that has data before capture.
 - Screenshot-specific data: after capture, inspect the screenshot companion DOM text and validation metadata for each required dashboard. A dashboard page load is not enough; the validation artifact must show at least one data-bearing panel, table row, plotted series, legend, service name, endpoint, metric value, or non-zero/current sample that matches the dashboard's purpose.
 
@@ -397,6 +413,8 @@ Capture evidence for:
 - Helidon Main Dashboard, Helidon MP Details, and Helidon JVM Details, only when `customer-helidon`, `helidon-producer`, `helidon-consumer`, or another Helidon MP workload is deployed
 - Helidon SE Details only when a real Helidon SE workload is deployed; otherwise mark it `Not Applicable` or `Waived` because this repository currently provides Helidon MP examples only
 
+For the Helidon JVM Details dashboard, validate `Peak Active Virtual Threads` and `Peak Pinned Virtual Threads` as window-maximum panels. Do not treat those panels as instantaneous active or pinned thread counts.
+
 ### Dashboard Detail Capture Requirements
 
 The dashboards list page proves only that dashboards are installed. It does not prove that any individual dashboard was opened or populated.
@@ -531,10 +549,10 @@ For each image, record:
 - Image reference.
 - Image digest, when available.
 - Total vulnerabilities by severity.
-- Critical and high findings.
+- Critical, high, and medium findings.
 - Whether findings are fixed, unfixed, or accepted by an approved exception.
 
-Mark the security test `Fail` when critical or high findings exist without a documented exception. Mark it `Waived` only when the operator explicitly accepts the risk and the waiver records the image, CVE, severity, reason, approver, and expiration date.
+Mark the security test `Fail` when critical or high findings exist without a documented exception. Medium findings are non-blocking but must be triaged in the report. Mark any finding `Waived` only when the operator explicitly accepts the risk and the waiver records the image, CVE, severity, reason, approver, and expiration date.
 
 ## Lifecycle And Isolation Tests
 
@@ -546,7 +564,7 @@ Run destructive lifecycle tests only with explicit operator approval and only af
 2. Uninstall OBaaS using `AGENTS.md` cleanup or uninstall guidance for the selected installation type.
 3. Verify the namespace is empty except for explicitly retained or approved resources.
 4. Reinstall OBaaS into the same namespace using the same values.
-5. Rerun platform and CloudBank smoke tests.
+5. Rerun platform and CloudBank smoke tests, plus `7-test_all_services.sh` when the validation tier is `Full Validation`.
 
 ### Multi-OBaaS
 
@@ -558,6 +576,7 @@ Expected:
 - Each Eureka instance shows only services from its namespace.
 - Each SigNoz instance shows only telemetry from its namespace.
 - Ingress-nginx class names, controller values, and election IDs are unique when deprecated ingress-nginx is explicitly enabled for both tenants.
+- When Coherence is enabled in either tenant, each release owns a uniquely named Coherence CR in its application namespace.
 
 ### BYODB
 
@@ -582,7 +601,9 @@ When any test fails, collect the relevant diagnostics from `AGENTS.md`, `CBV5-AG
 - Namespace events sorted by time.
 - Failed job logs, especially database initialization jobs.
 - For MicroTx Workflow Server failures, collect workflow server health output, workflow server logs, service/endpoints output, Helm values, latest `obaas-run-sql-*` job logs, and application-user privilege or quota diagnostics for Flyway DDL failures such as `ORA-01031`.
-- Gateway route or APISIX Admin API output for route, auth, or gateway failures.
+- Gateway route, APISIX Admin API, and `apisix-plugin-metadata` sidecar output for route, auth, gateway, or APISIX telemetry failures.
+- For Eureka/APISIX discovery failures, capture effective Helm values plus rendered and running APISIX ConfigMap discovery hosts.
+- For Coherence failures, capture the Coherence CR, operator logs, requested member pods, CRD status, and namespace watch configuration.
 - HTTP request and response evidence for endpoint failures.
 - SigNoz, ClickHouse, OpenTelemetry collector, instrumentation, and application telemetry configuration evidence for observability failures.
 - Browser automation error details for UI or screenshot failures.
@@ -620,6 +641,8 @@ Use this template:
 | OBaaS App Version |  |
 | Database Type |  |
 | Access Path |  |
+| Eureka Replicas |  |
+| Coherence Enabled / Cluster Name / Persistence |  |
 | CloudBank DB Name |  |
 | CloudBank Image Tag |  |
 | CloudBank Customer Implementation | `customer` / `customer-helidon` |
@@ -670,7 +693,17 @@ Known deviations or waivers:
 | ID | Category | Status | Expected | Actual | Evidence | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
 | PRE-001 | Preflight |  |  |  |  |  |
+| PRE-002 | Preflight |  |  |  |  |  |
+| PRE-003 | Preflight |  |  |  |  |  |
+| PRE-004 | Preflight |  |  |  |  |  |
+| PRE-005 | Preflight |  |  |  |  |  |
+| PRE-006 | Preflight |  |  |  |  |  |
+| PRE-007 | Preflight |  |  |  |  |  |
+| PRE-008 | Preflight |  |  |  |  |  |
 | INST-001 | Install |  |  |  |  |  |
+| INST-002 | Install |  |  |  |  |  |
+| INST-003 | Install |  |  |  |  |  |
+| INST-004 | Install |  |  |  |  |  |
 | PLAT-001 | Platform |  |  |  |  |  |
 | PLAT-002 | Platform |  |  |  |  |  |
 | PLAT-003 | Platform |  |  |  |  |  |
@@ -682,13 +715,49 @@ Known deviations or waivers:
 | PLAT-009 | Platform |  |  |  |  |  |
 | PLAT-010 | Platform |  |  |  |  |  |
 | PLAT-011 | Platform |  |  |  |  |  |
+| PLAT-012 | Platform |  |  |  |  |  |
+| PLAT-013 | Platform |  |  |  |  |  |
+| PLAT-014 | Platform |  |  |  |  |  |
 | CB-001 | CloudBank |  |  |  |  |  |
+| CB-002 | CloudBank |  |  |  |  |  |
+| CB-003 | CloudBank |  |  |  |  |  |
+| CB-004 | CloudBank |  |  |  |  |  |
+| CB-005 | CloudBank |  |  |  |  |  |
+| CB-006 | CloudBank |  |  |  |  |  |
+| CB-007 | CloudBank |  |  |  |  |  |
+| CB-008 | CloudBank |  |  |  |  |  |
+| CB-009 | CloudBank |  |  |  |  |  |
+| CB-010 | CloudBank |  |  |  |  |  |
+| CB-011 | CloudBank |  |  |  |  |  |
+| CB-012 | CloudBank |  |  |  |  |  |
+| CB-013 | CloudBank |  |  |  |  |  |
+| CB-014 | CloudBank |  |  |  |  |  |
 | OBS-001 | Observability |  |  |  |  |  |
+| OBS-002 | Observability |  |  |  |  |  |
+| OBS-003 | Observability |  |  |  |  |  |
+| OBS-004 | Observability |  |  |  |  |  |
+| OBS-005 | Observability |  |  |  |  |  |
+| OBS-006 | Observability |  |  |  |  |  |
+| OBS-007 | Observability |  |  |  |  |  |
+| OBS-008 | Observability |  |  |  |  |  |
+| OBS-009 | Observability |  |  |  |  |  |
+| OBS-010 | Observability |  |  |  |  |  |
 | OBS-011 | Observability |  |  |  |  |  |
+| OBS-012 | Observability |  |  |  |  |  |
 | OBS-013 | Observability |  |  |  |  |  |
+| OBS-014 | Observability |  |  |  |  |  |
 | OBS-015 | Observability |  |  |  |  |  |
 | OBS-016 | Observability |  |  |  |  |  |
+| OBS-017 | Observability |  |  |  |  |  |
 | SEC-001 | Security |  |  |  |  |  |
+| SEC-002 | Security |  |  |  |  |  |
+| SEC-003 | Security |  |  |  |  |  |
+| LIFE-001 | Lifecycle |  |  |  |  |  |
+| LIFE-002 | Lifecycle |  |  |  |  |  |
+| MT-001 | Multi-OBaaS |  |  |  |  |  |
+| MT-002 | Multi-OBaaS |  |  |  |  |  |
+| MT-003 | Multi-OBaaS |  |  |  |  |  |
+| DB-001 | BYODB |  |  |  |  |  |
 
 ## Platform Evidence Summary
 
@@ -696,7 +765,9 @@ Known deviations or waivers:
 | --- | --- | --- | --- |
 | APISIX Gateway Service |  |  |  |
 | APISIX Admin API Routes |  |  |  |
+| APISIX OpenTelemetry Runtime Metadata |  |  |  |
 | Eureka UI/API |  |  |  |
+| Eureka/APISIX Replica Alignment |  |  |  |
 | Config Server |  |  |  |
 | Spring Boot Admin UI |  |  |  |
 | Oracle Database Exporter |  |  |  |
@@ -705,6 +776,7 @@ Known deviations or waivers:
 | MicroTx Workflow Server |  |  | Optional; required only when `otmm.workflowServer.enabled=true`; include deployment, pod, service, endpoint, and health evidence. |
 | Workflow Server Flyway DB Initialization |  |  | Optional; required only when workflow server is enabled; include migration logs and any Oracle privilege diagnostics. |
 | OTMM Console |  |  | Optional; required only when `otmm.console.enabled=true` and either coordinator or workflow server is enabled; verify `/consoleui/`, not service root `/`; do not use as workflow server evidence. |
+| Coherence Cluster |  |  | Optional and deprecated; when enabled, include operator/CRD, CR, member-count, namespace-watch, and persistence evidence. |
 
 ## Observability Evidence Summary
 
@@ -716,6 +788,7 @@ Telemetry readiness summary:
 - Load evidence:
 - Ingestion wait time:
 - Screenshot validation evidence:
+- Collector scrape health evidence:
 
 | View / Dashboard | Telemetry Data Present Before Capture | Screenshot Validation | Status | Evidence | Notes |
 | --- | --- | --- | --- | --- | --- |
@@ -739,6 +812,8 @@ Telemetry readiness summary:
 | Helidon MP Details |  |  |  |  |  |
 | Helidon SE Details |  |  |  |  |  |
 | Helidon JVM Details |  |  |  |  |  |
+| Helidon JVM Peak Virtual Threads |  |  |  |  | Validate `Peak Active Virtual Threads` and `Peak Pinned Virtual Threads` as window maxima. |
+| Collector Scrape Health |  |  |  |  | EndpointSlice discovery and no repeated self-scrape/deprecated-v1 warnings. |
 
 ## Security Scan Summary
 
@@ -751,6 +826,12 @@ Exceptions:
 | Image | CVE | Severity | Reason | Approver | Expiration |
 | --- | --- | --- | --- | --- | --- |
 |  |  |  |  |  |  |
+
+Medium finding triage:
+
+| Image | CVE | Reason / Disposition | Evidence |
+| --- | --- | --- | --- |
+|  |  |  |  |
 
 ## Failure Diagnostics
 
@@ -773,10 +854,11 @@ A run is complete only when:
 
 - The selected installation tier is explicitly recorded.
 - Required install and platform tests are complete.
-- CloudBank deployment and smoke tests are complete.
+- CloudBank deployment and smoke tests are complete; `7-test_all_services.sh` is also complete for `Full Validation`.
 - Observability readiness checks prove required telemetry existed before screenshots were captured, or load generation was run and the checks were repeated.
+- Collector scrape health is verified, including EndpointSlice discovery and the absence of repeated collector self-scrape or deprecated-v1 warnings.
 - Observability evidence includes SigNoz Services, traces, logs, metrics, dashboards, dashboard-population screenshots, load-generation output, and dashboard validation metadata that distinguishes populated, partial, empty, zero-only, and not-applicable dashboards.
 - Screenshot validation guardrails pass for every required UI evidence file.
-- Vulnerability scans are complete or explicitly waived by the operator.
+- Vulnerability scans are complete; medium findings are triaged, and critical/high findings are resolved or explicitly waived by the operator.
 - Every failure has logs, events, command output, and a recommended next action.
 - The run report contains an overall pass/fail result, pass rate, traffic-light rating, and evidence links.
