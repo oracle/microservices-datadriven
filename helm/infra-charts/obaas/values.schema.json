@@ -31,8 +31,8 @@
           "additionalProperties": false,
           "required": ["chartVersion", "signozVersion", "otelCollectorVersion", "clickhouseVersion"],
           "properties": {
-            "chartVersion": { "type": "string", "enum": ["0.133.0"] },
-            "signozVersion": { "type": "string", "enum": ["v0.133.0"] },
+            "chartVersion": { "type": "string", "enum": ["0.134.0"] },
+            "signozVersion": { "type": "string", "enum": ["v0.134.0"] },
             "otelCollectorVersion": { "type": "string", "enum": ["v0.144.6"] },
             "clickhouseVersion": { "type": "string", "enum": ["25.12.5"] }
           }

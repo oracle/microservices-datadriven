@@ -167,38 +167,115 @@ kubectl create secret docker-registry myregistry-secret \
 helm upgrade --install obaas . -f examples/values-private-registry.yaml
 ```
 
-### 9. SigNoz 0.133.0 Two-Stage Upgrade Profiles
+### 9. SigNoz 0.134.0 Two-Stage Upgrade Profiles
 
-The files `values-signoz-0.133-stage1.yaml` and `values-signoz-0.133-stage2.yaml`
+The files `values-signoz-0.134-stage1.yaml` and `values-signoz-0.134-stage2.yaml`
 select the two steps of the planned SigNoz upgrade workflow. Always layer the
 selected profile after the customer's normal values files and use the same Helm
 release name and namespace for both commands.
 
+The `0.134.0` target fixes CVE-2026-63094 and includes the earlier
+CVE-2026-57956 fix. It also adopts anchored Prometheus regex semantics for
+PromQL. Review customer-created dashboard and alert matchers that relied on
+implicit substring matching before upgrading.
+
 Stage 1 creates and validates CSI snapshots, upgrades ClickHouse, and records a
 completion marker. Stage 2 refuses to run without that validated marker, upgrades
-SigNoz to `0.133.0` and the collector to `0.144.6`, runs the official telemetry
+SigNoz to `0.134.0` and the collector to `0.144.6`, runs the official telemetry
 migrations, removes obsolete OIDC mock resources, reruns login/dashboard setup,
-and validates historical plus newly ingested telemetry. Full OKE upgrade and fresh
-install validation are still required before release.
+and validates historical plus newly ingested telemetry. Release validation
+should cover both the full OKE upgrade and fresh-install paths.
 
 Stage 1 snapshots are retained independently of the Helm hook and may incur storage
 charges. Helm does not delete them automatically.
 
+Do not run Stage 1 on an installation that already runs SigNoZ `0.133.0` and
+ClickHouse `25.12.5`; Stage 1 intentionally pins the intermediate SigNoZ
+`0.113.0` image. After confirming that a retained backup is available, use the
+normal `signozUpgrade.stage=standard` patch-upgrade path from `0.133.0` to
+`0.134.0`.
+
+#### OKE snapshot preparation
+
+OKE uses the OCI Block Volume CSI driver to turn Kubernetes `VolumeSnapshot`
+objects into OCI Block Volume backups. Prepare each OKE cluster once before its
+first two-stage SigNoZ upgrade:
+
 ```bash
-# Stage 1 profile (snapshots, ClickHouse upgrade, validation, and marker)
+../tools/prepare-oke-volume-snapshots.sh \
+  --namespace obaas \
+  --release obaas
+```
+
+The script is idempotent. It installs a pinned version of the three Kubernetes
+snapshot API CRDs, creates the non-default `obaas-oci-bv-snapshot` class with
+`backupType: full` and `deletionPolicy: Retain`, and verifies that the SigNoZ,
+ClickHouse, and ZooKeeper PVCs are backed by OCI Block Volume CSI PVs. It does
+not install a generic snapshot controller because OKE supplies the snapshot
+implementation through its managed control plane.
+
+To validate an already prepared cluster without changing it:
+
+```bash
+../tools/prepare-oke-volume-snapshots.sh \
+  --namespace obaas \
+  --release obaas \
+  --check-only
+```
+
+For another Kubernetes provider, install that provider's supported snapshot
+CRDs, snapshot controller, CSI snapshot implementation, and
+`VolumeSnapshotClass`. Then set
+`signozUpgrade.backup.volumeSnapshotClassName` to that class. Do not use the OKE
+preparation script for a non-OKE storage driver.
+
+#### Upgrade commands
+
+```bash
+# Generic Stage 1 profile
 helm upgrade obaas . \
   -n obaas \
   --timeout 30m \
   -f <customer-values-file> \
-  -f examples/values-signoz-0.133-stage1.yaml
+  -f examples/values-signoz-0.134-stage1.yaml
+
+# OKE Stage 1 adds the explicit retained OCI snapshot class
+helm upgrade obaas . \
+  -n obaas \
+  --timeout 30m \
+  -f <customer-values-file> \
+  -f examples/values-signoz-0.134-stage1.yaml \
+  -f examples/values-signoz-0.134-stage1-oke.yaml
 
 # Stage 2 profile (gate, SigNoz upgrade, cleanup, migrations, and validation)
 helm upgrade obaas . \
   -n obaas \
   --timeout 30m \
   -f <customer-values-file> \
-  -f examples/values-signoz-0.133-stage2.yaml
+  -f examples/values-signoz-0.134-stage2.yaml
 ```
+
+After Stage 1, verify that a retained backup can provision a new volume before
+running Stage 2:
+
+```bash
+../tools/validate-signoz-snapshot-restore.sh
+```
+
+This restores the newest ClickHouse Stage 1 snapshot into a temporary PVC,
+mounts it read-only, and checks for ClickHouse data. The restored PVC is retained
+for inspection and the script prints explicit cleanup commands. This restored
+volume incurs OCI Block Volume charges until it is deleted.
+
+Collect read-only upgrade diagnostics at any point with:
+
+```bash
+../tools/diagnose-signoz-upgrade.sh obaas obaas
+```
+
+The report includes Helm history, workload images, PVC-to-volume OCID mappings,
+snapshot readiness, OCI backup handles, the Stage 1 marker, hook logs, and recent
+events. It does not print application or database credentials.
 
 ## Customizing Examples
 

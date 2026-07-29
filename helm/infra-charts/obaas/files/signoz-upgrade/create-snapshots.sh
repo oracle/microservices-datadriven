@@ -113,8 +113,14 @@ create_snapshot() {
 
   csi_driver="$(kube get storageclass "${storage_class}" -o jsonpath='{.provisioner}' 2>/dev/null || true)"
   [ -n "${csi_driver}" ] || fail "StorageClass '${storage_class}' does not exist or has no provisioner"
-  kube get csidriver "${csi_driver}" >/dev/null 2>&1 || \
-    fail "StorageClass '${storage_class}' uses '${csi_driver}', but no matching CSIDriver is installed"
+
+  pv="$(kube get pvc "${pvc}" -n "${NAMESPACE}" -o jsonpath='{.spec.volumeName}')"
+  [ -n "${pv}" ] || fail "PVC '${pvc}' does not reference a PersistentVolume"
+  pv_csi_driver="$(kube get pv "${pv}" -o jsonpath='{.spec.csi.driver}' 2>/dev/null || true)"
+  [ -n "${pv_csi_driver}" ] || \
+    fail "PersistentVolume '${pv}' for PVC '${pvc}' is not backed by a CSI driver"
+  [ "${pv_csi_driver}" = "${csi_driver}" ] || \
+    fail "PersistentVolume '${pv}' uses CSI driver '${pv_csi_driver}', but StorageClass '${storage_class}' uses '${csi_driver}'"
 
   snapshot_class="$(select_snapshot_class "${storage_class}" "${csi_driver}")"
   pvc_prefix="$(printf '%.170s' "${pvc}")"

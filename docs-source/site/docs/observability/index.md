@@ -3,7 +3,7 @@ title: Observability Overview
 sidebar_position: 0
 ---
 
-Oracle Backend for Microservices and AI ships with a fully integrated observability stack powered by [SigNoz](https://signoz.io/), providing metrics, logs, and distributed traces out of the box. Applications deployed to the platform automatically export telemetry data via OpenTelemetry — no additional infrastructure setup required.
+Oracle Backend for Microservices and AI ships with a fully integrated observability stack powered by [SigNoz](https://signoz.io/), providing metrics, logs, and distributed traces. Platform services are preconfigured for observability. Applications export telemetry after they are instrumented with OpenTelemetry or configured with supported metrics annotations.
 
 ### What's Included
 
@@ -24,5 +24,6 @@ Oracle Backend for Microservices and AI ships with a fully integrated observabil
 | [Configure Applications for SigNoz](./configure.md) | Add OpenTelemetry and Micrometer dependencies to your application |
 | [Kafka Observability](./kafka.md) | Monitor Kafka clusters, producers, and consumers |
 | [Customize Java Instrumentation](./java-instrumentation) | Pass custom environment variables to the OpenTelemetry Java agent through Helm values or CLI overrides |
-| [Oracle Database Metrics Exporter](./dbexporter.md) | Database-level metrics collection and Grafana integration |
+| [Oracle Database Metrics Exporter](./dbexporter.md) | Database-level metrics collection and configuration guidance |
 | [Common Customizations](./customizations.md) | Configure Online and Cold Storage |
+| [Upgrade SigNoZ](./upgrade.md) | Back up telemetry and perform the guarded two-stage SigNoZ upgrade |

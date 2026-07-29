@@ -508,6 +508,18 @@ kubectl create secret generic my-signoz-secret \
 helm upgrade --install <app-release> obaas/obaas -f examples/values-signoz-existing-secret.yaml -n <application-namespace> [--debug]
 ```
 
+#### SigNoZ 0.134.0 Two-Stage Upgrade
+
+SigNoZ recommends backing up configuration and persistent data before an
+upgrade. Existing OBaaS SigNoZ installations can use a guarded two-stage
+upgrade that creates and validates retained CSI snapshots, upgrades ClickHouse,
+and then upgrades SigNoZ and runs the telemetry migrations.
+
+See [Upgrade SigNoZ](../../observability/upgrade.md) for the OKE and
+provider-neutral prerequisites, both Helm commands, restore validation,
+troubleshooting, and the optional single-command path when protected historical
+data is not required.
+
 #### SigNoz Cold Storage (`values-signoz-cold-storage.yaml`)
 
 Configures SigNoz ClickHouse cold storage so recent telemetry stays on the local persistent disk and older data is offloaded to S3-compatible object storage.

@@ -6,8 +6,8 @@ CHART_DIR="${CHART_DIR:-$(cd "${SCRIPT_DIR}/.." && pwd)}"
 SNAPSHOT_SCRIPT="${CHART_DIR}/files/signoz-upgrade/create-snapshots.sh"
 MOCK_KUBECTL="${SCRIPT_DIR}/fixtures/signoz-upgrade/mock-kubectl.sh"
 DEFAULT_VALUES="${CHART_DIR}/examples/values-default.yaml"
-STAGE1_VALUES="${CHART_DIR}/examples/values-signoz-0.133-stage1.yaml"
-STAGE2_VALUES="${CHART_DIR}/examples/values-signoz-0.133-stage2.yaml"
+STAGE1_VALUES="${CHART_DIR}/examples/values-signoz-0.134-stage1.yaml"
+STAGE2_VALUES="${CHART_DIR}/examples/values-signoz-0.134-stage2.yaml"
 TEST_ROOT="$(mktemp -d)"
 
 cleanup() {
@@ -57,9 +57,9 @@ run_snapshot_script() {
     NAMESPACE="obaas-test" \
     RELEASE_NAME="obaas" \
     RELEASE_REVISION="7" \
-    TARGET_VERSION="0.133.0" \
+    TARGET_VERSION="0.134.0" \
     SNAPSHOT_TIMEOUT="20m" \
-    MARKER_SECRET_NAME="obaas-signoz-upgrade-0-133-stage1" \
+    MARKER_SECRET_NAME="obaas-signoz-upgrade-0-134-stage1" \
     SNAPSHOT_CLASS_NAME="${explicit_class}" \
     SNAPSHOT_CLASS_MAPPINGS="${mappings}" \
     /bin/sh "${SNAPSHOT_SCRIPT}" >"${case_dir}/output.log" 2>&1
@@ -114,7 +114,9 @@ done
 assert_contains "${stage1_upgrade}" 'app.kubernetes.io/name: signoz-upgrade-snapshot'
 assert_contains "${stage1_upgrade}" '"helm.sh/hook": pre-upgrade'
 assert_contains "${stage1_upgrade}" 'resources: ["pods", "persistentvolumeclaims"]'
-assert_contains "${stage1_upgrade}" 'resources: ["storageclasses", "csidrivers"]'
+assert_contains "${stage1_upgrade}" 'resources: ["persistentvolumes"]'
+assert_contains "${stage1_upgrade}" 'resources: ["storageclasses"]'
+assert_not_contains "${stage1_upgrade}" 'resources: ["storageclasses", "csidrivers"]'
 assert_contains "${stage1_upgrade}" 'resources: ["volumesnapshotclasses"]'
 assert_contains "${stage1_upgrade}" 'resources: ["volumesnapshots"]'
 assert_contains "${stage1_upgrade}" 'Kubernetes snapshot API resource'
@@ -126,7 +128,7 @@ assert_contains "${stage1_mapped}" $'oci-bv\toci-bv-snap'
 assert_contains "${stage1_upgrade}" 'image: docker.io/signoz/signoz:v0.113.0'
 assert_contains "${stage1_upgrade}" 'image: docker.io/signoz/signoz-otel-collector:v0.144.1'
 assert_contains "${stage1_upgrade}" 'image: docker.io/clickhouse/clickhouse-server:25.12.5'
-assert_not_contains "${stage1_upgrade}" 'image: docker.io/signoz/signoz:v0.133.0'
+assert_not_contains "${stage1_upgrade}" 'image: docker.io/signoz/signoz:v0.134.0'
 
 # Exercise the snapshot logic with a mocked Kubernetes API.
 run_snapshot_script "success" "success"
@@ -135,7 +137,7 @@ snapshot_count="$(find "${TEST_ROOT}/success" -name 'snapshot-*.yaml' | wc -l | 
 assert_contains "${TEST_ROOT}/success/output.log" 'All SigNoz Stage 1 CSI snapshots are ready.'
 assert_contains "${TEST_ROOT}/success/snapshot-1.yaml" 'helm.sh/resource-policy: keep'
 assert_contains "${TEST_ROOT}/success/snapshot-1.yaml" 'obaas.oracle.com/source-pvc-uid:'
-assert_contains "${TEST_ROOT}/success/snapshot-1.yaml" 'obaas.oracle.com/upgrade-target: "0.133.0"'
+assert_contains "${TEST_ROOT}/success/snapshot-1.yaml" 'obaas.oracle.com/upgrade-target: "0.134.0"'
 assert_contains "${TEST_ROOT}/success/snapshot-1.yaml" 'volumeSnapshotClassName: default-snap'
 
 mappings=$'fast-sc\tfast-snap\nblock-sc\tblock-snap'
@@ -153,8 +155,10 @@ assert_snapshot_script_fails "missing-explicit-class" "missing-explicit-class" \
   "VolumeSnapshotClass 'does-not-exist' does not exist" "does-not-exist"
 assert_snapshot_script_fails "success" "incompatible-driver" \
   "VolumeSnapshotClass 'wrong-snap' uses driver 'other.csi.example.com'" "wrong-snap"
-assert_snapshot_script_fails "missing-driver" "missing-driver" \
-  "no matching CSIDriver is installed"
+assert_snapshot_script_fails "non-csi-pv" "non-csi-pv" \
+  "is not backed by a CSI driver"
+assert_snapshot_script_fails "mismatched-pv-driver" "mismatched-pv-driver" \
+  "uses CSI driver 'other.csi.example.com', but StorageClass 'shared-sc' uses 'csi.example.com'"
 assert_snapshot_script_fails "missing-pvc" "missing-pvc" \
   "No mounted PVC was found for required SigNoz component 'zookeeper'"
 assert_snapshot_script_fails "unbound-pvc" "unbound-pvc" \

@@ -52,6 +52,7 @@ if [[ "$1" == "get" && "$2" == "pvc" ]]; then
       [[ "${SCENARIO}" == "unbound-pvc" && "${pvc}" == signoz-* ]] && echo "Pending" || echo "Bound"
       ;;
     *metadata.uid*) echo "uid-${pvc}" ;;
+    *spec.volumeName*) echo "pv-${pvc}" ;;
     *spec.storageClassName*)
       if [[ "${SCENARIO}" == "mapped-classes" ]]; then
         [[ "${pvc}" == signoz-* ]] && echo "fast-sc" || echo "block-sc"
@@ -74,8 +75,21 @@ if [[ "$1" == "get" && "$2" == "storageclass" ]]; then
   exit 0
 fi
 
-if [[ "$1" == "get" && "$2" == "csidriver" ]]; then
-  [[ "${SCENARIO}" == "missing-driver" ]] && exit 1
+if [[ "$1" == "get" && "$2" == "pv" ]]; then
+  pv="$3"
+  if [[ "${last_argument}" == *'{.spec.csi.driver}'* ]]; then
+    if [[ "${SCENARIO}" == "non-csi-pv" ]]; then
+      exit 0
+    elif [[ "${SCENARIO}" == "mismatched-pv-driver" ]]; then
+      echo "other.csi.example.com"
+    elif [[ "${pv}" == *signoz-* && "${SCENARIO}" == "mapped-classes" ]]; then
+      echo "fast.csi.example.com"
+    elif [[ "${SCENARIO}" == "mapped-classes" ]]; then
+      echo "block.csi.example.com"
+    else
+      echo "csi.example.com"
+    fi
+  fi
   exit 0
 fi
 

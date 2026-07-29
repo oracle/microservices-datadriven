@@ -5,7 +5,7 @@ sidebar_position: 2
 ## Configure Online Storage
 
 You can configure the amount of online storage, for storing metrics, logs and traces, by specifying the desired size in the `values.yaml`
-for the `obaas` Helm chart as follows.  The default size is 25 GB.  If you have a large number of applications, you may want to increase
+for the `obaas` Helm chart as follows. The default ClickHouse volume request is `20Gi`. If you have a large number of applications, you may want to increase
 the amount of storage.
 
 ```yaml
@@ -15,15 +15,19 @@ signoz:
       size: 200Gi
 ```
 
+This value controls the ClickHouse volume that stores telemetry. It is separate
+from the SigNoZ metadata volume, configured with
+`signoz.signoz.persistence.size`, whose default request is `1Gi`.
+
 ## Configure Cold Storage
 
 ### Use Case
 
-Use this configuration when you want recent telemetry data to remain on local persistent storage while older data is offloaded to object storage for long-term retention. For on-premises deployments, you can use an S3-compatible object store such as [MinIO](https://www.min io/). For additional information, see the [SigNoz Administrator Guide] (https://signoz.io/docs/manage/administrator-guide/).
+Use this configuration when you want recent telemetry data to remain on local persistent storage while older data is offloaded to object storage for long-term retention. For on-premises deployments, you can use an S3-compatible object store such as [MinIO](https://www.min.io/). For additional information, see the [SigNoz Administrator Guide](https://signoz.io/docs/manage/administrator-guide/).
 
 ### Storage Hierarchy
 
-SigNoz stores recent ClickHouse data on the local persistent volume as hot storage. After the configured retention threshold is reached, older data is moved to OCI Object Storage or another S3-compatible object store, such as MinIO for on-premises deployments. When needed, ClickHouse retrieves older data from cold storage to satisfy queries.
+SigNoZ stores recent ClickHouse data on the local persistent volume as hot storage. After the configured retention threshold is reached, older data is moved to OCI Object Storage or another S3-compatible object store, such as [MinIO](https://www.min.io/) for on-premises deployments. When needed, ClickHouse retrieves older data from cold storage to satisfy queries.
 
 ```text
   Hot Storage (Local Disk)

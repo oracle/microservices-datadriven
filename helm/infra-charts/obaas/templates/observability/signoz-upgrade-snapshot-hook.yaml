@@ -59,8 +59,11 @@ metadata:
   annotations:
     {{- toYaml $hookAnnotations | nindent 4 }}
 rules:
+  - apiGroups: [""]
+    resources: ["persistentvolumes"]
+    verbs: ["get"]
   - apiGroups: ["storage.k8s.io"]
-    resources: ["storageclasses", "csidrivers"]
+    resources: ["storageclasses"]
     verbs: ["get", "list"]
   - apiGroups: ["snapshot.storage.k8s.io"]
     resources: ["volumesnapshotclasses"]

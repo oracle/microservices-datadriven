@@ -8,7 +8,7 @@ if [[ "$1" == wait ]]; then
 fi
 if [[ "$1" == get && "$2" == pods ]]; then
   if [[ "$*" == *component=signoz* ]]; then
-    [[ "${SCENARIO}" == wrong-signoz ]] && echo docker.io/signoz/signoz:v0.113.0 || echo docker.io/signoz/signoz:v0.133.0
+    [[ "${SCENARIO}" == wrong-signoz ]] && echo docker.io/signoz/signoz:v0.113.0 || echo docker.io/signoz/signoz:v0.134.0
   else
     [[ "${SCENARIO}" == wrong-collector ]] && echo docker.io/signoz/signoz-otel-collector:v0.144.1 || echo docker.io/signoz/signoz-otel-collector:v0.144.6
   fi
