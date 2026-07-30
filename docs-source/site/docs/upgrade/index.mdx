@@ -16,7 +16,7 @@ Before performing any upgrade, we recommend that you make a backup of your envir
 OBaaS supports an in-place upgrade from 2.0.0 to {OBAAS_VERSION}. If SigNoZ is
 enabled, this release's ClickHouse and SigNoZ transition requires special
 handling. Use the guarded two-stage procedure in
-[Upgrade SigNoZ](../observability/upgrade.md) when historical telemetry must be
+[Upgrade SigNoZ](../observability/upgrade/index.md) when historical telemetry must be
 protected.
 
 The general process is as follows:
@@ -88,7 +88,7 @@ helm upgrade --install obaas -n obaas obaas/obaas -f values.yaml [--debug]
 ```
 
 If SigNoZ is enabled, choose one of the procedures in
-[Upgrade SigNoZ](../observability/upgrade.md):
+[Upgrade SigNoZ](../observability/upgrade/index.md):
 
 - Use the guarded two-stage upgrade to back up and preserve historical data.
 - Use the single-command standard upgrade only when no protected recovery is

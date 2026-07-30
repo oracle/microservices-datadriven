@@ -26,4 +26,4 @@ Oracle Backend for Microservices and AI ships with a fully integrated observabil
 | [Customize Java Instrumentation](./java-instrumentation) | Pass custom environment variables to the OpenTelemetry Java agent through Helm values or CLI overrides |
 | [Oracle Database Metrics Exporter](./dbexporter.md) | Database-level metrics collection and configuration guidance |
 | [Common Customizations](./customizations.md) | Configure Online and Cold Storage |
-| [Upgrade SigNoZ](./upgrade.md) | Back up telemetry and perform the guarded two-stage SigNoZ upgrade |
+| [Upgrade SigNoZ](./upgrade/index.md) | Back up telemetry and perform the guarded two-stage SigNoZ upgrade |

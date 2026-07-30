@@ -523,7 +523,7 @@ upgrade. Existing OBaaS SigNoZ installations can use a guarded two-stage
 upgrade that creates and validates retained CSI snapshots, upgrades ClickHouse,
 and then upgrades SigNoZ and runs the telemetry migrations.
 
-See [Upgrade SigNoZ](../../observability/upgrade.md) for the OKE and
+See [Upgrade SigNoZ](../../observability/upgrade/index.md) for the OKE and
 provider-neutral prerequisites, both Helm commands, restore validation,
 troubleshooting, and the optional single-command path when protected historical
 data is not required.

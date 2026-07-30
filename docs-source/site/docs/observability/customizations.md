@@ -23,16 +23,16 @@ from the SigNoZ metadata volume, configured with
 
 ### Use Case
 
-Use this configuration when you want recent telemetry data to remain on local persistent storage while older data is offloaded to object storage for long-term retention. For on-premises deployments, you can use an S3-compatible object store such as [MinIO](https://www.min.io/). For additional information, see the [SigNoz Administrator Guide](https://signoz.io/docs/manage/administrator-guide/).
+Use this configuration when you want recent telemetry data to remain on local persistent storage while older data is offloaded to object storage for long-term retention. For on-premises deployments, use a supported S3-compatible object store. For additional information, see the [SigNoz Administrator Guide](https://signoz.io/docs/manage/administrator-guide/).
 
 ### Storage Hierarchy
 
-SigNoZ stores recent ClickHouse data on the local persistent volume as hot storage. After the configured retention threshold is reached, older data is moved to OCI Object Storage or another S3-compatible object store, such as [MinIO](https://www.min.io/) for on-premises deployments. When needed, ClickHouse retrieves older data from cold storage to satisfy queries.
+SigNoZ stores recent ClickHouse data on the local persistent volume as hot storage. After the configured retention threshold is reached, older data is moved to OCI Object Storage or another supported S3-compatible object store. When needed, ClickHouse retrieves older data from cold storage to satisfy queries.
 
 ```text
   Hot Storage (Local Disk)
   ↓ [after retention threshold]
-  Cold Storage (OCI Object Storage / S3-compatible / MinIO)
+  Cold Storage (OCI Object Storage / S3-compatible object storage)
   ↓ [query hits cold data]
 ```
 
