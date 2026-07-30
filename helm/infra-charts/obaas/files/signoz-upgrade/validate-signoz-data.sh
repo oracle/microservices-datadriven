@@ -1,4 +1,7 @@
 #!/bin/sh
+# Copyright (c) 2026, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+
 set -eu
 SIGNOZ_URL="${SIGNOZ_URL:?}"
 COLLECTOR_URL="${COLLECTOR_URL:?}"
