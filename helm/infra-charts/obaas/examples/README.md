@@ -205,10 +205,9 @@ select the two steps of the planned SigNoz upgrade workflow. Always layer the
 selected profile after the customer's normal values files and use the same Helm
 release name and namespace for both commands.
 
-The `0.134.0` target fixes CVE-2026-63094 and includes the earlier
-CVE-2026-57956 fix. It also adopts anchored Prometheus regex semantics for
-PromQL. Review customer-created dashboard and alert matchers that relied on
-implicit substring matching before upgrading.
+SigNoz `0.134.0` adopts anchored Prometheus regex semantics for PromQL. Review
+customer-created dashboard and alert matchers that relied on implicit substring
+matching before upgrading.
 
 Stage 1 creates and validates CSI snapshots, upgrades ClickHouse, and records a
 completion marker. Stage 2 refuses to run without that validated marker, upgrades
@@ -217,14 +216,14 @@ migrations, removes obsolete OIDC mock resources, reruns login/dashboard setup,
 and validates historical plus newly ingested telemetry. Release validation
 should cover both the full OKE upgrade and fresh-install paths.
 
+OBaaS 2.0.0 includes SigNoz `0.102.1`, so its upgrade crosses the `0.113.0`
+migrator replacement. OBaaS 2.1.0 already includes SigNoz `0.113.0` and has
+completed that transition. The Stage 2 cleanup is unrelated to the migrator
+replacement: it removes the OBaaS OIDC mock resources used by air-gapped 2.1.0
+installations and does nothing when those resources are absent.
+
 Stage 1 snapshots are retained independently of the Helm hook and may incur storage
 charges. Helm does not delete them automatically.
-
-Do not run Stage 1 on an installation that already runs SigNoZ `0.133.0` and
-ClickHouse `25.12.5`; Stage 1 intentionally pins the intermediate SigNoZ
-`0.113.0` image. After confirming that a retained backup is available, use the
-normal `signozUpgrade.stage=standard` patch-upgrade path from `0.133.0` to
-`0.134.0`.
 
 #### OKE snapshot preparation
 

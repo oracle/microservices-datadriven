@@ -29,6 +29,17 @@ OBaaS chart normally.
 
 If you are unsure which path applies, use the protected recovery guide.
 
+## Behavior by source version
+
+OBaaS 2.0.0 includes SigNoZ `0.102.1`. Its upgrade path crosses the SigNoZ
+`0.113.0` migration boundary, where `telemetryStoreMigrator` replaces the
+earlier `schemaMigrator` resources.
+
+OBaaS 2.1.0 already includes SigNoZ `0.113.0`, so that migrator replacement has
+already occurred. The Stage 2 cleanup is separate from that SigNoZ migration:
+it removes obsolete OBaaS OIDC mock resources from air-gapped OBaaS 2.1.0
+installations. The cleanup is a no-op when those resources are absent.
+
 ## Common requirements
 
 Before selecting a guide:

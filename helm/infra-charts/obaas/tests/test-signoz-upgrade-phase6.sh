@@ -6,7 +6,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CHART_DIR="${CHART_DIR:-$(cd "${SCRIPT_DIR}/.." && pwd)}"
-CLEANUP_SCRIPT="${CHART_DIR}/files/signoz-upgrade/cleanup-signoz-legacy.sh"
+CLEANUP_SCRIPT="${CHART_DIR}/files/signoz-upgrade/cleanup-signoz-oidc-mock.sh"
 MOCK_KUBECTL="${SCRIPT_DIR}/fixtures/signoz-upgrade/mock-phase6-kubectl.sh"
 DEFAULT="${CHART_DIR}/examples/values-default.yaml"
 PRIVATE="${CHART_DIR}/examples/values-private-registry.yaml"
@@ -80,15 +80,15 @@ run_cleanup() {
   mkdir -p "${state_dir}"
   env KUBECTL="${MOCK_KUBECTL}" MOCK_SCENARIO="${scenario}" MOCK_STATE_DIR="${state_dir}" \
     MOCK_LOG="${state_dir}/kubectl.log" NAMESPACE=phase6 STATEFULSET_NAME=phase6-signoz \
-    LEGACY_HOOK_NAME=phase6-signoz-airgap-patch \
+    OIDC_MOCK_HOOK_NAME=phase6-signoz-airgap-patch \
     /bin/sh "${CLEANUP_SCRIPT}" >"${state_dir}/output.log" 2>&1
 }
 
-run_cleanup legacy
-assert_contains "${TMP}/legacy/output.log" 'Obsolete SigNoz OIDC mock resources and StatefulSet settings are absent.'
-assert_contains "${TMP}/legacy/kubectl.log" 'patch statefulset phase6-signoz'
-assert_contains "${TMP}/legacy/kubectl.log" 'delete secret mock-google-cert'
-assert_contains "${TMP}/legacy/kubectl.log" 'delete role phase6-signoz-airgap-patch'
+run_cleanup oidc-mock
+assert_contains "${TMP}/oidc-mock/output.log" 'Obsolete SigNoz OIDC mock resources and StatefulSet settings are absent.'
+assert_contains "${TMP}/oidc-mock/kubectl.log" 'patch statefulset phase6-signoz'
+assert_contains "${TMP}/oidc-mock/kubectl.log" 'delete secret mock-google-cert'
+assert_contains "${TMP}/oidc-mock/kubectl.log" 'delete role phase6-signoz-airgap-patch'
 
 run_cleanup clean
 assert_not_contains "${TMP}/clean/kubectl.log" 'patch statefulset phase6-signoz'

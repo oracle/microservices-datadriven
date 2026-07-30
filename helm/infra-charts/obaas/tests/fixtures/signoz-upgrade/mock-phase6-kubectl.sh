@@ -4,7 +4,7 @@
 
 set -eu
 
-scenario="${MOCK_SCENARIO:-legacy}"
+scenario="${MOCK_SCENARIO:-oidc-mock}"
 state_dir="${MOCK_STATE_DIR:?MOCK_STATE_DIR is required}"
 log_file="${MOCK_LOG:?MOCK_LOG is required}"
 command_name="${1:-}"

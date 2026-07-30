@@ -74,9 +74,9 @@ spec:
           env:
             - { name: NAMESPACE, value: {{ .Release.Namespace | quote }} }
             - { name: STATEFULSET_NAME, value: {{ include "obaas.signoz.fullname" . | quote }} }
-            - { name: LEGACY_HOOK_NAME, value: {{ printf "%s-signoz-airgap-patch" .Release.Name | quote }} }
+            - { name: OIDC_MOCK_HOOK_NAME, value: {{ printf "%s-signoz-airgap-patch" .Release.Name | quote }} }
           command: ["/bin/sh", "-c"]
           args:
             - |
-              {{- .Files.Get "files/signoz-upgrade/cleanup-signoz-legacy.sh" | nindent 14 }}
+              {{- .Files.Get "files/signoz-upgrade/cleanup-signoz-oidc-mock.sh" | nindent 14 }}
 {{- end }}
