@@ -71,8 +71,50 @@ helm get manifest <app-release> -n <application-namespace> \
   > /tmp/obaas-pre-signoz-upgrade-manifest.yaml
 ```
 
-Confirm that SigNoZ, ClickHouse, and ZooKeeper are healthy. Record an
-identifiable historical telemetry time range for post-upgrade validation.
+Wait for the stateful workloads and ClickHouse pods to report ready:
+
+```bash
+kubectl rollout status statefulset/<app-release>-signoz \
+  -n <application-namespace> --timeout=5m
+kubectl rollout status statefulset/<app-release>-zookeeper \
+  -n <application-namespace> --timeout=5m
+kubectl wait --for=condition=Ready pod \
+  -l clickhouse.altinity.com/chi=<app-release>-clickhouse \
+  -n <application-namespace> --timeout=5m
+```
+
+Inspect the component pods, persistent volumes, restart counts, and recent
+warning events:
+
+```bash
+kubectl get pods,pvc -n <application-namespace> \
+  | grep -E 'signoz|clickhouse|zookeeper'
+kubectl get events -n <application-namespace> \
+  --field-selector type=Warning \
+  --sort-by=.lastTimestamp
+```
+
+Confirm that all listed pods are `Running` and fully ready, all listed PVCs are
+`Bound`, and no component is repeatedly restarting. Investigate unresolved
+warning events before continuing.
+
+Verify the SigNoZ health endpoint. In one terminal, run:
+
+```bash
+kubectl port-forward -n <application-namespace> \
+  service/<app-release>-signoz 18080:8080
+```
+
+While the port-forward is running, use another terminal to run:
+
+```bash
+curl --fail 'http://127.0.0.1:18080/api/v1/health?live=1'
+```
+
+Stop the port-forward after the health request succeeds. Log in to SigNoZ and
+select an existing service with historical telemetry. Record the service name,
+signal type, and a time range containing data so that the same telemetry can be
+verified after Stage 2.
 
 ### 2. Prepare volume snapshots
 
@@ -148,11 +190,11 @@ helm upgrade <app-release> obaas/obaas \
 Stage 1:
 
 1. Invalidates any earlier completion marker.
-1. Creates retained snapshots for the SigNoZ, ClickHouse, and ZooKeeper PVCs.
-1. Waits for every snapshot to become ready.
-1. Upgrades ClickHouse to `25.12.5`.
-1. Validates the running ClickHouse version and original PVC identities.
-1. Records a completion marker for Stage 2.
+2. Creates retained snapshots for the SigNoZ, ClickHouse, and ZooKeeper PVCs.
+3. Waits for every snapshot to become ready.
+4. Upgrades ClickHouse to `25.12.5`.
+5. Validates the running ClickHouse version and original PVC identities.
+6. Records a completion marker for Stage 2.
 
 Do not continue until the following checks pass:
 
@@ -242,13 +284,13 @@ live PVC.
 If Stage 1 or Stage 2 fails:
 
 1. Stop and retain the live PVCs, VolumeSnapshots, and provider backup handles.
-1. Do not continue to Stage 2 when the Stage 1 marker or restore validation is
+2. Do not continue to Stage 2 when the Stage 1 marker or restore validation is
    incomplete.
-1. Collect the diagnostics described below.
-1. Follow the storage provider's procedure to create replacement volumes from
+3. Collect the diagnostics described below.
+4. Follow the storage provider's procedure to create replacement volumes from
    the retained snapshots. OKE restores a snapshot into a new Block Volume; it
    does not revert an existing PVC in place.
-1. Validate restored data before reconnecting workloads.
+5. Validate restored data before reconnecting workloads.
 
 The chart does not automatically replace live PVCs during recovery. Preserve
 the original resources and contact Oracle Support before rebinding restored

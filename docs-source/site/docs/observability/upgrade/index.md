@@ -45,8 +45,8 @@ installations. The cleanup is a no-op when those resources are absent.
 Before selecting a guide:
 
 1. Confirm the Kubernetes context, Helm release name, and application namespace.
-1. Confirm that SigNoZ, ClickHouse, and ZooKeeper are healthy.
-1. Retain the customer values files and all database, secret, image, storage,
+2. Confirm that SigNoZ, ClickHouse, and ZooKeeper are healthy.
+3. Retain the customer values files and all database, secret, image, storage,
    and private-registry settings used by the existing release.
-1. Do not use an older ClickHouse version against a persistent volume whose
+4. Do not use an older ClickHouse version against a persistent volume whose
    on-disk format has already been upgraded.
