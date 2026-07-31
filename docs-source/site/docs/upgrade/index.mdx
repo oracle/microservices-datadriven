@@ -13,13 +13,18 @@ Before performing any upgrade, we recommend that you make a backup of your envir
 
 ## Upgrading from OBaaS 2.0.0
 
-You may directly upgrade from OBaaS 2.0.0 to {OBAAS_VERSION} by performing a Helm upgrade. 
+OBaaS supports an in-place upgrade from 2.0.0 to {OBAAS_VERSION}. If SigNoZ is
+enabled, this release's ClickHouse and SigNoZ transition requires special
+handling. Use the guarded two-stage procedure in
+[Upgrade SigNoZ](../observability/upgrade/index.md) when historical telemetry must be
+protected.
 
 The general process is as follows:
 
 - Get the new Helm charts for OBaaS {OBAAS_VERSION}
 - Review your configuration (`values.yaml` files)
-- Perform the Helm upgrade
+- Perform the prerequisite and application Helm upgrades. A protected SigNoZ
+  upgrade uses two application Helm commands.
 
 The following sections provide more detail.
 
@@ -68,15 +73,26 @@ In particular, check the following:
 
 ### Perform the Helm upgrade
 
-You can perform the upgrade using commands similiar to these.  Please ensure that you use the correct chart name and namespace
-for your environment, and that you use your customized `values.yaml` file:
+You can perform the prerequisite upgrade using a command similar to this.
+Ensure that you use the correct chart name and namespace and your customized
+`values.yaml` file:
 
 ```
 helm upgrade --install obaas-prereqs -n obaas-system obaas/obaas-prereqs -f values.yaml [--debug]
+```
+
+If SigNoZ is disabled, perform the normal application-chart upgrade:
+
+```
 helm upgrade --install obaas -n obaas obaas/obaas -f values.yaml [--debug]
 ```
 
+If SigNoZ is enabled, choose one of the procedures in
+[Upgrade SigNoZ](../observability/upgrade/index.md):
 
+- Use the guarded two-stage upgrade to back up and preserve historical data.
+- Use the single-command standard upgrade only when no protected recovery is
+  required.
 
 ## Upgrading from versions before OBaaS 2.0.0
 

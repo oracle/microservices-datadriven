@@ -57,10 +57,6 @@ global:
   # This ensures a clean reinstall but destroys all persistent data
   cleanupPVCs: true
 
-  # When true, creates resources needed for air-gapped (disconnected) environments
-  # including a self-signed TLS certificate for accounts.google.com
-  airGapped: true
-
   # Image pull secret name — this is the ONLY value you need to change (see Step 3 above).
   # The &secretName anchor propagates it to OBaaS templates and subcharts.
   imagePullSecretName: &secretName myregistry-secret

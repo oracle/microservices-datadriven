@@ -101,7 +101,7 @@
       "multiSelect": true,
       "name": "namespace",
       "order": 0,
-      "queryValue": "SELECT distinct JSONExtractString(labels, 'namespace') \nFROM signoz_metrics.distributed_time_series_v4\nWHERE (metric_name = 'jvm_memory_used_bytes')\nand (JSONExtractString(labels, 'namespace') != '')",
+      "queryValue": "SELECT distinct JSONExtractString(labels, 'kubernetes_namespace') \nFROM signoz_metrics.distributed_time_series_v4\nWHERE (metric_name = 'jvm_memory_used_bytes')\nand (JSONExtractString(labels, 'kubernetes_namespace') != '')",
       "showALLOption": true,
       "sort": "ASC",
       "textboxValue": "",
@@ -117,7 +117,7 @@
       "multiSelect": true,
       "name": "app_name",
       "order": 0,
-      "queryValue": "SELECT distinct JSONExtractString(labels, 'mp_app')\nFROM signoz_metrics.distributed_time_series_v4\nWHERE (metric_name = 'jvm_uptime_seconds')\nand (JSONExtractString(labels, 'namespace') in {{.namespace}})\n",
+      "queryValue": "SELECT distinct JSONExtractString(labels, 'mp_app')\nFROM signoz_metrics.distributed_time_series_v4\nWHERE (metric_name = 'jvm_uptime_seconds')\nand (JSONExtractString(labels, 'kubernetes_namespace') in {{.namespace}})\n",
       "showALLOption": true,
       "sort": "ASC",
       "textboxValue": "",
@@ -194,7 +194,7 @@
         "promql": [
           {
             "name": "A",
-            "query": "count(last_over_time(jvm_uptime_seconds{namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
+            "query": "count(last_over_time(jvm_uptime_seconds{kubernetes_namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
             "legend": ""
           }
         ],
@@ -331,7 +331,7 @@
         "promql": [
           {
             "name": "A",
-            "query": "sum(last_over_time(memory_maxHeap_bytes{namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
+            "query": "sum(last_over_time(memory_maxHeap_bytes{kubernetes_namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
             "legend": ""
           }
         ],
@@ -507,7 +507,7 @@
         "promql": [
           {
             "name": "A",
-            "query": "sum(last_over_time(memory_usedHeap_bytes{namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m])) / sum(last_over_time(memory_maxHeap_bytes{namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
+            "query": "sum(last_over_time(memory_usedHeap_bytes{kubernetes_namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m])) / sum(last_over_time(memory_maxHeap_bytes{kubernetes_namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
             "legend": ""
           }
         ],
@@ -690,12 +690,12 @@
         "promql": [
           {
             "name": "A",
-            "query": "sum(memory_usedHeap_bytes{namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
+            "query": "sum(memory_usedHeap_bytes{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
             "legend": "Total Heap Used"
           },
           {
             "name": "B",
-            "query": "sum(memory_maxHeap_bytes{namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
+            "query": "sum(memory_maxHeap_bytes{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"})",
             "legend": "Total Heap Max"
           }
         ],
@@ -939,22 +939,22 @@
         "promql": [
           {
             "name": "A",
-            "query": "sum(last_over_time(memory_usedHeap_bytes{namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
+            "query": "sum(last_over_time(memory_usedHeap_bytes{kubernetes_namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
             "legend": "Current Heap Used"
           },
           {
             "name": "B",
-            "query": "sum(last_over_time(memory_maxHeap_bytes{namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
+            "query": "sum(last_over_time(memory_maxHeap_bytes{kubernetes_namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
             "legend": "Current Heap Max"
           },
           {
             "name": "C",
-            "query": "sum(max_over_time(memory_usedHeap_bytes{namespace=~\"$namespace\",mp_app=~\"$app_name\"}[5m]))",
+            "query": "sum(max_over_time(memory_usedHeap_bytes{kubernetes_namespace=~\"$namespace\",mp_app=~\"$app_name\"}[5m]))",
             "legend": "Peak Heap Used (5m)"
           },
           {
             "name": "D",
-            "query": "sum(max_over_time(memory_maxHeap_bytes{namespace=~\"$namespace\",mp_app=~\"$app_name\"}[5m]))",
+            "query": "sum(max_over_time(memory_maxHeap_bytes{kubernetes_namespace=~\"$namespace\",mp_app=~\"$app_name\"}[5m]))",
             "legend": "Peak Heap Max (5m)"
           }
         ],
@@ -1099,7 +1099,7 @@
         "promql": [
           {
             "name": "A",
-            "query": "sum(increase(requests_count_total{namespace=~\"$namespace\", mp_app=~\"$app_name\"}[5m])) by (mp_app)",
+            "query": "sum(increase(requests_count_total{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"}[5m])) by (mp_app)",
             "legend": "{{mp_app}}"
           }
         ],
@@ -1236,7 +1236,7 @@
         "promql": [
           {
             "name": "A",
-            "query": "sum(last_over_time(memory_usedHeap_bytes{namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
+            "query": "sum(last_over_time(memory_usedHeap_bytes{kubernetes_namespace=~\"$namespace\",mp_app=~\"$app_name\"}[2m]))",
             "legend": ""
           }
         ],
@@ -1382,7 +1382,7 @@
         "promql": [
           {
             "name": "A",
-            "query": "sum(increase(requests_count_total{namespace=~\"$namespace\", mp_app=~\"$app_name\"}[5m])) by (mp_app)",
+            "query": "sum(increase(requests_count_total{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"}[5m])) by (mp_app)",
             "legend": "{{mp_app}}"
           }
         ],
@@ -1582,7 +1582,7 @@
         "promql": [
           {
             "name": "A",
-            "query": "sum(increase(requests_count_total{namespace=~\"$namespace\", mp_app=~\"$app_name\"}[5m])) by (mp_app)",
+            "query": "sum(increase(requests_count_total{kubernetes_namespace=~\"$namespace\", mp_app=~\"$app_name\"}[5m])) by (mp_app)",
             "legend": "{{mp_app}}"
           }
         ],

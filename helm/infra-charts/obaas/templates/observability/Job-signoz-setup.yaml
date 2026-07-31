@@ -6,6 +6,10 @@ kind: Job
 metadata:
   name: {{ .Release.Name }}-signoz-setup
   namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "20"
+    "helm.sh/hook-delete-policy": before-hook-creation
   labels:
     app.kubernetes.io/name: {{ .Release.Name }}
     app.kubernetes.io/component: observability
