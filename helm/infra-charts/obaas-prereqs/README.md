@@ -12,7 +12,7 @@ This chart must be installed **once per cluster** before installing any OBaaS in
 - **strimzi-kafka-operator** - Kafka cluster management via CRDs
 - **clickhouse-operator CRDs** - Custom Resource Definitions for ClickHouse management (operator runs per-tenant namespace)
 - **oracle-database-operator** - Oracle Database lifecycle management via CRDs
-- **cert-manager** (subchart) - Certificate management and issuance.  Note that cert-manager, by default, will be installed as part of the oracle-database-operator
+- **cert-manager** (subchart) - Certificate management and issuance.
 
 ## Installation
 
