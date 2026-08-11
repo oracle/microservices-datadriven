@@ -528,6 +528,22 @@ provider-neutral prerequisites, both Helm commands, restore validation,
 troubleshooting, and the optional single-command path when protected historical
 data is not required.
 
+#### ClickHouse Internal Diagnostic Retention
+
+OBaaS retains the high-volume ClickHouse `zookeeper_log` and
+`processors_profile_log` diagnostic tables for one day. These tables are useful
+for short-lived ClickHouse or ZooKeeper investigations, but longer retention can
+create substantial ClickHouse write, merge, and storage pressure under sustained
+telemetry load.
+
+The one-day retention is set in the OBaaS chart defaults. An operator can
+temporarily increase either retention period through
+`signoz.clickhouse.clickhouseOperator.zookeeperLog.ttl` or
+`signoz.clickhouse.clickhouseOperator.processorsProfileLog.ttl`; return it to
+one day after the investigation. Existing installations need a Helm upgrade to
+receive the new configuration. This configuration does not immediately delete
+diagnostic rows already stored in ClickHouse.
+
 #### SigNoz Cold Storage (`values-signoz-cold-storage.yaml`)
 
 Configures SigNoz ClickHouse cold storage so recent telemetry stays on the local persistent disk and older data is offloaded to S3-compatible object storage.
