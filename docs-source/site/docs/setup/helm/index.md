@@ -20,3 +20,4 @@ This guide outlines the steps to deploy Oracle Backend for Microservices and AI 
 
 - [Prerequisites](./prereqs.md) — Kubernetes cluster, database, and tooling requirements
 - [Helm Chart Installation](./install.md) — Full installation, architecture, and example configurations
+- [Dependent Helm Chart References](./chart-references.md) — Version-pinned upstream README and values references for bundled dependency charts
