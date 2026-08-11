@@ -903,6 +903,13 @@ signoz:
             chmod +x "$dst"
             echo "histogram-quantile installed successfully"
     clickhouseOperator:
+      # Keep high-volume ClickHouse diagnostic logs for one day. These logs are
+      # useful during short-lived investigations, but longer retention can put
+      # substantial write, merge, and storage pressure on ClickHouse.
+      zookeeperLog:
+        ttl: 1
+      processorsProfileLog:
+        ttl: 1
       image:
         registry: docker.io
         repository: altinity/clickhouse-operator
