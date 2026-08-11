@@ -8,6 +8,7 @@ This document describes how to deploy OBaaS to an existing Kubernetes cluster us
 
 - [Quick Start Decision Guide](#quick-start-decision-guide) — Choose the right example values file for your deployment
 - [Architecture](#architecture) — Two-chart design, components, and cluster layout
+- [Dependent Helm Chart References](./chart-references.md) — Version-pinned README and values references for bundled dependency charts
 - [Prerequisites](#prerequisites) — Required tools and cluster access
 - [Names and Namespace Conventions](#names-and-namespace-conventions) — Replace example release names and namespaces with your own values
 - [Installation Guide](#installation-guide) — Step-by-step deployment process
@@ -48,6 +49,8 @@ If you are unsure where to start, use `values-sidb-free.yaml` for evaluation or 
 ### Architecture
 
 The deployment uses a two-chart architecture. The charts are separated because the OBaaS prerequisites chart installs cluster-wide CRDs and operators that may only exist once in a cluster, while the OBaaS chart contains namespace-scoped resources that can be safely installed multiple times.
+
+For configuration options supplied by a dependent chart, see the [version-pinned dependent Helm chart references](./chart-references.md). The references include the upstream README and complete values file for the versions bundled with OBaaS 2.1.1.
 
 **obaas-prereqs** (cluster-scoped, install once):
 
