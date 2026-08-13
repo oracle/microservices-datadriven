@@ -311,7 +311,7 @@ gateway-helm:
         pullPolicy: IfNotPresent
         pullSecrets: *imagePullSecrets
       ratelimit:
-        image: "myregistry.example.com/envoyproxy/ratelimit:master"
+        image: "myregistry.example.com/envoyproxy/ratelimit:17b1956c"
         pullPolicy: IfNotPresent
         pullSecrets: *imagePullSecrets
 
