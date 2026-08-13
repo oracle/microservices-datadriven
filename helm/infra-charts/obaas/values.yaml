@@ -157,7 +157,7 @@ eureka:
   connectionIdleTimeout: 90s
   image:
     repository: container-registry.oracle.com/obaas/service-registry
-    tag: "2.1.0"
+    tag: "2.1.1"
   # Override default resources if needed (defaults: cpu 250m-500m, memory 1Gi-1200Mi)
   resources: {}
 
@@ -198,7 +198,7 @@ gateway-helm:
         pullSecrets: *imagePullSecrets
       ratelimit:
         # This is the full image name including the hub, repo, and tag.
-        image: "docker.io/envoyproxy/ratelimit:master"
+        image: "docker.io/envoyproxy/ratelimit:17b1956c"
         # Specify image pull policy if default behavior isn't desired.
         # Default behavior: latest images will be Always else IfNotPresent.
         pullPolicy: IfNotPresent
@@ -473,7 +473,7 @@ admin-server:
   replicas: 1
   image:
     repository: container-registry.oracle.com/obaas/admin-server
-    tag: "2.1.0"
+    tag: "2.1.1"
   # Override default resources if needed (defaults: cpu 250m-500m, memory 256Mi-512Mi)
   # resources: {}
 
@@ -483,7 +483,7 @@ config-server:
   replicas: 1
   image:
     repository: container-registry.oracle.com/obaas/config-server
-    tag: "2.1.0"
+    tag: "2.1.1"
   # Override default resources if needed (defaults: cpu 250m-500m, memory 256Mi-512Mi)
   # resources: {}
 
@@ -888,7 +888,7 @@ signoz:
         image:
           registry: container-registry.oracle.com
           repository: obaas/dashboards
-          tag: "2.1.0"
+          tag: "2.1.1"
         command:
           - sh
           - -c
