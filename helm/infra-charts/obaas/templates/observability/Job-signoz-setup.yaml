@@ -1,6 +1,6 @@
 ## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
-{{- if .Values.signoz.enabled }}
+{{- if and .Values.signoz.enabled (ne (include "obaas.signozUpgrade.stage" .) "stage1") }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -79,50 +79,51 @@ spec:
           # Use JWT token for all subsequent requests
           AUTH_HEADER="Authorization: Bearer ${TOKEN}"
 
-          # Function to extract title from dashboard JSON file
-          get_title() {
-            grep -o '"title"[[:space:]]*:[[:space:]]*"[^"]*"' "$1" | head -1 | sed 's/.*:[[:space:]]*"\([^"]*\)".*/\1/'
-          }
+          # BEGIN OBaaS dashboard replacement
+          dashboard_dirs=${DASHBOARD_DIRS:-"/signoz-dashboards-1 /signoz-dashboards-2"}
 
-          # Function to find dashboard UUID by title from API response
-          find_dashboard_uuid() {
-            local search_title="$1"
-            local response="$2"
-            # Extract id that appears before matching title in the response
-            echo "$response" | tr '{}' '\n' | grep -B1 "\"title\":\"${search_title}\"" | grep '"id"' | sed 's/.*"id":"\([^"]*\)".*/\1/' | head -1
-          }
-
-          # Get existing dashboards
           echo "Fetching existing dashboards..."
           dashboards_response=$(curl -sf -H "${AUTH_HEADER}" "${SIGNOZ_URL}/api/v1/dashboards")
+          echo "${dashboards_response}" | jq -e '.data | arrays' >/dev/null || {
+            echo "ERROR: SigNoz returned an invalid dashboard list" >&2
+            exit 1
+          }
 
-          # Process dashboards from both directories
-          for dir in /signoz-dashboards-1 /signoz-dashboards-2; do
-            [ -d "$dir" ] || continue
-            for f in $(find -L "$dir" -maxdepth 1 -type f 2>/dev/null); do
-              title=$(get_title "$f")
-              [ -z "$title" ] && continue
-              echo "Reconciling dashboard: $title"
+          for dir in ${dashboard_dirs}; do
+            [ -d "${dir}" ] || continue
 
-              # Find and delete existing dashboard with same title
-              uuid=$(find_dashboard_uuid "$title" "$dashboards_response")
-              if [ -n "$uuid" ]; then
-                echo "  Deleting existing dashboard: $uuid"
-                curl -sf -H "${AUTH_HEADER}" -X DELETE "${SIGNOZ_URL}/api/v1/dashboards/$uuid" || true
-              fi
+            for dashboard_file in $(find -L "${dir}" -maxdepth 1 -type f -name '*.json' -print | sort); do
+              title=$(jq -er '.title | select(type == "string" and length > 0)' "${dashboard_file}") || {
+                echo "ERROR: Packaged dashboard has no valid title: ${dashboard_file}" >&2
+                exit 1
+              }
 
-              # Create new dashboard
-              echo "  Creating dashboard..."
+              echo "Replacing OBaaS system dashboard: ${title}"
+              dashboard_ids=$(echo "${dashboards_response}" | jq -r --arg title "${title}" '
+                .data[]?
+                | select(.data.title == $title)
+                | .id
+              ')
+
+              for dashboard_id in ${dashboard_ids}; do
+                echo "  Deleting existing dashboard: ${dashboard_id}"
+                curl -sf -H "${AUTH_HEADER}" -X DELETE \
+                  "${SIGNOZ_URL}/api/v1/dashboards/${dashboard_id}" >/dev/null
+              done
+
+              echo "  Creating current dashboard"
               curl -sf -H "${AUTH_HEADER}" -H 'Content-Type: application/json' \
-                -d @"${f}" "${SIGNOZ_URL}/api/v1/dashboards" && echo "  Done" || echo "  Failed"
+                -d @"${dashboard_file}" "${SIGNOZ_URL}/api/v1/dashboards" >/dev/null
+              echo "  Done"
             done
           done
 
           echo "SigNoz setup complete"
+          # END OBaaS dashboard replacement
         command:
         - /bin/sh
         - -c
-        image: {{ .Values.signoz.utilities.curlJq.image.registry }}/{{ .Values.signoz.utilities.curlJq.image.repository }}:{{ .Values.signoz.utilities.curlJq.image.tag }}
+        image: {{ .Values.global.utilities.kubectl.image.registry }}/{{ .Values.global.utilities.kubectl.image.repository }}:{{ .Values.global.utilities.kubectl.image.tag }}
         name: signoz-setup
         volumeMounts:
         - mountPath: /shared

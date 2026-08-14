@@ -8,6 +8,13 @@ More details can be found in the [SigNoz Documentation](https://signoz.io/docs/i
 
 There are several dashboards that are pre-installed in SigNoz, for example:
 
+:::warning
+OBaaS-provided dashboards are system dashboards. An OBaaS upgrade replaces any
+dashboard with the same name as a system dashboard. To customize a system
+dashboard, first copy it and give the copy a different name. The renamed copy is
+not replaced during an upgrade.
+:::
+
 - [Spring Boot Observability](#spring-boot-observability)
 - [Spring Boot Statistics](#spring-boot-statistics)
 - [Oracle Database Dashboard](#oracle-database-dashboard)
