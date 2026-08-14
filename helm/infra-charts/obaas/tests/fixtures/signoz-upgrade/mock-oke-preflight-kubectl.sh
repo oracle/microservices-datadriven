@@ -27,12 +27,8 @@ if [[ "$1" == "config" && "$2" == "current-context" ]]; then
   exit 0
 fi
 
-if [[ "$1" == "apply" && "$2" == "-f" ]]; then
-  echo "customresourcedefinition configured"
-  exit 0
-fi
-
 if [[ "$1" == "get" && "$2" == "crd" ]]; then
+  [[ "${SCENARIO}" == "missing-crd" ]] && exit 1
   exit 0
 fi
 
@@ -41,7 +37,7 @@ if [[ "$1" == "wait" && "$2" == "--for=condition=Established" ]]; then
 fi
 
 if [[ "$1" == "get" && "$2" == "volumesnapshotclass.snapshot.storage.k8s.io" ]]; then
-  [[ -f "${STATE_DIR}/class.yaml" ]] || exit 1
+  [[ "${SCENARIO}" == "missing-class" ]] && exit 1
   case "${last_argument}" in
     *'{.driver}'*) echo "blockvolume.csi.oraclecloud.com" ;;
     *'{.deletionPolicy}'*) echo "Retain" ;;
@@ -50,9 +46,8 @@ if [[ "$1" == "get" && "$2" == "volumesnapshotclass.snapshot.storage.k8s.io" ]];
   exit 0
 fi
 
-if [[ "$1" == "create" && "$2" == "-f" && "$3" == "-" ]]; then
-  tee "${STATE_DIR}/class.yaml" >/dev/null
-  echo "volumesnapshotclass.snapshot.storage.k8s.io/obaas-oci-bv-snapshot created"
+if [[ "$1" == "get" && "$2" == "csidriver" ]]; then
+  [[ "${SCENARIO}" == "missing-csi-driver" ]] && exit 1
   exit 0
 fi
 

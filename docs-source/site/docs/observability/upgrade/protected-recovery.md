@@ -47,8 +47,11 @@ curl --fail --location \
   --output /tmp/obaas-signoz-upgrade/validate-signoz-snapshot-restore.sh \
   https://raw.githubusercontent.com/oracle/microservices-backend/OBAAS-2.1.1/helm/infra-charts/tools/validate-signoz-snapshot-restore.sh
 curl --fail --location \
-  --output /tmp/obaas-signoz-upgrade/diagnose-signoz-upgrade.sh \
-  https://raw.githubusercontent.com/oracle/microservices-backend/OBAAS-2.1.1/helm/infra-charts/tools/diagnose-signoz-upgrade.sh
+  --output /tmp/obaas-signoz-upgrade/validate-signoz-upgrade.sh \
+  https://raw.githubusercontent.com/oracle/microservices-backend/OBAAS-2.1.1/helm/infra-charts/tools/validate-signoz-upgrade.sh
+curl --fail --location \
+  --output /tmp/obaas-signoz-upgrade/collect-signoz-upgrade-diagnostics.sh \
+  https://raw.githubusercontent.com/oracle/microservices-backend/OBAAS-2.1.1/helm/infra-charts/tools/collect-signoz-upgrade-diagnostics.sh
 
 chmod +x /tmp/obaas-signoz-upgrade/*.sh
 ```
@@ -120,7 +123,28 @@ verified after Stage 2.
 
 #### OKE with OCI Block Volume
 
-Prepare each OKE cluster once:
+Before running the OBaaS validation tool, ask the cluster administrator to
+install the Kubernetes VolumeSnapshot CRDs and create a
+`VolumeSnapshotClass` named `obaas-oci-bv-snapshot` with the following
+settings:
+
+```yaml
+apiVersion: snapshot.storage.k8s.io/v1
+kind: VolumeSnapshotClass
+metadata:
+  name: obaas-oci-bv-snapshot
+driver: blockvolume.csi.oraclecloud.com
+parameters:
+  backupType: full
+deletionPolicy: Retain
+```
+
+Follow the
+[OKE volume snapshot prerequisites](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengcreatingpersistentvolumeclaim_topic-Provisioning_PVCs_on_BV.htm)
+to install the provider-supported snapshot APIs. Snapshot infrastructure is a
+cluster-level prerequisite and is not installed by OBaaS upgrade tooling.
+
+Validate the prepared OKE cluster:
 
 ```bash
 /tmp/obaas-signoz-upgrade/prepare-oke-volume-snapshots.sh \
@@ -128,19 +152,10 @@ Prepare each OKE cluster once:
   --release <app-release>
 ```
 
-The script installs pinned Kubernetes VolumeSnapshot CRDs, creates the
-non-default `obaas-oci-bv-snapshot` class, and validates the SigNoZ, ClickHouse,
-and ZooKeeper PVCs. The class uses the OCI Block Volume CSI driver, full
-backups, and `deletionPolicy: Retain`.
-
-Validate an already prepared cluster without changing it:
-
-```bash
-/tmp/obaas-signoz-upgrade/prepare-oke-volume-snapshots.sh \
-  --namespace <application-namespace> \
-  --release <app-release> \
-  --check-only
-```
+The script performs read-only validation of the snapshot CRDs, OKE CSI driver,
+snapshot class, and the SigNoZ, ClickHouse, and ZooKeeper PVCs. It fails with
+corrective guidance when a required cluster resource is missing or
+incompatible.
 
 Kubernetes VolumeSnapshots do not require a backup size. OCI backs up each
 complete source Block Volume. Review the protected PVC capacities and verify
@@ -196,16 +211,19 @@ Stage 1:
 5. Validates the running ClickHouse version and original PVC identities.
 6. Records a completion marker for Stage 2.
 
-Do not continue until the following checks pass:
+Do not continue until Stage 1 validation passes:
 
 ```bash
-kubectl get volumesnapshots -n <application-namespace>
-/tmp/obaas-signoz-upgrade/diagnose-signoz-upgrade.sh \
-  <application-namespace> <app-release>
+/tmp/obaas-signoz-upgrade/validate-signoz-upgrade.sh \
+  --namespace <application-namespace> \
+  --release <app-release> \
+  --stage stage1
 ```
 
-Every snapshot must report `readyToUse: true`, ClickHouse must be healthy, and
-the diagnostics must show a complete Stage 1 marker.
+The command prints a short PASS/FAIL summary and returns a nonzero status if the
+completion marker, snapshots, PVC identities, ClickHouse readiness, or
+ClickHouse version is invalid. Stage 2 may be run only after it reports
+`Stage 1 validation PASSED`.
 
 ### 4. Validate the ClickHouse restore point
 
@@ -213,9 +231,9 @@ Prove that the newest ClickHouse snapshot can provision a new volume and that
 the restored volume contains recognizable ClickHouse data:
 
 ```bash
-NAMESPACE=<application-namespace> \
-RELEASE_NAME=<app-release> \
-/tmp/obaas-signoz-upgrade/validate-signoz-snapshot-restore.sh
+/tmp/obaas-signoz-upgrade/validate-signoz-snapshot-restore.sh \
+  --namespace <application-namespace> \
+  --release <app-release>
 ```
 
 This smoke test creates a temporary PVC, mounts it read-only, and retains it for
@@ -227,13 +245,22 @@ Do not continue to Stage 2 if restore validation fails.
 
 ### 5. Run Stage 2
 
+Stage 1 uses temporary compatibility values that keep SigNoZ and its collector
+at their pre-migration versions. Do not repeat those Stage 1 values and do not
+use Helm's `--reuse-values` option. Run Stage 2 with the complete customer
+values file and the explicit Stage 2 values shown below:
+
 ```bash
 helm upgrade <app-release> obaas/obaas \
   --version 0.1.1 \
   -n <application-namespace> \
   --timeout 30m \
   -f <customer-values-file> \
-  --set signozUpgrade.stage=stage2
+  --set signozUpgrade.stage=stage2 \
+  --set signoz.signoz.image.tag=v0.134.0 \
+  --set signoz.otelCollector.image.tag=v0.144.6 \
+  --set signoz.telemetryStoreMigrator.enabled=true \
+  --set signoz.clickhouse.image.tag=25.12.5
 ```
 
 Before modifying workloads, the Stage 2 gate verifies the completion marker,
@@ -245,10 +272,14 @@ ingested telemetry rows.
 ## Validation
 
 ```bash
-kubectl get pods,jobs -n <application-namespace>
-/tmp/obaas-signoz-upgrade/diagnose-signoz-upgrade.sh \
-  <application-namespace> <app-release>
+/tmp/obaas-signoz-upgrade/validate-signoz-upgrade.sh \
+  --namespace <application-namespace> \
+  --release <app-release> \
+  --stage stage2
 ```
+
+The command returns a nonzero status unless the retained Stage 1 recovery
+point, ClickHouse, SigNoZ, collector, migration Job, and setup Job are valid.
 
 Confirm:
 
@@ -298,12 +329,19 @@ volumes in a production environment.
 
 ## Troubleshooting
 
-Collect read-only diagnostics:
+If validation or either Helm stage fails, collect detailed read-only
+troubleshooting data for Oracle Support:
 
 ```bash
-/tmp/obaas-signoz-upgrade/diagnose-signoz-upgrade.sh \
-  <application-namespace> <app-release>
+/tmp/obaas-signoz-upgrade/collect-signoz-upgrade-diagnostics.sh \
+  --namespace <application-namespace> \
+  --release <app-release> \
+  >signoz-upgrade-diagnostics.txt 2>&1
 ```
+
+The file can contain workload logs. Review it before sharing it. Provider
+volume and snapshot handles are omitted by default; add `--include-identifiers`
+only when Oracle Support requests them.
 
 Stage 2 stops before changing workloads when its marker, version, PVC, or
 snapshot checks fail. Correct the reported condition; do not bypass the gate by

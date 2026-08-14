@@ -6,13 +6,14 @@ Utility scripts for managing OBaaS Helm chart dependencies and container images 
 
 ### prepare-oke-volume-snapshots.sh
 
-Prepares an existing OKE-hosted OBaaS release for the SigNoZ two-stage upgrade.
-It installs pinned Kubernetes snapshot CRDs, creates an explicit retained/full
-OCI Block Volume `VolumeSnapshotClass`, and validates the live SigNoZ storage.
+Validates an existing OKE-hosted OBaaS release for the SigNoZ two-stage upgrade.
+The cluster administrator must first install the Kubernetes snapshot CRDs and
+an explicit retained/full OCI Block Volume `VolumeSnapshotClass`. The tool
+validates that cluster-level infrastructure and the live SigNoZ storage without
+modifying it.
 
 ```bash
 ./prepare-oke-volume-snapshots.sh --namespace obaas --release obaas
-./prepare-oke-volume-snapshots.sh --namespace obaas --release obaas --check-only
 ```
 
 This is an OKE-specific cluster preparation tool. Other Kubernetes providers
@@ -28,7 +29,7 @@ ClickHouse snapshot into a new PVC, mounts it read-only, and verifies that the
 volume contains ClickHouse data.
 
 ```bash
-./validate-signoz-snapshot-restore.sh
+./validate-signoz-snapshot-restore.sh --namespace obaas --release obaas
 ```
 
 The restored PVC is intentionally retained for inspection. The script prints
@@ -36,17 +37,29 @@ the commands that remove the temporary pod and PVC.
 
 ---
 
-### diagnose-signoz-upgrade.sh
+### validate-signoz-upgrade.sh
 
-Collects read-only diagnostics for either stage of the SigNoZ upgrade:
+Prints a concise PASS/FAIL result and returns a nonzero status when the selected
+SigNoZ upgrade stage is not valid:
 
 ```bash
-./diagnose-signoz-upgrade.sh obaas obaas
+./validate-signoz-upgrade.sh --namespace obaas --release obaas --stage stage1
+./validate-signoz-upgrade.sh --namespace obaas --release obaas --stage stage2
 ```
 
-The output covers Helm revisions, live images, PVC/PV/OCI volume mappings,
-snapshot classes and backup handles, the Stage 1 completion marker, hook logs,
-and namespace events.
+### collect-signoz-upgrade-diagnostics.sh
+
+Collects detailed read-only troubleshooting information after validation or an
+upgrade stage fails:
+
+```bash
+./collect-signoz-upgrade-diagnostics.sh --namespace obaas --release obaas \
+  >signoz-upgrade-diagnostics.txt 2>&1
+```
+
+Provider volume and snapshot handles are omitted unless
+`--include-identifiers` is specified. Review the file before sharing it because
+it can contain workload logs.
 
 ---
 

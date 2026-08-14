@@ -209,7 +209,9 @@ These files are upgrade profiles and must not be used for a fresh installation:
 | `values-signoz-0.134-stage2.yaml` | Selects the guarded SigNoz and telemetry-migration stage |
 
 Layer the selected profile after the customer's normal values files and use the
-same Helm release name and namespace for both stages. Do not use this README as
+same Helm release name and namespace for both stages. Do not layer Stage 2 over
+the Stage 1 profile or use `--reuse-values`; Stage 2 explicitly replaces the
+temporary Stage 1 compatibility values. Do not use this README as
 the upgrade procedure. Follow [Upgrade SigNoz](../../../../docs-source/site/docs/observability/upgrade/index.md)
 to select a supported path and [Upgrade with protected recovery](../../../../docs-source/site/docs/observability/upgrade/protected-recovery.md)
 for the complete two-stage procedure, prerequisites, commands, validation, and
