@@ -79,7 +79,7 @@ configServer:
 # Enables OTEL Java Agent auto-instrumentation
 otel:
   enabled: true
-  # Sets OTEL_INSTRUMENTATION_MICROMETER_ENABLED=true
+  # Disables/Enables micrometer instrumentation for the OTEL Java Agent
   micrometer:
     enabled: false
 
