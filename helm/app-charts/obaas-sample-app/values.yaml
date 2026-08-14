@@ -76,8 +76,12 @@ eureka:
 configServer:
   enabled: true
 
+# Enables OTEL Java Agent auto-instrumentation
 otel:
   enabled: true
+  # Disables/Enables micrometer instrumentation for the OTEL Java Agent
+  micrometer:
+    enabled: false
 
 otmm:
   enabled: false
