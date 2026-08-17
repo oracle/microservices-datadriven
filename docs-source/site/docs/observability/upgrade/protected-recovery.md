@@ -184,6 +184,11 @@ snapshot class, and the SigNoZ, ClickHouse, and ZooKeeper PVCs. It fails with
 corrective guidance when a required cluster resource is missing or
 incompatible.
 
+OKE might not expose the Block Volume CSI driver as a `CSIDriver` object or its
+managed snapshot controller as a workload in `kube-system`. Do not treat the
+absence of those objects as a failed prerequisite. Use the preparation script
+and the Stage 1 snapshot readiness checks to validate the OKE integration.
+
 Kubernetes VolumeSnapshots do not require a backup size. OCI backs up each
 complete source Block Volume. Review the protected PVC capacities and verify
 that OCI Block Volume Backup service limits and budget can accommodate them.
