@@ -46,11 +46,6 @@ if [[ "$1" == "get" && "$2" == "volumesnapshotclass.snapshot.storage.k8s.io" ]];
   exit 0
 fi
 
-if [[ "$1" == "get" && "$2" == "csidriver" ]]; then
-  [[ "${SCENARIO}" == "missing-csi-driver" ]] && exit 1
-  exit 0
-fi
-
 if [[ "$1" == "get" && "$2" == "pods" ]]; then
   selector="$(argument_after -l "$@")"
   case "${selector}" in

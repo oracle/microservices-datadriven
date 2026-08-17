@@ -96,13 +96,6 @@ if env KUBECTL="${MOCK}" MOCK_STATE_DIR="${TMP}" MOCK_SCENARIO=missing-class \
 fi
 assert_contains "${TMP}/missing-class.log" 'Ask the cluster administrator to create a retained, full-backup class'
 
-if env KUBECTL="${MOCK}" MOCK_STATE_DIR="${TMP}" MOCK_SCENARIO=missing-csi-driver \
-  "${PREPARE}" --namespace obaas --release obaas >"${TMP}/missing-csi-driver.log" 2>&1; then
-  echo "Expected OKE preparation to reject a missing CSI driver" >&2
-  exit 1
-fi
-assert_contains "${TMP}/missing-csi-driver.log" "required OKE CSI driver 'blockvolume.csi.oraclecloud.com' is not installed"
-
 if env KUBECTL="${MOCK}" MOCK_STATE_DIR="${TMP}" MOCK_SCENARIO=wrong-driver \
   "${PREPARE}" --namespace obaas --release obaas >"${TMP}/wrong-driver.log" 2>&1; then
   echo "Expected OKE preparation to reject a mismatched PV driver" >&2

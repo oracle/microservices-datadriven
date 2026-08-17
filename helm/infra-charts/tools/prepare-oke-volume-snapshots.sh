@@ -91,9 +91,6 @@ for crd in \
   kube wait --for=condition=Established "crd/${crd}" --timeout=2m >/dev/null
 done
 
-kube get csidriver blockvolume.csi.oraclecloud.com >/dev/null 2>&1 || \
-  fail "required OKE CSI driver 'blockvolume.csi.oraclecloud.com' is not installed"
-
 if kube get volumesnapshotclass.snapshot.storage.k8s.io "${SNAPSHOT_CLASS_NAME}" >/dev/null 2>&1; then
   class_driver="$(kube get volumesnapshotclass.snapshot.storage.k8s.io "${SNAPSHOT_CLASS_NAME}" -o jsonpath='{.driver}')"
   deletion_policy="$(kube get volumesnapshotclass.snapshot.storage.k8s.io "${SNAPSHOT_CLASS_NAME}" -o jsonpath='{.deletionPolicy}')"

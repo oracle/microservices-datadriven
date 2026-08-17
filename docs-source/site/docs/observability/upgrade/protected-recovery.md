@@ -123,8 +123,35 @@ verified after Stage 2.
 
 #### OKE with OCI Block Volume
 
-Before running the OBaaS validation tool, ask the cluster administrator to
-install the Kubernetes VolumeSnapshot CRDs and create a
+Check whether the Kubernetes VolumeSnapshot CRDs are installed:
+
+```bash
+kubectl get crd volumesnapshotclasses.snapshot.storage.k8s.io
+kubectl get crd volumesnapshotcontents.snapshot.storage.k8s.io
+kubectl get crd volumesnapshots.snapshot.storage.k8s.io
+```
+
+If any CRD is missing, a cluster administrator must install the CRDs using the
+OKE-supported procedure:
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/v8.6.0/client/config/crd/snapshot.storage.k8s.io_volumesnapshotclasses.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/v8.6.0/client/config/crd/snapshot.storage.k8s.io_volumesnapshotcontents.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/v8.6.0/client/config/crd/snapshot.storage.k8s.io_volumesnapshots.yaml
+```
+
+Verify that all three CRDs are available before continuing:
+
+```bash
+kubectl get crd | grep snapshot.storage.k8s.io
+```
+
+Creating cluster-wide CRDs requires cluster-administrator permissions. If the
+CRDs are missing, attempting to create a `VolumeSnapshotClass` fails with `no
+matches for kind "VolumeSnapshotClass" in version
+"snapshot.storage.k8s.io/v1"`.
+
+After the CRDs are installed, create a
 `VolumeSnapshotClass` named `obaas-oci-bv-snapshot` with the following
 settings:
 
