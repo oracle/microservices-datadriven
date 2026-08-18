@@ -34,6 +34,7 @@ docker.io/signoz/zookeeper:3.7.1
 ghcr.io/external-secrets/external-secrets:v2.8.0
 ghcr.io/open-telemetry/opentelemetry-operator/autoinstrumentation-java:2.28.1
 ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator:0.154.0
+ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-k8s:0.154.0
 quay.io/jetstack/cert-manager-cainjector:v1.21.1
 quay.io/jetstack/cert-manager-controller:v1.21.1
 quay.io/jetstack/cert-manager-startupapicheck:v1.21.1
