@@ -108,7 +108,9 @@ env KUBECTL="${CLI_MOCK}" "${VALIDATE}" --namespace obaas --release obaas --stag
   >"${TMP}/validate-stage1.log"
 assert_contains "${TMP}/validate-stage1.log" 'Stage 1 validation PASSED'
 assert_contains "${TMP}/validate-stage1.log" 'Snapshots: 3/3 ready'
-assert_contains "${TMP}/validate-stage1.log" 'Stage 2 may now be run'
+assert_contains "${TMP}/validate-stage1.log" 'Next required step: validate the ClickHouse snapshot restore point'
+assert_contains "${TMP}/validate-stage1.log" 'Do not run Stage 2 until snapshot restore validation passes'
+assert_not_contains "${TMP}/validate-stage1.log" 'Stage 2 may now be run'
 
 env KUBECTL="${CLI_MOCK}" "${VALIDATE}" --namespace obaas --release obaas --stage stage2 \
   >"${TMP}/validate-stage2.log"
@@ -143,6 +145,7 @@ assert_contains "${COLLECT}" 'Stage 1 completion marker'
 assert_contains "${COLLECT}" 'obaas.oracle.com/signoz-upgrade-marker=true'
 assert_contains "${COLLECT}" '--include-identifiers'
 assert_contains "${RESTORE}" 'Snapshot restore validation passed.'
+assert_contains "${RESTORE}" 'If Stage 1 validation has also passed, Stage 2 may now be run.'
 assert_contains "${RESTORE}" 'dataSource:'
 assert_contains "${RESTORE}" 'kind: VolumeSnapshot'
 assert_contains "${RESTORE}" ".status.restoreSize"

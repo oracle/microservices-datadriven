@@ -144,7 +144,8 @@ if [[ "${STAGE}" == "stage1" ]]; then
   echo "Snapshots: ${snapshot_count}/${snapshot_count} ready"
   echo "ClickHouse: ready, version ${CLICKHOUSE_VERSION}"
   echo "Completion marker: valid"
-  echo "Stage 2 may now be run"
+  echo "Next required step: validate the ClickHouse snapshot restore point"
+  echo "Do not run Stage 2 until snapshot restore validation passes"
   exit 0
 fi
 

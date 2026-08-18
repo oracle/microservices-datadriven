@@ -254,8 +254,8 @@ Do not continue until Stage 1 validation passes:
 
 The command prints a short PASS/FAIL summary and returns a nonzero status if the
 completion marker, snapshots, PVC identities, ClickHouse readiness, or
-ClickHouse version is invalid. Stage 2 may be run only after it reports
-`Stage 1 validation PASSED`.
+ClickHouse version is invalid. Continue to restore validation only after it
+reports `Stage 1 validation PASSED`.
 
 ### 4. Validate the ClickHouse restore point
 
@@ -274,6 +274,7 @@ PVC size is selected automatically from the snapshot's `status.restoreSize`.
 Run the cleanup commands printed by the script after inspection.
 
 Do not continue to Stage 2 if restore validation fails.
+After both Stage 1 validation and restore validation pass, Stage 2 may be run.
 
 ### 5. Run Stage 2
 
