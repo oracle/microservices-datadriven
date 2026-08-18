@@ -63,6 +63,27 @@ it can contain workload logs.
 
 ---
 
+### recover-signoz-stage1.sh
+
+Completes Stage 1 validation after a failed Stage 1 Helm revision when all
+retained snapshots and the ClickHouse upgrade succeeded but the completion
+marker was not created:
+
+```bash
+./recover-signoz-stage1.sh \
+  --namespace obaas \
+  --release obaas \
+  --revision 2
+```
+
+The tool accepts only the latest failed Stage 1 revision. It validates the
+revision, snapshots, live PVC identities, ClickHouse version, and telemetry
+before creating the standard marker. It does not change workloads, PVCs, or
+snapshots. Use the diagnostics collector first and do not run this tool for an
+incomplete or uncertain recovery point.
+
+---
+
 ### download-dependencies.sh
 
 Downloads all Helm chart dependencies for both `obaas` and `obaas-prereqs` charts.

@@ -52,6 +52,9 @@ curl --fail --location \
 curl --fail --location \
   --output /tmp/obaas-signoz-upgrade/collect-signoz-upgrade-diagnostics.sh \
   https://raw.githubusercontent.com/oracle/microservices-backend/OBAAS-2.1.1/helm/infra-charts/tools/collect-signoz-upgrade-diagnostics.sh
+curl --fail --location \
+  --output /tmp/obaas-signoz-upgrade/recover-signoz-stage1.sh \
+  https://raw.githubusercontent.com/oracle/microservices-backend/OBAAS-2.1.1/helm/infra-charts/tools/recover-signoz-stage1.sh
 
 chmod +x /tmp/obaas-signoz-upgrade/*.sh
 ```
@@ -359,6 +362,68 @@ If Stage 1 or Stage 2 fails:
 The chart does not automatically replace live PVCs during recovery. Preserve
 the original resources and contact Oracle Support before rebinding restored
 volumes in a production environment.
+
+### Recover a failed Stage 1 validation
+
+If the Stage 1 Helm command fails, stop and collect diagnostics before retrying
+or running Stage 2:
+
+```bash
+/tmp/obaas-signoz-upgrade/collect-signoz-upgrade-diagnostics.sh \
+  --namespace <application-namespace> \
+  --release <app-release> \
+  >signoz-upgrade-diagnostics.txt 2>&1
+
+helm history <app-release> -n <application-namespace>
+```
+
+Review the diagnostics file before sharing it because it can contain workload
+logs. Use the failed revision shown by `helm history` to determine the next
+action:
+
+- If no protected snapshot was created and ClickHouse was not upgraded, correct
+  the reported snapshot or cluster problem and rerun the documented Stage 1
+  command.
+- If the snapshots are ready and ClickHouse reached the target version, but the
+  post-upgrade validation Job failed before creating its completion marker, run
+  the recovery validator shown below.
+- If snapshots are missing or incomplete after ClickHouse was upgraded, a PVC
+  identity changed, ClickHouse is unhealthy, or the state is unclear, stop and
+  contact Oracle Support. Do not create a marker or proceed to Stage 2.
+
+For the second case only, run:
+
+```bash
+/tmp/obaas-signoz-upgrade/recover-signoz-stage1.sh \
+  --namespace <application-namespace> \
+  --release <app-release> \
+  --revision <failed-stage1-revision>
+```
+
+The recovery validator accepts only the latest Helm revision when it has
+`failed` status and used `signozUpgrade.stage=stage1`. It derives the expected
+versions and marker name from that revision, verifies every ready snapshot
+against its live PVC name and UID, and queries the upgraded ClickHouse instance.
+It does not change workloads, PVCs, or snapshots. It creates the normal Stage 1
+completion marker only after every check passes.
+
+After recovery validation passes, resume the documented workflow rather than
+rerunning the Stage 1 Helm command:
+
+```bash
+/tmp/obaas-signoz-upgrade/validate-signoz-upgrade.sh \
+  --namespace <application-namespace> \
+  --release <app-release> \
+  --stage stage1
+
+/tmp/obaas-signoz-upgrade/validate-signoz-snapshot-restore.sh \
+  --namespace <application-namespace> \
+  --release <app-release>
+```
+
+Proceed to Stage 2 only after both commands pass. If the recovery validator
+fails, it does not create a marker; retain the diagnostic file and recovery
+resources for Oracle Support.
 
 ## Troubleshooting
 
