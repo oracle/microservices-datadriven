@@ -116,7 +116,8 @@ helm upgrade --install obaas . -f examples/values-signoz-existing-secret.yaml -n
 
 ### 7. Kafka Enabled Configuration (`values-kafka.yaml`)
 
-Create a Strimzi-managed Kafka cluster in the OBaaS release namespace.
+Create a Strimzi-managed Kafka cluster in the OBaaS release namespace, with full Kafka
+observability in SigNoz (the "Kafka Server Monitoring Dashboard") included by default.
 
 **Use case:** Kafka integration testing, CloudBank Helidon producer/consumer workloads, Kafka observability validation
 
@@ -129,15 +130,6 @@ Create a Strimzi-managed Kafka cluster in the OBaaS release namespace.
 ```bash
 helm upgrade --install obaas . \
   -f examples/values-kafka.yaml \
-  -n obaas \
-  --create-namespace
-```
-
-**Optional Kafka metrics in SigNoz:**
-```bash
-helm upgrade --install obaas . \
-  -f examples/values-kafka.yaml \
-  -f extensions/kafka-metrics.yaml \
   -n obaas \
   --create-namespace
 ```

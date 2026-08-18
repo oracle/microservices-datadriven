@@ -590,19 +590,12 @@ Creates a Strimzi-managed Kafka cluster in the OBaaS release namespace. This is 
 
 **Installation:**
 
-```bash
-helm upgrade --install <app-release> obaas/obaas \
-  -f examples/values-kafka.yaml \
-  -n <application-namespace> \
-  --create-namespace [--debug]
-```
-
-**Optional Kafka metrics in SigNoz:**
+This example includes full Kafka observability in SigNoz (the "Kafka Server Monitoring
+Dashboard") by default — no separate extension file needed.
 
 ```bash
 helm upgrade --install <app-release> obaas/obaas \
   -f examples/values-kafka.yaml \
-  -f extensions/kafka-metrics.yaml \
   -n <application-namespace> \
   --create-namespace [--debug]
 ```
