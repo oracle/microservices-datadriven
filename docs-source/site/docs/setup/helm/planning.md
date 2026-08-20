@@ -39,7 +39,7 @@ Select the database mode by setting `database.type` to one of the supported valu
 Ensure that you review the installation documentation and the instructions in the example `values.yaml` file provided for your specific type of database deployment and provide the necessary configuration information.  Also, ensure that you create Kubernetes secrets with your database credentials if required for your chosen deployment option.
 
 :::note
-If you plan to use an in-cluster database deployment, be aware that database data uses ephemeral node storage by default. We recommend 250 GB ephemeral node storage for SIDB-FREE when `database.persistence.enabled: false`. Alternatively, set `database.persistence.enabled: true` for SIDB-FREE or ADB-FREE and provide storage through a PersistentVolumeClaim.
+If you plan to use an in-cluster database deployment, plan a PersistentVolumeClaim of at least 250 GiB for SIDB-FREE or ADB-FREE. Persistent storage is enabled by default. Set `database.persistence.enabled: false` only when ephemeral database data is acceptable; in that case, plan at least 250 GB of ephemeral node storage for SIDB-FREE.
 :::
 
 ## Choose cluster access option

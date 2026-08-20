@@ -96,9 +96,9 @@ Example configuration for using Oracle Database Free as a container in the clust
 helm upgrade --install obaas . -f examples/values-sidb-free.yaml -n obaas --create-namespace
 ```
 
-SIDB-FREE data is ephemeral by default. To retain it when the database Pod is
-replaced, enable `database.persistence` and select a storage class appropriate
-for a single-writer database volume:
+SIDB-FREE and ADB-FREE persistent storage is enabled by default. The database
+PVC uses the cluster default StorageClass unless you select a storage class
+appropriate for a single-writer database volume:
 
 ```yaml
 database:
@@ -108,7 +108,8 @@ database:
     size: 250Gi
 ```
 
-The same persistence settings apply to ADB-FREE. OBaaS deletes PVCs during
+Set `database.persistence.enabled: false` only when ephemeral database data is
+acceptable. OBaaS deletes PVCs during
 Helm uninstall by default (`global.cleanupPVCs: true`). To retain the database
 PVC when the release is removed, set `global.cleanupPVCs: false`.
 

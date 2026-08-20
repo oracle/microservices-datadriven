@@ -309,7 +309,7 @@ helm upgrade --install <app-release> obaas/obaas -f examples/values-default.yaml
 #### SIDB-FREE Database (`values-sidb-free.yaml`)
 
 :::warning[Important]
-SIDB data is stored on ephemeral node storage by default. You can instead enable persistent storage for SIDB-FREE or ADB-FREE. Please refer to [prerequisites](./prereqs.md) for capacity requirements.
+Persistent storage is enabled by default for SIDB-FREE and ADB-FREE. Please refer to [prerequisites](./prereqs.md) for capacity requirements.
 :::
 
 Uses Oracle Database Free as an in-cluster container. This is the default database type.
@@ -322,7 +322,7 @@ Uses Oracle Database Free as an in-cluster container. This is the default databa
 helm upgrade --install <app-release> obaas/obaas -f examples/values-sidb-free.yaml -n <application-namespace> --create-namespace [--debug]
 ```
 
-To retain in-cluster database data when the database Pod is replaced, enable `database.persistence`. The same settings apply to `SIDB-FREE` and `ADB-FREE`:
+In-cluster database data is retained when the database Pod is replaced. The same `database.persistence` settings apply to `SIDB-FREE` and `ADB-FREE`:
 
 ```yaml
 database:
@@ -334,7 +334,7 @@ database:
       - ReadWriteOnce
 ```
 
-Leave `storageClass` empty to use the cluster default. Persistent storage is disabled by default, so the database data is ephemeral unless you enable it.
+Leave `storageClass` empty to use the cluster default. Set `database.persistence.enabled: false` only when ephemeral database data is acceptable.
 
 OBaaS deletes PVCs during Helm uninstall by default (`global.cleanupPVCs: true`). To retain the database PVC after an uninstall, set `global.cleanupPVCs: false`.
 

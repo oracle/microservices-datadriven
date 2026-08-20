@@ -622,9 +622,9 @@ database:
     tag: "23.26.2.0"
 
   # Persistent storage for SIDB-FREE and ADB-FREE data files.
-  # Disabled by default, so the database data is ephemeral.
+  # Enabled by default, so database data persists when the Pod is replaced.
   persistence:
-    enabled: false
+    enabled: true
     # StorageClass to request. Leave empty to use the cluster default.
     storageClass: ""
     # Requested size for the data PersistentVolumeClaim.
