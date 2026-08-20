@@ -22,7 +22,7 @@ database:
   # persistence:
   #   enabled: true
   #   storageClass: "fast-ssd"
-  #   size: 50Gi
+  #   size: 250Gi
   #   accessModes:
   #     - ReadWriteOnce
 

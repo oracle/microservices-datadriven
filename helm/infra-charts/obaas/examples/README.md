@@ -105,7 +105,7 @@ database:
   persistence:
     enabled: true
     storageClass: "fast-ssd"
-    size: 50Gi
+    size: 250Gi
 ```
 
 The same persistence settings apply to ADB-FREE. OBaaS deletes PVCs during

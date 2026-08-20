@@ -628,7 +628,7 @@ database:
     # StorageClass to request. Leave empty to use the cluster default.
     storageClass: ""
     # Requested size for the data PersistentVolumeClaim.
-    size: 50Gi
+    size: 250Gi
     # Kubernetes access modes for the data PersistentVolumeClaim.
     accessModes:
       - ReadWriteOnce
