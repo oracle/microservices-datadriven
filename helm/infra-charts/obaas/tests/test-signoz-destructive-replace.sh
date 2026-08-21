@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 set -euo pipefail
 chart="$(cd "$(dirname "$0")/.." && pwd)"
 tmp="$(mktemp)"
@@ -20,4 +19,3 @@ grep -qF 'app.kubernetes.io/component=clickhouse' "$tmp"
 grep -qF 'name: signoz-telemetrystore-migrator' "$tmp"
 ! awk '/telemetrystore-migrator\/job.yaml/{found=1} found{print} found && /^---$/{exit}' "$tmp" | grep -q 'helm.sh/hook: pre-upgrade'
 grep -qF 'Deleting existing dashboard:' "$tmp"
-
