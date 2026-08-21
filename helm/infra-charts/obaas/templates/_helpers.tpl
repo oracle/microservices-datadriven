@@ -464,6 +464,13 @@ Returns the short database type prefix (sidb or adb) for service naming.
 {{- end -}}
 
 {{/*
+Database Data PVC Name
+*/}}
+{{- define "obaas.database.dataPvcName" -}}
+{{- printf "%s-%s-data" (include "obaas.fullname" .) (include "obaas.database.dbName" .) -}}
+{{- end -}}
+
+{{/*
 Validate that if oci_config.configMapName is specified,
 then none of the other OCI config values (tenancy, user, fingerprint, region) should be provided.
 */}}

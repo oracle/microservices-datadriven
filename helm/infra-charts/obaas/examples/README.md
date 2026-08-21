@@ -96,6 +96,23 @@ Example configuration for using Oracle Database Free as a container in the clust
 helm upgrade --install obaas . -f examples/values-sidb-free.yaml -n obaas --create-namespace
 ```
 
+SIDB-FREE and ADB-FREE persistent storage is enabled by default. The database
+PVC uses the cluster default StorageClass unless you select a storage class
+appropriate for a single-writer database volume:
+
+```yaml
+database:
+  persistence:
+    enabled: true
+    storageClass: "fast-ssd"
+    size: 250Gi
+```
+
+Set `database.persistence.enabled: false` only when ephemeral database data is
+acceptable. OBaaS deletes PVCs during
+Helm uninstall by default (`global.cleanupPVCs: true`). To retain the database
+PVC when the release is removed, set `global.cleanupPVCs: false`.
+
 ### 6. SigNoz Existing Secret (`values-signoz-existing-secret.yaml`)
 
 Use a pre-existing Kubernetes secret for SigNoz admin authentication instead of auto-generating one.

@@ -10,7 +10,7 @@ component; do not copy the complete dependency values into OBaaS documentation.
 
 | Chart | Version | Chart README | Values reference |
 | --- | --- | --- | --- |
-| `ai-optimizer` | 2.0.3 | [README](https://github.com/oracle/ai-optimizer/blob/v2.0.3/helm/README.md) | [values.yaml](https://github.com/oracle/ai-optimizer/blob/v2.0.3/helm/values.yaml) |
+| `ai-optimizer` | 2.4.1 | [README](https://github.com/oracle/ai-optimizer/blob/v2.4.1/helm/README.md) | [values.yaml](https://github.com/oracle/ai-optimizer/blob/v2.4.1/helm/values.yaml) |
 | `apisix` | 2.16.0 | [README](https://github.com/apache/apisix-helm-chart/blob/apisix-2.16.0/charts/apisix/README.md) | [values.yaml](https://github.com/apache/apisix-helm-chart/blob/apisix-2.16.0/charts/apisix/values.yaml) |
 | `cert-manager` | v1.21.1 | [README template](https://github.com/cert-manager/cert-manager/blob/v1.21.1/deploy/charts/cert-manager/README.template.md) | [values.yaml](https://github.com/cert-manager/cert-manager/blob/v1.21.1/deploy/charts/cert-manager/values.yaml) |
 | `coherence-operator` | 3.5.14 | [README](https://github.com/oracle/coherence-operator/blob/v3.5.14/helm-charts/coherence-operator/README.md) | [values.yaml](https://github.com/oracle/coherence-operator/blob/v3.5.14/helm-charts/coherence-operator/values.yaml) |

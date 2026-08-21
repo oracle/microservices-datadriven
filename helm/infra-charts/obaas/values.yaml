@@ -592,6 +592,18 @@ database:
     repository: "container-registry.oracle.com/database/free"
     tag: "23.26.2.0"
 
+  # Persistent storage for SIDB-FREE and ADB-FREE data files.
+  # Enabled by default, so database data persists when the Pod is replaced.
+  persistence:
+    enabled: true
+    # StorageClass to request. Leave empty to use the cluster default.
+    storageClass: ""
+    # Requested size for the data PersistentVolumeClaim.
+    size: 250Gi
+    # Kubernetes access modes for the data PersistentVolumeClaim.
+    accessModes:
+      - ReadWriteOnce
+
   # For ADB-S: OCI Autonomous Database OCID (exclude for SIDB-FREE/ADB-FREE/OTHER)
   oci:
     ocid: ""

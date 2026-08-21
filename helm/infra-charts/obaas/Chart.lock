@@ -16,6 +16,6 @@ dependencies:
   version: 2.16.0
 - name: ai-optimizer
   repository: https://oracle.github.io/ai-optimizer/helm
-  version: 2.0.3
-digest: sha256:2d096d4797aae17a094db10269d187fe9a16da614c791eb3d6a949b6d1b6d3bc
-generated: "2026-07-28T09:12:08.429564-04:00"
+  version: 2.4.1
+digest: sha256:de18c535fc3f7ff47a2499a66b6a106b4d429b0b2408c29844fd63ffc7511613
+generated: "2026-08-20T15:08:32.107175+01:00"
