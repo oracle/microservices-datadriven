@@ -5,11 +5,30 @@
 set -euo pipefail
 
 KUBECTL="${KUBECTL:-kubectl}"
-NAMESPACE="${NAMESPACE:-obaas}"
-RELEASE_NAME="${RELEASE_NAME:-obaas}"
-COMPONENT="${COMPONENT:-clickhouse}"
-TIMEOUT="${TIMEOUT:-15m}"
-CHECK_IMAGE="${CHECK_IMAGE:-docker.io/busybox:1.37}"
+NAMESPACE=""
+RELEASE_NAME=""
+COMPONENT="clickhouse"
+TIMEOUT="15m"
+CHECK_IMAGE="docker.io/busybox:1.37"
+
+usage() {
+  cat <<'EOF'
+Usage: validate-signoz-snapshot-restore.sh --namespace NAME --release NAME [options]
+
+Options:
+  --namespace NAME          OBaaS namespace (required)
+  --release NAME            OBaaS Helm release (required)
+  --component NAME          Component to restore: clickhouse, signoz, or zookeeper
+                            (default: clickhouse)
+  --timeout DURATION        Restore validation timeout (default: 15m)
+  --check-image IMAGE       Image used to inspect restored data
+                            (default: docker.io/busybox:1.37)
+  -h, --help                Show this help
+
+Environment overrides:
+  KUBECTL
+EOF
+}
 
 fail() {
   echo "ERROR: $*" >&2
@@ -19,6 +38,46 @@ fail() {
 kube() {
   "${KUBECTL}" "$@"
 }
+
+while [[ "$#" -gt 0 ]]; do
+  case "$1" in
+    --namespace)
+      [[ "$#" -ge 2 ]] || fail "--namespace requires a value"
+      NAMESPACE="$2"
+      shift 2
+      ;;
+    --release)
+      [[ "$#" -ge 2 ]] || fail "--release requires a value"
+      RELEASE_NAME="$2"
+      shift 2
+      ;;
+    --component)
+      [[ "$#" -ge 2 ]] || fail "--component requires a value"
+      COMPONENT="$2"
+      shift 2
+      ;;
+    --timeout)
+      [[ "$#" -ge 2 ]] || fail "--timeout requires a value"
+      TIMEOUT="$2"
+      shift 2
+      ;;
+    --check-image)
+      [[ "$#" -ge 2 ]] || fail "--check-image requires a value"
+      CHECK_IMAGE="$2"
+      shift 2
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      fail "unknown option: $1"
+      ;;
+  esac
+done
+
+[[ -n "${NAMESPACE}" ]] || fail "--namespace is required"
+[[ -n "${RELEASE_NAME}" ]] || fail "--release is required"
 
 hash8() {
   if command -v sha256sum >/dev/null 2>&1; then
@@ -140,3 +199,4 @@ echo "  kubectl get pvc ${restore_pvc} -n ${NAMESPACE}"
 echo "Remove the temporary restored volume after inspection:"
 echo "  kubectl delete pod ${check_pod} -n ${NAMESPACE}"
 echo "  kubectl delete pvc ${restore_pvc} -n ${NAMESPACE}"
+echo "If Stage 1 validation has also passed, Stage 2 may now be run."

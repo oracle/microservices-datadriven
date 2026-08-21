@@ -8,6 +8,22 @@
 #
 # Layer this file after the customer's normal values files and use the same Helm
 # release name and namespace that own the existing OBaaS installation.
+# Do not layer this file after the Stage 1 profile and do not use --reuse-values.
+# The values below explicitly replace the temporary Stage 1 compatibility
+# settings.
 
 signozUpgrade:
   stage: stage2
+
+signoz:
+  signoz:
+    image:
+      tag: v0.134.0
+  otelCollector:
+    image:
+      tag: v0.144.6
+  telemetryStoreMigrator:
+    enabled: true
+  clickhouse:
+    image:
+      tag: 25.12.5

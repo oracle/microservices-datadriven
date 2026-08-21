@@ -11,10 +11,25 @@ RELEASE_REVISION="${RELEASE_REVISION:?RELEASE_REVISION is required}"
 TARGET_VERSION="${TARGET_VERSION:?TARGET_VERSION is required}"
 CLICKHOUSE_VERSION="${CLICKHOUSE_VERSION:?CLICKHOUSE_VERSION is required}"
 VALIDATION_TIMEOUT="${VALIDATION_TIMEOUT:?VALIDATION_TIMEOUT is required}"
+VALIDATION_POLL_INTERVAL="${VALIDATION_POLL_INTERVAL:-5}"
 MARKER_SECRET_NAME="${MARKER_SECRET_NAME:?MARKER_SECRET_NAME is required}"
 
 kube() { "${KUBECTL}" "$@"; }
 fail() { echo "ERROR: $*" >&2; exit 1; }
+
+duration_seconds() {
+  duration="$1"
+  case "${duration}" in
+    *s) value="${duration%s}"; multiplier=1 ;;
+    *m) value="${duration%m}"; multiplier=60 ;;
+    *h) value="${duration%h}"; multiplier=3600 ;;
+    *) value="${duration}"; multiplier=1 ;;
+  esac
+  case "${value}" in
+    ''|*[!0-9]*) fail "Invalid validation timeout '${duration}'" ;;
+  esac
+  echo $((value * multiplier))
+}
 
 component_pvcs() {
   component="$1"
@@ -26,24 +41,12 @@ component_pvcs() {
 
 echo "=== Validating SigNoz Stage 1 ==="
 
-for component in signoz clickhouse zookeeper; do
+for component in signoz zookeeper; do
   kube wait pod -n "${NAMESPACE}" \
     -l "app.kubernetes.io/instance=${RELEASE_NAME},app.kubernetes.io/name=${component}" \
     --for=condition=Ready --timeout="${VALIDATION_TIMEOUT}" || \
     fail "${component} pods did not become Ready"
 done
-
-clickhouse_pod="$(kube get pods -n "${NAMESPACE}" \
-  -l "app.kubernetes.io/instance=${RELEASE_NAME},app.kubernetes.io/name=clickhouse,app.kubernetes.io/component=clickhouse" \
-  -o jsonpath='{.items[0].metadata.name}')"
-[ -n "${clickhouse_pod}" ] || fail "No ClickHouse pod was found"
-
-clickhouse_image="$(kube get pod "${clickhouse_pod}" -n "${NAMESPACE}" \
-  -o jsonpath='{.spec.containers[?(@.name=="clickhouse")].image}')"
-case "${clickhouse_image}" in
-  *:"${CLICKHOUSE_VERSION}"|*:"${CLICKHOUSE_VERSION}"@sha256:*) ;;
-  *) fail "ClickHouse pod image '${clickhouse_image}' does not use target ${CLICKHOUSE_VERSION}" ;;
-esac
 
 chi_name="$(kube get clickhouseinstallations.clickhouse.altinity.com -n "${NAMESPACE}" \
   -l "app.kubernetes.io/instance=${RELEASE_NAME}" -o jsonpath='{.items[0].metadata.name}')"
@@ -51,12 +54,45 @@ chi_name="$(kube get clickhouseinstallations.clickhouse.altinity.com -n "${NAMES
 clickhouse_password="$(kube get clickhouseinstallation.clickhouse.altinity.com "${chi_name}" -n "${NAMESPACE}" \
   -o jsonpath="{.spec.configuration.users['admin/password']}")"
 
-reported_version="$(kube exec -n "${NAMESPACE}" "${clickhouse_pod}" -c clickhouse -- \
-  clickhouse-client --user admin --password "${clickhouse_password}" --query 'SELECT version()')"
-case "${reported_version}" in
-  "${CLICKHOUSE_VERSION}"*) ;;
-  *) fail "ClickHouse reported version '${reported_version}', expected ${CLICKHOUSE_VERSION}" ;;
-esac
+timeout_seconds="$(duration_seconds "${VALIDATION_TIMEOUT}")"
+deadline=$(( $(date +%s) + timeout_seconds ))
+clickhouse_pod=""
+clickhouse_image="<none>"
+reported_version="<not queried>"
+
+echo "Waiting up to ${VALIDATION_TIMEOUT} for ClickHouse ${CLICKHOUSE_VERSION} to become Ready..."
+while :; do
+  clickhouse_pod="$(kube get pods -n "${NAMESPACE}" \
+    -l "app.kubernetes.io/instance=${RELEASE_NAME},app.kubernetes.io/name=clickhouse,app.kubernetes.io/component=clickhouse" \
+    -o jsonpath='{.items[0].metadata.name}' 2>/dev/null || true)"
+
+  if [ -n "${clickhouse_pod}" ]; then
+    clickhouse_image="$(kube get pod "${clickhouse_pod}" -n "${NAMESPACE}" \
+      -o jsonpath='{.spec.containers[?(@.name=="clickhouse")].image}' 2>/dev/null || true)"
+    case "${clickhouse_image}" in
+      *:"${CLICKHOUSE_VERSION}"|*:"${CLICKHOUSE_VERSION}"@sha256:*)
+        if kube wait pod "${clickhouse_pod}" -n "${NAMESPACE}" \
+          --for=condition=Ready --timeout="${VALIDATION_TIMEOUT}" >/dev/null 2>&1; then
+          if reported_version="$(kube exec -n "${NAMESPACE}" "${clickhouse_pod}" -c clickhouse -- \
+            clickhouse-client --user admin --password "${clickhouse_password}" \
+            --query 'SELECT version()' 2>/dev/null)"; then
+            case "${reported_version}" in
+              "${CLICKHOUSE_VERSION}"*) break ;;
+            esac
+          else
+            reported_version="<query failed>"
+          fi
+        fi
+        ;;
+    esac
+  fi
+
+  if [ "$(date +%s)" -ge "${deadline}" ]; then
+    fail "ClickHouse did not reach target ${CLICKHOUSE_VERSION} within ${VALIDATION_TIMEOUT}; last pod '${clickhouse_pod:-<none>}', image '${clickhouse_image:-<none>}', reported version '${reported_version:-<not queried>}'"
+  fi
+  sleep "${VALIDATION_POLL_INTERVAL}"
+done
+
 telemetry_rows="$(kube exec -n "${NAMESPACE}" "${clickhouse_pod}" -c clickhouse -- \
   clickhouse-client --user admin --password "${clickhouse_password}" \
   --query "SELECT toString(sum(rows)) FROM system.parts WHERE active AND startsWith(database, 'signoz_')")"

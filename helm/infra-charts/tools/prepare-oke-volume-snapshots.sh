@@ -4,32 +4,29 @@
 
 set -euo pipefail
 
-# Prepares an OKE cluster for the SigNoZ two-stage upgrade workflow.
-# This script installs only the Kubernetes snapshot API CRDs documented by OKE
-# and creates an explicit retained VolumeSnapshotClass for OCI Block Volume.
-# OKE supplies the CSI snapshot implementation in its managed control plane.
+# Validates an OKE cluster for the SigNoZ two-stage upgrade workflow.
+# Cluster-wide snapshot APIs and classes must be installed by the cluster
+# administrator before this script is run.
 
 KUBECTL="${KUBECTL:-kubectl}"
-NAMESPACE="${NAMESPACE:-obaas}"
-RELEASE_NAME="${RELEASE_NAME:-obaas}"
-SNAPSHOT_CLASS_NAME="${SNAPSHOT_CLASS_NAME:-obaas-oci-bv-snapshot}"
-SNAPSHOTTER_VERSION="${SNAPSHOTTER_VERSION:-v8.2.0}"
-CHECK_ONLY=false
+NAMESPACE=""
+RELEASE_NAME=""
+SNAPSHOT_CLASS_NAME="obaas-oci-bv-snapshot"
+OKE_SNAPSHOT_DOCUMENTATION="https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengcreatingpersistentvolumeclaim_topic-Provisioning_PVCs_on_BV.htm"
 
 usage() {
   cat <<'EOF'
-Usage: prepare-oke-volume-snapshots.sh [options]
+Usage: prepare-oke-volume-snapshots.sh --namespace NAME --release NAME [options]
 
 Options:
-  --namespace NAME          OBaaS namespace (default: obaas)
-  --release NAME            OBaaS Helm release (default: obaas)
-  --snapshot-class NAME     VolumeSnapshotClass to create or validate
+  --namespace NAME          OBaaS namespace (required)
+  --release NAME            OBaaS Helm release (required)
+  --snapshot-class NAME     VolumeSnapshotClass to validate
                             (default: obaas-oci-bv-snapshot)
-  --check-only              Validate without creating cluster resources
   -h, --help                Show this help
 
 Environment overrides:
-  KUBECTL, NAMESPACE, RELEASE_NAME, SNAPSHOT_CLASS_NAME, SNAPSHOTTER_VERSION
+  KUBECTL
 EOF
 }
 
@@ -59,10 +56,6 @@ while [[ "$#" -gt 0 ]]; do
       SNAPSHOT_CLASS_NAME="$2"
       shift 2
       ;;
-    --check-only)
-      CHECK_ONLY=true
-      shift
-      ;;
     -h|--help)
       usage
       exit 0
@@ -72,6 +65,9 @@ while [[ "$#" -gt 0 ]]; do
       ;;
   esac
 done
+
+[[ -n "${NAMESPACE}" ]] || fail "--namespace is required"
+[[ -n "${RELEASE_NAME}" ]] || fail "--release is required"
 
 for command in "${KUBECTL}" grep sed sort; do
   command -v "${command}" >/dev/null 2>&1 || fail "required command not found: ${command}"
@@ -86,25 +82,12 @@ echo "Kubernetes context: $(kube config current-context)"
 echo "OBaaS release: ${NAMESPACE}/${RELEASE_NAME}"
 echo "Snapshot class: ${SNAPSHOT_CLASS_NAME}"
 
-crd_base="https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/${SNAPSHOTTER_VERSION}/client/config/crd"
-crds=(
-  "snapshot.storage.k8s.io_volumesnapshotclasses.yaml"
-  "snapshot.storage.k8s.io_volumesnapshotcontents.yaml"
-  "snapshot.storage.k8s.io_volumesnapshots.yaml"
-)
-
-if [[ "${CHECK_ONLY}" == "false" ]]; then
-  echo "Installing pinned snapshot API CRDs from external-snapshotter ${SNAPSHOTTER_VERSION}..."
-  for crd in "${crds[@]}"; do
-    kube apply -f "${crd_base}/${crd}"
-  done
-fi
-
 for crd in \
   volumesnapshotclasses.snapshot.storage.k8s.io \
   volumesnapshotcontents.snapshot.storage.k8s.io \
   volumesnapshots.snapshot.storage.k8s.io; do
-  kube get crd "${crd}" >/dev/null 2>&1 || fail "required CRD '${crd}' is not installed"
+  kube get crd "${crd}" >/dev/null 2>&1 || \
+    fail "required CRD '${crd}' is not installed. Ask the cluster administrator to configure OKE VolumeSnapshot support: ${OKE_SNAPSHOT_DOCUMENTATION}"
   kube wait --for=condition=Established "crd/${crd}" --timeout=2m >/dev/null
 done
 
@@ -119,23 +102,8 @@ if kube get volumesnapshotclass.snapshot.storage.k8s.io "${SNAPSHOT_CLASS_NAME}"
   [[ "${backup_type}" == "full" ]] || \
     fail "VolumeSnapshotClass '${SNAPSHOT_CLASS_NAME}' must use backupType full"
   echo "Existing VolumeSnapshotClass '${SNAPSHOT_CLASS_NAME}' is compatible."
-elif [[ "${CHECK_ONLY}" == "true" ]]; then
-  fail "VolumeSnapshotClass '${SNAPSHOT_CLASS_NAME}' is not installed"
 else
-  echo "Creating retained OCI Block Volume snapshot class..."
-  kube create -f - <<EOF
-apiVersion: snapshot.storage.k8s.io/v1
-kind: VolumeSnapshotClass
-metadata:
-  name: ${SNAPSHOT_CLASS_NAME}
-  labels:
-    app.kubernetes.io/managed-by: obaas-snapshot-preflight
-    obaas.oracle.com/signoz-upgrade: "true"
-driver: blockvolume.csi.oraclecloud.com
-parameters:
-  backupType: full
-deletionPolicy: Retain
-EOF
+  fail "VolumeSnapshotClass '${SNAPSHOT_CLASS_NAME}' is not installed. Ask the cluster administrator to create a retained, full-backup class for 'blockvolume.csi.oraclecloud.com': ${OKE_SNAPSHOT_DOCUMENTATION}"
 fi
 
 targets="$(mktemp)"

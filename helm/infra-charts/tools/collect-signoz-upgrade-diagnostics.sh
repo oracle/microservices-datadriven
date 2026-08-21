@@ -6,24 +6,69 @@ set -u
 
 KUBECTL="${KUBECTL:-kubectl}"
 HELM="${HELM:-helm}"
-NAMESPACE="${NAMESPACE:-obaas}"
-RELEASE_NAME="${RELEASE_NAME:-obaas}"
+NAMESPACE=""
+RELEASE_NAME=""
+MARKER_NAME=""
+INCLUDE_IDENTIFIERS=false
 
 usage() {
   cat <<'EOF'
-Usage: diagnose-signoz-upgrade.sh [namespace] [release]
+Usage: collect-signoz-upgrade-diagnostics.sh --namespace NAME --release NAME [options]
 
-Prints read-only Helm, PVC, CSI snapshot, marker, workload, event, and hook-log
-state for the SigNoZ two-stage upgrade.
+Options:
+  --namespace NAME          OBaaS namespace (required)
+  --release NAME            OBaaS Helm release (required)
+  --marker-name NAME        Stage 1 marker Secret name (default: discover it)
+  --include-identifiers     Include provider volume and snapshot handles
+  -h, --help                Show this help
+
+Environment overrides:
+  KUBECTL, HELM
+
+Collects detailed, read-only troubleshooting data for Oracle Support. The
+output can contain workload logs and should be reviewed before it is shared.
 EOF
 }
 
-if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
-  usage
-  exit 0
-fi
-NAMESPACE="${1:-${NAMESPACE}}"
-RELEASE_NAME="${2:-${RELEASE_NAME}}"
+fail() {
+  echo "ERROR: $*" >&2
+  exit 1
+}
+
+while [[ "$#" -gt 0 ]]; do
+  case "$1" in
+    --namespace)
+      [[ "$#" -ge 2 ]] || fail "--namespace requires a value"
+      NAMESPACE="$2"
+      shift 2
+      ;;
+    --release)
+      [[ "$#" -ge 2 ]] || fail "--release requires a value"
+      RELEASE_NAME="$2"
+      shift 2
+      ;;
+    --marker-name)
+      [[ "$#" -ge 2 ]] || fail "--marker-name requires a value"
+      MARKER_NAME="$2"
+      shift 2
+      ;;
+    --include-identifiers)
+      INCLUDE_IDENTIFIERS=true
+      shift
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      fail "unknown option: $1"
+      ;;
+  esac
+done
+
+[[ -n "${NAMESPACE}" ]] || fail "--namespace is required"
+[[ -n "${RELEASE_NAME}" ]] || fail "--release is required"
+
 MARKER_NAME="${MARKER_NAME:-$("${KUBECTL}" get secret -n "${NAMESPACE}" \
   -l "app.kubernetes.io/instance=${RELEASE_NAME},obaas.oracle.com/signoz-upgrade-marker=true" \
   --sort-by=.metadata.creationTimestamp \
@@ -52,9 +97,14 @@ for pvc in $("${KUBECTL}" get pvc -n "${NAMESPACE}" -o name 2>/dev/null); do
   pv="$("${KUBECTL}" get "${pvc}" -n "${NAMESPACE}" -o jsonpath='{.spec.volumeName}' 2>/dev/null)"
   storage_class="$("${KUBECTL}" get "${pvc}" -n "${NAMESPACE}" -o jsonpath='{.spec.storageClassName}' 2>/dev/null)"
   driver="$("${KUBECTL}" get pv "${pv}" -o jsonpath='{.spec.csi.driver}' 2>/dev/null)"
-  handle="$("${KUBECTL}" get pv "${pv}" -o jsonpath='{.spec.csi.volumeHandle}' 2>/dev/null)"
-  printf 'PVC=%s PV=%s StorageClass=%s Driver=%s Handle=%s\n' \
-    "${pvc_name}" "${pv}" "${storage_class}" "${driver}" "${handle}"
+  if [[ "${INCLUDE_IDENTIFIERS}" == "true" ]]; then
+    handle="$("${KUBECTL}" get pv "${pv}" -o jsonpath='{.spec.csi.volumeHandle}' 2>/dev/null)"
+    printf 'PVC=%s PV=%s StorageClass=%s Driver=%s Handle=%s\n' \
+      "${pvc_name}" "${pv}" "${storage_class}" "${driver}" "${handle}"
+  else
+    printf 'PVC=%s PV=%s StorageClass=%s Driver=%s\n' \
+      "${pvc_name}" "${pv}" "${storage_class}" "${driver}"
+  fi
 done
 
 section "Snapshot API and classes"
@@ -69,10 +119,17 @@ section "Stage 1 snapshots"
   -o custom-columns='NAME:.metadata.name,COMPONENT:.metadata.labels.obaas\.oracle\.com/component,SOURCE_PVC:.spec.source.persistentVolumeClaimName,READY:.status.readyToUse,CONTENT:.status.boundVolumeSnapshotContentName,ERROR:.status.error.message' \
   2>&1 || true
 
-section "Snapshot contents and OCI backup handles"
-"${KUBECTL}" get volumesnapshotcontent.snapshot.storage.k8s.io \
-  -o custom-columns='NAME:.metadata.name,DRIVER:.spec.driver,POLICY:.spec.deletionPolicy,SNAPSHOT_HANDLE:.status.snapshotHandle,READY:.status.readyToUse,ERROR:.status.error.message' \
-  2>&1 || true
+if [[ "${INCLUDE_IDENTIFIERS}" == "true" ]]; then
+  section "Snapshot contents and provider handles"
+  "${KUBECTL}" get volumesnapshotcontent.snapshot.storage.k8s.io \
+    -o custom-columns='NAME:.metadata.name,DRIVER:.spec.driver,POLICY:.spec.deletionPolicy,SNAPSHOT_HANDLE:.status.snapshotHandle,READY:.status.readyToUse,ERROR:.status.error.message' \
+    2>&1 || true
+else
+  section "Snapshot contents"
+  "${KUBECTL}" get volumesnapshotcontent.snapshot.storage.k8s.io \
+    -o custom-columns='NAME:.metadata.name,DRIVER:.spec.driver,POLICY:.spec.deletionPolicy,READY:.status.readyToUse,ERROR:.status.error.message' \
+    2>&1 || true
+fi
 
 section "Stage 1 completion marker"
 if [[ -n "${MARKER_NAME}" ]] && \

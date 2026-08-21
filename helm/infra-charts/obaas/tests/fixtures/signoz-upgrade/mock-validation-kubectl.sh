@@ -29,9 +29,14 @@ if [[ "$1" == "get" && "$2" == "pods" ]]; then
 fi
 
 if [[ "$1" == "get" && "$2" == "pod" ]]; then
-  [[ "${SCENARIO}" == "wrong-image" ]] && \
-    echo "docker.io/clickhouse/clickhouse-server:25.5.6" || \
+  if [[ "${SCENARIO}" == "wrong-image" ]]; then
+    echo "docker.io/clickhouse/clickhouse-server:25.5.6"
+  elif [[ "${SCENARIO}" == "delayed-rollout" && ! -f "${OUTPUT_DIR}/old-image-observed" ]]; then
+    touch "${OUTPUT_DIR}/old-image-observed"
+    echo "docker.io/clickhouse/clickhouse-server:25.5.6"
+  else
     echo "docker.io/clickhouse/clickhouse-server:25.12.5"
+  fi
   exit 0
 fi
 

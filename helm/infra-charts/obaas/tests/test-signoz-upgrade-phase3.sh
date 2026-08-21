@@ -29,7 +29,7 @@ run_validation() {
   mkdir -p "${case_dir}"
   env KUBECTL="${MOCK_KUBECTL}" MOCK_SCENARIO="${scenario}" MOCK_OUTPUT_DIR="${case_dir}" \
     NAMESPACE=obaas RELEASE_NAME=obaas RELEASE_REVISION=7 TARGET_VERSION=0.134.0 \
-    CLICKHOUSE_VERSION=25.12.5 VALIDATION_TIMEOUT=10m \
+    CLICKHOUSE_VERSION=25.12.5 VALIDATION_TIMEOUT=1s VALIDATION_POLL_INTERVAL=0.1 \
     MARKER_SECRET_NAME=obaas-signoz-upgrade-0-134-stage1 \
     /bin/sh "${VALIDATION_SCRIPT}" >"${case_dir}/output.log" 2>&1
 }
@@ -58,6 +58,7 @@ assert_contains "${stage1}" 'image: docker.io/signoz/signoz-otel-collector:v0.14
 assert_contains "${stage1}" 'app.kubernetes.io/name: signoz-upgrade-validation'
 assert_contains "${stage1}" '"helm.sh/hook": post-upgrade'
 assert_contains "${stage1}" 'resources: ["pods/exec"]'
+assert_contains "${stage1}" 'verbs: ["get", "list", "watch", "create", "update", "patch"]'
 assert_contains "${stage1}" 'resources: ["volumesnapshots"]'
 assert_contains "${stage1}" 'resources: ["clickhouseinstallations"]'
 assert_contains "${IMAGE_LIST}" 'docker.io/clickhouse/clickhouse-server:25.12.5'
@@ -72,10 +73,14 @@ assert_contains "${TEST_ROOT}/success/marker.yaml" 'telemetryRows: "100"'
 assert_contains "${TEST_ROOT}/success/marker.yaml" 'helmRevision: "7"'
 assert_contains "${TEST_ROOT}/success/marker.yaml" $'clickhouse\tdata-volumeclaim-template-chi-0-0-0'
 
+run_validation delayed-rollout
+assert_contains "${TEST_ROOT}/delayed-rollout/output.log" 'Stage 1 completion marker'
+[[ -f "${TEST_ROOT}/delayed-rollout/old-image-observed" ]]
+
 assert_validation_fails pods-not-ready 'pods did not become Ready'
-assert_validation_fails wrong-image 'does not use target 25.12.5'
+assert_validation_fails wrong-image 'did not reach target 25.12.5'
 assert_validation_fails wrong-version "reported version '25.11.1.1'"
-assert_validation_fails query-failed 'clickhouse-client'
+assert_validation_fails query-failed "reported version '<query failed>'"
 assert_validation_fails stale-pvc-uid 'No ready snapshot matches PVC'
 assert_validation_fails snapshot-not-ready 'No ready snapshot matches PVC'
 assert_validation_fails marker-write-failed 'kubectl'
