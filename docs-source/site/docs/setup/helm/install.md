@@ -519,17 +519,35 @@ kubectl create secret generic my-signoz-secret \
 helm upgrade --install <app-release> obaas/obaas -f examples/values-signoz-existing-secret.yaml -n <application-namespace> [--debug]
 ```
 
-#### SigNoZ 0.134.0 Two-Stage Upgrade
+#### Replace SigNoZ during an existing-release upgrade
 
-SigNoZ recommends backing up configuration and persistent data before an
-upgrade. Existing OBaaS SigNoZ installations can use a guarded two-stage
-upgrade that creates and validates retained CSI snapshots, upgrades ClickHouse,
-and then upgrades SigNoZ and runs the telemetry migrations.
+OBaaS 2.1.1 replaces SigNoZ rather than migrating it when upgrading an
+existing release. The procedure permanently deletes all existing SigNoZ
+telemetry, dashboards, users, alerts, ClickHouse data, and ZooKeeper data. It
+does not affect the application database or other OBaaS services.
 
-See [Upgrade SigNoZ](../../observability/upgrade/index.md) for the OKE and
-provider-neutral prerequisites, both Helm commands, restore validation,
-troubleshooting, and the optional single-command path when protected historical
-data is not required.
+This release has no in-place or data-preserving SigNoZ upgrade path. Back up any
+observability data that must be retained before proceeding. A data-preserving
+migration using SigNoZ's own documentation is not supported by OBaaS 2.1.1.
+
+Use the complete values file for the installed release and explicitly
+acknowledge the data loss:
+
+```bash
+helm upgrade <app-release> helm/infra-charts/obaas \
+  -n <application-namespace> \
+  --timeout 30m \
+  -f <customer-values-file> \
+  --set signozUpgrade.mode=destructive-replace \
+  --set signozUpgrade.confirmDataLoss=true
+```
+
+If these settings are omitted when upgrading an existing release, Helm fails
+before changing any OBaaS resources. Fresh installations do not require these
+settings.
+
+See [Replace SigNoZ during upgrade](../../observability/upgrade/index.md) for
+the complete procedure.
 
 #### SigNoz Cold Storage (`values-signoz-cold-storage.yaml`)
 
