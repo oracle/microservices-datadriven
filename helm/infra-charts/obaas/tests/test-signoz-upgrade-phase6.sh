@@ -12,7 +12,7 @@ DEFAULT="${CHART_DIR}/examples/values-default.yaml"
 PRIVATE="${CHART_DIR}/examples/values-private-registry.yaml"
 STAGE1="${CHART_DIR}/examples/values-signoz-0.134-stage1.yaml"
 STAGE2="${CHART_DIR}/examples/values-signoz-0.134-stage2.yaml"
-IMAGE_LIST="${CHART_DIR}/../tools/image_lists/k8s_images_2.1.1.txt"
+IMAGE_LIST="${CHART_DIR}/../tools/image_lists/k8s_images_2.1.2.txt"
 TMP="$(mktemp -d)"
 trap 'rm -rf "${TMP}"' EXIT
 

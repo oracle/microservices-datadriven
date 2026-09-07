@@ -11,7 +11,7 @@ MOCK_KUBECTL="${SCRIPT_DIR}/fixtures/signoz-upgrade/mock-validation-kubectl.sh"
 DEFAULT_VALUES="${CHART_DIR}/examples/values-default.yaml"
 STAGE1_VALUES="${CHART_DIR}/examples/values-signoz-0.134-stage1.yaml"
 STAGE2_VALUES="${CHART_DIR}/examples/values-signoz-0.134-stage2.yaml"
-IMAGE_LIST="${CHART_DIR}/../tools/image_lists/k8s_images_2.1.1.txt"
+IMAGE_LIST="${CHART_DIR}/../tools/image_lists/k8s_images_2.1.2.txt"
 TEST_ROOT="$(mktemp -d)"
 trap 'rm -rf "${TEST_ROOT}"' EXIT
 
