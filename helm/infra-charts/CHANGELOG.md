@@ -136,5 +136,4 @@ AppVersion: 2.1.0
 
 # TBD
 
-AppVersion 2.1.1
-
+AppVersion 2.1.2

@@ -1,6 +1,6 @@
 # OBaaS And CloudBank Test Agent Runbook
 
-This guide tells an AI agent how to deploy, test, collect evidence, and report on Oracle Backend for Microservices and AI (OBaaS) 2.1.1 with the CloudBank v5 sample workload.
+This guide tells an AI agent how to deploy, test, collect evidence, and report on Oracle Backend for Microservices and AI (OBaaS) 2.1.2 with the CloudBank v5 sample workload.
 
 The expected output of a test run is a completed report created from the template in this file, plus an evidence directory containing command output, logs, screenshots, and vulnerability scan results.
 
@@ -8,7 +8,7 @@ The expected output of a test run is a completed report created from the templat
 
 Use only these sources for installation and test truth:
 
-- `AGENTS.md` for OBaaS 2.1.1 planning, installation, and verification.
+- `AGENTS.md` for OBaaS 2.1.2 planning, installation, and verification.
 - `CBV5-AGENT.md` for CloudBank v5 deployment, testing, and cleanup.
 - `docs-source/site/docs`, especially `intro.md`, `setup/helm/`, `platform/`, and `observability/`.
 - `helm/infra-charts/obaas-prereqs` and `helm/infra-charts/obaas`.
@@ -18,7 +18,7 @@ Use only these sources for installation and test truth:
 - The task list provided with this guide.
 - The SigNoz Services evidence checklist in this guide.
 
-Use only the OBaaS `next` documentation stream for 2.1.1. Do not use 2.1.0 or older behavior, older CloudBank documentation, or unrelated repository directories.
+Use only the OBaaS `next` documentation stream for 2.1.2. Do not use 2.1.0 or older behavior, older CloudBank documentation, or unrelated repository directories.
 
 Do not duplicate command syntax, values-file policy, secrets policy, or cleanup procedure from `AGENTS.md` or `CBV5-AGENT.md` in this file. If those guides conflict with this guide, treat them as canonical for deployment mechanics and treat this guide as canonical for test scope, evidence, and reporting.
 
@@ -36,7 +36,7 @@ Collect and record these values before any mutating command:
 | `<app-release>` | Helm release for the OBaaS application chart, for example `obaas`. |
 | `<prereqs-values-file>` | Values file for the prerequisites chart, if any. |
 | `<app-values-file>` | Values file for the OBaaS application chart. |
-| `<obaas-chart-version>` | Expected local chart version, `0.1.1`, recorded from both local `Chart.yaml` files. |
+| `<obaas-chart-version>` | Expected local chart version, `0.1.2`, recorded from both local `Chart.yaml` files. |
 | `<database-type>` | `SIDB-FREE`, `ADB-FREE`, `ADB-S`, or `OTHER`. |
 | `<storage-class>` | StorageClass selected for persistent components. |
 | `<access-path>` | Envoy Gateway by default, deprecated ingress-nginx when explicitly enabled, both, existing external access, or port-forward-only. |
@@ -140,7 +140,7 @@ Use this matrix as the master list for each run. Mark each test `Pass`, `Fail`, 
 | PRE-004 | Preflight | Verify cluster capacity policy. | Full validation meets requirements, or local deviations are recorded. | node describe |
 | PRE-005 | Preflight | Verify storage classes and RWX support decision. | Selected storage class and RWX status are recorded. | storageclass output |
 | PRE-006 | Preflight | Verify external access strategy. | Envoy Gateway default, explicit ingress-nginx opt-in, both, or port-forward-only path is documented. | service, ingress, gateway output |
-| PRE-007 | Preflight | Verify chart source and version. | Both local charts report chart version `0.1.1` and app version `2.1.1`; local paths are used unless public charts report app version `2.1.1`. | Chart.yaml and Helm search output |
+| PRE-007 | Preflight | Verify chart source and version. | Both local charts report chart version `0.1.2` and app version `2.1.2`; local paths are used unless public charts report app version `2.1.2`. | Chart.yaml and Helm search output |
 | PRE-008 | Preflight | Render selected chart values. | `helm lint` and `helm template` succeed for both charts; rendered output reflects selected optional components. | lint and rendered-manifest output |
 | INST-001 | Install | Install or verify cert-manager. | Helm reports `deployed`; cert-manager deployments are available; CRDs exist. A pending or missing Helm release is a failure even if pods are running. | Helm status, pod, wait, CRD output; on failure also capture Job logs and events |
 | INST-002 | Install | Install `obaas-prereqs` once. | Release deployed and prerequisite pods healthy. | Helm status and pod output |

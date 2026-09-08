@@ -14,7 +14,7 @@ STAGE1="${CHART_DIR}/examples/values-signoz-0.134-stage1.yaml"
 STAGE2="${CHART_DIR}/examples/values-signoz-0.134-stage2.yaml"
 SIGNOZ_ARCHIVE="${CHART_DIR}/charts/signoz-0.134.0.tgz"
 OLD_SIGNOZ_ARCHIVE="${CHART_DIR}/charts/signoz-0.133.0.tgz"
-IMAGE_LIST="${CHART_DIR}/../tools/image_lists/k8s_images_2.1.1.txt"
+IMAGE_LIST="${CHART_DIR}/../tools/image_lists/k8s_images_2.1.2.txt"
 TMP="$(mktemp -d)"; trap 'rm -rf "${TMP}"' EXIT
 assert_contains() { grep -Fq -- "$2" "$1" || { echo "Expected $1 to contain: $2" >&2; exit 1; }; }
 assert_not_contains() { ! grep -Fq -- "$2" "$1" || { echo "Unexpected $2 in $1" >&2; exit 1; }; }
