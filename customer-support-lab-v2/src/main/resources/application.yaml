@@ -13,7 +13,7 @@ spring:
   profiles:
     active: rest
   application:
-    name: Everything You Never Knew About Oracle
+    name: ${OTEL_SERVICE_NAME:customer-support-lab-v2}
   datasource:
     username: ${APP_DB_USERNAME}
     password: ${APP_DB_PASSWORD}
@@ -31,3 +31,35 @@ spring:
     hibernate:
       ddl-auto: create-drop
 
+server:
+  port: 9001
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - info
+          - metrics
+  opentelemetry:
+    resource-attributes:
+      service.name: ${OTEL_SERVICE_NAME:${spring.application.name}}
+  otlp:
+    metrics:
+      export:
+        enabled: ${MANAGEMENT_OTLP_METRICS_EXPORT_ENABLED:true}
+        url: ${MANAGEMENT_OTLP_METRICS_EXPORT_URL:http://localhost:4318/v1/metrics}
+        step: ${MANAGEMENT_OTLP_METRICS_EXPORT_STEP:5s}
+    tracing:
+      export:
+        enabled: ${MANAGEMENT_OTLP_TRACING_EXPORT_ENABLED:true}
+      endpoint: ${MANAGEMENT_OTLP_TRACING_ENDPOINT:http://localhost:4318/v1/traces}
+    logging:
+      export:
+        enabled: ${MANAGEMENT_OTLP_LOGGING_EXPORT_ENABLED:true}
+      endpoint: ${MANAGEMENT_OTLP_LOGGING_ENDPOINT:http://localhost:4318/v1/logs}
+  tracing:
+    sampling:
+      probability: ${MANAGEMENT_TRACING_SAMPLING_PROBABILITY:1.0}
+  server:
+    port: ${MANAGEMENT_SERVER_PORT:9002}

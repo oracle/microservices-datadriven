@@ -41,6 +41,83 @@ sql ${APP_DB_USERNAME}/${APP_DB_PASSWORD}@<host:port/service> @src/test/resource
 
 The app now fails fast if `APP_DB_USERNAME` or `APP_DB_PASSWORD` is missing.
 
+## Run local infrastructure with Docker Compose
+
+`docker-compose.yml` starts the local backing services only; run the Spring
+Boot application from Maven on the host. The default stack includes Oracle AI
+Database Free and Grafana LGTM, which receives the application's OTLP metrics,
+traces, and logs on port `4318`.
+
+Set a database administrator password before starting the stack. The default is
+provided only for local evaluation; choose a different password outside a
+throwaway environment.
+
+```bash
+export ORACLE_PWD='<local-admin-password>'
+docker compose up -d
+docker compose ps
+```
+
+Wait until `oracle-free` is healthy before creating the application schema. The
+primary database is available to host processes at `localhost:1522`.
+
+```bash
+export APP_DB_USERNAME=LAB_USER
+export APP_DB_PASSWORD='<lab-user-password>'
+export ADMIN_DB_USERNAME=sys
+export ADMIN_DB_PASSWORD="$ORACLE_PWD"
+export ADMIN_DB_CONNECT=localhost:1522/FREEPDB1
+export ADMIN_DB_ROLE=sysdba
+./scripts/setup-lab-user.sh
+
+sql "${APP_DB_USERNAME}/${APP_DB_PASSWORD}@localhost:1522/FREEPDB1" \
+  @src/test/resources/init.sql
+```
+
+Run the application from this directory. These values select the host-exposed
+primary service and the local TxEventQ connection path:
+
+```bash
+export JDBC_URL='jdbc:oracle:thin:@//localhost:1522/FREEPDB1'
+export OKAFKA_BOOTSTRAP_SERVERS=localhost:1522
+export OKAFKA_SECURITY_PROTOCOL=PLAINTEXT
+./mvnw spring-boot:run
+```
+
+The application API is available on `http://localhost:9001`, the management
+endpoints on `http://localhost:9002/actuator`, and Grafana on
+`http://localhost:3000`. The default `application.yaml` configuration exports
+OTLP metrics, traces, and logs to `http://localhost:4318`; override the
+`OTEL_SERVICE_NAME` or `MANAGEMENT_OTLP_*` variables when required.
+
+### Optional Oracle True Cache
+
+Start the True Cache profile when demonstrating read-only, freshness-tolerant
+queries:
+
+```bash
+docker compose --profile true-cache up -d
+docker compose ps
+docker compose logs true-cache-configure
+```
+
+Wait for `true-cache-configure` to exit successfully. It performs the
+primary-side registration that maps `FREEPDB1` to the True Cache service
+`FREEPDB1_TC`. The cache service is then available to host processes at
+`localhost:1523`:
+
+```text
+jdbc:oracle:thin:@//localhost:1523/FREEPDB1_TC
+```
+
+Use that service only for read-only work that can tolerate cache freshness lag;
+ticket creation and workflow updates remain on the primary service. The
+one-shot configuration helper mounts the local Docker socket, so the True Cache
+profile is intended only for local development, not a shared Docker host.
+
+Stop the stack with `docker compose down`. Add `--volumes` only when an
+intentional reset of the shared True Cache password-file volume is required.
+
 ## App Profiles
 
 Profiles are additive. The default is `rest`; add others to progressively unlock Oracle Database features. Activate additional profiles with:
@@ -99,20 +176,20 @@ The REST API is available in all profiles.
 
 ```bash
 curl -X POST -H 'Content-Type: application/json' \
-  "http://localhost:8080/tickets" \
+  "http://localhost:9001/tickets" \
   -d '{"title": "My ticket", "description": "Need help with XYZ!"}'
 ```
 
 #### Retrieve a ticket
 
 ```bash
-curl -X GET "http://localhost:8080/tickets/{id}"
+curl -X GET "http://localhost:9001/tickets/{id}"
 ```
 
 #### Retrieve all tickets
 
 ```bash
-curl -X GET "http://localhost:8080/tickets"
+curl -X GET "http://localhost:9001/tickets"
 ```
 
 ## ORDS
@@ -147,5 +224,5 @@ curl -X GET $ORDS_URL/support/ticket/ \
 The app includes a "Delete All" API that clears all app data, and can be run between showcase stages to clean-up data.
 
 ```bash
-curl -X DELETE "http://localhost:8080/tickets"
+curl -X DELETE "http://localhost:9001/tickets"
 ```

@@ -1,0 +1,17 @@
+# Copyright (c) 2026, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/.
+
+apiVersion: 1
+
+providers:
+  - name: Oracle UCP
+    orgId: 1
+    folder: Oracle AI Database
+    folderUid: oracle-ai-database
+    type: file
+    disableDeletion: false
+    allowUiUpdates: false
+    updateIntervalSeconds: 30
+    options:
+      path: /otel-lgtm/grafana/conf/provisioning/dashboards/custom
+      foldersFromFilesStructure: false
