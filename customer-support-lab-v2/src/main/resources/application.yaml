@@ -5,19 +5,20 @@ okafka:
   tnsAdmin: ${TNS_ALIAS:freepdb1}
   securityProtocol: ${OKAFKA_SECURITY_PROTOCOL:SSL}
 
-oci:
-  embeddingModelID: ${OCI_EMBEDDING_MODEL_ID:cohere.embed-english-v3.0}
-  compartment: ${OCI_COMPARTMENT_ID}
-
 spring:
+  ai:
+    model:
+      embedding: none
   profiles:
     active: rest
   application:
     name: ${OTEL_SERVICE_NAME:customer-support-lab-v2}
+  jmx:
+    enabled: true
   datasource:
     username: ${APP_DB_USERNAME}
     password: ${APP_DB_PASSWORD}
-    url: ${JDBC_URL:jdbc:oracle:thin:@localhost:1521/freepdb1}
+    url: ${JDBC_URL:jdbc:oracle:thin:@localhost:1521/freepdb1?oracle.jdbc.provider.traceEventListener=open-telemetry-trace-event-listener-provider}
 
     driver-class-name: oracle.jdbc.OracleDriver
     type: oracle.ucp.jdbc.PoolDataSource
@@ -44,22 +45,29 @@ management:
   opentelemetry:
     resource-attributes:
       service.name: ${OTEL_SERVICE_NAME:${spring.application.name}}
+    tracing:
+      export:
+        otlp:
+          endpoint: ${MANAGEMENT_OTLP_TRACING_ENDPOINT:http://localhost:4318/v1/traces}
+    logging:
+      export:
+        otlp:
+          endpoint: ${MANAGEMENT_OTLP_LOGGING_ENDPOINT:http://localhost:4318/v1/logs}
   otlp:
     metrics:
       export:
         enabled: ${MANAGEMENT_OTLP_METRICS_EXPORT_ENABLED:true}
         url: ${MANAGEMENT_OTLP_METRICS_EXPORT_URL:http://localhost:4318/v1/metrics}
         step: ${MANAGEMENT_OTLP_METRICS_EXPORT_STEP:5s}
-    tracing:
-      export:
-        enabled: ${MANAGEMENT_OTLP_TRACING_EXPORT_ENABLED:true}
-      endpoint: ${MANAGEMENT_OTLP_TRACING_ENDPOINT:http://localhost:4318/v1/traces}
-    logging:
-      export:
-        enabled: ${MANAGEMENT_OTLP_LOGGING_EXPORT_ENABLED:true}
-      endpoint: ${MANAGEMENT_OTLP_LOGGING_ENDPOINT:http://localhost:4318/v1/logs}
   tracing:
+    export:
+      otlp:
+        enabled: ${MANAGEMENT_OTLP_TRACING_EXPORT_ENABLED:true}
     sampling:
       probability: ${MANAGEMENT_TRACING_SAMPLING_PROBABILITY:1.0}
+  logging:
+    export:
+      otlp:
+        enabled: ${MANAGEMENT_OTLP_LOGGING_EXPORT_ENABLED:true}
   server:
     port: ${MANAGEMENT_SERVER_PORT:9002}

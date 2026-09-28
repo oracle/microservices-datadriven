@@ -16,7 +16,7 @@
 
 	<properties>
 		<oracle.starters.version>26.3.0</oracle.starters.version>
-		<oci.sdk.version>3.96.0</oci.sdk.version>
+		<spring-ai-oracle.version>2.0.1</spring-ai-oracle.version>
 		<java.version>21</java.version>
 	</properties>
 
@@ -65,21 +65,10 @@
 			<version>${oracle.starters.version}</version>
 		</dependency>
 
-<!--		OCI SDK configuration-->
 		<dependency>
-			<groupId>com.oracle.oci.sdk</groupId>
-			<artifactId>oci-java-sdk-generativeaiinference</artifactId>
-			<version>${oci.sdk.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.oracle.oci.sdk</groupId>
-			<artifactId>oci-java-sdk-core</artifactId>
-			<version>${oci.sdk.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.oracle.oci.sdk</groupId>
-			<artifactId>oci-java-sdk-common-httpclient-jersey3</artifactId>
-			<version>${oci.sdk.version}</version>
+			<groupId>com.oracle.spring.ai</groupId>
+			<artifactId>spring-ai-starter-model-oracle</artifactId>
+			<version>${spring-ai-oracle.version}</version>
 		</dependency>
 
 <!--		Test dependencies-->

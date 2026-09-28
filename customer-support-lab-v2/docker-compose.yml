@@ -48,12 +48,10 @@ services:
       retries: 60
       start_period: 60s
 
-  # Start this profile with: docker compose --profile true-cache up
   # Both database services use Compose DNS names rather than fixed IPs.
   true-cache:
     container_name: truecache
     image: container-registry.oracle.com/database/free:latest
-    profiles: ["true-cache"]
     ports:
       - "1523:1521"
     environment:
@@ -83,7 +81,6 @@ services:
   # access to the local Docker socket and must not be used in shared hosts.
   true-cache-configure:
     image: docker:cli
-    profiles: ["true-cache"]
     environment:
       ORACLE_PWD: ${ORACLE_PWD:-Welcome12345}
     volumes:

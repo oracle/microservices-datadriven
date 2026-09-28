@@ -1,0 +1,14 @@
+spring:
+  ai:
+    model:
+      embedding: oci-genai
+    oci:
+      genai:
+        authentication-type: ${OCI_AUTHENTICATION_TYPE:FILE}
+        config-file: ${OCI_CONFIG_FILE:${user.home}/.oci/config}
+        profile: ${OCI_PROFILE:DEFAULT}
+        embedding:
+          compartment-id: ${OCI_COMPARTMENT_ID}
+          serving-mode: ON_DEMAND
+          model: ${OCI_EMBEDDING_MODEL_ID:cohere.embed-english-v3.0}
+          truncate: END

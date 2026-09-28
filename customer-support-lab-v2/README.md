@@ -11,12 +11,17 @@ Before running the application, run the `user.sql` script on your database and c
 ```bash
 APP_DB_USERNAME=<app schema username>
 APP_DB_PASSWORD=<app schema password>
-JDBC_URL=jdbc:oracle:thin:@<my TNS alias>?TNS_ADMIN=/path/to/wallet;
-OCI_COMPARTMENT_ID=<embedding model compartment id>;
+JDBC_URL='jdbc:oracle:thin:@<my TNS alias>?TNS_ADMIN=/path/to/wallet&oracle.jdbc.provider.traceEventListener=open-telemetry-trace-event-listener-provider'
 TNS_ALIAS=<tns alias>;
 WALLET_DIR=</path/to/wallet>
 OKAFKA_SECURITY_PROTOCOL=PLAINTEXT  # Set to PLAINTEXT for local/Docker; defaults to SSL (ADB wallet)
 ```
+
+The lab includes Oracle's `spring-boot-starter-oracle-otel` and enables Spring
+JMX for JDBC driver tracing. Keep the
+`oracle.jdbc.provider.traceEventListener=open-telemetry-trace-event-listener-provider`
+property in any custom `JDBC_URL`; append it with `&` if the URL already has
+query parameters.
 
 You can provision the schema with:
 
@@ -45,8 +50,8 @@ The app now fails fast if `APP_DB_USERNAME` or `APP_DB_PASSWORD` is missing.
 
 `docker-compose.yml` starts the local backing services only; run the Spring
 Boot application from Maven on the host. The default stack includes Oracle AI
-Database Free and Grafana LGTM, which receives the application's OTLP metrics,
-traces, and logs on port `4318`.
+Database Free, True Cache, and Grafana LGTM, which receives the application's
+OTLP metrics, traces, and logs on port `4318`.
 
 Set a database administrator password before starting the stack. The default is
 provided only for local evaluation; choose a different password outside a
@@ -58,8 +63,10 @@ docker compose up -d
 docker compose ps
 ```
 
-Wait until `oracle-free` is healthy before creating the application schema. The
-primary database is available to host processes at `localhost:1522`.
+Wait until `oracle-free` and `true-cache` are healthy and the one-shot
+`true-cache-configure` service exits successfully before creating the
+application schema. The primary database is available to host processes at
+`localhost:1522`; True Cache is available at `localhost:1523`.
 
 ```bash
 export APP_DB_USERNAME=LAB_USER
@@ -78,7 +85,7 @@ Run the application from this directory. These values select the host-exposed
 primary service and the local TxEventQ connection path:
 
 ```bash
-export JDBC_URL='jdbc:oracle:thin:@//localhost:1522/FREEPDB1'
+export JDBC_URL='jdbc:oracle:thin:@//localhost:1522/FREEPDB1?oracle.jdbc.provider.traceEventListener=open-telemetry-trace-event-listener-provider'
 export OKAFKA_BOOTSTRAP_SERVERS=localhost:1522
 export OKAFKA_SECURITY_PROTOCOL=PLAINTEXT
 ./mvnw spring-boot:run
@@ -90,13 +97,12 @@ endpoints on `http://localhost:9002/actuator`, and Grafana on
 OTLP metrics, traces, and logs to `http://localhost:4318`; override the
 `OTEL_SERVICE_NAME` or `MANAGEMENT_OTLP_*` variables when required.
 
-### Optional Oracle True Cache
+### Oracle True Cache
 
-Start the True Cache profile when demonstrating read-only, freshness-tolerant
-queries:
+True Cache starts by default with `docker compose up -d`. Check its startup and
+the primary-side service registration with:
 
 ```bash
-docker compose --profile true-cache up -d
 docker compose ps
 docker compose logs true-cache-configure
 ```
@@ -113,7 +119,7 @@ jdbc:oracle:thin:@//localhost:1523/FREEPDB1_TC
 Use that service only for read-only work that can tolerate cache freshness lag;
 ticket creation and workflow updates remain on the primary service. The
 one-shot configuration helper mounts the local Docker socket, so the True Cache
-profile is intended only for local development, not a shared Docker host.
+setup is intended only for local development, not a shared Docker host.
 
 Stop the stack with `docker compose down`. Add `--volumes` only when an
 intentional reset of the shared True Cache password-file volume is required.
@@ -148,7 +154,23 @@ Enables event-based ticket processing, replacing the basic REST controller.
 
 Enables AI integration on ticket processing, using the `GenAIEventProcessor` class.
 Each ticket processed will be embedded and linked to similar tickets using vector search.
-Requires `events`.
+Requires `events`. Embeddings use Spring AI Oracle's `EmbeddingModel` backed by OCI
+Generative AI. The Oracle model configuration is loaded only with the `ai` profile;
+configure OCI authentication and the embedding compartment before starting it:
+
+```bash
+export OCI_COMPARTMENT_ID=<embedding-model-compartment-ocid>
+# Defaults: ~/.oci/config and profile DEFAULT
+export OCI_CONFIG_FILE="$HOME/.oci/config"
+export OCI_PROFILE=DEFAULT
+export OCI_AUTHENTICATION_TYPE=FILE
+# Defaults to cohere.embed-english-v3.0
+export OCI_EMBEDDING_MODEL_ID=cohere.embed-english-v3.0
+```
+
+`OCI_AUTHENTICATION_TYPE` also supports the Spring AI Oracle authentication
+providers, including `INSTANCE_PRINCIPAL`, `RESOURCE_PRINCIPAL`, and
+`WORKLOAD_IDENTITY`; choose the provider appropriate for the runtime.
 
 ```bash
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=events,ai
@@ -164,7 +186,7 @@ With `ai`, tickets are also written back through the duality view in a single ro
 # Minimum — reads via ticket_dv, writes via direct SQL
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=events,json
 
-# Full round-trip through the duality view (requires OCI credentials)
+# Full round-trip through the duality view (requires OCI GenAI access)
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=events,ai,json
 ```
 
