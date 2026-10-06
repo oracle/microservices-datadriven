@@ -4,7 +4,6 @@
 package com.oracle.demo.lab.ai;
 
 import com.oracle.demo.lab.ticket.RelatedTicket;
-import com.oracle.demo.lab.ticket.SupportTicket;
 import com.oracle.demo.lab.ticket.TicketStore;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
@@ -32,7 +31,7 @@ class TicketAssistancePersistenceSmokeTest {
                 long relatedId = insertTicket(connection, "Earlier MFA recovery");
                 long ticketId = insertTicket(connection, "Lost authenticator");
                 JdbcClient jdbc = JdbcClient.create(new SingleConnectionDataSource(connection, true));
-                TicketStore tickets = new TicketStore(jdbc, (rs, rowNum) -> new SupportTicket(rs));
+                TicketStore tickets = new TicketStore(jdbc);
                 TicketAssistanceStore assistance = new TicketAssistanceStore(jdbc);
                 RelatedTicket related = new RelatedTicket(relatedId, 0.82);
                 float[] embedding = new float[1024];

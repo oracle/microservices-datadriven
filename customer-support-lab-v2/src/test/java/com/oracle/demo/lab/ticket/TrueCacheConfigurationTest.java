@@ -8,11 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.StandardEnvironment;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -47,9 +45,5 @@ class TrueCacheConfigurationTest {
     @Configuration(proxyBeanMethods = false)
     @Import(TrueCacheTicketReader.class)
     static class CacheConfiguration {
-        @Bean
-        RowMapper<SupportTicket> ticketRowMapper() {
-            return (rows, rowNumber) -> new SupportTicket(rows);
-        }
     }
 }

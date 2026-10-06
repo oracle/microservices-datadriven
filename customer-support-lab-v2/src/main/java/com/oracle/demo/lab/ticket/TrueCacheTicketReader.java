@@ -9,7 +9,6 @@ import oracle.ucp.admin.UniversalConnectionPoolManagerImpl;
 import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +28,6 @@ public class TrueCacheTicketReader {
     private static final Logger log = LoggerFactory.getLogger(TrueCacheTicketReader.class);
     private static final String POOL_NAME = "TrueCacheReadPool";
     private final PoolDataSource pool;
-    private final RowMapper<SupportTicket> mapper;
     private final String expectedDbUniqueName;
 
     public TrueCacheTicketReader(
@@ -37,15 +35,13 @@ public class TrueCacheTicketReader {
             @Value("${app.true-cache.username}") String username,
             @Value("${app.true-cache.password}") String password,
             @Value("${app.true-cache.db-unique-name}") String expectedDbUniqueName,
-            @Value("${app.true-cache.max-pool-size:8}") int maxPoolSize,
-            RowMapper<SupportTicket> relationalMapper) throws SQLException {
+            @Value("${app.true-cache.max-pool-size:8}") int maxPoolSize) throws SQLException {
         if (maxPoolSize < 1) {
             throw new IllegalArgumentException("True Cache max pool size must be at least 1");
         }
         if (expectedDbUniqueName == null || expectedDbUniqueName.isBlank()) {
             throw new IllegalArgumentException("True Cache DB_UNIQUE_NAME must not be blank");
         }
-        this.mapper = relationalMapper;
         this.expectedDbUniqueName = expectedDbUniqueName;
         this.pool = PoolDataSourceFactory.getPoolDataSource();
         pool.setConnectionFactoryClassName("oracle.jdbc.pool.OracleDataSource");
@@ -67,7 +63,7 @@ public class TrueCacheTicketReader {
              ResultSet rows = statement.executeQuery()) {
             List<SupportTicket> tickets = new ArrayList<>();
             while (rows.next()) {
-                tickets.add(mapper.mapRow(rows, tickets.size()));
+                tickets.add(new SupportTicket(rows));
             }
             return tickets;
         } catch (SQLException error) {
@@ -81,7 +77,7 @@ public class TrueCacheTicketReader {
                      "select id, title, description, workflow_status from support_ticket where id = ?")) {
             statement.setLong(1, id);
             try (ResultSet rows = statement.executeQuery()) {
-                return rows.next() ? Optional.of(mapper.mapRow(rows, 0)) : Optional.empty();
+                return rows.next() ? Optional.of(new SupportTicket(rows)) : Optional.empty();
             }
         } catch (SQLException error) {
             throw classify(error);

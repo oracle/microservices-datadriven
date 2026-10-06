@@ -4,16 +4,8 @@
 
 set -euo pipefail
 
-if ! command -v jq >/dev/null 2>&1; then
-  echo "This demo needs jq to read the API responses." >&2
-  exit 1
-fi
-
-base_url="${LAB_BASE_URL:-http://localhost:9001}"
-created="$(curl -fsS --max-time 5 -H 'Content-Type: application/json' \
-  -d '{"title":"[demo-fail-once] Lost MFA authenticator","description":"I lost my authenticator and cannot sign in. How can I recover access safely?"}' \
-  "${base_url}/tickets")"
-ticket_id="$(jq -er '.id' <<<"${created}")"
+source "$(dirname "${BASH_SOURCE[0]}")/demo-common.sh"
+ticket_id="$(create_demo_ticket "[demo-fail-once] Lost MFA authenticator")"
 echo "Created ticket ${ticket_id} (RECEIVED); waiting for the intentional failure..."
 
 failed_event_id=""

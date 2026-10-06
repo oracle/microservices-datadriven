@@ -18,7 +18,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class TicketStoreSqlTest {
-    private final TicketStore store = new TicketStore(null, null);
+    private final TicketStore store = new TicketStore(null);
 
     @Test
     void insertReturnsGeneratedTicketId() throws Exception {

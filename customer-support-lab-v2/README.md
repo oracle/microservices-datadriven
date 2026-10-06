@@ -1,132 +1,143 @@
 # Customer Support Lab v2
 
-One ticket tells the story: a Spring Boot API writes a ticket and publishes a
-TxEventQ event in the same Oracle AI Database transaction; a consumer processes
-it, records success or a durable failure, and lets an operator replay failed
-work. True Cache serves freshness-tolerant ticket reads; the primary serves
-fresh workflow reads. Optional chapters add Spring AI Oracle summaries/vector
-retrieval and Grafana LGTM telemetry. See [spec-v2.md](spec-v2.md) for the
-staged simplification plan.
+Build a support-ticket workflow with Spring Boot and Oracle AI Database:
+create a ticket, process its TxEventQ event, record a deliberate failure, replay
+it, and read the same ticket through True Cache. Optional profiles add OCI
+Generative AI assistance and metrics and traces in Grafana.
 
-This is a local teaching lab. Ticket and replay APIs have no authentication;
-do not expose them outside a trusted development environment.
+The application runs locally through Maven. Docker Compose supplies Oracle
+Database Free, a separate True Cache instance, and Grafana LGTM. This is a
+teaching lab: the ticket and replay APIs have no authentication, and the cache
+registration helper mounts the local Docker socket. Use a trusted development
+host.
 
-## Start here: ticket, failure, replay
+## Prerequisites
 
-Prerequisites: Docker Compose, JDK 21 or later, Maven (or `./mvnw`), SQLcl or
-SQL*Plus, `curl`, and `jq`. OCI Generative AI credentials are **not** needed for
-this path. Allow enough free Docker memory for the primary and True Cache
-database instances. Work from the `customer-support-lab-v2` directory.
+- JDK 21 or later and Maven, or the included Maven wrapper.
+- Docker with Docker Compose and enough available memory to run two Oracle
+  database instances alongside LGTM.
+- SQLcl (`sql`) or SQL*Plus (`sqlplus`) for schema setup.
+- `curl` and `jq` for the walkthrough scripts.
 
-1. Start the full backing stack:
+Run the commands below from `customer-support-lab-v2`. The core walkthrough
+requires no OCI credentials. The schema includes Oracle `VECTOR` columns even
+when AI is disabled; use the supplied Oracle AI Database Free stack for this
+local setup.
 
-   ```bash
-   export ORACLE_PWD='<local-admin-password>'
-   docker compose up -d
-   docker compose ps -a
-   ```
+## Start the lab
 
-   Wait for `oracle-free` and `true-cache` to be healthy and
-   `true-cache-configure` to show `Exited (0)`. The helper's successful exit
-   proves the primary-side cache service was registered. LGTM also starts.
-
-2. Create a fresh lab schema and its objects:
-
-   ```bash
-   export APP_DB_USERNAME=LAB_USER
-   export APP_DB_PASSWORD='<lab-user-password>'
-   export ADMIN_DB_USERNAME=sys
-   export ADMIN_DB_PASSWORD="$ORACLE_PWD"
-   export ADMIN_DB_CONNECT=localhost:1522/FREEPDB1
-   export ADMIN_DB_ROLE=sysdba
-   ./scripts/setup-lab.sh
-   ```
-
-   This creates a fresh lab user, TxEventQ grants, tables, and three sample
-   policies. It is for a clean schema; do not run it over populated lab data.
-
-3. In the same terminal as step 2, start the application from Maven (or
-   export `APP_DB_USERNAME` and `APP_DB_PASSWORD` again in a new terminal):
-
-   ```bash
-   ./mvnw spring-boot:run -Dspring-boot.run.profiles=events,demo-failures
-   ```
-
-   The standard Compose connections are the defaults. The API listens on
-   `localhost:9001`; Actuator listens on `localhost:9002`. Ticket GETs use
-   True Cache by default; the walkthrough requests fresh primary reads when
-   checking workflow status.
-
-4. In another terminal, run the repeatable walkthrough:
-
-   ```bash
-   ./scripts/demo-failed-event-replay.sh
-   ```
-
-   Expect one ticket to move from `RECEIVED` to `FAILED` and, after replay,
-   to `TRIAGED`. The replayed event makes one simulated transient attempt before
-   succeeding when `TICKET_EVENT_MAX_ATTEMPTS` is at least 2. The script then
-   proves **that same ticket** is readable from
-   primary and True Cache. It exits unsuccessfully on cache fallback or if
-   the ticket is still absent from cache after 30 seconds. Run it again to
-   create another ticket without resetting the schema. The two printed
-   workflow statuses may differ briefly while True Cache applies redo.
-   If it says the ticket completed without the deliberate failure, restart
-   Maven with `events,demo-failures` and run the script again.
-
-   To inspect reads separately, run `./scripts/demo-true-cache-reads.sh`.
-
-## Optional chapters
-
-| Chapter | Start the app with | Observe |
-| --- | --- | --- |
-| AI assistance | `events,ai` | `./scripts/demo-ai-assistance.sh` prints a saved summary, model/prompt version, similar tickets, and policy matches. |
-| Operations | `events,demo-failures,observability` | Run `./scripts/demo-failed-event-replay.sh`, then open Grafana at `http://localhost:3000` → Oracle AI Database → Customer Support Workflow. |
-
-For the operations chapter, expect `failed` and `processed` in the event
-outcomes panel and a final `TRIAGED` ticket count. The failed-worklist and
-`FAILED` state gauges refresh every 10 seconds; the script may replay before
-they capture the brief failure. The event counters record both outcomes.
-The original deliberate failure is non-retryable; the replayed event makes
-one transient attempt, so the retry panel should show a series once metrics
-export catches up. With `TICKET_EVENT_MAX_ATTEMPTS=1`, the demo skips that
-transient injection and still replays successfully. No data in the state panel
-means metrics have not reached Grafana; it is not evidence of zero tickets.
-The read-path panel should show `primary` and `true-cache` after the same
-script; `primary-fallback` means the cache was not actually used.
-To demonstrate fallback and recovery for an existing ticket, use the ID printed
-by the replay script in place of `<ticket-id>`:
+### 1. Start the backing services
 
 ```bash
-docker compose stop true-cache
-curl -i 'http://localhost:9001/tickets/<ticket-id>?readPath=cache'
-docker compose start --wait true-cache
-docker compose up -d --no-deps --force-recreate true-cache-configure
-docker compose ps -a true-cache-configure
+export ORACLE_PWD='Choose-Your-Admin-Password'
+docker compose up -d
+docker compose ps -a
 ```
 
-The read during the outage remains HTTP 200 with
-`X-Read-Path: primary-fallback`.
-Wait for the helper to show `Exited (0)`, then rerun
-`LAB_TICKET_ID=<ticket-id> ./scripts/demo-true-cache-reads.sh`. A restarted
-ephemeral True Cache inherits the service definition but needs its
-`FREEPDB1_TC` service started again; the helper now does that idempotently.
-Open the separate Oracle UCP Metrics dashboard for primary-pool connection
-activity. In Grafana's trace search, select service
-`customer-support-lab-v2` and the last 15 minutes; inspect the ticket HTTP,
-event-consumer, and JDBC spans. If Grafana is empty, check
-`http://localhost:9002/actuator/metrics/support.ticket.events` first: local
-measurements there point to an export/collector problem, while a missing
-meter points to the app profile or event consumer. Run the replay script again
-to generate another observation without resetting the schema.
+Before creating the schema, wait for:
 
-Each standalone script can create a fresh ticket and can be rerun without
-clearing data. The replay script reuses its ticket for the cache check.
-For a blank-ticket reset between chapters, stop the app and use the deliberate
-`db/truncate.sql` procedure below; the three seeded policies remain.
+- `oracle-free` and `true-cache` to be healthy.
+- `true-cache-password-volume-init` and `true-cache-configure` to exit with code 0.
 
-Stop the Maven app before changing profiles. Restart it with the new profile
-list; use the same schema. AI requires a chat model and OCI authentication:
+The health checks execute database queries. The registration helper configures
+`FREEPDB1_TC` on the primary and starts that service on True Cache. Inspect a
+failed helper with `docker compose logs true-cache-configure`.
+
+| Service | Local endpoint | Purpose |
+| --- | --- | --- |
+| Oracle primary | `localhost:1522/FREEPDB1` | Ticket writes, event transactions, fresh reads |
+| True Cache | `localhost:1523/FREEPDB1_TC` | Freshness-tolerant ticket reads |
+| Grafana | `http://localhost:3000` | Workflow and UCP dashboards, trace exploration |
+| LGTM OTLP | `localhost:4317` / `localhost:4318` | gRPC / HTTP telemetry receivers |
+| Application, started below | `http://localhost:9001` | Ticket and replay API |
+| Actuator, started below | `http://localhost:9002/actuator` | Health and local metrics |
+
+Database files and LGTM data have no dedicated persistent volumes in this
+Compose file. The named volume holds the shared database password file;
+it does not preserve ticket data when the database container is removed.
+
+### 2. Create a fresh schema
+
+```bash
+export APP_DB_USERNAME=LAB_USER
+export APP_DB_PASSWORD='Choose-Your-Lab-Password'
+export ADMIN_DB_USERNAME=sys
+export ADMIN_DB_PASSWORD="$ORACLE_PWD"
+export ADMIN_DB_CONNECT=localhost:1522/FREEPDB1
+export ADMIN_DB_ROLE=sysdba
+./scripts/setup-lab.sh
+```
+
+The script runs `db/user.sql` and `db/init.sql`: it creates the application
+user, grants database and TxEventQ permissions, creates seven tables, and
+seeds three support policies. Run it against a fresh schema, not an existing
+populated one. The application creates or discovers the `ticket_event` topic
+when it starts.
+
+Setup passes credentials to the SQL client over stdin. Usernames must be
+simple unquoted Oracle identifiers; passwords may contain letters, digits,
+and `. _ ! # % + -`. The script rejects unsupported input. To check inputs
+without connecting, run:
+
+```bash
+./scripts/setup-lab.sh --dry-run
+```
+
+### 3. Start the application
+
+In the terminal with `APP_DB_USERNAME` and `APP_DB_PASSWORD` exported:
+
+```bash
+./mvnw spring-boot:run -Dspring-boot.run.profiles=events,demo-failures
+```
+
+You can replace `./mvnw` with `mvn`. In a new terminal, export the application
+credentials again before starting Maven. Check health with:
+
+```bash
+curl -fsS http://localhost:9002/actuator/health
+```
+
+`events` is the default profile. Include it whenever you supply an explicit
+profile list. `demo-failures` enables the deliberate failure and retry used
+in the next step.
+
+### 4. Demonstrate failure, replay, and cache reads
+
+In another terminal:
+
+```bash
+./scripts/demo-failed-event-replay.sh
+```
+
+The script creates a ticket with the `[demo-fail-once]` title prefix and waits
+for `FAILED`. It replays the failed event, waits for `TRIAGED` in the core
+profile, and checks that replaying the original again returns HTTP 404. With
+at least two allowed attempts, the replay has one simulated transient failure
+before succeeding.
+
+It then checks that **the same ticket** is served by both primary and True
+Cache. The cache check rejects `primary-fallback` and waits up to 30 polling
+iterations for a cache miss to become visible. Workflow statuses may briefly
+differ between primary and cache while redo is applied.
+
+Rerun the script to create another ticket without resetting the schema.
+If the deliberate failure does not occur, restart the app with
+`events,demo-failures`.
+
+For a separate read check, create a new ticket or reuse an existing one:
+
+```bash
+./scripts/demo-true-cache-reads.sh
+LAB_TICKET_ID=42 ./scripts/demo-true-cache-reads.sh
+```
+
+All demo scripts accept `LAB_BASE_URL`, defaulting to `http://localhost:9001`.
+
+## Optional AI assistance
+
+Stop the Maven app, retain the schema, and configure OCI authentication and
+models available to your compartment:
 
 ```bash
 export OCI_COMPARTMENT_ID='<compartment-ocid>'
@@ -138,157 +149,256 @@ export OCI_CHAT_MODEL_ID='<available-chat-model-id>'
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=events,ai
 ```
 
-On the first AI ticket, the processor embeds the small seeded policy corpus,
-then stores a concise summary and scored references. Read them at
-`GET /tickets/{id}/assistance`. Before enrichment it returns 404. Policies
-are recommendations, not automatic decisions. The AI script exits successfully
-only when that ticket has a nonempty saved summary, model/prompt metadata,
-and at least one policy match. The first ticket may have no similar historical
-tickets; run the script again to give the second ticket one to find. If it
-reports `TRIAGED`, restart the app with `events,ai` and run it again. If it
-reports `FAILED`, inspect the printed worklist event, correct the OCI/model
-issue, and replay that event; replay may make another chargeable model call.
-The schema expects 1024-dimensional embeddings and uses exact cosine scoring
-for the small ticket and policy datasets. Use a fresh ticket dataset after
-changing the embedding model. Policy indexing no longer makes a model call
-during app startup. Model failures during ticket processing appear in the replayable
-event worklist; missing OCI configuration may still prevent the AI profile
-from starting.
+Then run:
 
-## Configuration and API reference
+```bash
+./scripts/demo-ai-assistance.sh
+```
 
-The standard primary endpoint is `localhost:1522/FREEPDB1`; True Cache is
-`localhost:1523/FREEPDB1_TC`. If those ports are occupied, set
-`LAB_PRIMARY_PORT` and `LAB_TRUE_CACHE_PORT` before `docker compose up -d`,
-then adjust `ADMIN_DB_CONNECT`, `JDBC_URL`, `OKAFKA_BOOTSTRAP_SERVERS`, and
-`TRUE_CACHE_JDBC_URL` to match. `events` is the default app profile, but an
-explicit profile list must include it. The app fails fast without
-`APP_DB_USERNAME` and `APP_DB_PASSWORD`.
+AI processing embeds the ticket, searches related tickets and the seeded
+policy corpus, generates a short summary, and persists the assistance and
+`ENRICHED` status on the consumer's database connection. Policy embeddings
+are created on first use and refreshed when the configured model changes.
+The small datasets use exact cosine search with a minimum score of 0.2.
+The schema expects 1024-dimensional embeddings; use a fresh ticket dataset
+when changing embedding models.
 
-`scripts/setup-lab.sh` sends SQLcl/SQL*Plus connections over stdin so
-passwords do not appear in the process listing. Its SQL-client substitution
-accepts simple unquoted usernames and passwords made from letters, digits,
-`. _ ! # % + -`; unsupported characters are rejected. Use
-`./scripts/setup-lab.sh --dry-run` to validate inputs without connecting.
-`LAB_BASE_URL` overrides `http://localhost:9001` for demo scripts. The
-`[demo-fail-once]` prefix triggers the deliberate first failure; the same
-ticket text without it processes normally. For a standalone cache check,
-`LAB_TICKET_ID` can reuse an existing positive numeric ticket ID.
+The script succeeds when the ticket is `ENRICHED` and its saved assistance
+has a summary, model and prompt metadata, and at least one policy match. The
+first ticket may have no similar tickets; rerun it to build history. Policy
+matches are suggestions for human review.
 
-A prior local timing reached the first replay result in 104 seconds with
-primary and LGTM only, cached images/dependencies, and operator pauses.
-That is **not** a timing guarantee for the full True Cache stack. A separate
-full-stack run verified two consecutive replay/cache walkthroughs without
-resetting the schema; startup time still depends on host resources and cached
-images.
+A `TRIAGED` result means the app processed the ticket without AI. A `FAILED`
+result directs you to the failed-event worklist. Correct the cause before
+replaying; replay can make additional model calls. Database idempotency does
+not guarantee exactly-once external OCI calls.
 
-The standard Compose startup includes True Cache. Check `docker compose ps -a`
-and `docker compose logs true-cache-configure`; the helper must exit successfully
-so the primary registers `FREEPDB1_TC`. It mounts the local Docker socket and
-is not for shared hosts. Compose gives True Cache a stable `ORACLE_HOSTNAME`
-and checks that its PDB accepts a query before running the registration helper.
-`TRUE_CACHE_JDBC_URL` defaults to
-`jdbc:oracle:thin:@//localhost:1523/FREEPDB1_TC`.
-`TRUE_CACHE_DB_USERNAME` and `TRUE_CACHE_DB_PASSWORD` default to the app
-credentials; `TRUE_CACHE_MAX_POOL_SIZE` defaults to 8 and
-`TRUE_CACHE_DB_UNIQUE_NAME` to `TRUEFREE`. The reader checks the connected
-database's `DB_UNIQUE_NAME` on each cache borrow before reporting
-`X-Read-Path: true-cache`; a misconfigured primary endpoint yields
-`primary-fallback` instead. This adds one SQL round trip to each cache read.
+## Optional observability
 
-Only ticket list/detail GETs use the cache pool. They default to True Cache;
-`?readPath=primary` forces a fresh primary read and `?readPath=cache` requests
-a freshness-tolerant read. They select only core ticket fields, not embedding
-or assistance references; use `/tickets/{id}/assistance` for recommendations.
-`X-Read-Path` reports `primary`, `true-cache`, or `primary-fallback`, even for
-404. A successful cache miss remains a 404, not a hidden primary read. Cache
-connection failure falls back to primary. Writes, event processing, replay,
-operator worklist, and assistance reads stay on primary. A single logical
-driver-routed datasource is a future option, not the current implementation.
-The cache script rejects `primary-fallback`; fallback is not proof of a cache
-read.
+Stop the app and restart with:
+
+```bash
+./mvnw spring-boot:run -Dspring-boot.run.profiles=events,demo-failures,observability
+```
+
+Run the replay walkthrough again, then open Grafana at
+`http://localhost:3000`. Under **Oracle AI Database**, use **Customer Support
+Workflow** for event outcomes, retries, enrichment steps, ticket states, and
+read paths, and **Oracle UCP Metrics** for pool activity. To observe AI steps,
+start with `events,ai,observability` and run the AI script.
+
+The observability profile enables OTLP metrics and trace export, JSON console
+logs, and database-backed state gauges. Metrics export every 5 seconds by
+default; gauges refresh every 10 seconds. A quick replay may finish before a
+gauge captures the brief `FAILED` state, while event counters retain both
+outcomes. Search traces for service `customer-support-lab-v2`.
+
+If Grafana is empty, check a local meter first:
+
+```bash
+curl -fsS http://localhost:9002/actuator/metrics/support.ticket.events
+```
+
+A local measurement helps distinguish export problems from absent event
+activity. Oracle JDBC tracing is configured, but does not imply coverage of
+every OKafka-internal call. Console logs are not automatically forwarded to
+LGTM; an OTLP log endpoint alone does not establish log delivery.
+
+## How the workflow is structured
+
+1. Submission inserts a `RECEIVED` ticket and publishes an OSON work event in
+   one producer transaction.
+2. The consumer handles one event per transaction. It checks durable outcomes,
+   marks the ticket `TRIAGED`, and invokes the core or AI processor.
+3. Transient failures retry with savepoint rollback and exponential backoff.
+   Exhausted or permanent failures produce a durable failure record and, when
+   the ticket exists, a `FAILED` status.
+4. Successful processing or the durable failure outcome commits with the
+   TxEventQ acknowledgement. Redelivery of an event with an existing outcome
+   skips processing.
+5. Replay locks a failed record, marks it `REPLAYED`, resets its failed ticket
+   to `RECEIVED`, and publishes a new event in one producer transaction. The
+   new event's causation ID identifies the original failure.
+
+The event carries a schema version, ticket ID, event type, UUIDs, timestamp,
+and W3C trace context. Ticket text stays in the database. UUIDs use canonical
+strings in HTTP/OSON and `RAW(16)` in database event tables.
+
+Primary and cache reads have separate connection pools. Only ticket list and
+detail GETs use True Cache; writes, processing, replay, worklist queries, and
+assistance reads use primary. Each cache borrow verifies `DB_UNIQUE_NAME`
+before reading. The ticket stores construct `SupportTicket` directly from
+database rows.
+
+### Project map
+
+```text
+customer-support-lab-v2/
+├── pom.xml, mvnw                 Maven build and wrapper
+├── docker-compose.yml           Primary, True Cache, registration helpers, LGTM
+├── db/                          User grants, schema/seed data, reset and cleanup SQL
+├── dashboards/                  Grafana provisioning and workflow/UCP dashboards
+├── scripts/
+│   ├── setup-lab.sh             Fresh-schema setup and input validation
+│   ├── demo-common.sh           Sourced setup and ticket creation for HTTP demos
+│   ├── demo-failed-event-replay.sh
+│   ├── demo-true-cache-reads.sh
+│   └── demo-ai-assistance.sh
+├── src/main/java/com/oracle/demo/lab/
+│   ├── Application.java         Boot entry point, executor, JDBC tracing import
+│   ├── config/                  Required database credential validation
+│   ├── web/                     Ticket, replay, and assistance endpoints
+│   ├── events/                  OKafka setup, transactions, outcomes, retry, telemetry
+│   ├── ticket/                  Ticket model, primary writes/reads, cache routing
+│   └── ai/                      Summaries, vector retrieval, policy indexing, assistance
+├── src/main/resources/          Base, AI, and observability configuration
+├── src/test/                    Unit/profile tests, opt-in Oracle tests, startup scripts
+└── spec-v2.md                   Lab design and evolution notes
+```
+
+`demo-common.sh` is sourced by the three walkthroughs; run their entry-point
+scripts directly. The seven tables have distinct roles:
+
+| Table | Stores |
+| --- | --- |
+| `support_ticket` | Ticket text, workflow state, optional embedding |
+| `ticket_event_processed` | Completed-event idempotency keys |
+| `failed_ticket_event` | Failure envelope, attempt metadata, replay state |
+| `support_policy` | Seeded policy text and model-specific embeddings |
+| `ticket_assistance` | Saved summary, model, prompt version, generation time |
+| `related_ticket` | Scored links to similar tickets |
+| `ticket_policy_match` | Scored links to policies |
+
+## API reference
+
+| Method and path | Behavior |
+| --- | --- |
+| `POST /tickets` | Accepts `title` and `description`; returns the created ticket. Optional `X-Correlation-ID` header accepts a UUID. |
+| `GET /tickets` | Lists core ticket fields; accepts `readPath=primary` or `readPath=cache`. |
+| `GET /tickets/{id}` | Reads one ticket; returns 404 when absent. Accepts the same read-path options. |
+| `GET /ticket-events/failures` | Lists failed-event metadata, including replayability. |
+| `POST /ticket-events/failures/{eventId}/replay` | Returns 202 with the new event; 404 for absent/already replayed failures; 409 for unsupported envelopes or a ticket no longer eligible for replay. |
+| `GET /tickets/{id}/assistance` | Available with `ai`; returns saved assistance or 404 before it is available. |
+
+Ticket GETs default to cache. Their `X-Read-Path` header reports `primary`,
+`true-cache`, or `primary-fallback`, including on 404. A successful cache query
+that finds no ticket remains a 404. Connection unavailability falls back to
+primary; other query errors propagate. Invalid read-path values return 400.
 
 ```bash
 ticket_id="$(curl -fsS -H 'Content-Type: application/json' \
-  -d '{"title":"Lost MFA authenticator","description":"I lost my authenticator and cannot sign in. How can I recover access safely?"}' \
+  -d '{"title":"Login problem","description":"I cannot sign in."}' \
   http://localhost:9001/tickets | jq -er '.id')"
 curl -i "http://localhost:9001/tickets/${ticket_id}?readPath=primary"
 curl -fsS http://localhost:9001/ticket-events/failures
-curl -X POST 'http://localhost:9001/ticket-events/failures/<event-uuid>/replay'
+curl -i -X POST 'http://localhost:9001/ticket-events/failures/<event-uuid>/replay'
 ```
 
-The versioned OSON event contains ticket ID, event type/ID, correlation ID,
-optional causation ID, creation time, and trace context—never ticket text.
-Java uses `UUID`, the database stores event IDs as `RAW(16)`, and HTTP/OSON
-use canonical UUID strings. `X-Correlation-ID` accepts an optional UUID on
-submission. The consumer retries transient failures up to three times with
-exponential backoff (250 ms initial delay). Override with
-`TICKET_EVENT_MAX_ATTEMPTS` and `TICKET_EVENT_RETRY_BACKOFF_MS`.
+## Configuration reference
 
-The failed-event table is an operator worklist, not a ticket-content review.
-Replay marks the original event `REPLAYED` and atomically publishes a new
-event whose causation ID is the original ID. A repeated replay request cannot
-publish a second event. The processed-event table remains separate because it
-is the small idempotency key set committed with enrichment; the failed-event
-table holds the full replayable envelope and failure metadata. Merging them
-would obscure these distinct transaction roles without improving this demo.
-The consumer treats an event found in either table as already handled. A
-redelivered original event cannot reopen a `REPLAYED` failure; failure records
-are inserted once, not merged back to `FAILED`.
-A missing or already replayed failure returns HTTP 404. An incomplete failure
-envelope or a ticket no longer in `FAILED` returns HTTP 409. Neither case
-publishes a new event.
+| Environment variable | Default / use |
+| --- | --- |
+| `APP_DB_USERNAME`, `APP_DB_PASSWORD` | Required in the application terminal; also used by schema setup. |
+| `ORACLE_PWD` | Compose admin password; set before startup (Compose otherwise uses `Welcome12345`). |
+| `LAB_PRIMARY_PORT`, `LAB_TRUE_CACHE_PORT` | Compose host ports, `1522` and `1523`. |
+| `JDBC_URL` | Primary JDBC URL, `localhost:1522/FREEPDB1`, with the JDBC trace listener parameter. |
+| `OKAFKA_BOOTSTRAP_SERVERS` | `localhost:1522`. |
+| `OKAFKA_SECURITY_PROTOCOL` | `PLAINTEXT`; only `PLAINTEXT` and `SSL` are accepted. |
+| `WALLET_DIR`, `TNS_ALIAS` | `.` and `FREEPDB1`; for SSL, supply the wallet directory and service alias. |
+| `TRUE_CACHE_JDBC_URL` | Cache JDBC URL, `localhost:1523/FREEPDB1_TC`, with the JDBC trace listener parameter. |
+| `TRUE_CACHE_DB_USERNAME`, `TRUE_CACHE_DB_PASSWORD` | Application credentials. |
+| `TRUE_CACHE_DB_UNIQUE_NAME`, `TRUE_CACHE_MAX_POOL_SIZE` | `TRUEFREE`, `8`. |
+| `TICKET_EVENT_MAX_ATTEMPTS`, `TICKET_EVENT_RETRY_BACKOFF_MS` | `3` total attempts, `250` ms initial backoff. |
+| `LAB_BASE_URL`, `LAB_TICKET_ID` | Demo API URL; optional existing ID for the cache demo. |
+| `OTEL_SERVICE_NAME` | `customer-support-lab-v2`. |
+| `MANAGEMENT_SERVER_PORT` | `9002`. |
+| `MANAGEMENT_OTLP_METRICS_EXPORT_URL` | `http://localhost:4318/v1/metrics`. |
+| `MANAGEMENT_OTLP_TRACING_ENDPOINT` | `http://localhost:4318/v1/traces`. |
+| `MANAGEMENT_OTLP_METRICS_EXPORT_STEP`, `TICKET_STATE_REFRESH_MS` | `5s`, `10000` ms. |
 
-The `observability` profile exports metrics and traces through OTLP HTTP to
-`http://localhost:4318` by default, and adds JSON console logs and
-ticket-state/worklist gauges. The core profile does not attempt OTLP export.
-Oracle JDBC/UCP tracing and pool metrics are configured. Application logs are
-**not** forwarded to LGTM without a separate appender; the configured OTLP log
-endpoint alone is not proof of delivery. A local run verified a trace linking
-HTTP ticket submission, event consumption, and an Oracle JDBC query. The
-driver span comes from the primary JDBC datasource, not every
-OKafka-internal database call. The small
-dashboard covers emitted workflow metrics; it does not claim consumer lag or
-OCI cost/rate-limit meters. Avoid customer text and IDs in metric labels.
+Changing Compose ports does not change the Maven app's connection defaults.
+Update `ADMIN_DB_CONNECT`, `JDBC_URL`, `OKAFKA_BOOTSTRAP_SERVERS`, and
+`TRUE_CACHE_JDBC_URL` to match. Keep the
+`oracle.jdbc.provider.traceEventListener=open-telemetry-trace-event-listener-provider`
+query parameter on custom JDBC URLs when using JDBC tracing.
 
-For another database or collector, override `JDBC_URL`, `WALLET_DIR`,
-`TNS_ALIAS`, `OKAFKA_SECURITY_PROTOCOL`, `OKAFKA_BOOTSTRAP_SERVERS`,
-`OTEL_SERVICE_NAME`, `MANAGEMENT_OTLP_METRICS_EXPORT_*`,
-`MANAGEMENT_OTLP_TRACING_*`, and `MANAGEMENT_SERVER_PORT` as appropriate. Keep
-the JDBC trace-event-listener URL parameter on custom URLs. For OCI wallet
-connections, set `OKAFKA_SECURITY_PROTOCOL=SSL`, `WALLET_DIR`, and
-`TNS_ALIAS`; the local PLAINTEXT path obtains credentials from the app
-environment through a temporary `ojdbc.properties` file.
+The local PLAINTEXT OKafka path writes app credentials to a temporary
+`ojdbc.properties` file. Wallet-based SSL connections use `WALLET_DIR` and
+`TNS_ALIAS`. Full property definitions are in
+[`application.yaml`](src/main/resources/application.yaml),
+[`application-ai.yaml`](src/main/resources/application-ai.yaml), and
+[`application-observability.yaml`](src/main/resources/application-observability.yaml).
 
-## Reset and troubleshooting
+## Validation
 
-`DELETE /tickets` is intentionally absent: an unauthenticated endpoint must
-not truncate the whole lab. To intentionally clear **all** ticket, event,
-assistance, and relation data in this disposable schema, stop the app and run
-`db/truncate.sql` as the app user. It uses irreversible
-`TRUNCATE` statements; inspect the target schema and retain anything needed
-before running it. The policy corpus remains for the next walkthrough. To
-stop infrastructure without removing volumes, run `docker compose down`.
+Run the default test suite without starting the backing stack:
 
-For example, connect interactively with `sql /nolog`, then run
-`connect <app-user>@localhost:1522/FREEPDB1` and `@db/truncate.sql` at the
-SQL prompt; the client will request the password.
+```bash
+./mvnw test
+```
 
-- Startup fails with missing credentials: export `APP_DB_USERNAME` and
-  `APP_DB_PASSWORD` in the Maven terminal.
-- Queue setup fails: verify the app user grants from `db/user.sql`, the primary
-  service/port, and `OKAFKA_SECURITY_PROTOCOL=PLAINTEXT` for Compose. Only
-  `PLAINTEXT` and `SSL` are supported; a typo now fails at startup instead of
-  silently selecting PLAINTEXT.
-- AI profile fails: check compartment, model availability, authentication,
-  and 1024-dimensional embedding compatibility; the core path needs none of
-  these credentials.
-- No Grafana trace or metrics: check LGTM on port 4318 and the `MANAGEMENT_*`
-  export overrides. A configured endpoint is not delivery evidence.
-- Cache reads fail: check `true-cache-configure` exit status and primary-side
-  service registration, then use `readPath=primary` while diagnosing. A cache
-  miss immediately after a write can simply be redo lag. The cache's Docker
-  health check waits for database readiness, not just an open listener. If it
-  exits during `Create_truecache_instance`, inspect
-  `docker inspect truecache --format '{{.State.OOMKilled}}'`; `true` means the
-  Docker host needs more free memory before retrying the full topology.
+The two Oracle persistence smoke tests are opt-in. They require a disposable
+schema prepared by `setup-lab.sh`, including its seeded policies:
+
+```bash
+export LAB_DB_SMOKE_TEST=true
+export LAB_SMOKE_JDBC_URL='jdbc:oracle:thin:@//localhost:1522/FREEPDB1'
+export LAB_SMOKE_USERNAME="$APP_DB_USERNAME"
+export LAB_SMOKE_PASSWORD="$APP_DB_PASSWORD"
+./mvnw test -Dtest=TicketEventOutcomePersistenceSmokeTest,TicketAssistancePersistenceSmokeTest
+```
+
+These checks exercise persistence and rollback, not the complete OKafka,
+True Cache, or OCI model flow. Use the walkthrough scripts against the running
+app for those paths. The AI walkthrough requires actual OCI model access.
+
+## Reset, recovery, and troubleshooting
+
+To stop services while keeping their containers and local database state:
+
+```bash
+docker compose stop
+```
+
+`docker compose down` removes containers; the current Compose setup does not
+persist database data outside them. Treat the next startup as a fresh lab.
+
+For a deliberate ticket-data reset, stop Maven, verify the schema, and run
+`db/truncate.sql` as the app user. It irreversibly clears tickets, outcomes,
+assistance, and scored links while retaining the policy corpus. There is no
+`DELETE /tickets` reset endpoint. For example, open `sql /nolog`, then enter:
+
+```text
+connect LAB_USER@localhost:1522/FREEPDB1
+@db/truncate.sql
+```
+
+The client prompts for the password. `db/cleanup.sql` is the separate
+destructive schema-removal script; it is not needed to repeat a walkthrough.
+
+To demonstrate cache fallback for an existing ticket, replace `<ticket-id>`
+below with its ID:
+
+```bash
+docker compose stop true-cache
+curl -i 'http://localhost:9001/tickets/<ticket-id>?readPath=cache'
+docker compose start --wait true-cache
+docker compose up -d --no-deps --force-recreate true-cache-configure
+docker compose ps -a true-cache-configure
+```
+
+During the outage, an existing ticket can be served with
+`X-Read-Path: primary-fallback`. After the helper exits with code 0, run
+`LAB_TICKET_ID=<ticket-id> ./scripts/demo-true-cache-reads.sh` to prove recovery.
+
+| Symptom | Check |
+| --- | --- |
+| Missing credentials at startup | Export `APP_DB_USERNAME` and `APP_DB_PASSWORD` in the Maven terminal. |
+| Queue setup fails | Check `db/user.sql` grants, the primary service/port, and `OKAFKA_SECURITY_PROTOCOL=PLAINTEXT` for Compose. |
+| Replay demo finishes without a deliberate failure | Restart with `events,demo-failures`. |
+| AI demo reports `TRIAGED` | Restart with `events,ai`. |
+| AI startup or enrichment fails | Check OCI credentials, compartment/model access, and 1024-dimensional embeddings; inspect failed-event metadata before replay. |
+| Cache read falls back | Check database health, `true-cache-configure` logs/exit status, the cache URL, and expected `DB_UNIQUE_NAME`. |
+| Cache returns 404 after a write | Allow for redo lag; the cache demo polls for visibility. |
+| True Cache exits during creation | Inspect `docker inspect truecache --format '{{.State.OOMKilled}}'`; if true, free Docker memory before retrying. |
+| Grafana has no measurements | Check the `observability` profile, local Actuator metrics, LGTM receiver, and export settings. |

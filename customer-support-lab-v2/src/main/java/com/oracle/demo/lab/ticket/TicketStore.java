@@ -5,7 +5,6 @@ package com.oracle.demo.lab.ticket;
 
 import oracle.jdbc.OracleType;
 import oracle.sql.VECTOR;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
@@ -22,22 +21,20 @@ public class TicketStore {
             "update support_ticket set workflow_status = ? where id = ?";
 
     private final JdbcClient jdbcClient;
-    private final RowMapper<SupportTicket> rowMapper;
 
-    public TicketStore(JdbcClient jdbcClient, RowMapper<SupportTicket> rowMapper) {
+    public TicketStore(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
-        this.rowMapper = rowMapper;
     }
 
     public List<SupportTicket> getAllTickets() {
         return jdbcClient.sql("select id, title, description, workflow_status from support_ticket")
-                .query(rowMapper).list();
+                .query((rows, rowNumber) -> new SupportTicket(rows)).list();
     }
 
     public Optional<SupportTicket> findById(Long id) {
         return jdbcClient.sql("select id, title, description, workflow_status from support_ticket where id = ?")
                 .param(id)
-                .query(rowMapper).optional();
+                .query((rows, rowNumber) -> new SupportTicket(rows)).optional();
     }
 
     public long insert(Connection connection, SupportTicket ticket) throws SQLException {

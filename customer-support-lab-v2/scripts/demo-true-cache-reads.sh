@@ -4,18 +4,10 @@
 
 set -euo pipefail
 
-if ! command -v jq >/dev/null 2>&1; then
-  echo "This demo needs jq to read the API responses." >&2
-  exit 1
-fi
-
-base_url="${LAB_BASE_URL:-http://localhost:9001}"
+source "$(dirname "${BASH_SOURCE[0]}")/demo-common.sh"
 ticket_id="${LAB_TICKET_ID:-}"
 if [[ -z "${ticket_id}" ]]; then
-  created="$(curl -fsS --max-time 5 -H 'Content-Type: application/json' \
-    -d '{"title":"Lost MFA authenticator","description":"I lost my authenticator and cannot sign in. How can I recover access safely?"}' \
-    "${base_url}/tickets")"
-  ticket_id="$(jq -er '.id' <<<"${created}")"
+  ticket_id="$(create_demo_ticket)"
   echo "Created ticket ${ticket_id} for the read-path check."
 elif [[ ! "${ticket_id}" =~ ^[1-9][0-9]*$ ]]; then
   echo "LAB_TICKET_ID must be a positive numeric ticket ID." >&2
