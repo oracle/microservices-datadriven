@@ -9,7 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Properties;
 
-import com.oracle.demo.lab.ticket.SupportTicket;
 import com.oracle.spring.json.kafka.OSONKafkaSerializationFactory;
 import org.apache.kafka.clients.admin.Admin;
 import org.apache.kafka.common.serialization.Deserializer;
@@ -31,7 +30,7 @@ public class EventsConfiguration {
     @Value("${okafka.walletDir}")
     private String walletDir;
 
-    @Value("${okafka.bootstrapServers:localhost:1521}")
+    @Value("${okafka.bootstrapServers}")
     private String bootstrapServers;
 
     // We use the default 23ai Free service name
@@ -53,6 +52,9 @@ public class EventsConfiguration {
     @Bean
     @Qualifier("okafkaAuth")
     public Properties okafkaAuth() throws IOException {
+        if (!"SSL".equals(securityProtocol) && !"PLAINTEXT".equals(securityProtocol)) {
+            throw new IllegalArgumentException("OKAFKA_SECURITY_PROTOCOL must be SSL or PLAINTEXT");
+        }
         // Just like kafka-clients, we can use a Java Properties object to configure connection parameters.
         Properties props = new Properties();
 
@@ -98,33 +100,37 @@ public class EventsConfiguration {
     }
 
     @Bean
-    public KafkaProducer<String, SupportTicket> ticketProducer(OSONKafkaSerializationFactory serializationFactory) throws IOException {
-        Properties props = okafkaAuth();
+    public KafkaProducer<String, TicketWorkEvent> ticketProducer(OSONKafkaSerializationFactory serializationFactory) throws IOException {
+        Properties props = new Properties();
+        props.putAll(okafkaAuth());
         props.put("enable.idempotence", "true");
         // This property is required for transactional producers
         props.put("oracle.transactional.producer", "true");
 
         Serializer<String> keySerializer = new StringSerializer();
-        Serializer<SupportTicket> valueSerializer = serializationFactory.createSerializer();
+        Serializer<TicketWorkEvent> valueSerializer = serializationFactory.createSerializer();
         // Note the use of the org.oracle.okafka.clients.producer.KafkaProducer class
         // for producing records to Oracle Database Transactional Event Queues.
-        KafkaProducer<String, SupportTicket> producer = new KafkaProducer<>(props, keySerializer, valueSerializer);
+        KafkaProducer<String, TicketWorkEvent> producer = new KafkaProducer<>(props, keySerializer, valueSerializer);
         // Initialize the producer for transactional workflows.
         producer.initTransactions();
         return producer;
     }
 
-    @Bean
-    public KafkaConsumer<String, SupportTicket> ticketConsumer(OSONKafkaSerializationFactory serializationFactory) throws IOException {
-        Properties props = okafkaAuth();
+    @Bean(destroyMethod = "")
+    public KafkaConsumer<String, TicketWorkEvent> ticketConsumer(OSONKafkaSerializationFactory serializationFactory) throws IOException {
+        Properties props = new Properties();
+        props.putAll(okafkaAuth());
         // Note the use of standard Kafka properties for OKafka configuration.
         props.put("group.id" , "TICKETS");
         props.put("enable.auto.commit","false");
-        props.put("max.poll.records", 50);
+        // Process one event per database transaction so a failure outcome and
+        // the TxEventQ acknowledgement cannot be separated by batch failure.
+        props.put("max.poll.records", 1);
         props.put("auto.offset.reset", "earliest");
 
         Deserializer<String> keyDeserializer = new StringDeserializer();
-        Deserializer<SupportTicket> valueDeserializer = serializationFactory.createDeserializer(SupportTicket.class);
+        Deserializer<TicketWorkEvent> valueDeserializer = serializationFactory.createDeserializer(TicketWorkEvent.class);
         return new KafkaConsumer<>(props, keyDeserializer, valueDeserializer);
     }
 }

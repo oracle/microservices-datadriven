@@ -1,4 +1,4 @@
--- app user and grants
+-- App user and TxEventQ grants for a fresh lab schema.
 create user &&app_username identified by "&&app_password";
 
 grant unlimited tablespace to &&app_username;

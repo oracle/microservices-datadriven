@@ -4,10 +4,13 @@
 package com.oracle.demo.lab.web;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.oracle.demo.lab.events.TicketEventProducer;
+import com.oracle.demo.lab.events.FailedTicketEvent;
+import com.oracle.demo.lab.events.TicketEventOutcomeStore;
+import com.oracle.demo.lab.events.TicketWorkEvent;
 import com.oracle.demo.lab.ticket.SupportTicket;
-import com.oracle.demo.lab.ticket.TicketStore;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,34 +22,34 @@ import org.springframework.web.server.ResponseStatusException;
 public class EventsController {
 
     private final TicketEventProducer ticketEventProducer;
-    private final TicketStore ticketStore;
+    private final TicketEventOutcomeStore outcomeStore;
 
-    public EventsController(TicketEventProducer ticketEventProducer, TicketStore ticketStore) {
+    public EventsController(TicketEventProducer ticketEventProducer,
+                            TicketEventOutcomeStore outcomeStore) {
         this.ticketEventProducer = ticketEventProducer;
-        this.ticketStore = ticketStore;
-    }
-
-    @GetMapping("/tickets")
-    public List<SupportTicket> getAllTickets() {
-        return ticketStore.getAllTickets();
-    }
-
-    @GetMapping("/tickets/{id}")
-    public SupportTicket getTicket(@PathVariable long id) {
-        return ticketStore.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        this.outcomeStore = outcomeStore;
     }
 
     @PostMapping("/tickets")
-    public SupportTicket createTicket(@RequestBody SupportTicket ticket) {
-        Long id = ticketEventProducer.produce(ticket);
-        return ticketStore.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR));
+    public SupportTicket createTicket(@RequestBody SupportTicket ticket,
+                                      @RequestHeader(name = "X-Correlation-ID", required = false) UUID correlationId) {
+        ticketEventProducer.produce(ticket, correlationId);
+        return ticket;
     }
 
-    @DeleteMapping("/tickets")
-    public ResponseEntity<?> deleteAll() {
-        ticketStore.deleteAll();
-        return ResponseEntity.noContent().build();
+    @GetMapping("/ticket-events/failures")
+    public List<FailedTicketEvent> getFailedEvents() {
+        return outcomeStore.findFailed();
+    }
+
+    @PostMapping("/ticket-events/failures/{eventId}/replay")
+    public ResponseEntity<TicketWorkEvent> replay(@PathVariable UUID eventId) {
+        try {
+            return ResponseEntity.accepted().body(ticketEventProducer.replay(eventId));
+        } catch (TicketEventProducer.FailedEventNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (IllegalStateException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }
     }
 }

@@ -4,6 +4,7 @@
 package com.oracle.demo.lab.events;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import org.apache.kafka.clients.admin.Admin;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.common.errors.TopicExistsException;
@@ -15,7 +16,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @Component
@@ -40,18 +41,30 @@ public class OKafkaManager {
 
     @PostConstruct
     public void init() {
-        NewTopic newTopic = new NewTopic(topic, 1, (short) 1);
+        NewTopic newTopic = new NewTopic(topic, 1, (short) 0);
         try {
-            admin.createTopics(Collections.singletonList(newTopic))
-                    .all()
-                    .get();
-        } catch (ExecutionException | InterruptedException e) {
-            if (e.getCause() instanceof TopicExistsException) {
-                log.info("Topic {} already exists, skipping creation", newTopic);
+            boolean exists = admin.listTopics().names().get().stream()
+                    .anyMatch(name -> name.equalsIgnoreCase(topic));
+            if (exists) {
+                log.info("Topic {} already exists", topic);
             } else {
-                throw new RuntimeException(e);
+                admin.createTopics(List.of(newTopic)).all().get();
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("Interrupted while preparing topic " + topic, e);
+        } catch (ExecutionException e) {
+            if (e.getCause() instanceof TopicExistsException) {
+                log.info("Topic {} already exists", topic);
+            } else {
+                throw new IllegalStateException("Could not prepare topic " + topic, e);
             }
         }
         asyncTaskExecutor.submit(eventConsumer);
+    }
+
+    @PreDestroy
+    public void stop() {
+        eventConsumer.stop();
     }
 }

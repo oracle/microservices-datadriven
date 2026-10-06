@@ -5,24 +5,15 @@ package com.oracle.demo.lab.ticket;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.json.bind.annotation.JsonbProperty;
-import org.apache.kafka.clients.producer.ProducerRecord;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SupportTicket {
-    private static final Logger log = LoggerFactory.getLogger(SupportTicket.class);
-    @JsonbProperty("_id")
     private Long id;
     private String title;
     private String description;
-    private float[] embedding;
-
-    private Set<RelatedTicket> relatedTickets = new HashSet<>();
+    private TicketStatus workflowStatus = TicketStatus.RECEIVED;
 
     public SupportTicket() {
     }
@@ -31,8 +22,7 @@ public class SupportTicket {
         this.id = rs.getLong("id");
         this.title = rs.getString("title");
         this.description = rs.getString("description");
-        this.embedding = rs.getObject("embedding", float[].class);
-        this.relatedTickets = new HashSet<>();
+        this.workflowStatus = TicketStatus.valueOf(rs.getString("workflow_status"));
     }
 
     public Long getId() {
@@ -59,46 +49,19 @@ public class SupportTicket {
         this.description = description;
     }
 
-    public Set<RelatedTicket> getRelatedTickets() {
-        return relatedTickets;
+    public TicketStatus getWorkflowStatus() {
+        return workflowStatus;
     }
 
-    public void setRelatedTickets(Set<RelatedTicket> relatedTickets) {
-        this.relatedTickets = relatedTickets;
-    }
-
-    public float[] getEmbedding() {
-        return embedding;
-    }
-
-    public void setEmbedding(float[] embedding) {
-        this.embedding = embedding;
-    }
-
-    public ProducerRecord<String, SupportTicket> toProducerRecord(String topic) {
-        return new ProducerRecord<>(topic, this);
-    }
-
-    @Override
-    public final boolean equals(Object o) {
-        if (!(o instanceof SupportTicket that)) return false;
-
-        return Objects.equals(getId(), that.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
+    public void setWorkflowStatus(TicketStatus workflowStatus) {
+        this.workflowStatus = workflowStatus;
     }
 
     @Override
     public String toString() {
         return "SupportTicket{" +
                 "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", embedding=" + Arrays.toString(embedding) +
-                ", relatedTickets=" + relatedTickets +
+                ", workflowStatus=" + workflowStatus +
                 '}';
     }
 }

@@ -1,257 +1,228 @@
-# Customer Support Lab v2 Specification
+# Customer Support Lab v2: Simpler, More Teachable
 
-## Purpose
+## Goal
 
-Evolve the Customer Support Lab from a ticket application with asynchronous
-embedding into a production-oriented AI support workflow. The lab should
-demonstrate how Oracle AI Database and OCI capabilities address the practical
-concerns of an agentic application: reliable event processing, partial
-failures, read-heavy workloads, regional data placement, auditable human
-approvals, and operational visibility.
+Teach one support-ticket story that can be run twice without repair: create a
+ticket, process its TxEventQ event, deliberately fail one event, inspect the
+durable failure, and replay it successfully. The standard stack includes
+True Cache so the same lab also demonstrates a primary read and a cache read.
+AI assistance and observability extend that story in short optional chapters.
 
-MicroTx is explicitly out of scope for this version.
+This is a clean-slate lab: no schema migrations, old event formats, or
+backwards-compatibility paths. MicroTx, regional placement, and blockchain
+approval history are out of scope for v2. The local APIs are unauthenticated
+and must not be presented as production-secure. AI results are recommendations,
+never automatic customer-impacting actions.
 
-## Starting Point
+## The smallest useful lab
 
-The existing lab already demonstrates the core data and eventing path:
+| Layer | Keep for the core | Add only in its chapter |
+| --- | --- | --- |
+| Runtime | Maven-run Spring Boot app plus the full Compose stack: primary, True Cache, registration helper, and LGTM | OCI Generative AI configuration |
+| Data | One SQL ticket path and two small event-outcome tables | Curated policies, assistance, and scored links |
+| Workflow | Submit → `RECEIVED` → `TRIAGED`; fail → `FAILED` → replay | `ENRICHED` when AI is enabled |
+| Learner actions | Start, set up schema, run one replay script that also checks both read paths | One script and one expected observation per optional chapter |
 
-- Spring Boot REST APIs create and retrieve support tickets.
-- TxEventQ, accessed through Apache Kafka APIs, atomically persists a ticket
-  and publishes its processing event.
-- An asynchronous consumer generates embeddings through OCI Generative AI.
-- Oracle AI Vector Search identifies related tickets.
-- JSON Relational Duality Views provide an optional JSON-oriented data path.
+Use `docker compose up -d` for the full topology. True Cache is not a profile
+or an alternative route; its readiness and primary-side registration are part
+of a successful lab start. OCI credentials are not needed for the core story.
+Keep one ticket
+example across the README, scripts, dashboard, and optional chapters. Put
+connection variants and tuning after the walkthrough, not before it.
 
-Version 2 extends these capabilities into an explicit, observable support
-workflow. It should retain the existing progressive-profile style so each
-technology can be demonstrated in isolation before the complete flow.
+## Design rules
 
-## Target Experience
+- One ticket writer, one read API, one SQL ticket store, one event type, and
+  one consumer flow. Do not restore a parallel JSON duality/ORDS writer or
+  add a framework for branching demo scripts.
+- The event envelope contains only ticket ID, event ID, correlation ID,
+  optional causation ID, creation time, and trace context. Ticket text remains
+  in the database. Java uses `UUID`; JDBC binds event IDs as 16-byte `RAW`;
+  HTTP and OSON stringify only at their boundaries.
+- Ticket states are `RECEIVED`, `TRIAGED`, `ENRICHED`, and `FAILED`. `REPLAYED`
+  describes an event outcome, not a ticket state. Approval and resolution
+  states wait until a separate demo actually uses them.
+- Preserve atomic ticket/event submission, idempotent processing, bounded
+  retries, a durable failed-event worklist, and explicit replay. Replay
+  publishes a new event linked to the original; a redelivered original must
+  not reopen a replayed failure. Do not imply exactly-once external AI calls.
+- Prefer clear relational links to JSON blobs introduced merely to lower the
+  table count. Keep the processed-event idempotency key set separate from the
+  failed-event worklist unless a single table demonstrably simplifies both
+  transactions and queries.
+- Cache reads are explicitly freshness-tolerant. Writes, replay, assistance,
+  and fresh reads stay on the primary. `X-Read-Path` must describe the actual
+  path, including fallback; a fallback is not proof of a cache read.
+- Metrics use bounded labels. Do not put ticket text, prompts, summaries,
+  customer data, secrets, or ticket/event IDs in metric labels. Do not claim
+  logs, traces, or dashboard signals that have not been observed end to end.
 
-A support agent submits a ticket and immediately receives its identifier and
-initial workflow status. Background processing enriches the ticket with an AI
-summary, similar historical tickets, and relevant support policies. The agent
-can see whether processing is complete, retrying, or awaiting review. Read
-traffic can be served through an appropriate cache-aware path, while all
-authoritative writes remain on the primary database. Selected data stays in
-its assigned region, and sensitive recommendations receive a tamper-evident
-human approval record.
+## Staged work from the current implementation
 
-The demo should make the operational evidence visible: event latency, retry
-behavior, AI-call outcomes, database and cache behavior, and end-to-end traces
-from ticket submission through enrichment and approval.
+### 1. Make the full-stack orientation predictable
 
-## Functional Scope
+Keep the README's single `Start here` route and make its first screen answer:
+what runs, what credentials are needed, which health and registration checks
+prove True Cache is ready, what command demonstrates success, and how to
+repeat it. Keep one full-stack Compose command.
+Measure the complete path with warm and uncached dependencies; distinguish
+host-dependent timings from a guarantee. Move profile/port/wallet variants
+into a compact reference.
 
-### 1. Explicit ticket lifecycle
+**Gate:** a fresh learner can replay a ticket without OCI credentials and
+prove that same ticket is read from True Cache, with no manual database repair.
 
-Tickets have durable workflow state instead of implying that asynchronous work
-is complete when the create request returns. The initial set of states is:
+### 2. Make the core code and schema explain themselves
 
-- `RECEIVED`
-- `TRIAGED`
-- `ENRICHED`
-- `NEEDS_APPROVAL`
-- `RESOLVED`
-- `FAILED`
+The parallel writer and duality path are already gone. Now review naming and
+transaction boundaries in the ticket producer, consumer, outcome store, and
+replay endpoint. Keep the fail-once injector visibly demo-only. Remove unused
+configuration, wrappers, and state only when their callers and tests move.
+Assess the seven tables by purpose, not by chasing a smaller number: ticket;
+processed event; failed event; and, for AI, policy, assistance, related ticket,
+and policy match. Keep the two event tables if merging them would obscure
+idempotency or replay. Keep the two scored-link tables if the demo displays
+their relationships. Maintain one clean-slate `init`, `truncate`, and
+`cleanup` schema set; do not add migrations.
 
-The create API returns the ticket identifier and initial status. Ticket detail
-and list views expose the current workflow status and the results that are
-available so far.
+The small ticket dataset uses exact `VECTOR_DISTANCE` scoring; an IVF index
+would add setup work without a read-scale lesson. Add one only if a later lab
+actually demonstrates approximate search and its accuracy trade-off.
 
-### 2. Durable ticket-work events
+**Gate:** normal submission, duplicate delivery, exhausted retries, invalid
+replay, repeated replay, and a redelivered original have clear outcomes and
+focused tests. A second live walkthrough needs no database repair.
 
-Ticket events use a small, versioned envelope rather than serializing the full
-ticket as the event contract. At minimum, the envelope identifies the ticket,
-event type, event ID, correlation ID, causation ID, attempt number, and creation
-time. Ticket content remains in Oracle AI Database as the source of truth.
+### 3. Keep AI to one visible assistance result
 
-This contract supports replay, idempotent consumers, retry diagnostics, and
-future workflow stages without coupling every consumer to the ticket schema.
+With the `ai` profile, enrich the same ticket with one concise summary, a few
+similar tickets, and cited/scored policy matches. Reuse the Spring AI Oracle
+model integration and the small seeded policy corpus. Expose model and prompt
+version for explanation, but do not save every intermediate model artifact or
+add category/priority predictions that the lab does not evaluate. Policy
+indexing should not block non-AI startup. Make a failed model call visible in
+the same replay worklist; explain that replay may repeat a chargeable call.
 
-### 3. Reliable asynchronous enrichment
+**Gate:** one AI ticket reaches `ENRICHED` with persisted, readable references;
+one model failure is replayable; the no-AI path is unchanged. Verify the full
+AI event path against an authorized OCI model before claiming it is live.
 
-Enrichment is divided into independently reportable steps:
+### 4. Show operational evidence for the standard cache path
 
-- Generate a concise AI summary.
-- Create an embedding.
-- Find related historical tickets with vector search.
-- Retrieve relevant support policies and runbooks.
-- Optionally recommend category, priority, or routing.
+Use a small dashboard for emitted ticket states, event outcomes/retries,
+failed-worklist depth, processing latency, and served read paths. Show one correlated
+HTTP → event-consumer → JDBC trace, plus useful Oracle JDBC/UCP signals.
+Only add log panels after application logs are actually delivered to LGTM.
+Avoid placeholder consumer-lag, OCI-cost, regional, or approval panels.
 
-Each step records its outcome. Transient failures use bounded retries with
-backoff. Exhausted retries and non-retryable failures move the work to a
-durable review or failure queue. Operators can inspect and explicitly replay
-failed work. Processing must be idempotent so replay does not duplicate ticket
-relations, summaries, or approval requests.
+Demonstrate a fresh primary read, a cache-tolerant read, and
+an unavailable-cache fallback. Verify actual cache identity before labeling a
+response `true-cache`. Keep the current separate read-only pool until a live
+comparison proves that one driver-routed datasource simplifies the code **and**
+preserves cache routing, primary writes, pooled read-only reset, and fallback.
+Do not change topology based on static configuration alone.
 
-### 4. Policy-aware AI assistance
+**Gate:** the named dashboard panels and trace contain real data; a live
+`X-Read-Path: true-cache` response reaches the cache. Fallback is a useful
+resilience observation, not a substitute for the required cache demo.
 
-The lab adds a small, curated support-policy corpus alongside ticket vectors.
-For a ticket, the application persists structured AI assistance rather than a
-single opaque response:
+### 5. Rehearse and trim the teaching flow
 
-- Summary for a support agent.
-- Suggested category and priority, when enabled.
-- Similar tickets with relevance scores.
-- Relevant policy or runbook references with relevance scores.
-- AI model and prompt/version metadata needed to explain the result.
+Each optional chapter gets a prerequisite, one command, expected output, a
+failure explanation, and a reset/next-step instruction. Keep separate small
+scripts rather than a menu-driven demo framework. Re-run the README from a
+clean schema, then repeat it without clearing data. Fix any step that requires
+unexplained SQL, hidden environment variables, or manual repair. Clearly
+separate static checks, local database verification, live cache routing, live
+OCI calls, and observability delivery in the final report.
 
-These are recommendations. The lab does not automatically execute external
-actions or treat generated output as a final policy decision.
+**Gate:** another person can run the guided sequence twice and explain what
+each moving part adds to the original ticket story.
 
-### 5. Read scaling with Oracle True Cache
+## Current evidence and open gates (2026-09-30)
 
-Read-heavy endpoints, such as ticket lists, ticket detail, and a triage
-dashboard, are candidates for a True Cache-aware read path. Only read-only and
-freshness-tolerant work may use this path. Ticket creation, workflow updates,
-retry bookkeeping, and approvals always use the primary database.
+The current tree has 33 main Java files, 28 test files, seven tables, and one
+SQL ticket path. Earlier Oracle-primary validation completed fail/replay twice
+without repair; Oracle smoke tests covered 16-byte event IDs, event outcomes,
+AI vector persistence, and rollback. The latest local test reports show 68
+passed, two opt-in smoke tests skipped, and no failures (70 total). The two
+smoke tests were also run separately against a disposable Oracle instance.
+The documented full Compose file passes `docker compose config --quiet`, and
+`scripts/setup-lab.sh --dry-run` accepts the README's environment contract
+without exposing either password. `mvn package` also passes and produces an
+executable Spring Boot JAR. A fresh full Compose start subsequently brought up
+healthy primary and True Cache databases, healthy LGTM, and a registration
+helper that exited successfully. The Maven app started with
+`events,demo-failures,observability`; the clean schema setup created its seven
+tables and three seeded policies.
+With images and Maven dependencies already cached, a fresh primary-plus-LGTM
+run reached its first replay result in 104 seconds, including operator pauses;
+this is not an uncached-startup promise. The README now starts the full Compose topology;
+True Cache reads are configured in the base app rather than a `read-scale`
+profile. An application-profile test verifies OTLP export is off without the
+optional observability profile and on with it. The revised full-stack route
+has not been benchmarked as a startup-time claim. A focused Spring context
+test confirms the base profile constructs a lazy True Cache UCP reader without
+connecting. The replay script invokes the cache check for its own ticket and
+displays both workflow statuses without requiring them to match. Live runs for
+tickets 1 and 2 both passed failure → replay → `TRIAGED`, rejected a repeated
+replay, and returned HTTP 200 with `X-Read-Path: true-cache` for the same
+ticket. The second run reused the schema without repair.
 
-The lab should expose which read path served a request and clearly document the
-freshness tradeoff. The exact cache topology and connection configuration remain
-environment-specific.
+Ticket insertion and replay's conditional status reset now live in
+`TicketStore`; both still use the OKafka producer connection before the event
+commit. Focused tests assert the producer's transaction order and the store's
+JDBC binds and update count. Producer telemetry now runs after commit and
+cannot turn a committed submission or replay into an apparent failure; tests
+also verify that an abort error does not mask the original transaction error.
+The consumer likewise treats post-acknowledgment telemetry failures as
+non-transactional while propagating a failed `commitSync()`; both paths have
+focused tests. This does not resolve an ambiguous database commit response.
+The demo-only failure path now makes the replayed event fail transiently on
+its first attempt and succeed on retry; when retries are configured off, it
+skips that injection. Focused tests cover both paths. Both live replay runs
+logged one transient retry, and the exported retry counter reached two.
+AI step, retry, and match telemetry is now best-effort: a metric or observation
+failure does not turn completed model work into a replayable processing failure
+or mask the actual work exception. Focused tests cover metric failure paths.
+Similar-ticket retrieval keeps the SQL score order in a list, without a
+deduplication set.
+Its two-field result is an immutable record like policy matches; focused tests
+cover ranking, vector
+binding, and the unchanged JSON field names. The small policy corpus remains
+an exact scan.
+The unused IVF index and annotation are gone from the clean-slate schema;
+vector columns and cosine scoring remain.
+The core ticket model no longer defines unused ID-based equality, which also
+avoids treating two unsaved null-ID tickets as equal; its text-safe `toString`
+and JSON fields are unchanged.
 
-### 6. Regional data placement
+LGTM received workflow metrics and an HTTP → consumer → JDBC trace. App logs
+are not forwarded to LGTM. The dashboard now includes a served-read-path panel;
+router tests verify the `primary`, `true-cache`, and `primary-fallback` metric
+labels. In the full-stack run, all six provisioned dashboard expressions
+returned live Prometheus data: two `TRIAGED` tickets, an empty final worklist,
+failed and processed event counters, retries, processing time, and both
+`primary` and `true-cache` reads. Tempo returned one trace containing
+`http post /tickets`, `support.ticket.consume`, and `Execute query` spans.
+The dashboard does not render synthetic zeroes for absent state or retry
+metrics. Read metrics fail open so instrumentation cannot convert a successful
+GET into an error or hide the real read exception; focused tests cover both
+outcomes. Stopping this lab's cache yielded HTTP 200 with
+`X-Read-Path: primary-fallback`. After restart, the inherited `FREEPDB1_TC`
+service definition was present but inactive; an idempotent extension of the
+existing registration helper now starts it. Recreating that helper restored
+`X-Read-Path: true-cache` for the same ticket. This recovery path was tested
+both when the service was already active and when it was stopped.
 
-Tickets carry a data-residency or assigned-region attribute. A regional data
-access layer selects the correct regional service before ticket persistence or
-retrieval.
+AI persistence has a live Oracle smoke test, but the full AI event flow and
+OCI model calls remain unverified. The AI walkthrough rejects an `ENRICHED` ticket if its saved
+summary, model/prompt metadata, or policy matches are missing; local HTTP
+fixtures exercised both acceptance and rejection, not OCI model delivery.
+The AI and replay scripts now stop promptly with a profile hint when a newly
+created ticket completes without the expected AI or deliberate failure;
+local response fixtures exercised both wrong-profile paths.
+These are open gates, not inferred successes.
 
-The initial demonstration uses two logical regions. Ticket content, policy
-corpora, and approval records remain in the selected region. Any global view is
-limited to intentionally approved, minimized operational metadata. The physical
-multi-region topology is a deployment decision and is not prescribed by this
-application specification.
-
-### 7. Tamper-evident approval history
-
-Sensitive recommendations, such as a proposed customer-impacting action or a
-policy exception, can enter `NEEDS_APPROVAL`. A human decision is written to an
-Oracle blockchain table with the ticket ID, recommendation, approver, decision,
-timestamp, and rationale.
-
-Blockchain tables are reserved for approval evidence, not routine application
-logs or every automated workflow transition.
-
-## Observability Scope
-
-Metrics, tracing, logs, and dashboards are part of the lab experience rather
-than post-demo infrastructure.
-
-### Metrics
-
-Expose application and database-relevant metrics through Spring Boot Actuator
-and Micrometer, with Oracle-capable export/configuration kept as a selectable
-environment concern. The initial metric set should cover:
-
-- Ticket lifecycle counts by state and region.
-- Event age, consumer lag or backlog, retry count, and review-queue depth.
-- Per-enrichment-step duration, success, failure, and retry outcomes.
-- OCI Generative AI request count, duration, error class, and rate-limit
-  outcomes.
-- Vector and policy retrieval result counts and durations.
-- Primary-database versus True Cache read routing and cache-path latency.
-- Approval volume and time spent awaiting approval.
-- JDBC/UCP pool health and database-facing metrics where they are safely
-  available.
-
-Metric labels must remain low-cardinality. Ticket IDs, customer identifiers,
-full prompts, and ticket text must never become metric labels.
-
-### Distributed tracing
-
-Create an end-to-end trace beginning at ticket submission and continue it
-through TxEventQ publication, event consumption, each enrichment step, database
-access, OCI Generative AI calls, cache-aware reads, and approval actions.
-
-The event envelope carries the correlation and trace context needed to link the
-asynchronous boundary. Spans should identify the operation and outcome but must
-not record ticket descriptions, generated summaries, credentials, or other
-sensitive content by default. Trace sampling and export destinations are
-deployment configuration.
-
-### Structured logs
-
-Use structured logs keyed by correlation ID, ticket ID where appropriate, event
-ID, workflow step, attempt number, region, and outcome. Logs complement traces
-for diagnosis but must not become a second store of customer ticket content.
-
-### Dashboards
-
-The lab includes high-level dashboard definitions and sample views, without
-committing to a single dashboard product in this version. A dashboard may be
-implemented in an Oracle observability service, a Prometheus-compatible
-dashboard tool, or another environment-standard platform.
-
-The initial dashboard set should include:
-
-- **Workflow overview:** tickets by lifecycle state, throughput, end-to-end
-  processing time, and regional distribution.
-- **Reliability:** event backlog, retries, review-queue depth, failed steps,
-  and replay outcomes.
-- **AI quality and cost signals:** model-call volume and latency, error rate,
-  related-ticket and policy retrieval counts, and recommendation-to-approval
-  funnel.
-- **Data and read path:** primary versus cache read volume and latency, pool
-  health, and database-facing capacity signals.
-- **Approvals:** pending approvals, approval duration, decisions by type, and
-  region.
-
-Dashboard data must aggregate or link to governed detail views rather than
-displaying ticket text or generated content broadly.
-
-## Progressive Demo Stages
-
-- `events`: atomic ticket submission and TxEventQ-driven asynchronous work.
-- `ai`: ticket summaries, embeddings, similar tickets, and policy retrieval.
-- `reliability`: workflow state, retries, partial failures, review queue, and
-  replay.
-- `observability`: metrics, traces, structured logs, and dashboard walkthrough.
-- `read-scale`: True Cache-aware read routing and freshness behavior.
-- `residency`: regional routing and scoped data visibility.
-- `approvals`: blockchain-backed approval history.
-
-Profiles may remain additive, but each stage must work independently with clear
-prerequisites and an explicit explanation of what it adds to the story.
-
-## Architectural Principles
-
-- Oracle AI Database is the authoritative system of record for tickets and
-  workflow state.
-- TxEventQ provides the durable asynchronous boundary; consumers are
-  idempotent and retry-aware.
-- Keep event contracts small, versioned, and independent of the full ticket
-  representation.
-- Separate workflow orchestration, persistence, AI clients, retrieval, and
-  HTTP presentation into focused components.
-- Treat cache reads as an explicit consistency tradeoff, never as a write path.
-- Keep regional placement and data-governance decisions visible in the domain
-  model and deployment configuration.
-- Reserve blockchain tables for high-value, human approval evidence.
-- Avoid storing secrets, ticket text, embeddings, prompts, or generated output
-  in metrics labels and default trace/log attributes.
-
-## Delivery Sequence
-
-1. Add lifecycle state and the event envelope.
-2. Make enrichment steps idempotent; add retry, review-queue, and replay
-   behavior.
-3. Add summaries and policy-aware retrieval.
-4. Add metrics, tracing, structured logs, and high-level dashboard definitions.
-5. Add True Cache-aware read routing.
-6. Add regional routing.
-7. Add blockchain-table approvals.
-
-Each stage should include an isolated demo path, automated tests for its
-failure behavior, and a short operator-facing verification guide.
-
-## Deferred Decisions
-
-- The exact OCI Generative AI chat and embedding model choices.
-- The concrete retry schedule, retention period, and failure-queue operation
-  model.
-- The dashboard product and telemetry export destination.
-- The physical True Cache and multi-region deployment topology.
-- The policy-corpus source, update process, and access-control model.
-- Approval roles, authentication, and authorization integration.
-- Any MicroTx-based cross-boundary workflow coordination.
+Regional placement, blockchain approvals, physical multi-region topology,
+production auth, retention, and cache freshness SLOs belong in later work.

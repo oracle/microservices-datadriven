@@ -20,6 +20,7 @@ services:
     volumes:
       - ./dashboards/dashboards.yaml:/otel-lgtm/grafana/conf/provisioning/dashboards/ucp.yaml:ro
       - ./dashboards/ucp-metrics.json:/otel-lgtm/grafana/conf/provisioning/dashboards/custom/ucp-metrics.json:ro
+      - ./dashboards/customer-support-workflow.json:/otel-lgtm/grafana/conf/provisioning/dashboards/custom/customer-support-workflow.json:ro
 
   oracle-free:
     container_name: oracledb
@@ -28,7 +29,7 @@ services:
     # cache.
     image: container-registry.oracle.com/database/free:latest
     ports:
-      - "1522:1521"
+      - "${LAB_PRIMARY_PORT:-1522}:1521"
     environment:
       ORACLE_PWD: ${ORACLE_PWD:-Welcome12345}
       ENABLE_ARCHIVELOG: "true"
@@ -53,13 +54,16 @@ services:
     container_name: truecache
     image: container-registry.oracle.com/database/free:latest
     ports:
-      - "1523:1521"
+      - "${LAB_TRUE_CACHE_PORT:-1523}:1521"
     environment:
       TRUE_CACHE: "true"
       PRIMARY_DB_CONN_STR: oracle-free:1521/FREE
       PRIMARY_DB_PWD_FILE: /var/tmp/orapwFREE
       PDB_TC_SVCS: FREEPDB1:FREEPDB1:FREEPDB1_TC
       TRUEDB_UNIQUE_NAME: TRUEFREE
+      # Stable callback/redo destination; also enables the image's callback
+      # readiness wait during True Cache DBCA creation.
+      ORACLE_HOSTNAME: true-cache
       ORACLE_PWD: ${ORACLE_PWD:-Welcome12345}
     volumes:
       # Keep the exported password file itself read-only (mode 0444), while
@@ -69,10 +73,11 @@ services:
       oracle-free:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "bash -c '</dev/tcp/localhost/1521'"]
-      interval: 10s
-      timeout: 10s
-      retries: 108
+      # The listener can open before the cached PDB is queryable.
+      test: ["CMD-SHELL", "printf 'WHENEVER SQLERROR EXIT FAILURE\\nALTER SESSION SET CONTAINER=FREEPDB1;\\nSELECT 1 FROM DUAL;\\nEXIT;\\n' | sqlplus -L -s / as sysdba >/dev/null"]
+      interval: 20s
+      timeout: 30s
+      retries: 60
       start_period: 120s
 
   # Compose cannot run a command inside another service after it starts. This
@@ -100,6 +105,24 @@ services:
           bash /home/oracle/configure-primary-truecache-service.sh \
           FREEPDB1 FREEPDB1_TC FREEPDB1 true-cache:1521/TRUEFREE FREE FREE false \
           "B64:$${password}"
+        # A restarted, ephemeral True Cache inherits the service definition
+        # through redo but does not automatically start that service.
+        docker exec -i --user oracle truecache sqlplus -s / as sysdba <<'SQL'
+        whenever sqlerror exit failure
+        alter session set container=FREEPDB1;
+        declare
+          active_count number;
+        begin
+          select count(*) into active_count
+            from v$$active_services
+           where name = 'FREEPDB1_TC';
+          if active_count = 0 then
+            dbms_service.start_service('FREEPDB1_TC');
+          end if;
+        end;
+        /
+        exit
+        SQL
     restart: "no"
 
 volumes:

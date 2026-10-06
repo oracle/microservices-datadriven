@@ -12,5 +12,5 @@ import java.sql.Connection;
  * Implemented in {@link LogEventProcessor} and {@link GenAIEventProcessor}.
  */
 public interface TicketEventProcessor {
-    void processRecord(Connection conn, SupportTicket ticket);
+    void processRecord(Connection conn, TicketWorkEvent event, SupportTicket ticket);
 }

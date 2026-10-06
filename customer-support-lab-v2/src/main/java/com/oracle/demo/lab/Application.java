@@ -4,13 +4,17 @@
 package com.oracle.demo.lab;
 
 import com.oracle.demo.lab.ticket.SupportTicket;
+import com.oracle.spring.otel.TracingConfigurator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.jdbc.core.RowMapper;
 
 @SpringBootApplication
+// The Oracle JDBC OTel configurator lives outside this application's component scan.
+@Import(TracingConfigurator.class)
 public class Application {
 
 	public static void main(String[] args) {

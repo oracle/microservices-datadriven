@@ -2,15 +2,34 @@ okafka:
   topic:
     tickets: ticket_event
   walletDir: ${WALLET_DIR:.}
-  tnsAdmin: ${TNS_ALIAS:freepdb1}
-  securityProtocol: ${OKAFKA_SECURITY_PROTOCOL:SSL}
+  tnsAdmin: ${TNS_ALIAS:FREEPDB1}
+  bootstrapServers: ${OKAFKA_BOOTSTRAP_SERVERS:localhost:1522}
+  securityProtocol: ${OKAFKA_SECURITY_PROTOCOL:PLAINTEXT}
+
+app:
+  events:
+    retry:
+      max-attempts: ${TICKET_EVENT_MAX_ATTEMPTS:3}
+      backoff-ms: ${TICKET_EVENT_RETRY_BACKOFF_MS:250}
+  true-cache:
+    jdbc-url: ${TRUE_CACHE_JDBC_URL:jdbc:oracle:thin:@//localhost:1523/FREEPDB1_TC?oracle.jdbc.provider.traceEventListener=open-telemetry-trace-event-listener-provider}
+    db-unique-name: ${TRUE_CACHE_DB_UNIQUE_NAME:TRUEFREE}
+    username: ${TRUE_CACHE_DB_USERNAME:${APP_DB_USERNAME}}
+    password: ${TRUE_CACHE_DB_PASSWORD:${APP_DB_PASSWORD}}
+    max-pool-size: ${TRUE_CACHE_MAX_POOL_SIZE:8}
+
+logging:
+  level:
+    org.oracle.okafka: WARN
+    org.apache.kafka: WARN
 
 spring:
   ai:
     model:
+      chat: none
       embedding: none
   profiles:
-    active: rest
+    default: events
   application:
     name: ${OTEL_SERVICE_NAME:customer-support-lab-v2}
   jmx:
@@ -18,7 +37,7 @@ spring:
   datasource:
     username: ${APP_DB_USERNAME}
     password: ${APP_DB_PASSWORD}
-    url: ${JDBC_URL:jdbc:oracle:thin:@localhost:1521/freepdb1?oracle.jdbc.provider.traceEventListener=open-telemetry-trace-event-listener-provider}
+    url: ${JDBC_URL:jdbc:oracle:thin:@//localhost:1522/FREEPDB1?oracle.jdbc.provider.traceEventListener=open-telemetry-trace-event-listener-provider}
 
     driver-class-name: oracle.jdbc.OracleDriver
     type: oracle.ucp.jdbc.PoolDataSource
@@ -28,10 +47,6 @@ spring:
       max-pool-size: 30
       connection-pool-name: DemoConnectionPool
       connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-
 server:
   port: 9001
 management:
@@ -56,18 +71,18 @@ management:
   otlp:
     metrics:
       export:
-        enabled: ${MANAGEMENT_OTLP_METRICS_EXPORT_ENABLED:true}
+        enabled: ${MANAGEMENT_OTLP_METRICS_EXPORT_ENABLED:false}
         url: ${MANAGEMENT_OTLP_METRICS_EXPORT_URL:http://localhost:4318/v1/metrics}
         step: ${MANAGEMENT_OTLP_METRICS_EXPORT_STEP:5s}
   tracing:
     export:
       otlp:
-        enabled: ${MANAGEMENT_OTLP_TRACING_EXPORT_ENABLED:true}
+        enabled: ${MANAGEMENT_OTLP_TRACING_EXPORT_ENABLED:false}
     sampling:
       probability: ${MANAGEMENT_TRACING_SAMPLING_PROBABILITY:1.0}
   logging:
     export:
       otlp:
-        enabled: ${MANAGEMENT_OTLP_LOGGING_EXPORT_ENABLED:true}
+        enabled: ${MANAGEMENT_OTLP_LOGGING_EXPORT_ENABLED:false}
   server:
     port: ${MANAGEMENT_SERVER_PORT:9002}
