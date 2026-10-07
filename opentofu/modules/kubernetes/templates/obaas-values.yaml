@@ -39,6 +39,12 @@ signoz:
             name: "${label}-signoz"
             key: password
 %{ if byo_ocir_url != "" ~}
+    image:
+      registry: ${byo_ocir_url}
+    initContainers:
+      init:
+        image:
+          registry: ${byo_ocir_url}
   global:
     imageRegistry: ${byo_ocir_url}
   utilities:
@@ -51,13 +57,6 @@ signoz:
     kubectl:
       image:
         registry: ${byo_ocir_url}
-  signoz:
-    image:
-      registry: ${byo_ocir_url}
-    initContainers:
-      init:
-        image:
-          registry: ${byo_ocir_url}
   schemaMigrator:
     image:
       registry: ${byo_ocir_url}
@@ -108,8 +107,6 @@ conductor-server:
 otmm:
   image:
     repository: ${byo_ocir_url}/database/otmm
-
-otmm:
   coordinator:
     image:
       repository: ${byo_ocir_url}/database/microtx-coordinator

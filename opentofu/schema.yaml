@@ -34,6 +34,14 @@ variableGroups:
       - k8s_run_cfgmgt
       - k8s_use_cluster_addons
       - k8s_use_local_charts
+      - fsdr_plan_types
+      - fsdr_plan_refresh_trigger
+      - fsdr_plan_verify_trigger
+      - fsdr_adb_drill_standby_type
+      - fsdr_disassociate_trigger
+      - fsdr_timeouts
+      - fsdr_automatic_dr
+      - fsdr_plan_executions
     visible: false
 
   #########################################################################
@@ -45,6 +53,14 @@ variableGroups:
       - label_prefix
       - deploy_optimizer
     visible: true
+
+  #########################################################################
+  # Full Stack Disaster Recovery
+  #########################################################################
+  - title: "Full Stack Disaster Recovery"
+    variables:
+      - fsdr_enabled
+      - fsdr_region_1
 
   #########################################################################
   # Infrastructure - Kubernetes
@@ -136,6 +152,19 @@ variables:
     title: "Install the AI Optimizer and Toolkit?"
     description: "It is recommended to 'Deploy GPU Node Pool' when installing the Optimizer."
     required: true
+
+  #########################################################################
+  fsdr_enabled:
+    type: boolean
+    title: "Enable Full Stack Disaster Recovery?"
+    default: false
+
+  fsdr_region_1:
+    type: string
+    title: "Standby OCI Region"
+    description: "Subscribed region distinct from the primary region."
+    required: true
+    visible: fsdr_enabled
 
   #########################################################################
   k8s_api_is_public:

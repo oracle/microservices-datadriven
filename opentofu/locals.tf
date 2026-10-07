@@ -80,3 +80,9 @@ locals {
   lb_http_port  = 80
   lb_https_port = 443
 }
+
+// Full Stack Disaster Recovery
+locals {
+  fsdr_label_prefix = format("%s-fsdr", local.label_prefix)
+  fsdr_include_adb  = var.fsdr_enabled ? var.byo_db_type != "OTHER" : false
+}

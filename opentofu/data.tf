@@ -6,6 +6,10 @@ data "oci_identity_availability_domains" "all" {
   compartment_id = var.tenancy_ocid
 }
 
+data "oci_objectstorage_namespace" "objectstorage_namespace" {
+  compartment_id = var.tenancy_ocid
+}
+
 data "oci_core_services" "core_services" {
   filter {
     name   = "name"
