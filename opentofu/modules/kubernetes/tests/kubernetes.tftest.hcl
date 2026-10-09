@@ -113,6 +113,10 @@ run "cpu_cluster_and_addons" {
     error_message = "CPU workers must select the matching x86 OKE image with GPU deployment opt-in."
   }
   assert {
+    condition     = oci_containerengine_node_pool.cpu_node_pool_details.node_metadata.user_data == data.cloudinit_config.workers.rendered
+    error_message = "CPU workers must retain the existing worker cloud-init configuration."
+  }
+  assert {
     condition     = length(oci_containerengine_addon.oraoper_addon) == 1 && length(oci_containerengine_addon.certmgr_addon) == 1 && length(oci_containerengine_addon.ingress_addon) == 1
     error_message = "Managed database, certificate, and native ingress add-ons must be enabled by default."
   }
@@ -139,6 +143,10 @@ run "gpu_capacity_and_placement" {
   assert {
     condition     = one(oci_containerengine_node_pool.gpu_node_pool_details[0].node_source_details).image_id == "gpu-x86" && one(oci_containerengine_node_pool.gpu_node_pool_details[0].node_config_details).size == 2 && toset([for placement in one(oci_containerengine_node_pool.gpu_node_pool_details[0].node_config_details).placement_configs : placement.availability_domain]) == toset(["AD-1"])
     error_message = "GPU workers must select the GPU image and use only availability domains with capacity."
+  }
+  assert {
+    condition     = oci_containerengine_node_pool.gpu_node_pool_details[0].node_metadata.user_data == data.cloudinit_config.workers.rendered
+    error_message = "GPU workers must share the worker cloud-init configuration."
   }
 }
 
@@ -276,5 +284,33 @@ run "workload_identity" {
   assert {
     condition     = anytrue([for statement in oci_identity_policy.workers_policies.statements : strcontains(statement, "oracle-database-operator-system") && strcontains(statement, "autonomous-database-family")]) && anytrue([for statement in oci_identity_policy.workers_policies.statements : strcontains(statement, "oci-native-ingress-controller") && strcontains(statement, "load-balancers")])
     error_message = "Workload policies must include database-operator and native ingress permissions."
+  }
+}
+
+run "regional_recovery_artifacts" {
+  command = plan
+  variables {
+    label_prefix    = "kubetestdr"
+    app_namespace   = "kubetest"
+    stage_directory = "cfgmgt/stage/fsdr/standby"
+  }
+  assert {
+    condition     = local_sensitive_file.kubeconfig.filename == "cfgmgt/stage/fsdr/standby/kubeconfig" && local_sensitive_file.obaas_values.filename == "cfgmgt/stage/fsdr/standby/obaas-values.yaml" && yamldecode(local.obaas_values).database.oci.ocid == "test-adb"
+    error_message = "Regional configuration files must use their own directory and database."
+  }
+  assert {
+    condition     = strcontains(local.repository_base, "/kubetest") && !strcontains(local.repository_base, "/kubetestdr")
+    error_message = "Peer clusters must retain the application namespace and image repository names."
+  }
+}
+
+run "recovery_external_database_permissions" {
+  command = plan
+  variables {
+    recovery_external_databases = { "byo-adb" = "database-compartment" }
+  }
+  assert {
+    condition     = anytrue([for statement in oci_identity_policy.workers_policies.statements : strcontains(statement, "manage autonomous-databases in compartment id database-compartment") && strcontains(statement, "target.database.id = 'byo-adb'") && strcontains(statement, "oracle-database-operator-system")])
+    error_message = "Database operators must access the exact external database for recovery and failback."
   }
 }

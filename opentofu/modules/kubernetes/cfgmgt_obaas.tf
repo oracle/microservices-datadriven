@@ -4,12 +4,12 @@
 
 locals {
   obaas_prereqs_values = templatefile("${path.module}/templates/obaas-prereqs-values.yaml", {
-    label        = var.label_prefix
+    label        = local.app_namespace
     byo_ocir_url = var.byo_ocir_url
   })
 
   obaas_values = templatefile("${path.module}/templates/obaas-values.yaml", {
-    label                = var.label_prefix
+    label                = local.app_namespace
     oci_region           = var.region
     db_type              = var.db_conn.db_type
     db_ocid              = var.db_ocid
@@ -28,12 +28,12 @@ locals {
 
 resource "local_sensitive_file" "obaas_prereqs_values" {
   content         = local.obaas_prereqs_values
-  filename        = "${path.root}/cfgmgt/stage/obaas-prereqs-values.yaml"
+  filename        = "${local.stage_directory}/obaas-prereqs-values.yaml"
   file_permission = 0600
 }
 
 resource "local_sensitive_file" "obaas_values" {
   content         = local.obaas_values
-  filename        = "${path.root}/cfgmgt/stage/obaas-values.yaml"
+  filename        = "${local.stage_directory}/obaas-values.yaml"
   file_permission = 0600
 }

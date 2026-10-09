@@ -2,10 +2,10 @@
 # All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 # spell-checker: disable
 
-# Complete the primary association before creating standby plans.
+# Complete association and member enrollment before creating standby plans.
 resource "terraform_data" "plan_association" {
   count = length(var.plans) > 0 || length(var.executions) > 0 || var.automatic_dr != null ? 1 : 0
-  input = var.plan_association_id
+  input = { association = var.plan_association_id, members = var.members_ready_id }
 }
 
 resource "oci_disaster_recovery_dr_plan" "dr_plan" {
@@ -26,9 +26,14 @@ resource "oci_disaster_recovery_dr_plan" "dr_plan" {
   }
 }
 
+resource "terraform_data" "operations_ready" {
+  count = length(var.executions) > 0 || var.automatic_dr != null ? 1 : 0
+  input = var.operations_ready_id
+}
+
 resource "oci_disaster_recovery_dr_plan_execution" "dr_plan_execution" {
   for_each   = var.executions
-  depends_on = [terraform_data.plan_association]
+  depends_on = [terraform_data.plan_association, terraform_data.operations_ready]
   execution_options {
     plan_execution_type   = each.value["plan_execution_type"]
     are_prechecks_enabled = each.value["are_prechecks_enabled"]

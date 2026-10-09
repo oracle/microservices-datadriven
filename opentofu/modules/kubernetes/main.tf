@@ -42,7 +42,7 @@ resource "random_string" "optimizer_api_key" {
 resource "oci_artifacts_container_repository" "optimizer_repositories" {
   for_each       = var.byo_ocir_url != "" ? toset([]) : toset(local.optimizer_container_repositories)
   compartment_id = var.compartment_id
-  display_name   = lower(format("%s/%s", var.label_prefix, each.value))
+  display_name   = lower(format("%s/%s", local.app_namespace, each.value))
   is_immutable   = false
   is_public      = false
 }

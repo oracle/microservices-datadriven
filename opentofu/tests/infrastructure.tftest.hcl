@@ -16,7 +16,7 @@ mock_provider "oci" {
     defaults = { services = [{ id = "services", cidr_block = "all-lhr-services-in-oracle-services-network", name = "All LHR Services In Oracle Services Network", description = "test-services" }] }
   }
   mock_data "oci_database_autonomous_database" {
-    defaults = { id = "byo-adb", db_name = "BYODB" }
+    defaults = { id = "byo-adb", db_name = "BYODB", compartment_id = "database-compartment" }
   }
   mock_data "oci_core_subnet" {
     defaults = { cidr_block = "10.80.0.0/24" }
@@ -25,7 +25,19 @@ mock_provider "oci" {
     defaults = { namespace = "test-namespace" }
   }
 }
-mock_provider "oci" { alias = "fsdr_region_1" }
+mock_provider "oci" {
+  alias = "fsdr_region_1"
+  mock_resource "oci_load_balancer_load_balancer" {
+    defaults = { ip_address_details = [{ ip_address = "192.0.2.20", is_public = true, reserved_ip = [] }] }
+  }
+  mock_data "oci_core_services" {
+    defaults = { services = [{ id = "standby-services", cidr_block = "all-cwl-services-in-oracle-services-network", name = "All CWL Services In Oracle Services Network", description = "standby-services" }] }
+  }
+  mock_data "oci_identity_availability_domains" {
+    defaults = { availability_domains = [{ name = "TEST:uk-london-1-AD-1", id = "standby-ad", compartment_id = "test-tenancy" }] }
+  }
+  mock_data "oci_core_subnet" { defaults = { cidr_block = "10.43.1.0/24" } }
+}
 mock_provider "oci" { alias = "home_region" }
 mock_provider "random" {}
 mock_provider "tls" {}
@@ -43,15 +55,45 @@ override_module {
   }
 }
 override_module {
-  target  = module.kubernetes
-  outputs = { kubeconfig_cmd = "test-kubeconfig" }
+  target = module.kubernetes
+  outputs = {
+    kubeconfig_cmd             = "test-kubeconfig"
+    cluster_id                 = "primary-cluster"
+    workers_dynamic_group_name = "primary-workers"
+    orm_private_endpoint_ip    = ""
+    repository_host            = "lhr.ocir.io"
+    node_pool_ids              = { cpu = "primary-cpu-pool" }
+    configuration_files        = { kubeconfig = "primary-kubeconfig", manifest = "primary-manifest", prereqs = "primary-prereqs", app = "primary-app" }
+  }
+}
+override_module {
+  target = module.fsdr_network
+  outputs = {
+    vcn_ocid                  = "standby-vcn"
+    public_subnet_ocid        = "standby-public-subnet"
+    private_subnet_ocid       = "standby-private-subnet"
+    private_subnet_cidr_block = "10.43.1.0/24"
+  }
+}
+override_module {
+  target = module.fsdr_kubernetes
+  outputs = {
+    kubeconfig_cmd             = "standby-kubeconfig"
+    cluster_id                 = "standby-cluster"
+    workers_dynamic_group_name = "standby-workers"
+    orm_private_endpoint_ip    = ""
+    repository_host            = "cwl.ocir.io"
+    node_pool_ids              = { cpu = "standby-cpu-pool" }
+    configuration_files        = { kubeconfig = "standby-kubeconfig", manifest = "standby-manifest", prereqs = "standby-prereqs", app = "standby-app" }
+  }
 }
 variables {
-  tenancy_ocid     = "test-tenancy"
-  compartment_ocid = "test-compartment"
-  region           = "uk-london-1"
-  label_prefix     = "iactest"
-  k8s_run_cfgmgt   = false
+  tenancy_ocid         = "test-tenancy"
+  compartment_ocid     = "test-compartment"
+  region               = "uk-london-1"
+  label_prefix         = "iactest"
+  k8s_use_local_charts = true
+  k8s_run_cfgmgt       = false
 }
 
 run "disabled_by_default" {
@@ -66,14 +108,18 @@ run "existing_plan_keys" {
   command = plan
   variables {
     fsdr_enabled  = true
-    fsdr_region_1 = "uk-cardiff-1"
+    fsdr_region_1 = "uk-london-1"
   }
   assert {
-    condition     = toset(keys(output.fsdr_plan_ids)) == toset(["switchover", "failover"]) && module.fsdr_region_1["fsdr_region_1"].automatic_dr_configuration == null && length(output.fsdr_plan_execution_ids) == 0
+    condition     = length(oci_dns_rrset.fsdr_application) == 0 && output.fsdr_application_url == null && output.fsdr_regional_application_urls == { "uk-london-1" = "http://192.0.2.10", "uk-london-1" = "http://192.0.2.20" }
+    error_message = "Selecting a standby region must enable FSDR with regional access URLs and optional DNS."
+  }
+  assert {
+    condition     = toset(keys(output.fsdr_plan_ids)) == toset(["switchover", "failover"]) && module.fsdr["managed"].regions.region_1.automatic_dr_configuration == null && length(output.fsdr_plan_execution_ids) == 0
     error_message = "Default FSDR must preserve its existing plan keys without submitting executions."
   }
   assert {
-    condition     = length(module.fsdr_region_0["fsdr_region_0"].dr_plans) == 0 && length(module.fsdr_region_0["fsdr_region_0"].dr_plan_executions) == 0 && module.fsdr_region_0["fsdr_region_0"].automatic_dr_configuration == null && one(module.fsdr_region_0["fsdr_region_0"].dr_protection_group.association).role == "PRIMARY"
+    condition     = length(module.fsdr["managed"].regions.region_0.dr_plans) == 0 && length(module.fsdr["managed"].regions.region_0.dr_plan_executions) == 0 && module.fsdr["managed"].regions.region_0.automatic_dr_configuration == null && one(module.fsdr["managed"].regions.region_0.dr_protection_group.association).role == "PRIMARY"
     error_message = "The primary instance must own the association while standby operations stay in region 1."
   }
 }
@@ -82,13 +128,13 @@ run "drill_plans" {
   command = plan
   variables {
     fsdr_enabled              = true
-    fsdr_region_1             = "uk-cardiff-1"
+    fsdr_region_1             = "uk-london-1"
     fsdr_plan_types           = ["SWITCHOVER", "FAILOVER", "START_DRILL", "STOP_DRILL"]
     fsdr_plan_refresh_trigger = 2
     fsdr_plan_verify_trigger  = 3
   }
   assert {
-    condition     = contains(keys(output.fsdr_plan_ids), "start_drill") && contains(keys(output.fsdr_plan_ids), "stop_drill") && module.fsdr_region_1["fsdr_region_1"].dr_plans["start_drill"].refresh_trigger == 2 && module.fsdr_region_1["fsdr_region_1"].dr_plans["stop_drill"].verify_trigger == 3
+    condition     = contains(keys(output.fsdr_plan_ids), "start_drill") && contains(keys(output.fsdr_plan_ids), "stop_drill") && module.fsdr["managed"].regions.region_1.dr_plans["start_drill"].refresh_trigger == 2 && module.fsdr["managed"].regions.region_1.dr_plans["stop_drill"].verify_trigger == 3
     error_message = "Drill plans and root refresh/verify controls must reach the child modules."
   }
 }
@@ -97,11 +143,11 @@ run "automatic_failover" {
   command = plan
   variables {
     fsdr_enabled      = true
-    fsdr_region_1     = "uk-cardiff-1"
+    fsdr_region_1     = "uk-london-1"
     fsdr_automatic_dr = { is_auto_failover_enabled = true }
   }
   assert {
-    condition     = module.fsdr_region_1["fsdr_region_1"].automatic_dr_configuration != null && length(output.fsdr_plan_execution_ids) == 0
+    condition     = module.fsdr["managed"].regions.region_1.automatic_dr_configuration != null && length(output.fsdr_plan_execution_ids) == 0
     error_message = "Automatic DR must configure the standby group without submitting an explicit execution."
   }
 }
@@ -110,11 +156,11 @@ run "explicit_precheck" {
   command = plan
   variables {
     fsdr_enabled         = true
-    fsdr_region_1        = "uk-cardiff-1"
+    fsdr_region_1        = "uk-london-1"
     fsdr_plan_executions = { switchover = { plan_execution_type = "SWITCHOVER_PRECHECK" } }
   }
   assert {
-    condition     = one(module.fsdr_region_1["fsdr_region_1"].dr_plan_executions["switchover"].execution_options).are_prechecks_enabled
+    condition     = one(module.fsdr["managed"].regions.region_1.dr_plan_executions["switchover"].execution_options).are_prechecks_enabled
     error_message = "Explicit root execution inputs must reach the plan module."
   }
 }
@@ -132,7 +178,7 @@ run "automatic_requires_adb" {
   command = plan
   variables {
     fsdr_enabled      = true
-    fsdr_region_1     = "uk-cardiff-1"
+    fsdr_region_1     = "uk-london-1"
     byo_db_type       = "OTHER"
     byo_db_password   = "test-password"
     fsdr_automatic_dr = { is_auto_failover_enabled = true }
@@ -144,7 +190,7 @@ run "unknown_execution_key" {
   command = plan
   variables {
     fsdr_enabled         = true
-    fsdr_region_1        = "uk-cardiff-1"
+    fsdr_region_1        = "uk-london-1"
     fsdr_plan_executions = { start_drill = { plan_execution_type = "START_DRILL" } }
   }
   expect_failures = [terraform_data.fsdr_validation]
@@ -317,4 +363,88 @@ run "normalized_label" {
     condition     = output.app_name == "mixedcaselon"
     error_message = "Resource labels must be lowercase and limited to twelve characters."
   }
+}
+
+run "full_stack_membership" {
+  command = plan
+  variables {
+    fsdr_enabled       = true
+    fsdr_region_1      = "uk-london-1"
+    fsdr_dns_zone_ocid = "test-zone"
+    fsdr_dns_name      = "obaas.example.com"
+  }
+  assert {
+    condition     = length(module.fsdr["managed"].regions.region_0.dr_protection_group.members) == 0 && length(module.fsdr["managed"].regions.region_1.dr_protection_group.members) == 0
+    error_message = "Create groups before granting exact-ID IAM and enrolling recovery members."
+  }
+  assert {
+    condition     = local.fsdr_clusters["uk-london-1"].cluster_id == "primary-cluster" && local.fsdr_clusters["uk-london-1"].cluster_id == "standby-cluster" && module.fsdr["managed"].recovery_config.node_counts.cpu == 3 && toset(module.fsdr["managed"].recovery_config.namespaces) == toset(["iactest"])
+    error_message = "Full-stack preparation must cover both OKE peers, application namespaces, and recovery capacity."
+  }
+  assert {
+    condition     = oci_database_autonomous_database.dr_adb_standby["fsdr_region_1"].subnet_id == "standby-private-subnet" && oci_database_autonomous_database.dr_adb_standby["fsdr_region_1"].is_mtls_connection_required
+    error_message = "The standby database must use its regional private endpoint and mTLS."
+  }
+  assert {
+    condition     = oci_dns_rrset.fsdr_application[0].domain == "obaas.example.com" && one(oci_dns_rrset.fsdr_application[0].items).rdata == "192.0.2.10" && output.fsdr_application_url == "http://obaas.example.com" && length(module.fsdr["managed"].iam_policy_statements.groups) > 10
+    error_message = "DNS starts on the primary and recovery IAM covers the full stack."
+  }
+}
+
+run "full_stack_byo_database_compartment" {
+  command = plan
+  variables {
+    fsdr_enabled    = true
+    fsdr_region_1   = "uk-london-1"
+    byo_db_type     = "ADB-S"
+    byo_adb_ocid    = "byo-adb"
+    byo_db_password = "test-password"
+  }
+  assert {
+    condition     = local.fsdr_external_databases == tomap({ "byo-adb" = "database-compartment" }) && anytrue([for statement in module.fsdr["managed"].iam_policy_statements.groups : strcontains(statement, "manage autonomous-databases in compartment id database-compartment where target.database.id = 'byo-adb'")])
+    error_message = "Protection groups must recover the exact BYO database in its actual compartment."
+  }
+}
+
+run "existing_standby_network" {
+  command = plan
+  variables {
+    fsdr_enabled         = true
+    fsdr_region_1        = "uk-london-1"
+    fsdr_standby_network = { vcn_id = "existing-dr-vcn", public_subnet_id = "existing-dr-public", private_subnet_id = "existing-dr-private" }
+  }
+  assert {
+    condition     = length(module.fsdr_network) == 0 && oci_database_autonomous_database.dr_adb_standby["fsdr_region_1"].subnet_id == "existing-dr-private" && oci_load_balancer_load_balancer.fsdr_standby[0].subnet_ids == tolist(["existing-dr-public"])
+    error_message = "Existing standby networking must supply both database and ingress subnets."
+  }
+}
+
+run "full_stack_requires_addons" {
+  command = plan
+  variables {
+    fsdr_enabled           = true
+    fsdr_region_1          = "uk-london-1"
+    k8s_use_cluster_addons = false
+  }
+  expect_failures = [terraform_data.fsdr_validation]
+}
+
+run "dns_zone_requires_hostname" {
+  command = plan
+  variables {
+    fsdr_enabled       = true
+    fsdr_region_1      = "uk-london-1"
+    fsdr_dns_zone_ocid = "test-zone"
+  }
+  expect_failures = [terraform_data.fsdr_validation]
+}
+
+run "dns_hostname_requires_zone" {
+  command = plan
+  variables {
+    fsdr_enabled  = true
+    fsdr_region_1 = "uk-london-1"
+    fsdr_dns_name = "obaas.example.com"
+  }
+  expect_failures = [terraform_data.fsdr_validation]
 }

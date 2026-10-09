@@ -4,13 +4,12 @@
 
 locals {
   k8s_manifest = templatefile("${path.module}/templates/k8s-manifest.yaml", {
-    label              = var.label_prefix
+    label              = local.app_namespace
     repository_host    = local.repository_host
     repository_base    = local.repository_base
     compartment_ocid   = var.lb.compartment_id
     lb_ocid            = var.lb.id
     lb_subnet_ocid     = var.public_subnet_id
-    lb_ip_ocid         = var.lb.ip_address_details[0].ip_address
     lb_nsgs            = var.lb_nsg_id
     lb_min_shape       = var.lb.shape_details[0].minimum_bandwidth_in_mbps
     lb_max_shape       = var.lb.shape_details[0].maximum_bandwidth_in_mbps
@@ -22,7 +21,6 @@ locals {
     clickhouse_secret  = random_password.clickhouse_secret.result
     deploy_buildkit    = var.byo_ocir_url == ""
     use_cluster_addons = var.use_cluster_addons
-    deploy_buildkit    = var.byo_ocir_url == ""
     deploy_optimizer   = var.deploy_optimizer
     optimizer_version  = var.optimizer_version
     optimizer_api_key  = random_string.optimizer_api_key.result
@@ -34,13 +32,13 @@ locals {
 
 resource "local_sensitive_file" "kubeconfig" {
   content         = data.oci_containerengine_cluster_kube_config.default_cluster_kube_config.content
-  filename        = "${path.root}/cfgmgt/stage/kubeconfig"
+  filename        = "${local.stage_directory}/kubeconfig"
   file_permission = 0600
 }
 
 resource "local_sensitive_file" "k8s_manifest" {
   content         = local.k8s_manifest
-  filename        = "${path.root}/cfgmgt/stage/k8s-manifest.yaml"
+  filename        = "${local.stage_directory}/k8s-manifest.yaml"
   file_permission = 0600
 }
 
@@ -59,7 +57,7 @@ resource "null_resource" "apply" {
 
   provisioner "local-exec" {
     command = <<EOT
-      python3 ${path.root}/cfgmgt/apply.py ${var.label_prefix}${local.orm_pe != "" ? " --private_endpoint ${local.orm_pe}" : ""} --optimizer_version ${var.optimizer_version}${var.use_local_charts ? " --local-charts" : ""}
+      python3 ${path.root}/cfgmgt/apply.py ${local.app_namespace} --stage-directory ${local.stage_directory}${local.orm_pe != "" ? " --private_endpoint ${local.orm_pe}" : ""} --optimizer_version ${var.optimizer_version}${var.use_local_charts ? " --local-charts" : ""}${var.primary_database_ocid != null ? " --primary-database-ocid ${var.primary_database_ocid} --region ${var.region}" : ""}
     EOT
   }
   depends_on = [

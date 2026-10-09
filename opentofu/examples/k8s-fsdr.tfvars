@@ -5,7 +5,7 @@
 region          = "uk-london-1"
 label_prefix    = "obaasdr"
 fsdr_enabled    = true
-fsdr_region_1   = "uk-cardiff-1"
+fsdr_region_1   = "uk-london-1"
 fsdr_plan_types = ["SWITCHOVER", "FAILOVER", "START_DRILL", "STOP_DRILL"]
 fsdr_timeouts = {
   create = "40m"
@@ -17,7 +17,11 @@ fsdr_timeouts = {
 fsdr_plan_refresh_trigger = 0
 fsdr_plan_verify_trigger  = 0
 
-# Enable after preparing Resource Principal IAM policies.
+# Optional application DNS record initially pointing to the primary.
+# fsdr_dns_zone_ocid = "<oci-public-dns-zone-ocid>"
+# fsdr_dns_name      = "obaas.example.com"
+
+# Enable after validating recovery with a drill.
 # fsdr_automatic_dr = {
 #   is_auto_switchover_enabled = true
 #   is_auto_failover_enabled   = true

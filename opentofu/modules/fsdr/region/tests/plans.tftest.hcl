@@ -71,7 +71,7 @@ run "created_plan_precheck" {
     error_message = "Created drill plans must support their precheck variant."
   }
   assert {
-    condition     = terraform_data.plan_association[0].input == "primary-group"
+    condition     = terraform_data.plan_association[0].input.association == "primary-group"
     error_message = "Standby operations must carry the primary association dependency."
   }
 }

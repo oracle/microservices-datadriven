@@ -42,6 +42,12 @@ variableGroups:
       - fsdr_timeouts
       - fsdr_automatic_dr
       - fsdr_plan_executions
+      - fsdr_standby_network
+      - fsdr_standby_vcn_cidr
+      - fsdr_standby_cpu_node_pool_size
+      - fsdr_backup_schedule
+      - fsdr_backup_retention
+      - fsdr_additional_namespaces
     visible: false
 
   #########################################################################
@@ -61,6 +67,8 @@ variableGroups:
     variables:
       - fsdr_enabled
       - fsdr_region_1
+      - fsdr_dns_zone_ocid
+      - fsdr_dns_name
 
   #########################################################################
   # Infrastructure - Kubernetes
@@ -164,6 +172,20 @@ variables:
     title: "Standby OCI Region"
     description: "Subscribed region distinct from the primary region."
     required: true
+    visible: fsdr_enabled
+
+  fsdr_dns_zone_ocid:
+    type: string
+    title: "Application OCI Public DNS Zone OCID"
+    description: "Supply with the application hostname to create its initial DNS record."
+    required: false
+    visible: fsdr_enabled
+
+  fsdr_dns_name:
+    type: string
+    title: "Application DNS Hostname"
+    description: "Supply with the public DNS zone OCID to create an A record pointing to the primary."
+    required: false
     visible: fsdr_enabled
 
   #########################################################################

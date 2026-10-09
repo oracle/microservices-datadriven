@@ -61,6 +61,18 @@ variable "label_prefix" {
   type = string
 }
 
+variable "app_namespace" {
+  description = "Application namespace shared by the primary and recovery clusters."
+  type        = string
+  default     = null
+}
+
+variable "stage_directory" {
+  description = "Directory for this cluster's generated configuration."
+  type        = string
+  default     = null
+}
+
 variable "db_ocid" {
   type = string
 }
@@ -124,6 +136,18 @@ variable "api_endpoint_allowed_cidrs" {
 
 variable "run_cfgmgt" {
   type = bool
+}
+
+variable "primary_database_ocid" {
+  description = "Run configuration management while this database is primary; null applies without a role check."
+  type        = string
+  default     = null
+}
+
+variable "recovery_external_databases" {
+  description = "Database OCIDs and compartments accessible to the database operator during recovery."
+  type        = map(string)
+  default     = {}
 }
 variable "use_cluster_addons" {
   type    = bool

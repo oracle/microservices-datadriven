@@ -32,7 +32,7 @@ resource "oci_disaster_recovery_automatic_dr_configuration" "automatic_dr_config
       is_auto_failover_enabled   = members.value.is_auto_failover_enabled
     }
   }
-  depends_on = [terraform_data.plan_association]
+  depends_on = [terraform_data.plan_association, terraform_data.operations_ready]
   timeouts {
     create = var.timeouts.create
     update = var.timeouts.update

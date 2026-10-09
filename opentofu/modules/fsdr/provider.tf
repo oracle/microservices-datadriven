@@ -5,8 +5,12 @@
 terraform {
   required_providers {
     oci = {
-      source  = "oracle/oci"
-      version = ">= 9.8.0"
+      source                = "oracle/oci"
+      version               = ">= 9.8.0"
+      configuration_aliases = [oci.fsdr_region_1, oci.home_region]
+    }
+    local = {
+      source = "hashicorp/local"
     }
   }
 }

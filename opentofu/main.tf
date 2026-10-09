@@ -75,3 +75,23 @@ resource "oci_database_autonomous_database" "default_adb" {
     ignore_changes = [whitelisted_ips, private_endpoint_label, subnet_id]
   }
 }
+
+// Cross-Region ADB Standby (Autonomous Data Guard — required before FSDR can manage ADB failover)
+resource "oci_database_autonomous_database" "dr_adb_standby" {
+  for_each                      = local.fsdr_include_adb ? { fsdr_region_1 = true } : {}
+  compartment_id                = local.compartment_ocid
+  source                        = "CROSS_REGION_DISASTER_RECOVERY"
+  source_id                     = local.db_ocid
+  db_name                       = local.db_name
+  display_name                  = format("%s", local.fsdr_label_prefix)
+  remote_disaster_recovery_type = "ADG"
+  subnet_id                     = local.fsdr_standby_private_subnet_id
+  private_endpoint_label        = local.fsdr_standby_label
+  nsg_ids                       = [oci_core_network_security_group.fsdr_standby["adb"].id]
+  is_mtls_connection_required   = true
+  lifecycle {
+    ignore_changes = [whitelisted_ips]
+  }
+  provider   = oci.fsdr_region_1
+  depends_on = [terraform_data.fsdr_validation]
+}

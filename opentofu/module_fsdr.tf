@@ -89,12 +89,50 @@ variable "fsdr_automatic_dr" {
   }
 }
 
+variable "fsdr_backup_schedule" {
+  description = "RFC 5545 recurrence for OKE backups (one hour by default)."
+  type        = string
+  default     = "FREQ=HOURLY;INTERVAL=1"
+}
+
+variable "fsdr_backup_retention" {
+  description = "Number of OKE backups retained."
+  type        = number
+  default     = 24
+}
+
+variable "fsdr_additional_namespaces" {
+  description = "Application namespaces to recover alongside OBaaS."
+  type        = list(string)
+  default     = []
+  validation {
+    condition     = alltrue([for namespace in var.fsdr_additional_namespaces : !contains(["obaas-system", "kube-system", "brie"], namespace)])
+    error_message = "Additional recovery namespaces must contain application workloads; cluster control namespaces are reserved."
+  }
+}
+
 resource "terraform_data" "fsdr_validation" {
   count = var.fsdr_enabled || var.fsdr_automatic_dr != null || length(var.fsdr_plan_executions) > 0 ? 1 : 0
   lifecycle {
     precondition {
       condition     = var.fsdr_enabled && trimspace(var.fsdr_region_1) != "" && var.fsdr_region_1 != var.region
       error_message = "Enable FSDR and select a non-empty standby region distinct from region."
+    }
+    precondition {
+      condition     = var.fsdr_standby_cpu_node_pool_size <= var.k8s_cpu_node_pool_size
+      error_message = "Standby prerequisite capacity must fit within the recovery CPU worker count."
+    }
+    precondition {
+      condition     = local.fsdr_include_adb && var.k8s_use_cluster_addons
+      error_message = "Full-stack recovery requires Autonomous Database and the OKE-managed database and ingress controllers."
+    }
+    precondition {
+      condition     = (trimspace(var.fsdr_dns_zone_ocid) == "") == (trimspace(var.fsdr_dns_name) == "")
+      error_message = "Supply fsdr_dns_zone_ocid and fsdr_dns_name together for an application DNS record, or leave both empty."
+    }
+    precondition {
+      condition     = var.fsdr_adb_drill_standby_type == null || var.fsdr_adb_drill_standby_type == "SNAPSHOT_STANDBY"
+      error_message = "Full-stack drills use SNAPSHOT_STANDBY to recover against the protected database endpoint."
     }
     precondition {
       condition     = var.fsdr_automatic_dr == null || local.fsdr_include_adb
@@ -108,132 +146,60 @@ resource "terraform_data" "fsdr_validation" {
       error_message = "Automatic DR requires the plan type for every enabled event."
     }
     precondition {
-      condition     = alltrue([for key in keys(var.fsdr_plan_executions) : contains(keys(local.fsdr_plan_types), key)])
+      condition     = alltrue([for key in keys(var.fsdr_plan_executions) : contains([for plan_type in var.fsdr_plan_types : lower(plan_type)], key)])
       error_message = "Each execution must reference a configured lowercase FSDR plan type."
     }
   }
 }
 
-// DR Log Buckets (one per region — each protection group needs a bucket in its own region)
-resource "oci_objectstorage_bucket" "fsdr_logs_region_1" {
-  for_each       = var.fsdr_enabled ? { fsdr_region_1 = true } : {}
-  compartment_id = local.compartment_ocid
-  name           = format("%s-logs-%s", local.fsdr_label_prefix, var.fsdr_region_1)
-  namespace      = data.oci_objectstorage_namespace.objectstorage_namespace.namespace
-  provider       = oci.fsdr_region_1
-  depends_on     = [terraform_data.fsdr_validation]
-}
-
-resource "oci_objectstorage_bucket" "fsdr_logs_region_0" {
-  for_each       = var.fsdr_enabled ? { fsdr_region_0 = true } : {}
-  compartment_id = local.compartment_ocid
-  name           = format("%s-logs-%s", local.fsdr_label_prefix, var.region)
-  namespace      = data.oci_objectstorage_namespace.objectstorage_namespace.namespace
-  depends_on     = [terraform_data.fsdr_validation]
-}
-
-// Cross-Region ADB Standby (Autonomous Data Guard — required before FSDR can manage ADB failover)
-resource "oci_database_autonomous_database" "dr_adb_standby" {
-  for_each                      = local.fsdr_include_adb ? { fsdr_region_1 = true } : {}
-  compartment_id                = local.compartment_ocid
-  source                        = "CROSS_REGION_DISASTER_RECOVERY"
-  source_id                     = local.db_ocid
-  db_name                       = local.db_name
-  display_name                  = format("%s", local.fsdr_label_prefix)
-  remote_disaster_recovery_type = "ADG"
-  lifecycle {
-    ignore_changes = [whitelisted_ips]
-  }
-  provider   = oci.fsdr_region_1
-  depends_on = [terraform_data.fsdr_validation]
-}
-
-locals {
-  fsdr_plan_types = var.fsdr_enabled ? { for plan_type in var.fsdr_plan_types : lower(plan_type) => plan_type } : {}
-}
-
-module "fsdr_region_1" {
-  for_each            = var.fsdr_enabled ? { fsdr_region_1 = true } : {}
-  source              = "./modules/fsdr"
-  compartment_id      = local.compartment_ocid
-  display_name        = format("%s-pg-%s", local.fsdr_label_prefix, var.fsdr_region_1)
-  timeouts            = var.fsdr_timeouts
-  plan_association_id = module.fsdr_region_0["fsdr_region_0"].dr_protection_group_id
-  log_location = {
-    bucket    = oci_objectstorage_bucket.fsdr_logs_region_1["fsdr_region_1"].name
-    namespace = oci_objectstorage_bucket.fsdr_logs_region_1["fsdr_region_1"].namespace
-  }
-  members = local.fsdr_include_adb ? [{
-    member_id                                      = oci_database_autonomous_database.dr_adb_standby["fsdr_region_1"].id
-    member_type                                    = "AUTONOMOUS_DATABASE"
-    autonomous_database_standby_type_for_dr_drills = var.fsdr_adb_drill_standby_type
-  }] : []
-  plans = { for key, plan_type in local.fsdr_plan_types : key => {
-    display_name    = format("%s-%s-%s", local.fsdr_label_prefix, key, var.fsdr_region_1)
-    type            = plan_type
-    refresh_trigger = var.fsdr_plan_refresh_trigger
-    verify_trigger  = var.fsdr_plan_verify_trigger
-    timeouts_create = var.fsdr_timeouts.create
-    timeouts_update = var.fsdr_timeouts.update
-    timeouts_delete = var.fsdr_timeouts.delete
-  } }
-  executions = var.fsdr_plan_executions
-  automatic_dr = local.fsdr_include_adb && var.fsdr_automatic_dr != null ? {
-    display_name = format("%s-automatic-%s", local.fsdr_label_prefix, var.fsdr_region_1)
-    members = [{
-      member_id                  = oci_database_autonomous_database.dr_adb_standby["fsdr_region_1"].id
-      member_type                = "AUTONOMOUS_DATABASE"
-      is_auto_switchover_enabled = var.fsdr_automatic_dr.is_auto_switchover_enabled
-      is_auto_failover_enabled   = var.fsdr_automatic_dr.is_auto_failover_enabled
-    }]
-  } : null
+module "fsdr" {
+  for_each                = var.fsdr_enabled ? { managed = true } : {}
+  source                  = "./modules/fsdr"
+  tenancy_id              = var.tenancy_ocid
+  compartment_id          = local.compartment_ocid
+  label_prefix            = local.fsdr_label_prefix
+  region_0                = var.region
+  region_1                = var.fsdr_region_1
+  objectstorage_namespace = data.oci_objectstorage_namespace.objectstorage_namespace.namespace
+  clusters                = local.fsdr_clusters
+  external_databases      = local.fsdr_external_databases
+  namespaces              = concat([local.label_prefix], var.fsdr_additional_namespaces)
+  use_local_charts        = var.k8s_use_local_charts
+  node_counts             = { cpu = var.k8s_cpu_node_pool_size, gpu = var.k8s_gpu_node_pool_size }
+  standby_node_counts     = { cpu = var.fsdr_standby_cpu_node_pool_size, gpu = 0 }
+  backup_schedule         = var.fsdr_backup_schedule
+  backup_retention        = var.fsdr_backup_retention
+  disassociate_trigger    = var.fsdr_disassociate_trigger
+  plan_types              = var.fsdr_plan_types
+  plan_refresh_trigger    = var.fsdr_plan_refresh_trigger
+  plan_verify_trigger     = var.fsdr_plan_verify_trigger
+  timeouts                = var.fsdr_timeouts
+  executions              = var.fsdr_plan_executions
+  automatic_dr            = var.fsdr_automatic_dr
   providers = {
-    oci = oci.fsdr_region_1
+    oci               = oci
+    oci.fsdr_region_1 = oci.fsdr_region_1
+    oci.home_region   = oci.home_region
   }
-}
-
-module "fsdr_region_0" {
-  for_each       = var.fsdr_enabled ? { fsdr_region_0 = true } : {}
-  source         = "./modules/fsdr"
-  compartment_id = local.compartment_ocid
-  display_name   = format("%s-pg-%s", local.fsdr_label_prefix, var.region)
-  association = {
-    role        = "PRIMARY"
-    peer_region = var.fsdr_region_1
-    peer_id     = module.fsdr_region_1["fsdr_region_1"].dr_protection_group_id
-  }
-  log_location = {
-    bucket    = oci_objectstorage_bucket.fsdr_logs_region_0["fsdr_region_0"].name
-    namespace = oci_objectstorage_bucket.fsdr_logs_region_0["fsdr_region_0"].namespace
-  }
-  members = local.fsdr_include_adb ? [{
-    member_id                                      = local.db_ocid
-    member_type                                    = "AUTONOMOUS_DATABASE"
-    autonomous_database_standby_type_for_dr_drills = var.fsdr_adb_drill_standby_type
-  }] : []
-  disassociate_trigger = var.fsdr_disassociate_trigger
-  timeouts             = var.fsdr_timeouts
+  depends_on = [terraform_data.fsdr_validation, module.kubernetes, module.fsdr_kubernetes]
 }
 
 output "fsdr_protection_group_ids" {
   description = "FSDR protection group OCIDs by region."
-  value = var.fsdr_enabled ? {
-    (var.region)        = module.fsdr_region_0["fsdr_region_0"].dr_protection_group_id
-    (var.fsdr_region_1) = module.fsdr_region_1["fsdr_region_1"].dr_protection_group_id
-  } : {}
+  value       = try(module.fsdr["managed"].protection_group_ids, {})
 }
 
 output "fsdr_plan_ids" {
   description = "Standby-region DR plan OCIDs keyed by lowercase plan type."
-  value       = try(module.fsdr_region_1["fsdr_region_1"].dr_plan_ids, {})
+  value       = try(module.fsdr["managed"].plan_ids, {})
 }
 
 output "fsdr_plan_execution_ids" {
-  description = "Explicit DR execution OCIDs keyed by lowercase plan type."
-  value       = try(module.fsdr_region_1["fsdr_region_1"].dr_plan_execution_ids, {})
+  description = "Explicit DR execution OCIDs keyed by execution key."
+  value       = try(module.fsdr["managed"].plan_execution_ids, {})
 }
 
 output "fsdr_automatic_dr_configuration_id" {
   description = "Standby-region Automatic DR configuration OCID."
-  value       = try(module.fsdr_region_1["fsdr_region_1"].automatic_dr_configuration_id, null)
+  value       = try(module.fsdr["managed"].automatic_dr_configuration_id, null)
 }

@@ -85,4 +85,33 @@ locals {
 locals {
   fsdr_label_prefix = format("%s-fsdr", local.label_prefix)
   fsdr_include_adb  = var.fsdr_enabled ? var.byo_db_type != "OTHER" : false
+  fsdr_external_databases = var.fsdr_enabled && var.byo_db_type == "ADB-S" ? {
+    (var.byo_adb_ocid) = data.oci_database_autonomous_database.byo_adb["byo"].compartment_id
+  } : {}
+  fsdr_clusters = var.fsdr_enabled ? {
+    (var.region) = {
+      cluster_id          = module.kubernetes["managed"].cluster_id
+      workers_group       = module.kubernetes["managed"].workers_dynamic_group_name
+      database_id         = local.db_ocid
+      node_pools          = module.kubernetes["managed"].node_pool_ids
+      files               = module.kubernetes["managed"].configuration_files
+      private_endpoint    = module.kubernetes["managed"].orm_private_endpoint_ip
+      subnet_id           = local.private_subnet_ocid
+      availability_domain = local.availability_domains[0]
+      lb_id               = oci_load_balancer_load_balancer.lb.id
+      lb_ip               = oci_load_balancer_load_balancer.lb.ip_address_details[0].ip_address
+    }
+    (var.fsdr_region_1) = {
+      cluster_id          = module.fsdr_kubernetes["standby"].cluster_id
+      workers_group       = module.fsdr_kubernetes["standby"].workers_dynamic_group_name
+      database_id         = try(oci_database_autonomous_database.dr_adb_standby["fsdr_region_1"].id, "")
+      node_pools          = module.fsdr_kubernetes["standby"].node_pool_ids
+      files               = module.fsdr_kubernetes["standby"].configuration_files
+      private_endpoint    = module.fsdr_kubernetes["standby"].orm_private_endpoint_ip
+      subnet_id           = local.fsdr_standby_private_subnet_id
+      availability_domain = data.oci_identity_availability_domains.fsdr_region_1[0].availability_domains[0].name
+      lb_id               = oci_load_balancer_load_balancer.fsdr_standby[0].id
+      lb_ip               = oci_load_balancer_load_balancer.fsdr_standby[0].ip_address_details[0].ip_address
+    }
+  } : {}
 }

@@ -77,12 +77,14 @@ jobs:
 
       - name: Install Python and Dependencies
         run: |
-          apk add --no-cache python3 py3-pip
-          pip3 install --break-system-packages pyyaml jsonschema referencing
+          apk add --no-cache python3 py3-pip kubectl
+          pip3 install --break-system-packages pyyaml jsonschema referencing oci==2.187.1
 
       - name: Test IaC Mocked Plans
         working-directory: ./opentofu
-        run: python3 tests/run-mocked-plans.py
+        run: |
+          python3 tests/run-mocked-plans.py
+          python3 -m unittest discover -s tests -p 'test_*.py'
 
       # Schema validation
       - name: Validate Oracle Resource Manager Schema
