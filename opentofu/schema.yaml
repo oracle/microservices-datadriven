@@ -38,7 +38,6 @@ variableGroups:
       - fsdr_plan_refresh_trigger
       - fsdr_plan_verify_trigger
       - fsdr_adb_drill_standby_type
-      - fsdr_disassociate_trigger
       - fsdr_timeouts
       - fsdr_automatic_dr
       - fsdr_plan_executions
@@ -58,6 +57,7 @@ variableGroups:
       - compartment_ocid
       - label_prefix
       - deploy_optimizer
+      - init_destroy
     visible: true
 
   #########################################################################
@@ -154,6 +154,12 @@ variables:
     title: "Application Name"
     pattern: "^$|^[a-zA-Z0-9]{1,12}$"
     required: false
+
+  init_destroy:
+    type: boolean
+    title: "Prepare for Destroy?"
+    description: "Disassociate FSDR groups, disable storage replication and skip configuration management. Run Apply before Destroy."
+    default: false
 
   deploy_optimizer:
     type: boolean
