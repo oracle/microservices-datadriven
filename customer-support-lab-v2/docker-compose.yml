@@ -32,10 +32,14 @@ services:
       - "${LAB_PRIMARY_PORT:-1522}:1521"
     environment:
       ORACLE_PWD: ${ORACLE_PWD:-Welcome12345}
+      APP_DB_USERNAME: ${APP_DB_USERNAME:-LAB_USER}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD:?Set APP_DB_PASSWORD before starting Compose}
       ENABLE_ARCHIVELOG: "true"
       ENABLE_FORCE_LOGGING: "true"
     volumes:
       - ./src/test/resources:/opt/oracle/scripts/startup:ro
+      - ./scripts:/opt/oracle/lab/scripts:ro
+      - ./db:/opt/oracle/lab/db:ro
       # The startup script copies the primary password file here. The True
       # Cache container mounts the same volume at /var/tmp/orapwFREE.
       - true-cache-primary-password:/var/tmp
@@ -43,7 +47,7 @@ services:
       true-cache-password-volume-init:
         condition: service_completed_successfully
     healthcheck:
-      test: ["CMD-SHELL", "test -r /var/tmp/orapwFREE && printf 'WHENEVER SQLERROR EXIT FAILURE\\nSELECT 1 FROM DUAL;\\nEXIT;\\n' | sqlplus -L -s \"system/$$ORACLE_PWD@//localhost:1521/FREEPDB1\" >/dev/null"]
+      test: ["CMD-SHELL", "test -r /var/tmp/orapwFREE && test -f /tmp/lab-schema-ready && printf 'WHENEVER SQLERROR EXIT FAILURE\\nSELECT 1 FROM DUAL;\\nEXIT;\\n' | sqlplus -L -s \"system/$$ORACLE_PWD@//localhost:1521/FREEPDB1\" >/dev/null"]
       interval: 10s
       timeout: 10s
       retries: 60

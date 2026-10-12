@@ -17,6 +17,8 @@
 	<properties>
 		<oracle.starters.version>26.3.0</oracle.starters.version>
 		<spring-ai-oracle.version>2.0.1</spring-ai-oracle.version>
+		<!-- Keep the HTTP transport aligned with the SDK used by Spring AI Oracle. -->
+		<oci-sdk.version>3.89.1</oci-sdk.version>
 		<java.version>21</java.version>
 	</properties>
 
@@ -69,6 +71,11 @@
 			<groupId>com.oracle.spring.ai</groupId>
 			<artifactId>spring-ai-starter-model-oracle</artifactId>
 			<version>${spring-ai-oracle.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.oci.sdk</groupId>
+			<artifactId>oci-java-sdk-common-httpclient-jersey3</artifactId>
+			<version>${oci-sdk.version}</version>
 		</dependency>
 
 <!--		Test dependencies-->

@@ -3,8 +3,8 @@
 
 package com.oracle.demo.lab.web;
 
-import com.oracle.demo.lab.ticket.SupportTicket;
-import com.oracle.demo.lab.ticket.TicketReadRouter;
+import com.oracle.demo.lab.model.SupportTicket;
+import com.oracle.demo.lab.persistence.TicketReadRouter;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 

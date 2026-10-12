@@ -3,7 +3,7 @@
 
 package com.oracle.demo.lab.ai;
 
-import com.oracle.demo.lab.ticket.RelatedTicket;
+import com.oracle.demo.lab.model.RelatedTicket;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;

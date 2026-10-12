@@ -21,7 +21,7 @@ import java.util.List;
 @Component
 @Profile("ai")
 public class PolicyIndex {
-    private static final int EMBEDDING_DIMENSIONS = 1024;
+    private static final int EMBEDDING_DIMENSIONS = 1536;
 
     private final JdbcClient jdbcClient;
     private final DataSource dataSource;
@@ -57,7 +57,7 @@ public class PolicyIndex {
         }
         for (float[] embedding : embeddings) {
             if (embedding == null || embedding.length != EMBEDDING_DIMENSIONS) {
-                throw new IllegalStateException("Policy embeddings must have 1024 dimensions");
+                throw new IllegalStateException("Policy embeddings must have 1536 dimensions");
             }
         }
 

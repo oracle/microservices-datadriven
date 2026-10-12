@@ -3,8 +3,8 @@
 
 package com.oracle.demo.lab.ai;
 
-import com.oracle.demo.lab.ticket.RelatedTicket;
-import com.oracle.demo.lab.ticket.TicketStore;
+import com.oracle.demo.lab.model.RelatedTicket;
+import com.oracle.demo.lab.persistence.TicketStore;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.jdbc.core.simple.JdbcClient;
@@ -34,7 +34,7 @@ class TicketAssistancePersistenceSmokeTest {
                 TicketStore tickets = new TicketStore(jdbc);
                 TicketAssistanceStore assistance = new TicketAssistanceStore(jdbc);
                 RelatedTicket related = new RelatedTicket(relatedId, 0.82);
-                float[] embedding = new float[1024];
+                float[] embedding = new float[1536];
                 embedding[0] = 1.0f;
 
                 tickets.saveEnrichment(connection, ticketId, embedding);
@@ -53,7 +53,7 @@ class TicketAssistancePersistenceSmokeTest {
                     try (ResultSet row = statement.executeQuery()) {
                         row.next();
                         assertEquals("ENRICHED", row.getString("workflow_status"));
-                        assertEquals(1024, row.getObject("embedding", float[].class).length);
+                        assertEquals(1536, row.getObject("embedding", float[].class).length);
                     }
                 }
             } finally {

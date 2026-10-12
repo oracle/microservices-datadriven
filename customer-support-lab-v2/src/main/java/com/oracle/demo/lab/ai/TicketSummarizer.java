@@ -3,7 +3,7 @@
 
 package com.oracle.demo.lab.ai;
 
-import com.oracle.demo.lab.ticket.SupportTicket;
+import com.oracle.demo.lab.model.SupportTicket;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;

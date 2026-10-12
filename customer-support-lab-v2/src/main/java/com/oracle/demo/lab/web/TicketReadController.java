@@ -3,8 +3,8 @@
 
 package com.oracle.demo.lab.web;
 
-import com.oracle.demo.lab.ticket.SupportTicket;
-import com.oracle.demo.lab.ticket.TicketReadRouter;
+import com.oracle.demo.lab.model.SupportTicket;
+import com.oracle.demo.lab.persistence.TicketReadRouter;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -6,7 +6,10 @@ set -euo pipefail
 
 usage() {
   cat <<'EOF'
-Usage: scripts/setup-lab.sh [--dry-run]
+Usage: scripts/setup-lab.sh [--dry-run] [--if-needed]
+
+--if-needed checks and reuses an existing complete lab schema. It refuses
+an incomplete schema and never resets existing data or credentials.
 
 Requires:
   APP_DB_USERNAME     Application schema username to create
@@ -41,15 +44,15 @@ EOF
 }
 
 dry_run=false
-if [[ "${1:-}" == "--dry-run" ]]; then
-  dry_run=true
+if_needed=false
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --dry-run) dry_run=true ;;
+    --if-needed) if_needed=true ;;
+    *) usage >&2; exit 1 ;;
+  esac
   shift
-fi
-
-if [[ $# -ne 0 ]]; then
-  usage >&2
-  exit 1
-fi
+done
 
 missing=()
 for var in APP_DB_USERNAME APP_DB_PASSWORD ADMIN_DB_USERNAME ADMIN_DB_PASSWORD ADMIN_DB_CONNECT; do
@@ -116,6 +119,45 @@ elif command -v sqlplus >/dev/null 2>&1; then
 else
   echo "Neither sql nor sqlplus is available on PATH." >&2
   exit 1
+fi
+
+if [[ "${if_needed}" == "true" ]]; then
+  schema_check="$("${sql_runner}" -L -s /nolog <<EOF
+whenever sqlerror exit failure
+whenever oserror exit failure
+set echo off verify off feedback off heading off pagesize 0
+connect ${ADMIN_DB_USERNAME}/${ADMIN_DB_PASSWORD}@${ADMIN_DB_CONNECT}${ADMIN_DB_ROLE:+ as ${ADMIN_DB_ROLE}}
+select 'LAB_SCHEMA_EXISTS=' || count(*) from dba_users
+where username = upper('${APP_DB_USERNAME}');
+exit
+EOF
+  )"
+  if [[ "${schema_check}" == *"LAB_SCHEMA_EXISTS=1"* ]]; then
+    "${sql_runner}" -L -s /nolog <<EOF
+whenever sqlerror exit failure
+whenever oserror exit failure
+set echo off verify off
+connect ${APP_DB_USERNAME}/${APP_DB_PASSWORD}@${ADMIN_DB_CONNECT}
+declare
+  table_count number;
+begin
+  select count(*) into table_count from user_tables
+  where table_name in ('SUPPORT_TICKET', 'RELATED_TICKET', 'SUPPORT_POLICY',
+      'TICKET_ASSISTANCE', 'TICKET_POLICY_MATCH', 'TICKET_EVENT_PROCESSED',
+      'FAILED_TICKET_EVENT');
+  if table_count <> 7 then
+    raise_application_error(-20001, 'Existing lab schema is incomplete; inspect it before retrying setup');
+  end if;
+end;
+/
+exit
+EOF
+    echo "Lab schema ${APP_DB_USERNAME} is already initialized; retaining its data."
+    exit 0
+  elif [[ "${schema_check}" != *"LAB_SCHEMA_EXISTS=0"* ]]; then
+    echo "Could not determine whether the lab schema exists." >&2
+    exit 1
+  fi
 fi
 
 # Credentials are passed via stdin, not as CLI arguments, so they do not

@@ -11,13 +11,16 @@ spring:
         chat:
           compartment-id: ${OCI_COMPARTMENT_ID}
           serving-mode: ON_DEMAND
-          model: ${OCI_CHAT_MODEL_ID}
+          model: ${OCI_CHAT_MODEL_ID:cohere.command-a-03-2025}
+          temperature: 0.2
+          max-tokens: 512
         embedding:
           compartment-id: ${OCI_COMPARTMENT_ID}
           serving-mode: ON_DEMAND
-          model: ${OCI_EMBEDDING_MODEL_ID:cohere.embed-english-v3.0}
+          model: ${OCI_EMBEDDING_MODEL_ID:cohere.embed-v4.0}
+          dimensions: 1536
           truncate: END
 app:
   ai:
-    chat-model-id: ${OCI_CHAT_MODEL_ID}
-    embedding-model-id: ${OCI_EMBEDDING_MODEL_ID:cohere.embed-english-v3.0}
+    chat-model-id: ${OCI_CHAT_MODEL_ID:cohere.command-a-03-2025}
+    embedding-model-id: ${OCI_EMBEDDING_MODEL_ID:cohere.embed-v4.0}

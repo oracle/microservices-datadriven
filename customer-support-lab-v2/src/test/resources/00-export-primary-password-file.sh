@@ -7,6 +7,7 @@
 # copying it to the host filesystem.
 set -euo pipefail
 
+rm -f /tmp/lab-schema-ready
 install -m 0444 \
   /opt/oracle/product/26ai/dbhomeFree/dbs/orapwFREE \
   /var/tmp/orapwFREE

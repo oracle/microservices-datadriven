@@ -6,11 +6,11 @@ package com.oracle.demo.lab.web;
 import java.util.List;
 import java.util.UUID;
 
-import com.oracle.demo.lab.events.TicketEventProducer;
-import com.oracle.demo.lab.events.FailedTicketEvent;
-import com.oracle.demo.lab.events.TicketEventOutcomeStore;
-import com.oracle.demo.lab.events.TicketWorkEvent;
-import com.oracle.demo.lab.ticket.SupportTicket;
+import com.oracle.demo.lab.messaging.TicketEventProducer;
+import com.oracle.demo.lab.model.FailedTicketEvent;
+import com.oracle.demo.lab.persistence.TicketEventOutcomeStore;
+import com.oracle.demo.lab.model.TicketWorkEvent;
+import com.oracle.demo.lab.model.SupportTicket;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

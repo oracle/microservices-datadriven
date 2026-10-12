@@ -3,7 +3,7 @@
 
 package com.oracle.demo.lab.ai;
 
-import com.oracle.demo.lab.ticket.RelatedTicket;
+import com.oracle.demo.lab.model.RelatedTicket;
 import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.core.simple.JdbcClient;
 

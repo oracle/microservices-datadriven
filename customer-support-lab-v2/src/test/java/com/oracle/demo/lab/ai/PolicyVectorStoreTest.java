@@ -31,7 +31,7 @@ class PolicyVectorStoreTest {
         when(result.getString("title")).thenReturn("MFA recovery");
         when(result.getDouble("score")).thenReturn(0.87);
 
-        var matches = new PolicyVectorStore().search(connection, new float[1024]);
+        var matches = new PolicyVectorStore().search(connection, new float[1536]);
 
         assertEquals(1, matches.size());
         assertEquals(new PolicyMatch("MFA_RECOVERY", "MFA recovery", 0.87), matches.getFirst());

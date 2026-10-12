@@ -3,10 +3,10 @@
 
 package com.oracle.demo.lab.web;
 
-import com.oracle.demo.lab.events.TicketEventOutcomeStore;
-import com.oracle.demo.lab.events.TicketEventProducer;
-import com.oracle.demo.lab.ticket.TicketReadRouter;
-import com.oracle.demo.lab.ticket.TicketStore;
+import com.oracle.demo.lab.persistence.TicketEventOutcomeStore;
+import com.oracle.demo.lab.messaging.TicketEventProducer;
+import com.oracle.demo.lab.persistence.TicketReadRouter;
+import com.oracle.demo.lab.persistence.TicketStore;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 

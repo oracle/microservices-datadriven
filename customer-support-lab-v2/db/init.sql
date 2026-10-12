@@ -5,7 +5,7 @@ create table support_ticket (
     description  varchar2(2000) not null,
     workflow_status varchar2(32) default 'RECEIVED' not null
         check (workflow_status in ('RECEIVED', 'TRIAGED', 'ENRICHED', 'FAILED')),
-    embedding    vector(1024, FLOAT32)
+    embedding    vector(1536, FLOAT32)
 );
 
 -- Join table for related tickets
@@ -23,7 +23,7 @@ create table support_policy (
     policy_id       varchar2(64) primary key,
     title           varchar2(255) not null,
     body            varchar2(2000) not null,
-    embedding       vector(1024, FLOAT32),
+    embedding       vector(1536, FLOAT32),
     embedding_model varchar2(256)
 );
 

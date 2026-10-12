@@ -215,14 +215,29 @@ existing registration helper now starts it. Recreating that helper restored
 `X-Read-Path: true-cache` for the same ticket. This recovery path was tested
 both when the service was already active and when it was stopped.
 
-AI persistence has a live Oracle smoke test, but the full AI event flow and
-OCI model calls remain unverified. The AI walkthrough rejects an `ENRICHED` ticket if its saved
-summary, model/prompt metadata, or policy matches are missing; local HTTP
-fixtures exercised both acceptance and rejection, not OCI model delivery.
+The full AI event flow was live-validated on 2026-10-06 with all four profiles:
+`events,ai,demo-failures,observability`. OCI FILE authentication in
+`us-chicago-1` used `cohere.command-a-03-2025` (temperature 0.2, maximum 512
+tokens) and `cohere.embed-v4.0` with 1536 dimensions. The lab explicitly
+includes the OCI SDK Jersey 3 HTTP transport required for AI startup.
+All 70 tests passed, including both live Oracle persistence smoke tests.
+Two AI walkthroughs and the failure/replay walkthrough produced three
+`ENRICHED` tickets with saved summaries and policy matches; the second AI
+ticket also retrieved a related ticket. Replay retried once, repeated replay
+returned HTTP 404, and primary and True Cache served the same enriched ticket.
+Database checks confirmed 1536-dimensional ticket and policy vectors, three
+processed events, one `REPLAYED` failure, 16-byte event IDs, and no ready queue
+messages. All six dashboard expressions returned Prometheus data. Exported
+counters recorded three processed events, one failure, and one retry.
+Tempo returned a 14-span trace connecting HTTP submission to the consumer,
+embedding, chat, and JDBC work; the consumer's parent span matched the HTTP
+span. AI span attributes confirmed the requested models and generation settings.
+The AI walkthrough rejects an `ENRICHED` ticket if its saved summary,
+model/prompt metadata, or policy matches are missing; local HTTP fixtures also
+exercised acceptance and rejection.
 The AI and replay scripts now stop promptly with a profile hint when a newly
 created ticket completes without the expected AI or deliberate failure;
 local response fixtures exercised both wrong-profile paths.
-These are open gates, not inferred successes.
 
 Regional placement, blockchain approvals, physical multi-region topology,
 production auth, retention, and cache freshness SLOs belong in later work.
