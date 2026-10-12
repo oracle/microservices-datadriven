@@ -30,6 +30,10 @@ output "configuration_files" {
   }
 }
 
+output "configuration_ready_id" {
+  value = var.run_cfgmgt ? null_resource.apply[0].id : oci_containerengine_cluster.default_cluster.id
+}
+
 output "repository_host" {
   value = local.repository_host
 }

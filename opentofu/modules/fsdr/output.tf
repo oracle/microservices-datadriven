@@ -11,15 +11,15 @@ output "protection_group_ids" {
 }
 
 output "plan_ids" {
-  value = module.fsdr_region_1.dr_plan_ids
+  value = merge(module.fsdr_region_0.dr_plan_ids, module.fsdr_region_1.dr_plan_ids)
 }
 
 output "plan_execution_ids" {
-  value = module.fsdr_region_1.dr_plan_execution_ids
+  value = merge(module.fsdr_region_0.dr_plan_execution_ids, module.fsdr_region_1.dr_plan_execution_ids)
 }
 
 output "automatic_dr_configuration_id" {
-  value = module.fsdr_region_1.automatic_dr_configuration_id
+  value = local.roles[var.region_0] == "STANDBY" ? module.fsdr_region_0.automatic_dr_configuration_id : module.fsdr_region_1.automatic_dr_configuration_id
 }
 
 output "regions" {
@@ -29,11 +29,6 @@ output "regions" {
     region_0 = module.fsdr_region_0
     region_1 = module.fsdr_region_1
   }
-}
-
-output "recovery_config" {
-  description = "Native preparation configuration written to cfgmgt/stage/fsdr/config.json."
-  value       = local.fsdr_recovery_config
 }
 
 output "iam_policy_statements" {

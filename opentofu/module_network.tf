@@ -59,7 +59,7 @@ variable "fsdr_dns_name" {
 
 locals {
   fsdr_dns_enabled               = var.fsdr_enabled && trimspace(var.fsdr_dns_zone_ocid) != "" && trimspace(var.fsdr_dns_name) != ""
-  fsdr_standby_label             = substr("${local.label_prefix}dr", 0, 15)
+  fsdr_standby_label             = substr(format("%sdr", local.label_prefix), 0, 15)
   fsdr_standby_vcn_id            = var.fsdr_standby_network != null ? var.fsdr_standby_network.vcn_id : try(module.fsdr_network["standby"].vcn_ocid, null)
   fsdr_standby_public_subnet_id  = var.fsdr_standby_network != null ? var.fsdr_standby_network.public_subnet_id : try(module.fsdr_network["standby"].public_subnet_ocid, null)
   fsdr_standby_private_subnet_id = var.fsdr_standby_network != null ? var.fsdr_standby_network.private_subnet_id : try(module.fsdr_network["standby"].private_subnet_ocid, null)
@@ -97,14 +97,14 @@ resource "oci_core_network_security_group" "fsdr_standby" {
   for_each       = var.fsdr_enabled ? toset(["lb", "adb"]) : toset([])
   compartment_id = local.compartment_ocid
   vcn_id         = local.fsdr_standby_vcn_id
-  display_name   = "${local.fsdr_standby_label}-${each.key}"
+  display_name   = format("%s-%s", local.fsdr_standby_label, each.key)
   provider       = oci.fsdr_region_1
 }
 
 locals {
   fsdr_standby_rules = var.fsdr_enabled ? merge(
-    { for cidr in split(",", replace(var.client_allowed_cidrs, "/\\s+/", "")) : "http-${cidr}" => { nsg = "lb", source = cidr, min = 80, max = 80 } },
-    { for cidr in split(",", replace(var.server_allowed_cidrs, "/\\s+/", "")) : "https-${cidr}" => { nsg = "lb", source = cidr, min = 443, max = 443 } },
+    { for cidr in split(",", replace(var.client_allowed_cidrs, "/\\s+/", "")) : format("http-%s", cidr) => { nsg = "lb", source = cidr, min = 80, max = 80 } },
+    { for cidr in split(",", replace(var.server_allowed_cidrs, "/\\s+/", "")) : format("https-%s", cidr) => { nsg = "lb", source = cidr, min = 443, max = 443 } },
     { database = { nsg = "adb", source = data.oci_core_subnet.fsdr_standby_private[0].cidr_block, min = 1521, max = 1522 } }
   ) : {}
 }
@@ -138,7 +138,7 @@ resource "oci_core_network_security_group_security_rule" "fsdr_standby_lb_egress
 resource "oci_load_balancer_load_balancer" "fsdr_standby" {
   count                      = var.fsdr_enabled ? 1 : 0
   compartment_id             = local.compartment_ocid
-  display_name               = "${local.fsdr_standby_label}-lb"
+  display_name               = format("%s-lb", local.fsdr_standby_label)
   shape                      = "flexible"
   is_private                 = false
   subnet_ids                 = [local.fsdr_standby_public_subnet_id]
@@ -168,10 +168,10 @@ resource "oci_dns_rrset" "fsdr_application" {
 
 output "fsdr_application_url" {
   description = "Application URL when a DNS hostname is configured."
-  value       = local.fsdr_dns_enabled ? "http://${var.fsdr_dns_name}" : null
+  value       = local.fsdr_dns_enabled ? format("http://%s", var.fsdr_dns_name) : null
 }
 
 output "fsdr_regional_application_urls" {
   description = "Regional load balancer URLs; use the active region after recovery."
-  value       = { for region, cluster in local.fsdr_clusters : region => "http://${cluster.lb_ip}" }
+  value       = { for region, cluster in local.fsdr_clusters : region => format("http://%s", cluster.lb_ip) }
 }

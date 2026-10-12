@@ -14,14 +14,8 @@ variable "fsdr_region_1" {
   default     = ""
 }
 
-variable "fsdr_disassociate_trigger" {
-  description = "Increment to disassociate the protection groups."
-  type        = number
-  default     = 0
-}
-
 variable "fsdr_plan_types" {
-  description = "Standby-region plan types to create."
+  description = "Standby-region plan types. STOP_DRILL is created while a drill is in progress."
   type        = set(string)
   default     = ["SWITCHOVER", "FAILOVER"]
   validation {
@@ -98,7 +92,7 @@ variable "fsdr_backup_schedule" {
 variable "fsdr_backup_retention" {
   description = "Number of OKE backups retained."
   type        = number
-  default     = 24
+  default     = 10
 }
 
 variable "fsdr_additional_namespaces" {
@@ -153,35 +147,36 @@ resource "terraform_data" "fsdr_validation" {
 }
 
 module "fsdr" {
-  for_each                = var.fsdr_enabled ? { managed = true } : {}
-  source                  = "./modules/fsdr"
-  tenancy_id              = var.tenancy_ocid
-  compartment_id          = local.compartment_ocid
-  label_prefix            = local.fsdr_label_prefix
-  region_0                = var.region
-  region_1                = var.fsdr_region_1
-  objectstorage_namespace = data.oci_objectstorage_namespace.objectstorage_namespace.namespace
-  clusters                = local.fsdr_clusters
-  external_databases      = local.fsdr_external_databases
-  namespaces              = concat([local.label_prefix], var.fsdr_additional_namespaces)
-  use_local_charts        = var.k8s_use_local_charts
-  node_counts             = { cpu = var.k8s_cpu_node_pool_size, gpu = var.k8s_gpu_node_pool_size }
-  standby_node_counts     = { cpu = var.fsdr_standby_cpu_node_pool_size, gpu = 0 }
-  backup_schedule         = var.fsdr_backup_schedule
-  backup_retention        = var.fsdr_backup_retention
-  disassociate_trigger    = var.fsdr_disassociate_trigger
-  plan_types              = var.fsdr_plan_types
-  plan_refresh_trigger    = var.fsdr_plan_refresh_trigger
-  plan_verify_trigger     = var.fsdr_plan_verify_trigger
-  timeouts                = var.fsdr_timeouts
-  executions              = var.fsdr_plan_executions
-  automatic_dr            = var.fsdr_automatic_dr
+  for_each                        = var.fsdr_enabled ? { managed = true } : {}
+  source                          = "./modules/fsdr"
+  tenancy_id                      = var.tenancy_ocid
+  compartment_id                  = local.compartment_ocid
+  label_prefix                    = local.fsdr_label_prefix
+  region_0                        = var.region
+  region_1                        = var.fsdr_region_1
+  objectstorage_namespace         = data.oci_objectstorage_namespace.objectstorage_namespace.namespace
+  clusters                        = local.fsdr_clusters
+  external_databases              = local.fsdr_external_databases
+  namespaces                      = concat([local.label_prefix], var.fsdr_additional_namespaces)
+  volumes                         = module.kubernetes_storage.persistent_storage.volumes
+  destination_availability_domain = data.oci_identity_availability_domains.fsdr_region_1[0].availability_domains[0].name
+  node_counts                     = { cpu = var.k8s_cpu_node_pool_size, gpu = var.k8s_gpu_node_pool_size }
+  standby_node_counts             = { cpu = var.fsdr_standby_cpu_node_pool_size, gpu = 0 }
+  backup_schedule                 = var.fsdr_backup_schedule
+  backup_retention                = var.fsdr_backup_retention
+  adb_drill_standby_type          = coalesce(var.fsdr_adb_drill_standby_type, "SNAPSHOT_STANDBY")
+  init_destroy                    = var.init_destroy
+  plan_types                      = var.fsdr_plan_types
+  plan_refresh_trigger            = var.fsdr_plan_refresh_trigger
+  plan_verify_trigger             = var.fsdr_plan_verify_trigger
+  timeouts                        = var.fsdr_timeouts
+  executions                      = var.fsdr_plan_executions
+  automatic_dr                    = var.fsdr_automatic_dr
   providers = {
     oci               = oci
     oci.fsdr_region_1 = oci.fsdr_region_1
     oci.home_region   = oci.home_region
   }
-  depends_on = [terraform_data.fsdr_validation, module.kubernetes, module.fsdr_kubernetes]
 }
 
 output "fsdr_protection_group_ids" {

@@ -5,7 +5,7 @@
 // Oracle Resource Manager
 locals {
   app_namespace   = coalesce(var.app_namespace, var.label_prefix)
-  stage_directory = var.stage_directory != null ? var.stage_directory : "${path.root}/cfgmgt/stage"
+  stage_directory = var.stage_directory != null ? var.stage_directory : format("%s/cfgmgt/stage", path.root)
   create_orm_pe   = var.orm_install ? contains(local.api_endpoint_allowed_cidrs, "0.0.0.0/0") ? false : true : false
   orm_pe          = local.create_orm_pe ? data.oci_resourcemanager_private_endpoint_reachable_ip.orm_pe_reachable_ip[0].ip_address : ""
   db_name         = replace(lower(split(".", var.db_name)[0]), "_", "-")

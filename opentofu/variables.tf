@@ -63,6 +63,12 @@ variable "label_prefix" {
   }
 }
 
+variable "init_destroy" {
+  description = "Prepare for destroy: disassociate FSDR groups, disable storage replication and skip configuration management. Apply before destroy."
+  type        = bool
+  default     = false
+}
+
 // Optimizer
 variable "deploy_optimizer" {
   description = "Determines if the AI Optimizer and Toolkit is deployed"

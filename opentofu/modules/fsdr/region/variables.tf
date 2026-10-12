@@ -41,7 +41,7 @@ variable "association" {
 }
 
 variable "members" {
-  description = "Initial membership. OCI and recovery preparation manage runtime members. The group resource preserves their updates."
+  description = "Provider-managed protection-group membership."
   type = list(object({
     autonomous_database_standby_type_for_dr_drills = optional(string, null)
     member_id                                      = string
@@ -265,7 +265,7 @@ variable "operations_ready_id" {
 }
 
 variable "members_ready_id" {
-  description = "Preparation dependency that completes runtime member enrollment before plans."
+  description = "Member configuration dependency for plan creation."
   type        = string
   default     = null
 }

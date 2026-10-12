@@ -9,7 +9,7 @@ metadata:
   labels:
     strimzi.io/cluster: {{ .Release.Name }}-kafka-cluster
 spec:
-  replicas: 3
+  replicas: {{ .Values.kafka.replicas }}
   roles:
     - controller
     - broker
@@ -18,7 +18,10 @@ spec:
     volumes:
       - id: 0
         type: persistent-claim
-        size: 100Gi
+        size: {{ .Values.kafka.storageSize }}
+        {{- with .Values.kafka.storageClass }}
+        class: {{ . | quote }}
+        {{- end }}
         kraftMetadata: shared
 ---
 apiVersion: kafka.strimzi.io/v1

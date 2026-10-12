@@ -29,24 +29,25 @@ variable "objectstorage_namespace" {
 }
 
 variable "clusters" {
-  description = "Regional infrastructure and generated Kubernetes configuration paths."
+  description = "Regional cluster, database and network configuration."
   type = map(object({
-    cluster_id    = string
-    workers_group = string
-    database_id   = string
-    node_pools    = map(string)
-    files = object({
-      kubeconfig = string
-      manifest   = string
-      prereqs    = string
-      app        = string
-    })
-    private_endpoint    = string
-    subnet_id           = string
-    availability_domain = string
-    lb_id               = string
-    lb_ip               = string
+    cluster_id             = string
+    workers_group          = string
+    database_id            = string
+    node_pools             = map(string)
+    lb_id                  = string
+    configuration_ready_id = string
   }))
+}
+
+variable "destination_availability_domain" { type = string }
+variable "volumes" {
+  type = map(object({ id = string, availability_domain = string }))
+}
+
+variable "adb_drill_standby_type" {
+  type    = string
+  default = "SNAPSHOT_STANDBY"
 }
 
 variable "external_databases" {
@@ -58,11 +59,6 @@ variable "external_databases" {
 variable "namespaces" {
   description = "Application namespaces protected by OKE backups."
   type        = list(string)
-}
-
-variable "use_local_charts" {
-  type    = bool
-  default = false
 }
 
 variable "node_counts" {
@@ -80,12 +76,16 @@ variable "backup_schedule" {
 
 variable "backup_retention" {
   type    = number
-  default = 24
+  default = 10
+  validation {
+    condition     = var.backup_retention >= 1 && var.backup_retention <= 20 && var.backup_retention == floor(var.backup_retention)
+    error_message = "FSDR backup retention must be a whole number from 1 to 20."
+  }
 }
 
-variable "disassociate_trigger" {
-  type    = number
-  default = null
+variable "init_destroy" {
+  type    = bool
+  default = false
 }
 
 variable "plan_types" {

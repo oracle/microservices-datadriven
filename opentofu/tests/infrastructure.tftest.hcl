@@ -3,6 +3,9 @@
 # spell-checker: disable
 
 mock_provider "oci" {
+  mock_data "oci_disaster_recovery_dr_protection_groups" {
+    defaults = { dr_protection_group_collection = [{ items = [] }] }
+  }
   mock_resource "oci_load_balancer_load_balancer" {
     defaults = { ip_address_details = [{ ip_address = "192.0.2.10", is_public = true, reserved_ip = [] }] }
   }
@@ -27,6 +30,9 @@ mock_provider "oci" {
 }
 mock_provider "oci" {
   alias = "fsdr_region_1"
+  mock_data "oci_disaster_recovery_dr_protection_groups" {
+    defaults = { dr_protection_group_collection = [{ items = [] }] }
+  }
   mock_resource "oci_load_balancer_load_balancer" {
     defaults = { ip_address_details = [{ ip_address = "192.0.2.20", is_public = true, reserved_ip = [] }] }
   }
@@ -58,6 +64,7 @@ override_module {
   target = module.kubernetes
   outputs = {
     kubeconfig_cmd             = "test-kubeconfig"
+    configuration_ready_id     = "primary-ready"
     cluster_id                 = "primary-cluster"
     workers_dynamic_group_name = "primary-workers"
     orm_private_endpoint_ip    = ""
@@ -79,6 +86,7 @@ override_module {
   target = module.fsdr_kubernetes
   outputs = {
     kubeconfig_cmd             = "standby-kubeconfig"
+    configuration_ready_id     = "standby-ready"
     cluster_id                 = "standby-cluster"
     workers_dynamic_group_name = "standby-workers"
     orm_private_endpoint_ip    = ""
@@ -108,10 +116,10 @@ run "existing_plan_keys" {
   command = plan
   variables {
     fsdr_enabled  = true
-    fsdr_region_1 = "uk-london-1"
+    fsdr_region_1 = "uk-cardiff-1"
   }
   assert {
-    condition     = length(oci_dns_rrset.fsdr_application) == 0 && output.fsdr_application_url == null && output.fsdr_regional_application_urls == { "uk-london-1" = "http://192.0.2.10", "uk-london-1" = "http://192.0.2.20" }
+    condition     = length(oci_dns_rrset.fsdr_application) == 0 && output.fsdr_application_url == null && output.fsdr_regional_application_urls == { "uk-london-1" = "http://192.0.2.10", "uk-cardiff-1" = "http://192.0.2.20" }
     error_message = "Selecting a standby region must enable FSDR with regional access URLs and optional DNS."
   }
   assert {
@@ -128,7 +136,7 @@ run "drill_plans" {
   command = plan
   variables {
     fsdr_enabled              = true
-    fsdr_region_1             = "uk-london-1"
+    fsdr_region_1             = "uk-cardiff-1"
     fsdr_plan_types           = ["SWITCHOVER", "FAILOVER", "START_DRILL", "STOP_DRILL"]
     fsdr_plan_refresh_trigger = 2
     fsdr_plan_verify_trigger  = 3
@@ -143,7 +151,7 @@ run "automatic_failover" {
   command = plan
   variables {
     fsdr_enabled      = true
-    fsdr_region_1     = "uk-london-1"
+    fsdr_region_1     = "uk-cardiff-1"
     fsdr_automatic_dr = { is_auto_failover_enabled = true }
   }
   assert {
@@ -156,7 +164,7 @@ run "explicit_precheck" {
   command = plan
   variables {
     fsdr_enabled         = true
-    fsdr_region_1        = "uk-london-1"
+    fsdr_region_1        = "uk-cardiff-1"
     fsdr_plan_executions = { switchover = { plan_execution_type = "SWITCHOVER_PRECHECK" } }
   }
   assert {
@@ -178,7 +186,7 @@ run "automatic_requires_adb" {
   command = plan
   variables {
     fsdr_enabled      = true
-    fsdr_region_1     = "uk-london-1"
+    fsdr_region_1     = "uk-cardiff-1"
     byo_db_type       = "OTHER"
     byo_db_password   = "test-password"
     fsdr_automatic_dr = { is_auto_failover_enabled = true }
@@ -190,7 +198,7 @@ run "unknown_execution_key" {
   command = plan
   variables {
     fsdr_enabled         = true
-    fsdr_region_1        = "uk-london-1"
+    fsdr_region_1        = "uk-cardiff-1"
     fsdr_plan_executions = { start_drill = { plan_execution_type = "START_DRILL" } }
   }
   expect_failures = [terraform_data.fsdr_validation]
@@ -369,16 +377,16 @@ run "full_stack_membership" {
   command = plan
   variables {
     fsdr_enabled       = true
-    fsdr_region_1      = "uk-london-1"
+    fsdr_region_1      = "uk-cardiff-1"
     fsdr_dns_zone_ocid = "test-zone"
     fsdr_dns_name      = "obaas.example.com"
   }
   assert {
-    condition     = length(module.fsdr["managed"].regions.region_0.dr_protection_group.members) == 0 && length(module.fsdr["managed"].regions.region_1.dr_protection_group.members) == 0
-    error_message = "Create groups before granting exact-ID IAM and enrolling recovery members."
+    condition     = length(module.fsdr["managed"].regions.region_0.dr_protection_group.members) == 3 && length(module.fsdr["managed"].regions.region_1.dr_protection_group.members) == 2
+    error_message = "Provider-managed groups must contain the database and OKE members."
   }
   assert {
-    condition     = local.fsdr_clusters["uk-london-1"].cluster_id == "primary-cluster" && local.fsdr_clusters["uk-london-1"].cluster_id == "standby-cluster" && module.fsdr["managed"].recovery_config.node_counts.cpu == 3 && toset(module.fsdr["managed"].recovery_config.namespaces) == toset(["iactest"])
+    condition     = local.fsdr_clusters["uk-london-1"].cluster_id == "primary-cluster" && local.fsdr_clusters["uk-cardiff-1"].cluster_id == "standby-cluster" && one([for member in module.fsdr["managed"].regions.region_0.dr_protection_group.members : member if member.member_type == "OKE_CLUSTER"]).managed_node_pool_configs[0].maximum == 3 && toset(one(one([for member in module.fsdr["managed"].regions.region_0.dr_protection_group.members : member if member.member_type == "OKE_CLUSTER"]).backup_config).namespaces) == toset(["iactest", "obaas-system"])
     error_message = "Full-stack preparation must cover both OKE peers, application namespaces, and recovery capacity."
   }
   assert {
@@ -395,7 +403,7 @@ run "full_stack_byo_database_compartment" {
   command = plan
   variables {
     fsdr_enabled    = true
-    fsdr_region_1   = "uk-london-1"
+    fsdr_region_1   = "uk-cardiff-1"
     byo_db_type     = "ADB-S"
     byo_adb_ocid    = "byo-adb"
     byo_db_password = "test-password"
@@ -410,7 +418,7 @@ run "existing_standby_network" {
   command = plan
   variables {
     fsdr_enabled         = true
-    fsdr_region_1        = "uk-london-1"
+    fsdr_region_1        = "uk-cardiff-1"
     fsdr_standby_network = { vcn_id = "existing-dr-vcn", public_subnet_id = "existing-dr-public", private_subnet_id = "existing-dr-private" }
   }
   assert {
@@ -423,7 +431,7 @@ run "full_stack_requires_addons" {
   command = plan
   variables {
     fsdr_enabled           = true
-    fsdr_region_1          = "uk-london-1"
+    fsdr_region_1          = "uk-cardiff-1"
     k8s_use_cluster_addons = false
   }
   expect_failures = [terraform_data.fsdr_validation]
@@ -433,7 +441,7 @@ run "dns_zone_requires_hostname" {
   command = plan
   variables {
     fsdr_enabled       = true
-    fsdr_region_1      = "uk-london-1"
+    fsdr_region_1      = "uk-cardiff-1"
     fsdr_dns_zone_ocid = "test-zone"
   }
   expect_failures = [terraform_data.fsdr_validation]
@@ -443,7 +451,7 @@ run "dns_hostname_requires_zone" {
   command = plan
   variables {
     fsdr_enabled  = true
-    fsdr_region_1 = "uk-london-1"
+    fsdr_region_1 = "uk-cardiff-1"
     fsdr_dns_name = "obaas.example.com"
   }
   expect_failures = [terraform_data.fsdr_validation]

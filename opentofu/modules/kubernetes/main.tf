@@ -159,6 +159,7 @@ resource "oci_containerengine_addon" "ingress_addon" {
 }
 
 resource "oci_containerengine_node_pool" "cpu_node_pool_details" {
+  depends_on         = [terraform_data.persistent_storage]
   cluster_id         = oci_containerengine_cluster.default_cluster.id
   compartment_id     = var.compartment_id
   kubernetes_version = format("v%s", var.kubernetes_version)
@@ -210,6 +211,7 @@ resource "oci_containerengine_node_pool" "cpu_node_pool_details" {
 }
 
 resource "oci_containerengine_node_pool" "gpu_node_pool_details" {
+  depends_on         = [terraform_data.persistent_storage]
   count              = var.node_pool_gpu_deploy ? 1 : 0
   cluster_id         = oci_containerengine_cluster.default_cluster.id
   compartment_id     = var.compartment_id

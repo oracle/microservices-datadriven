@@ -12,9 +12,9 @@ resource "oci_disaster_recovery_dr_protection_group" "dr_protection_group" {
     bucket    = var.log_location["bucket"]
     namespace = var.log_location["namespace"]
   }
-  # OCI and recovery preparation manage the association and runtime members.
+  # OCI changes association roles during recovery.
   lifecycle {
-    ignore_changes = [association, members]
+    ignore_changes = [association]
   }
   dynamic "association" {
     for_each = var.association == null ? [] : [1]

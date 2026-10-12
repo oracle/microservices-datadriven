@@ -138,10 +138,25 @@ variable "run_cfgmgt" {
   type = bool
 }
 
-variable "primary_database_ocid" {
-  description = "Run configuration management while this database is primary; null applies without a role check."
-  type        = string
-  default     = null
+variable "apply_cfgmgt" {
+  description = "Apply the staged application configuration when configuration management runs."
+  type        = bool
+  default     = true
+}
+
+variable "persistent_storage" {
+  description = "Preallocated OCI volumes and the chart settings for their reserved PVs."
+  type = object({
+    chart = map(object({ replicas = number, size_in_gbs = number, storage_class = string }))
+    volumes = map(object({
+      id                  = string
+      claim_name          = string
+      namespace           = string
+      size_in_gbs         = number
+      availability_domain = string
+    }))
+  })
+  default = null
 }
 
 variable "recovery_external_databases" {

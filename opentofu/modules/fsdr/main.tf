@@ -2,47 +2,45 @@
 # All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 # spell-checker: disable
 
+module "storage" {
+  source         = "./storage"
+  compartment_id = var.compartment_id
+  label_prefix   = var.label_prefix
+  volumes        = var.volumes
+  destination_ad = var.destination_availability_domain
+  init_destroy   = var.init_destroy
+  providers      = { oci = oci }
+  depends_on     = [terraform_data.idle]
+}
+
+resource "terraform_data" "application_ready" {
+  input = { for region, cluster in var.clusters : region => cluster.configuration_ready_id }
+}
+
 module "fsdr_region_1" {
   source              = "./region"
   compartment_id      = var.compartment_id
-  display_name        = "${var.label_prefix}-pg-${var.region_1}"
+  display_name        = format("%s-pg-%s", var.label_prefix, var.region_1)
+  members             = [for member in local.members[var.region_1] : member if !var.init_destroy]
   timeouts            = var.timeouts
   plan_association_id = module.fsdr_region_0.dr_protection_group_id
-  members_ready_id    = terraform_data.fsdr_members.id
   log_location = {
     bucket    = oci_objectstorage_bucket.fsdr_logs_region_1.name
     namespace = var.objectstorage_namespace
   }
-  plans = { for key, plan_type in local.plan_types : key => {
-    display_name    = "${var.label_prefix}-${key}-${var.region_1}"
-    type            = plan_type
-    refresh_trigger = var.plan_refresh_trigger
-    verify_trigger  = var.plan_verify_trigger
-    timeouts_create = var.timeouts.create
-    timeouts_update = var.timeouts.update
-    timeouts_delete = var.timeouts.delete
-  } }
-  operations_ready_id = terraform_data.fsdr_prepare.id
-  executions          = var.executions
-  automatic_dr = var.automatic_dr == null ? null : {
-    display_name = "${var.label_prefix}-automatic-${var.region_1}"
-    members = [{
-      member_id                  = var.clusters[var.region_1].database_id
-      member_type                = "AUTONOMOUS_DATABASE"
-      is_auto_switchover_enabled = var.automatic_dr.is_auto_switchover_enabled
-      is_auto_failover_enabled   = var.automatic_dr.is_auto_failover_enabled
-    }]
-  }
-  providers = {
-    oci = oci.fsdr_region_1
-  }
+  plans        = local.plans[var.region_1]
+  executions   = !var.init_destroy && local.roles[var.region_1] == "STANDBY" ? var.executions : {}
+  automatic_dr = local.automatic_dr[var.region_1]
+  providers    = { oci = oci.fsdr_region_1 }
+  depends_on   = [oci_identity_policy.fsdr, oci_identity_policy.fsdr_container, terraform_data.idle, terraform_data.application_ready]
 }
 
 module "fsdr_region_0" {
   source         = "./region"
   compartment_id = var.compartment_id
-  display_name   = "${var.label_prefix}-pg-${var.region_0}"
-  association = {
+  display_name   = format("%s-pg-%s", var.label_prefix, var.region_0)
+  members        = [for member in local.members[var.region_0] : member if !var.init_destroy]
+  association = var.init_destroy ? null : {
     role        = "PRIMARY"
     peer_region = var.region_1
     peer_id     = module.fsdr_region_1.dr_protection_group_id
@@ -51,6 +49,25 @@ module "fsdr_region_0" {
     bucket    = oci_objectstorage_bucket.fsdr_logs_region_0.name
     namespace = var.objectstorage_namespace
   }
-  disassociate_trigger = var.disassociate_trigger
+  disassociate_trigger = var.init_destroy ? 1 : 0
   timeouts             = var.timeouts
+  plans                = local.plans[var.region_0]
+  members_ready_id     = module.fsdr_region_1.dr_protection_group_id
+  executions           = !var.init_destroy && local.roles[var.region_0] == "STANDBY" ? var.executions : {}
+  automatic_dr         = local.automatic_dr[var.region_0]
+  depends_on           = [oci_identity_policy.fsdr, oci_identity_policy.fsdr_container, terraform_data.idle, terraform_data.application_ready]
+}
+
+resource "terraform_data" "idle" {
+  lifecycle {
+    precondition {
+      condition = alltrue(flatten([
+        for discovery in concat(data.oci_disaster_recovery_dr_plan_executions.region_0, data.oci_disaster_recovery_dr_plan_executions.region_1) : [
+          for execution in discovery.dr_plan_execution_collection[0].items :
+          !contains(["ACCEPTED", "IN_PROGRESS", "WAITING", "CANCELING", "PAUSING", "PAUSED", "RESUMING"], execution.state)
+        ]
+      ]))
+      error_message = "Wait for the active FSDR execution before changing recovery configuration."
+    }
+  }
 }
