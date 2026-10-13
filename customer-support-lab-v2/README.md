@@ -4,12 +4,32 @@ Build a support-ticket workflow with Spring Boot and Oracle AI Database:
 create a ticket, process its TxEventQ event, record a deliberate failure, replay
 it, and read the same ticket through True Cache. Optional profiles add OCI
 Generative AI assistance and metrics and traces in Grafana.
+An optional blockchain chapter records human reviews of saved AI summaries.
+Regional placement is described as a deployment option; the Compose stack
+remains a single local primary and its True Cache.
 
 The application runs locally through Maven. Docker Compose supplies Oracle
 Database Free, a separate True Cache instance, and Grafana LGTM. This is a
 teaching lab: the ticket and replay APIs have no authentication, and the cache
 registration helper mounts the local Docker socket. Use a trusted development
 host.
+
+TxEventQ is the queue inside the primary Oracle database. OKafka exposes it
+through Kafka-style Java APIs; this lab does not run a separate Kafka broker.
+The Spring Boot process serves HTTP requests and runs the background consumer.
+
+```mermaid
+flowchart LR
+    Client[HTTP client] --> App[Spring Boot application]
+    App -->|Ticket insert and event publish| Primary[(Oracle primary: tables and TxEventQ)]
+    Primary -->|Work event| Consumer[Background consumer in the application]
+    Consumer -->|Outcome and acknowledgement in one transaction| Primary
+    Consumer -->|Optional embedding and summary calls| OCI[OCI Generative AI]
+    Primary -->|Redo| Cache[(True Cache)]
+    App -->|Default ticket GETs| Cache
+    App -->|Explicit primary reads or cache unavailable| Primary
+    App -->|Optional metrics and traces| LGTM[Grafana LGTM]
+```
 
 ## Prerequisites
 
@@ -117,6 +137,14 @@ curl -fsS http://localhost:9002/actuator/health
 profile list. `demo-failures` enables the deliberate failure and retry used
 in the next step.
 
+| Profile | Effect |
+| --- | --- |
+| `events` | Enables ticket submission/read APIs, the failure worklist and replay API, topic setup, and the background consumer. Default when no active profiles are supplied. |
+| `demo-failures` | With `events`, injects deterministic failures for tickets whose title starts with `[demo-fail-once]`. |
+| `ai` | Selects the OCI-backed processor and enables the saved-assistance API. Use with `events` to process tickets. |
+| `observability` | Enables metrics/trace export and JSON console logs; with `events`, also refreshes database-backed state gauges. |
+| `blockchain` | With `events`, enables approval-history POST/GET endpoints. Install `db/blockchain.sql` first; a new review requires saved AI assistance. |
+
 ### 4. Demonstrate failure, replay, and cache reads
 
 In another terminal:
@@ -174,12 +202,22 @@ AI processing embeds the ticket, searches related tickets and the seeded
 policy corpus, generates a short summary, and persists the assistance and
 `ENRICHED` status on the consumer's database connection. Policy embeddings
 are created on first use and refreshed when the configured model changes.
+Policy indexing commits on a separate primary connection, so it can remain
+available even if the current ticket attempt rolls back. Ticket retrieval
+returns up to five other tickets that already have embeddings; policy
+retrieval returns up to three policies. The summary prompt contains only the
+ticket title and description. Retrieved matches are saved alongside the
+summary for human review; they are not supplied as context to the chat model.
 The small datasets use exact cosine search with a minimum score of 0.2.
 The default chat model is `cohere.command-a-03-2025` with temperature 0.2
 and a 512-token output limit. Embeddings use `cohere.embed-v4.0`, requesting
 1536 dimensions to match the schema and policy-index validation. Create a
 fresh schema when changing vector dimensions; changing the model environment
 variable does not migrate existing vector columns or stored embeddings.
+Only policy embeddings are refreshed automatically after a model change;
+existing ticket embeddings are not regenerated. For a model change, use a
+fresh lab or deliberately rebuild the ticket embeddings to avoid comparing
+vectors from different models, even when their dimensions match.
 
 The script succeeds when the ticket is `ENRICHED` and its saved assistance
 has a summary, model and prompt metadata, and at least one policy match. The
@@ -190,6 +228,115 @@ A `TRIAGED` result means the app processed the ticket without AI. A `FAILED`
 result directs you to the failed-event worklist. Correct the cause before
 replaying; replay can make additional model calls. Database idempotency does
 not guarantee exactly-once external OCI calls.
+
+## Optional blockchain approval history
+
+Record a human's `APPROVED` or `REJECTED` review of a saved AI summary. This
+appends history without changing workflow status or executing customer
+actions. `actorId` is a self-declared demo reviewer, not a verified identity;
+the local APIs remain unauthenticated.
+
+![Saved summary, human review, and blockchain approval history](visuals/blockchain-approval-history.svg)
+
+Stop Maven. Open `sql /nolog` or `sqlplus /nolog`, connect as the application
+user (substitute your username if needed), and install the optional table:
+
+```text
+connect LAB_USER@localhost:1522/FREEPDB1
+@db/blockchain.sql
+```
+
+The client prompts for the password. Run this SQL once. Normal Compose setup
+still creates only the seven core tables; this adds an eighth table without
+resetting existing tickets. Restart with the OCI settings from the AI chapter:
+
+```bash
+./mvnw spring-boot:run -Dspring-boot.run.profiles=events,ai,blockchain
+./scripts/demo-ai-assistance.sh
+```
+
+Use the `ENRICHED` ticket ID printed by the script. The following commands
+use `uuidgen` to create an action UUID:
+
+```bash
+ticket_id=42 # Replace with your ENRICHED ticket ID.
+action_id="$(uuidgen)"
+payload="$(jq -cn --arg actionId "$action_id" \
+  '{actionId: $actionId, decision: "APPROVED", actorId: "demo-reviewer", reason: "Reviewed manually"}')"
+curl -fsS -H 'Content-Type: application/json' -d "$payload" \
+  "http://localhost:9001/tickets/${ticket_id}/approvals" | jq
+
+# Retry: returns the same record without appending again.
+curl -fsS -H 'Content-Type: application/json' -d "$payload" \
+  "http://localhost:9001/tickets/${ticket_id}/approvals" | jq
+curl -fsS "http://localhost:9001/tickets/${ticket_id}/approvals" | jq
+```
+
+Each record preserves the summary text, SHA-256 digest of its exact UTF-8
+bytes, model/prompt metadata, reviewer, decision, optional reason, and UTC
+timestamp. The store locks the ticket, checks the action UUID, reads saved
+`ENRICHED` assistance, and appends on one primary connection. It commits before
+returning HTTP 200. Reusing the UUID with different request fields returns 409.
+A correction uses a new UUID and appends another decision. The endpoint does
+not generate a summary or publish a queue event.
+
+The table uses Oracle V2 blockchain SHA2-512 chaining, separately from the
+summary digest. Recent rows cannot be deleted during the 16-day row retention.
+`NO DROP UNTIL 0 DAYS IDLE` permits deliberate full table removal for lab
+cleanup; this is a demonstration retention policy. See the
+[Oracle blockchain table documentation](https://docs.oracle.com/en/database/oracle/oracle-database/26/admin/managing-tables.html).
+
+After committing a review, verify hashes from the app user's SQL session:
+
+```text
+@db/verify-approvals.sql
+```
+
+The script calls `DBMS_BLOCKCHAIN_TABLE.VERIFY_ROWS` and prints the verified
+row count. It verifies row hashes, not reviewer signatures. If package
+execution is denied, an administrator can grant
+`EXECUTE ON SYS.DBMS_BLOCKCHAIN_TABLE` to the application user. See the
+[verification API](https://docs.oracle.com/en/database/oracle/oracle-database/26/arpls/dbms_blockchain_table.html).
+To demonstrate modification protection, try updating your demo review and
+observe Oracle reject the operation:
+
+```sql
+update ticket_approval_history set decision = 'REJECTED' where ticket_id = 42;
+```
+
+`db/truncate.sql` stops before clearing any data when the approval table is
+installed. Its non-cascading ticket foreign key preserves the relationship.
+For a deliberate full reset, use a fresh lab database or explicitly drop
+`ticket_approval_history` before running the reset; dropping it destroys its
+history. `db/cleanup.sql` removes the optional table before the core schema.
+Ordinary container restarts preserve approval history with the other data.
+
+## Regional placement: deployment concept
+
+The lab installs one local primary. A regional deployment could assign each
+tenant to an owning region and keep its ticket text, embeddings, summaries,
+event outcomes, and approval history there. Curated support policies can be
+shared across regions. This diagram describes that topology; it does not
+demonstrate geographic placement or automatic routing.
+
+![Conceptual EU and US placement of ticket data with shared policies](visuals/regional-data-placement.svg)
+
+One avenue is regional app/database deployments with tenant routing. Oracle
+Globally Distributed AI Database is another, using placement and sharding
+keys; it requires additional topology, schema, and routing work. See Oracle's
+[data sovereignty use case](https://docs.oracle.com/en/database/oracle/oracle-database/26/shard/use-case-achieving-data-sovereignty.html).
+Model endpoints, True Cache, backups, and telemetry need a corresponding
+regional policy. No region field is added here to imply enforcement. Oracle
+V2 blockchain tables cannot themselves be sharded; a combined sharded design
+would need separately managed local approval ledgers and validation.
+
+MicroTx remains a possible avenue when future workflows span independent
+service or database transactions. The lab does not install MicroTx.
+
+The standalone 800×600 SVGs inline source artwork from the social-icon-builder
+skill: `ai.svg` and `security.svg` for approval history, and `pdb.svg` for
+regional placement. The human-review illustration is original vector artwork.
+Both passed strict SVG validation and were rendered and visually inspected.
 
 ## Optional observability
 
@@ -224,10 +371,19 @@ LGTM; an OTLP log endpoint alone does not establish log delivery.
 
 ## How the workflow is structured
 
+### Submission and processing
+
+`POST /tickets` returns HTTP 200 with the ticket in `RECEIVED` after the
+producer transaction commits. It does not wait for processing. Poll
+`GET /tickets/{id}?readPath=primary` for the current committed workflow state;
+default cache reads can lag behind it.
+
 1. Submission inserts a `RECEIVED` ticket and publishes an OSON work event in
-   one producer transaction.
+   one producer transaction, using `TicketEventProducer` and the connection
+   from `producer.getDBConnection()`.
 2. The consumer handles one event per transaction. It checks durable outcomes,
-   marks the ticket `TRIAGED`, and invokes the core or AI processor.
+   loads the ticket through the primary JDBC pool, marks it `TRIAGED` on
+   `consumer.getDBConnection()`, and invokes the core or AI processor.
 3. Transient failures retry with savepoint rollback and exponential backoff.
    Exhausted or permanent failures produce a durable failure record and, when
    the ticket exists, a `FAILED` status.
@@ -238,15 +394,46 @@ LGTM; an OTLP log endpoint alone does not establish log delivery.
    to `RECEIVED`, and publishes a new event in one producer transaction. The
    new event's causation ID identifies the original failure.
 
+Without `ai`, `LogEventProcessor` logs the ticket and leaves its committed
+status at `TRIAGED`. With `ai`, `GenAIEventProcessor` saves the embedding,
+summary, and scored matches and commits `ENRICHED`. The intermediate
+`TRIAGED` update belongs to that same transaction, so a separate HTTP read
+normally sees `RECEIVED` until the AI transaction commits `ENRICHED` or
+`FAILED`.
+
+### Retry, failure, and replay
+
+Retries happen within the consumer transaction. By default, retryable errors
+allow three total attempts, with 250 ms and 500 ms waits between them. Each
+failed attempt rolls back its database writes to a savepoint. If recording
+the final outcome or committing fails, the whole transaction rolls back and
+the queue message can be redelivered.
+
+Failures are stored directly in the `failed_ticket_event` database worklist.
+A recorded failure is acknowledged so the consumer can move on. Its
+metadata includes the exception class and attempt count; inspect
+application logs when investigating the cause. The failure API lists only
+records still marked `FAILED`. Replay retains the original row as `REPLAYED`,
+preserves the correlation ID, and gives the new event a new UUID. The ticket
+must still be `FAILED` for replay to succeed. If the replayed event also
+fails, it creates a new failure record that can be inspected and replayed.
+
+Outcome checks deduplicate by event UUID, including failures already marked
+`REPLAYED`. Replay intentionally creates a new event, so it is eligible for
+processing. This transaction boundary protects database changes and queue
+acknowledgements; OCI calls and policy indexing are outside its rollback scope.
+
 The event carries a schema version, ticket ID, event type, UUIDs, timestamp,
 and W3C trace context. Ticket text stays in the database. UUIDs use canonical
 strings in HTTP/OSON and `RAW(16)` in database event tables.
 
 Primary and cache reads have separate connection pools. Only ticket list and
 detail GETs use True Cache; writes, processing, replay, worklist queries, and
-assistance reads use primary. Each cache borrow verifies `DB_UNIQUE_NAME`
-before reading. The ticket stores construct `SupportTicket` directly from
-database rows.
+assistance and approval-history reads use primary. Each cache borrow verifies `DB_UNIQUE_NAME`
+before reading. Routing is explicit in `TicketReadRouter`, which chooses a
+pool from the `readPath` query parameter; it does not use automatic JDBC
+primary/cache switching. A missing row on a healthy cache is not a fallback
+condition. Use `readPath=primary` when a read must reflect a completed write.
 
 ### Project map
 
@@ -256,6 +443,7 @@ customer-support-lab-v2/
 ├── docker-compose.yml           Primary, True Cache, registration helpers, LGTM
 ├── db/                          User grants, schema/seed data, reset and cleanup SQL
 ├── dashboards/                  Grafana provisioning and workflow/UCP dashboards
+├── visuals/                     Approval-history and conceptual regional-placement SVGs
 ├── scripts/
 │   ├── setup-lab.sh             Schema setup, restart checks, input validation
 │   ├── demo-common.sh           Sourced setup and ticket creation for HTTP demos
@@ -266,30 +454,25 @@ customer-support-lab-v2/
 │   ├── Application.java         Boot entry point, executor, JDBC tracing import
 │   ├── config/                  Required database credential validation
 │   ├── web/                     Ticket, replay, and assistance endpoints
-│   ├── events/
-│   │   ├── model/               Work-event envelopes and failed-event metadata
-│   │   ├── messaging/           OKafka setup, lifecycle, transactional publish/consume
-│   │   ├── processing/          Ticket processors and opt-in demo failures
-│   │   ├── persistence/         Event outcomes, replay records, JDBC UUID binding
-│   │   └── observability/       Trace propagation, workflow metrics, state gauges
-│   ├── ticket/
-│   │   ├── model/               Shared ticket data, workflow status, related tickets
-│   │   ├── persistence/         Primary database reads and transactional writes
-│   │   └── read/                True Cache reads and primary fallback routing
+│   ├── model/                   Tickets, workflow status, event envelopes, failure metadata
+│   ├── messaging/               OKafka setup, lifecycle, transactional publish/consume
+│   ├── processing/              Core/AI processors and opt-in demo failures
+│   ├── persistence/             Ticket storage, outcomes, UUID binding, cache routing
+│   ├── observability/           Trace propagation, workflow metrics, state gauges
 │   └── ai/                      Summaries, vector retrieval, policy indexing, assistance
 ├── src/main/resources/          Base, AI, and observability configuration
 ├── src/test/                    Unit/profile tests, opt-in Oracle tests, startup scripts
 └── spec-v2.md                   Lab design and evolution notes
 ```
 
-`ticket.model` is shared by the HTTP endpoints, event processors, and AI
-retrieval. The event workflow uses `ticket.persistence.TicketStore` with the
-OKafka transaction connection for writes. HTTP reads use `ticket.read` to
-choose True Cache or the primary database; cache routing is separate from
-event processing. Tests mirror these role packages.
+`model` is shared by the HTTP endpoints, event processors, and AI retrieval.
+`persistence.TicketStore` accepts the OKafka transaction connection for
+workflow writes and uses Spring's primary `JdbcClient` for ordinary reads.
+`persistence.TicketReadRouter` selects `TicketStore` or `TrueCacheTicketReader`
+for ticket GETs. Tests mirror the production packages.
 
 `demo-common.sh` is sourced by the three walkthroughs; run their entry-point
-scripts directly. The seven tables have distinct roles:
+scripts directly. The seven core tables and optional approval table have distinct roles:
 
 | Table | Stores |
 | --- | --- |
@@ -300,6 +483,7 @@ scripts directly. The seven tables have distinct roles:
 | `ticket_assistance` | Saved summary, model, prompt version, generation time |
 | `related_ticket` | Scored links to similar tickets |
 | `ticket_policy_match` | Scored links to policies |
+| `ticket_approval_history` (optional) | Blockchain history of human summary reviews, snapshots, and digests |
 
 ## API reference
 
@@ -311,6 +495,8 @@ scripts directly. The seven tables have distinct roles:
 | `GET /ticket-events/failures` | Lists failed-event metadata, including replayability. |
 | `POST /ticket-events/failures/{eventId}/replay` | Returns 202 with the new event; 404 for absent/already replayed failures; 409 for unsupported envelopes or a ticket no longer eligible for replay. |
 | `GET /tickets/{id}/assistance` | Available with `ai`; returns saved assistance or 404 before it is available. |
+| `POST /tickets/{id}/approvals` | Available with `events,blockchain`; accepts `actionId` UUID, `decision`, `actorId`, and optional `reason`. Returns 200 with the review; 400 for invalid input, 404 for missing ticket, 409 for missing ENRICHED assistance or conflicting action UUID. |
+| `GET /tickets/{id}/approvals` | Available with `events,blockchain`; reads primary history, returns an empty list before review, or 404 for missing ticket. |
 
 Ticket GETs default to cache. Their `X-Read-Path` header reports `primary`,
 `true-cache`, or `primary-fallback`, including on 404. A successful cache query
@@ -386,6 +572,17 @@ export LAB_SMOKE_PASSWORD="$APP_DB_PASSWORD"
 These checks exercise persistence and rollback, not the complete OKafka,
 True Cache, or OCI model flow. Use the walkthrough scripts against the running
 app for those paths. The AI walkthrough requires actual OCI model access.
+
+The separate blockchain smoke test requires the core schema plus
+`db/blockchain.sql` and permission to execute `DBMS_BLOCKCHAIN_TABLE`. It commits
+one fixture ticket, assistance, and review, which remain after the test because
+blockchain retention prevents ordinary cleanup. It checks deduplication,
+conflicting actions, rolled-back appends, rejected updates/deletes, and chain
+verification. Use a disposable lab with the same `LAB_SMOKE_*` exports above:
+
+```bash
+LAB_BLOCKCHAIN_SMOKE_TEST=true ./mvnw test -Dtest=TicketApprovalPersistenceSmokeTest
+```
 
 ## Reset, recovery, and troubleshooting
 

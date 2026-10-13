@@ -9,8 +9,11 @@ True Cache so the same lab also demonstrates a primary read and a cache read.
 AI assistance and observability extend that story in short optional chapters.
 
 This is a clean-slate lab: no schema migrations, old event formats, or
-backwards-compatibility paths. MicroTx, regional placement, and blockchain
-approval history are out of scope for v2. The local APIs are unauthenticated
+backwards-compatibility paths. An optional blockchain chapter records human
+reviews of saved AI summaries. Regional placement is a documented deployment
+concept, and MicroTx is mentioned as a future avenue for workflows across
+transaction boundaries. Neither is installed by this lab. The local APIs
+are unauthenticated
 and must not be presented as production-secure. AI results are recommendations,
 never automatic customer-impacting actions.
 
@@ -40,8 +43,9 @@ connection variants and tuning after the walkthrough, not before it.
   in the database. Java uses `UUID`; JDBC binds event IDs as 16-byte `RAW`;
   HTTP and OSON stringify only at their boundaries.
 - Ticket states are `RECEIVED`, `TRIAGED`, `ENRICHED`, and `FAILED`. `REPLAYED`
-  describes an event outcome, not a ticket state. Approval and resolution
-  states wait until a separate demo actually uses them.
+  describes an event outcome, not a ticket state. Human reviews append to a
+  separate optional blockchain history; they do not change workflow status
+  or execute customer actions. Resolution states remain out of scope.
 - Preserve atomic ticket/event submission, idempotent processing, bounded
   retries, a durable failed-event worklist, and explicit replay. Replay
   publishes a new event linked to the original; a redelivered original must
@@ -239,5 +243,10 @@ The AI and replay scripts now stop promptly with a profile hint when a newly
 created ticket completes without the expected AI or deliberate failure;
 local response fixtures exercised both wrong-profile paths.
 
-Regional placement, blockchain approvals, physical multi-region topology,
-production auth, retention, and cache freshness SLOs belong in later work.
+Regional placement remains a descriptor, with no physical multi-region topology.
+The optional `events,ai,blockchain` chapter uses a separately installed V2
+blockchain table to preserve human decisions, summary snapshots, SHA-256
+summary digests, model/prompt metadata, and self-declared reviewer names.
+An action UUID deduplicates retries; corrections append a new action.
+Production authentication, cross-service transactions, production retention,
+and cache freshness SLOs remain later work.
