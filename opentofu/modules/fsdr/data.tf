@@ -4,12 +4,12 @@
 
 data "oci_disaster_recovery_dr_protection_groups" "region_0" {
   compartment_id = var.compartment_id
-  display_name   = format("%s-pg-%s", var.label_prefix, var.region_0)
+  display_name   = format("%s-pg-%s", local.group_label_prefix, var.region_0)
 }
 
 data "oci_disaster_recovery_dr_protection_groups" "region_1" {
   compartment_id = var.compartment_id
-  display_name   = format("%s-pg-%s", var.label_prefix, var.region_1)
+  display_name   = format("%s-pg-%s", local.group_label_prefix, var.region_1)
   provider       = oci.fsdr_region_1
 }
 

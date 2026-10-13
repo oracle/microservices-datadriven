@@ -14,6 +14,12 @@ variable "label_prefix" {
   type = string
 }
 
+variable "group_label_prefix" {
+  description = "Protection group prefix available during planning; defaults to label_prefix."
+  type        = string
+  default     = null
+}
+
 variable "region_0" {
   description = "Initial primary region."
   type        = string

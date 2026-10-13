@@ -32,7 +32,7 @@ locals {
         }] }] }
       }
     }
-  })])
+  }) if var.manage_persistent_volumes])
   k8s_manifest = join("\n---\n", concat([templatefile("${path.module}/templates/k8s-manifest.yaml", {
     label              = local.app_namespace
     repository_host    = local.repository_host

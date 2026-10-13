@@ -314,3 +314,48 @@ run "recovery_external_database_permissions" {
     error_message = "Database operators must access the exact external database for recovery and failback."
   }
 }
+
+run "bootstrap_pv_manifest" {
+  command = plan
+  variables {
+    persistent_storage = {
+      chart = { etcd = { replicas = 1, size_in_gbs = 8, storage_class = "obaas-preallocated" } }
+      volumes = { etcd-0 = {
+        id                  = "original-volume"
+        claim_name          = "data-obaas-etcd-0"
+        namespace           = "kubetest"
+        size_in_gbs         = 50
+        availability_domain = "TEST:AD-1"
+      } }
+    }
+  }
+  assert {
+    condition     = length(local.storage_manifests) == 2 && yamldecode(local.storage_manifests[1]).spec.csi.volumeHandle == "original-volume"
+    error_message = "Bootstrap must render the reserved PV using its provisioned volume handle."
+  }
+}
+
+run "recovered_pv_manifest" {
+  command = plan
+  variables {
+    manage_persistent_volumes = false
+    persistent_storage = {
+      chart = { etcd = { replicas = 1, size_in_gbs = 8, storage_class = "obaas-preallocated" } }
+      volumes = { etcd-0 = {
+        id                  = "original-volume"
+        claim_name          = "data-obaas-etcd-0"
+        namespace           = "kubetest"
+        size_in_gbs         = 50
+        availability_domain = "TEST:AD-1"
+      } }
+    }
+  }
+  assert {
+    condition     = length(local.storage_manifests) == 1 && yamldecode(local.storage_manifests[0]).kind == "StorageClass" && !strcontains(local.k8s_manifest, "original-volume")
+    error_message = "Recovered manifests must preserve native PV handles while retaining the StorageClass."
+  }
+  assert {
+    condition     = yamldecode(local.obaas_values).apisix.etcd.persistence.storageClass == "obaas-preallocated"
+    error_message = "Recovered releases must retain their chart storage configuration."
+  }
+}

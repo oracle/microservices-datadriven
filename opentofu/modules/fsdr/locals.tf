@@ -3,7 +3,8 @@
 # spell-checker: disable
 
 locals {
-  plan_types = { for plan_type in var.plan_types : lower(plan_type) => plan_type }
+  group_label_prefix = var.group_label_prefix == null ? var.label_prefix : var.group_label_prefix
+  plan_types         = { for plan_type in var.plan_types : lower(plan_type) => plan_type }
   backup_buckets = {
     (var.region_0) = oci_objectstorage_bucket.fsdr_backup_primary.name
     (var.region_1) = oci_objectstorage_bucket.fsdr_backup_standby.name
@@ -22,6 +23,29 @@ locals {
     (var.region_0) = try(local.groups[var.region_0].role, "PRIMARY")
     (var.region_1) = try(local.groups[var.region_1].role, "STANDBY")
   }
+  storage_members = { for region, group in local.groups : region => [
+    for member in try(group.members, []) : {
+      member_id                       = member.member_id
+      member_type                     = member.member_type
+      destination_availability_domain = member.destination_availability_domain
+      destination_backup_policy_id    = member.destination_backup_policy_id
+      destination_compartment_id      = member.destination_compartment_id
+      destination_snapshot_policy_id  = member.destination_snapshot_policy_id
+      common_destination_key          = one(member.common_destination_key)
+      destination_encryption_key      = one(member.destination_encryption_key)
+      export_mappings                 = member.export_mappings
+      source_volume_to_destination_encryption_key_mappings = [for mapping in member.source_volume_to_destination_encryption_key_mappings : {
+        source_volume_id           = mapping.source_volume_id
+        destination_encryption_key = one(mapping.destination_encryption_key)
+      }]
+    }
+    if contains(["VOLUME_GROUP", "FILE_SYSTEM"], member.member_type)
+  ] }
+  bootstrap_storage_group_ids = [for member in module.storage.members : member.member_id]
+  storage_recovered = anytrue([
+    for member in concat(local.storage_members[var.region_0], local.storage_members[var.region_1]) :
+    !contains(local.bootstrap_storage_group_ids, member.member_id) if member.member_type == "VOLUME_GROUP"
+  ])
   members = { for region, cluster in var.clusters : region => concat([
     {
       member_id                                      = cluster.database_id
@@ -48,11 +72,10 @@ locals {
       }]
     }
     ],
-    # FSDR updates storage IDs and replication direction during role transitions.
-    [for member in module.storage.members : member if local.roles[var.region_0] == "PRIMARY" && region == var.region_0], [
-      for member in try(local.groups[region].members, []) : member
-      if local.roles[var.region_0] != "PRIMARY" && contains(["VOLUME_GROUP", "FILE_SYSTEM"], member.member_type)
-  ]) }
+    # Existing membership contains the storage IDs activated by FSDR.
+    [for member in module.storage.members : member if !local.storage_recovered && local.groups[var.region_0] == null && region == var.region_0],
+    local.storage_members[region]
+  ) }
   plans = { for region in [var.region_0, var.region_1] : region => {
     for key, plan_type in local.plan_types : key => {
       display_name    = format("%s-%s-%s", var.label_prefix, key, region)

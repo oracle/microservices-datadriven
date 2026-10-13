@@ -86,8 +86,9 @@ locals {
 
 // Full Stack Disaster Recovery
 locals {
-  fsdr_label_prefix = format("%s-fsdr", local.label_prefix)
-  fsdr_include_adb  = var.fsdr_enabled ? var.byo_db_type != "OTHER" : false
+  fsdr_label_prefix       = format("%s-fsdr", local.label_prefix)
+  fsdr_group_label_prefix = try(random_pet.label.keepers.fsdr_group_prefix, local.fsdr_label_prefix)
+  fsdr_include_adb        = var.fsdr_enabled ? var.byo_db_type != "OTHER" : false
   fsdr_external_databases = var.fsdr_enabled && var.byo_db_type == "ADB-S" ? {
     (var.byo_adb_ocid) = data.oci_database_autonomous_database.byo_adb["byo"].compartment_id
   } : {}

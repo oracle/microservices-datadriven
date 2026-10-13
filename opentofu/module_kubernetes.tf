@@ -122,6 +122,7 @@ module "kubernetes" {
   run_cfgmgt                  = var.k8s_run_cfgmgt && !var.fsdr_init_destroy
   apply_cfgmgt                = !var.fsdr_enabled || coalesce(local.db_role, "PRIMARY") == "PRIMARY"
   persistent_storage          = module.kubernetes_storage.persistent_storage
+  manage_persistent_volumes   = !try(module.fsdr["managed"].storage_recovered, false)
   recovery_external_databases = local.fsdr_external_databases
   compute_os_ver              = local.compute_os_ver
   compute_cpu_ocpu            = var.compute_cpu_ocpu

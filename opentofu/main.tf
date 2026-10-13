@@ -5,6 +5,13 @@
 // random
 resource "random_pet" "label" {
   length = 1
+  # Protection-group discovery needs a prefix known during bootstrap planning.
+  keepers = var.label_prefix == "" && var.fsdr_enabled ? {
+    fsdr_group_prefix = format("obaas-%s", substr(sha256(format("%s:%s:%s", abspath(path.root), terraform.workspace, plantimestamp())), 0, 12))
+  } : null
+  lifecycle {
+    ignore_changes = [keepers]
+  }
 }
 
 resource "random_password" "adb_char" {

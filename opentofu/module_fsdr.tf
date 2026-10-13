@@ -158,6 +158,7 @@ module "fsdr" {
   tenancy_id                      = var.tenancy_ocid
   compartment_id                  = local.compartment_ocid
   label_prefix                    = local.fsdr_label_prefix
+  group_label_prefix              = local.fsdr_group_label_prefix
   region_0                        = var.region
   region_1                        = var.fsdr_region_1
   objectstorage_namespace         = data.oci_objectstorage_namespace.objectstorage_namespace.namespace

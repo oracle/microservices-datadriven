@@ -20,7 +20,7 @@ resource "terraform_data" "application_ready" {
 module "fsdr_region_1" {
   source              = "./region"
   compartment_id      = var.compartment_id
-  display_name        = format("%s-pg-%s", var.label_prefix, var.region_1)
+  display_name        = format("%s-pg-%s", local.group_label_prefix, var.region_1)
   members             = [for member in local.members[var.region_1] : member if !var.init_destroy]
   timeouts            = var.timeouts
   plan_association_id = module.fsdr_region_0.dr_protection_group_id
@@ -38,7 +38,7 @@ module "fsdr_region_1" {
 module "fsdr_region_0" {
   source         = "./region"
   compartment_id = var.compartment_id
-  display_name   = format("%s-pg-%s", var.label_prefix, var.region_0)
+  display_name   = format("%s-pg-%s", local.group_label_prefix, var.region_0)
   members        = [for member in local.members[var.region_0] : member if !var.init_destroy]
   association = var.init_destroy ? null : {
     role        = "PRIMARY"

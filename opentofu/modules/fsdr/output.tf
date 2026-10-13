@@ -22,6 +22,11 @@ output "automatic_dr_configuration_id" {
   value = local.roles[var.region_0] == "STANDBY" ? module.fsdr_region_0.automatic_dr_configuration_id : module.fsdr_region_1.automatic_dr_configuration_id
 }
 
+output "storage_recovered" {
+  description = "Discovered storage includes volume groups activated by FSDR."
+  value       = local.storage_recovered
+}
+
 output "regions" {
   description = "Regional protection groups, plans and operations."
   sensitive   = true

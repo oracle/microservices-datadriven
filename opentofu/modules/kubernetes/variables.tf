@@ -159,6 +159,12 @@ variable "persistent_storage" {
   default = null
 }
 
+variable "manage_persistent_volumes" {
+  description = "Render bootstrap PV definitions while the original storage is active."
+  type        = bool
+  default     = true
+}
+
 variable "recovery_external_databases" {
   description = "Database OCIDs and compartments accessible to the database operator during recovery."
   type        = map(string)

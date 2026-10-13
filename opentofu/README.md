@@ -56,7 +56,6 @@ This directory contains Terraform configuration to deploy Oracle Backend for Mic
 | `compartment_ocid` | Compartment for resources | Required |
 | `region` | OCI Region | Required |
 | `label_prefix` | Prefix for resource names (max 12 chars) | Auto-generated |
-| `init_destroy` | Prepare for deletion on apply, then destroy | `false` |
 
 ### Database Options
 
@@ -110,6 +109,8 @@ The primary Kubernetes deployment preallocates block volumes independently of `f
 The inventory covers three APISIX etcd claims, one ZooKeeper claim, one SigNoz claim and one ClickHouse claim. Enabling Kafka adds three 100 GiB volumes. OCI provisions at least 50 GiB per block volume. Chart replica counts and storage requests use the same inventory as provisioning; update that inventory when changing the deployed chart's storage requirements.
 
 The `obaas-preallocated` StorageClass uses `blockvolume.csi.oraclecloud.com` so native FSDR recognizes its storage. PV claim references reserve the preallocated volumes for the chart's PVCs.
+
+After FSDR activates replica storage, native recovery owns the restored PV definitions and their volume handles. Subsequent generated manifests manage the StorageClass and chart settings while preserving those PVs, including after switching back to the initial primary region.
 
 If an earlier apply created this class with `kubernetes.io/no-provisioner`, replace its metadata before reapplying. Run from `opentofu/`:
 
@@ -172,6 +173,8 @@ fsdr_region_1        = "uk-london-1"
 k8s_use_local_charts  = true
 ```
 
+With an auto-generated application label, protection groups use a separate persisted prefix available during planning. Existing deployments retain their recorded protection-group names.
+
 The `fsdr_regional_application_urls` output provides each region's load balancer URL. After recovery, direct clients to the active region's URL. To create an application DNS record initially pointing to the primary, supply both optional inputs for an existing OCI public DNS zone:
 
 ```hcl
@@ -205,6 +208,7 @@ Native FSDR restores the protected application and `obaas-system` namespaces and
 
 | Variable | Purpose | Default |
 |----------|---------|---------|
+| `fsdr_init_destroy` | Prepare recovery resources for deletion on apply, then destroy | `false` |
 | `fsdr_plan_types` | `SWITCHOVER`, `FAILOVER`, `START_DRILL`, `STOP_DRILL` plans | Switchover and failover |
 | `fsdr_plan_refresh_trigger` | Increment to refresh plans after group changes | `null` |
 | `fsdr_plan_verify_trigger` | Increment to verify plans | `null` |
@@ -248,7 +252,7 @@ Execution types are the four plan types and their `_PRECHECK` variants. Submit o
 
 The regional submodule supports OKE `resource_modifier_mappings` for ConfigMaps describing destination resource changes. Use `block_volume_attach_and_mount_operations` for non-movable compute storage. Provider-computed plan groups, execution progress, and automatic execution details are available through the existing resource outputs. The protection-group resource output is sensitive because it includes secret references; `dr_protection_group_id` exposes its identifier separately.
 
-After a switchover or failover, clear `fsdr_plan_executions`, increment the refresh and verify triggers, and review an apply once both regions are available. The provider reads current DR roles, preserves native storage membership after the transition, and creates plans and Automatic DR on the current standby. New storage provisioned in the recovered region requires enrollment in that region before failback. Review replication health and run the new standby's recovery prechecks.
+After a switchover or failover, clear `fsdr_plan_executions`, increment the refresh and verify triggers, and review an apply once both regions are available. The provider reads current DR roles, preserves each region's native storage membership through switchover and switchback, and creates plans and Automatic DR on the current standby. New storage provisioned in the recovered region requires enrollment in that region before failback. Review replication health and run the new standby's recovery prechecks.
 
 `modules/kubernetes/storage` owns the primary volume inventory and PV configuration. `modules/fsdr` coordinates both regions and owns buckets and IAM. Its `storage` submodule groups the supplied primary volumes and provisions replication; its `region` submodule manages protection groups, plans and operations. Root configuration supplies the OKE, database and network details. See [the FSDR example](examples/k8s-fsdr.tfvars).
 
@@ -374,10 +378,10 @@ This configuration is compatible with OCI Resource Manager for deployment via th
 
 ## Cleanup
 
-Set `init_destroy=true` and apply before starting destroy. Preparation skips chart installation and, for FSDR, disassociates groups and disables group and member-volume replication. Keep the deployed FSDR settings unchanged and leave `init_destroy=true` until destruction completes.
+For FSDR deployments, set `fsdr_init_destroy=true` and apply before starting destroy. Preparation skips chart installation, disassociates groups and disables group and member-volume replication. Keep the deployed FSDR settings unchanged and leave `fsdr_init_destroy=true` until destruction completes.
 
 ```hcl
-init_destroy = true
+fsdr_init_destroy = true
 ```
 
 ```bash
