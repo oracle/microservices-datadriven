@@ -34,9 +34,9 @@ flowchart LR
 ## Prerequisites
 
 - JDK 21 or later and Maven, or the included Maven wrapper.
-- Docker with Docker Compose and enough available memory to run two Oracle
+- Docker with Docker Compose 2.23.1 or later and enough available memory to run two Oracle
   database instances alongside LGTM.
-- SQLcl (`sql`) or SQL*Plus (`sqlplus`) only for manual setup or database checks.
+- SQLcl (`sql`) or SQL*Plus (`sqlplus`) only for optional database checks.
 - `curl` and `jq` for the walkthrough scripts.
 
 Run the commands below from `customer-support-lab-v2`. The core walkthrough
@@ -61,10 +61,13 @@ Before starting the Maven application, wait for:
 - `oracle-free` and `true-cache` to be healthy.
 - `true-cache-password-volume-init` and `true-cache-configure` to exit with code 0.
 
-The primary's startup hook runs `scripts/setup-lab.sh --if-needed` using the
-container's SQL*Plus client. It creates the application user, grants database
-and TxEventQ permissions, creates seven tables, and seeds three support
-policies. The primary becomes healthy only after this setup succeeds and a
+Compose supplies the application credentials through a small SQL config mounted
+in the primary image's startup directory. It runs the self-contained
+`db/init.sql` using the container's SQL*Plus client.
+This creates the application user, grants database, TxEventQ, and blockchain
+verification permissions, creates all eight tables, and seeds three support
+policies. No host-side setup script or manual schema installation is needed.
+The primary becomes healthy only after this setup succeeds and a
 database query passes. Inspect setup failures with `docker compose logs oracle-free`.
 The registration helper configures
 `FREEPDB1_TC` on the primary and starts that service on True Cache. Inspect a
@@ -85,38 +88,18 @@ it does not preserve ticket data when the database container is removed.
 
 ### 2. Confirm schema setup
 
-Compose sets up the schema automatically; keep the same `APP_DB_USERNAME` and
-`APP_DB_PASSWORD` exported for the Maven application. Ordinary database
-container restarts verify and reuse an existing complete schema. Setup rejects
-an incomplete schema or invalid credentials instead of reporting success.
-Recreating the database container starts with a fresh schema and seeded policies;
-ticket data is disposable and is not persisted across container recreation.
+Compose creates the user and tables for a fresh database; keep the same
+`APP_DB_USERNAME` and `APP_DB_PASSWORD` exported for Maven. The SQL contains
+plain creation statements, with no schema repair or restart checks. The lab
+assumes a fresh Compose startup and supports restarting the application to
+switch profiles while that database stays running.
 
-For manual setup against a separate fresh database, use:
+For another fresh run, use `docker compose down` followed by `docker compose up -d`.
+Database data is disposable and is not persisted across container recreation.
+The application creates or discovers the `ticket_event` topic when it starts.
 
-```bash
-export APP_DB_USERNAME=LAB_USER
-export APP_DB_PASSWORD='Choose-Your-Lab-Password'
-export ADMIN_DB_USERNAME=sys
-export ADMIN_DB_PASSWORD="$ORACLE_PWD"
-export ADMIN_DB_CONNECT=localhost:1522/FREEPDB1
-export ADMIN_DB_ROLE=sysdba
-./scripts/setup-lab.sh
-```
-
-The script runs `db/user.sql` and `db/init.sql`. Without `--if-needed`, run it
-against a fresh schema. With `--if-needed`, it verifies and reuses a complete
-existing schema without reseeding policies or changing its password. The
-application creates or discovers the `ticket_event` topic when it starts.
-
-Setup passes credentials to the SQL client over stdin. Usernames must be
-simple unquoted Oracle identifiers; passwords may contain letters, digits,
-and `. _ ! # % + -`. The script rejects unsupported input. To check inputs
-without connecting, run:
-
-```bash
-./scripts/setup-lab.sh --dry-run
-```
+Use a simple unquoted Oracle username and a password containing letters, digits,
+and `. _ ! # % + -`, matching the SQL*Plus substitution used by this lab.
 
 ### 3. Start the application
 
@@ -143,7 +126,7 @@ in the next step.
 | `demo-failures` | With `events`, injects deterministic failures for tickets whose title starts with `[demo-fail-once]`. |
 | `ai` | Selects the OCI-backed processor and enables the saved-assistance API. Use with `events` to process tickets. |
 | `observability` | Enables metrics/trace export and JSON console logs; with `events`, also refreshes database-backed state gauges. |
-| `blockchain` | With `events`, enables approval-history POST/GET endpoints. Install `db/blockchain.sql` first; a new review requires saved AI assistance. |
+| `blockchain` | With `events`, enables approval-history POST/GET endpoints. Compose already creates its table; a new review requires saved AI assistance. |
 
 ### 4. Demonstrate failure, replay, and cache reads
 
@@ -238,17 +221,8 @@ the local APIs remain unauthenticated.
 
 ![Saved summary, human review, and blockchain approval history](visuals/blockchain-approval-history.svg)
 
-Stop Maven. Open `sql /nolog` or `sqlplus /nolog`, connect as the application
-user (substitute your username if needed), and install the optional table:
-
-```text
-connect LAB_USER@localhost:1522/FREEPDB1
-@db/blockchain.sql
-```
-
-The client prompts for the password. Run this SQL once. Normal Compose setup
-still creates only the seven core tables; this adds an eighth table without
-resetting existing tickets. Restart with the OCI settings from the AI chapter:
+Compose creates the blockchain table with the rest of the schema. Stop Maven
+and restart with the OCI settings from the AI chapter:
 
 ```bash
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=events,ai,blockchain
@@ -286,16 +260,17 @@ summary digest. Recent rows cannot be deleted during the 16-day row retention.
 cleanup; this is a demonstration retention policy. See the
 [Oracle blockchain table documentation](https://docs.oracle.com/en/database/oracle/oracle-database/26/admin/managing-tables.html).
 
-After committing a review, verify hashes from the app user's SQL session:
+After committing a review, optionally open `sql /nolog` or `sqlplus /nolog`
+and verify hashes as the application user (the client prompts for its password):
 
 ```text
+connect LAB_USER@localhost:1522/FREEPDB1
 @db/verify-approvals.sql
 ```
 
 The script calls `DBMS_BLOCKCHAIN_TABLE.VERIFY_ROWS` and prints the verified
-row count. It verifies row hashes, not reviewer signatures. If package
-execution is denied, an administrator can grant
-`EXECUTE ON SYS.DBMS_BLOCKCHAIN_TABLE` to the application user. See the
+row count. It verifies row hashes, not reviewer signatures. Compose grants
+the required package permission during bootstrap. See the
 [verification API](https://docs.oracle.com/en/database/oracle/oracle-database/26/arpls/dbms_blockchain_table.html).
 To demonstrate modification protection, try updating your demo review and
 observe Oracle reject the operation:
@@ -304,12 +279,11 @@ observe Oracle reject the operation:
 update ticket_approval_history set decision = 'REJECTED' where ticket_id = 42;
 ```
 
-`db/truncate.sql` stops before clearing any data when the approval table is
-installed. Its non-cascading ticket foreign key preserves the relationship.
-For a deliberate full reset, use a fresh lab database or explicitly drop
-`ticket_approval_history` before running the reset; dropping it destroys its
-history. `db/cleanup.sql` removes the optional table before the core schema.
-Ordinary container restarts preserve approval history with the other data.
+For a deliberate reset, `db/truncate.sql` drops the blockchain table before
+clearing tickets, then recreates an empty ledger. Oracle prohibits truncating
+a blockchain table, so the lab's zero-day table-retention policy makes this
+explicit destructive reset possible. `db/cleanup.sql` removes the ledger
+before the rest of the schema. Restarting Maven preserves approval history.
 
 ## Regional placement: deployment concept
 
@@ -445,7 +419,6 @@ customer-support-lab-v2/
 ├── dashboards/                  Grafana provisioning and workflow/UCP dashboards
 ├── visuals/                     Approval-history and conceptual regional-placement SVGs
 ├── scripts/
-│   ├── setup-lab.sh             Schema setup, restart checks, input validation
 │   ├── demo-common.sh           Sourced setup and ticket creation for HTTP demos
 │   ├── demo-failed-event-replay.sh
 │   ├── demo-true-cache-reads.sh
@@ -472,7 +445,8 @@ workflow writes and uses Spring's primary `JdbcClient` for ordinary reads.
 for ticket GETs. Tests mirror the production packages.
 
 `demo-common.sh` is sourced by the three walkthroughs; run their entry-point
-scripts directly. The seven core tables and optional approval table have distinct roles:
+scripts directly. Compose creates all eight tables; the blockchain API remains
+an optional profile:
 
 | Table | Stores |
 | --- | --- |
@@ -483,7 +457,7 @@ scripts directly. The seven core tables and optional approval table have distinc
 | `ticket_assistance` | Saved summary, model, prompt version, generation time |
 | `related_ticket` | Scored links to similar tickets |
 | `ticket_policy_match` | Scored links to policies |
-| `ticket_approval_history` (optional) | Blockchain history of human summary reviews, snapshots, and digests |
+| `ticket_approval_history` | Blockchain history of human summary reviews, snapshots, and digests |
 
 ## API reference
 
@@ -538,7 +512,7 @@ curl -i -X POST 'http://localhost:9001/ticket-events/failures/<event-uuid>/repla
 | `MANAGEMENT_OTLP_METRICS_EXPORT_STEP`, `TICKET_STATE_REFRESH_MS` | `5s`, `10000` ms. |
 
 Changing Compose ports does not change the Maven app's connection defaults.
-Update `ADMIN_DB_CONNECT`, `JDBC_URL`, `OKAFKA_BOOTSTRAP_SERVERS`, and
+Update `JDBC_URL`, `OKAFKA_BOOTSTRAP_SERVERS`, and
 `TRUE_CACHE_JDBC_URL` to match. Keep the
 `oracle.jdbc.provider.traceEventListener=open-telemetry-trace-event-listener-provider`
 query parameter on custom JDBC URLs when using JDBC tracing.
@@ -559,7 +533,7 @@ Run the default test suite without starting the backing stack:
 ```
 
 The two Oracle persistence smoke tests are opt-in. They require a disposable
-schema prepared by `setup-lab.sh`, including its seeded policies:
+schema prepared automatically by Compose, including its seeded policies:
 
 ```bash
 export LAB_DB_SMOKE_TEST=true
@@ -573,8 +547,8 @@ These checks exercise persistence and rollback, not the complete OKafka,
 True Cache, or OCI model flow. Use the walkthrough scripts against the running
 app for those paths. The AI walkthrough requires actual OCI model access.
 
-The separate blockchain smoke test requires the core schema plus
-`db/blockchain.sql` and permission to execute `DBMS_BLOCKCHAIN_TABLE`. It commits
+The separate blockchain smoke test uses the same Compose-prepared schema,
+including its blockchain table and verification grant. It commits
 one fixture ticket, assistance, and review, which remain after the test because
 blockchain retention prevents ordinary cleanup. It checks deduplication,
 conflicting actions, rolled-back appends, rejected updates/deletes, and chain
@@ -586,10 +560,10 @@ LAB_BLOCKCHAIN_SMOKE_TEST=true ./mvnw test -Dtest=TicketApprovalPersistenceSmoke
 
 ## Reset, recovery, and troubleshooting
 
-To stop services while keeping their containers and local database state:
+To finish the lab, stop Maven and remove the backing containers:
 
 ```bash
-docker compose stop
+docker compose down
 ```
 
 `docker compose down` removes containers; the current Compose setup does not
@@ -597,7 +571,7 @@ persist database data outside them. Treat the next startup as a fresh lab.
 
 For a deliberate ticket-data reset, stop Maven, verify the schema, and run
 `db/truncate.sql` as the app user. It irreversibly clears tickets, outcomes,
-assistance, and scored links while retaining the policy corpus. There is no
+assistance, scored links, and approval history while retaining the policy corpus. There is no
 `DELETE /tickets` reset endpoint. For example, open `sql /nolog`, then enter:
 
 ```text
@@ -608,29 +582,15 @@ connect LAB_USER@localhost:1522/FREEPDB1
 The client prompts for the password. `db/cleanup.sql` is the separate
 destructive schema-removal script; it is not needed to repeat a walkthrough.
 
-To demonstrate cache fallback for an existing ticket, replace `<ticket-id>`
-below with its ID:
-
-```bash
-docker compose stop true-cache
-curl -i 'http://localhost:9001/tickets/<ticket-id>?readPath=cache'
-docker compose start --wait true-cache
-docker compose up -d --no-deps --force-recreate true-cache-configure
-docker compose ps -a true-cache-configure
-```
-
-During the outage, an existing ticket can be served with
-`X-Read-Path: primary-fallback`. After the helper exits with code 0, run
-`LAB_TICKET_ID=<ticket-id> ./scripts/demo-true-cache-reads.sh` to prove recovery.
-After restarting the primary database, also restart True Cache, wait for it
-to become healthy, and rerun `true-cache-configure`. This reloads the exported
-primary password file and restores the cache service.
+If the cache is unavailable, existing tickets can be served with
+`X-Read-Path: primary-fallback`. For this lab, recreate the backing stack for
+a fresh run instead of repairing or restarting the database containers.
 
 | Symptom | Check |
 | --- | --- |
 | Missing credentials at startup | Export `APP_DB_USERNAME` and `APP_DB_PASSWORD` before Compose and in the Maven terminal. |
-| Automatic schema setup fails | Inspect `docker compose logs oracle-free`; check credentials and existing schema completeness. The primary remains unhealthy until setup succeeds. |
-| Queue setup fails | Check `db/user.sql` grants, the primary service/port, and `OKAFKA_SECURITY_PROTOCOL=PLAINTEXT` for Compose. |
+| Automatic schema setup fails | Inspect `docker compose logs oracle-free`; check credentials and use a fresh database container. |
+| Queue setup fails | Check `db/init.sql` grants, the primary service/port, and `OKAFKA_SECURITY_PROTOCOL=PLAINTEXT` for Compose. |
 | Replay demo finishes without a deliberate failure | Restart with `events,demo-failures`. |
 | AI demo reports `TRIAGED` | Restart with `events,ai`. |
 | AI startup or enrichment fails | Check OCI credentials, compartment/model access, and 1536-dimensional embeddings; inspect failed-event metadata before replay. |

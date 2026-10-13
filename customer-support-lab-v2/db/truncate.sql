@@ -1,17 +1,29 @@
 -- Destructive local-demo reset: stop the app and verify the schema first.
--- Approval history has a non-cascading FK; do not partly reset its ticket data.
+-- Rebuild the retained ledger first: TRUNCATE is prohibited on blockchain tables.
+-- Zero-day table retention permits this explicit, destructive lab reset.
 whenever sqlerror exit failure
-declare
-    approval_table_count number;
-begin
-    select count(*) into approval_table_count from user_tables
-    where table_name = 'TICKET_APPROVAL_HISTORY';
-    if approval_table_count > 0 then
-        raise_application_error(-20002,
-            'Blockchain chapter installed: use a fresh lab or explicitly drop its approval table before reset');
-    end if;
-end;
-/
+drop table ticket_approval_history;
 truncate table failed_ticket_event;
 truncate table ticket_event_processed;
 truncate table support_ticket cascade;
+
+-- Approval history for a fresh lab database.
+-- Zero-day table retention permits deliberate lab cleanup; row retention is 16 days.
+create blockchain table ticket_approval_history (
+    action_id       raw(16) primary key,
+    ticket_id       number not null,
+    decision        varchar2(16) not null check (decision in ('APPROVED', 'REJECTED')),
+    actor_id        varchar2(128 char) not null,
+    reason          varchar2(1000 char),
+    reviewed_summary clob not null,
+    summary_digest  varchar2(64) not null,
+    summary_model   varchar2(256) not null,
+    prompt_version  varchar2(64) not null,
+    decided_at      timestamp default sys_extract_utc(systimestamp) not null,
+    constraint fk_approval_ticket foreign key (ticket_id) references support_ticket(id)
+)
+no drop until 0 days idle
+no delete until 16 days after insert
+hashing using "SHA2_512" version "v2";
+
+create index ticket_approval_ticket_idx on ticket_approval_history(ticket_id, decided_at);

@@ -18,7 +18,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/** Opt-in check against a disposable schema prepared by scripts/setup-lab.sh. */
+/** Opt-in check against a disposable schema prepared by Compose. */
 class TicketAssistancePersistenceSmokeTest {
     @Test
     @EnabledIfEnvironmentVariable(named = "LAB_DB_SMOKE_TEST", matches = "true")

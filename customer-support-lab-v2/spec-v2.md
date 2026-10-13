@@ -9,7 +9,10 @@ True Cache so the same lab also demonstrates a primary read and a cache read.
 AI assistance and observability extend that story in short optional chapters.
 
 This is a clean-slate lab: no schema migrations, old event formats, or
-backwards-compatibility paths. An optional blockchain chapter records human
+backwards-compatibility paths. Database SQL assumes a fresh Compose startup:
+create the user, grants, and tables without restart, repair, or validation
+guards. Only application restarts are part of the lab workflow. An optional
+blockchain chapter records human
 reviews of saved AI summaries. Regional placement is a documented deployment
 concept, and MicroTx is mentioned as a future avenue for workflows across
 transaction boundaries. Neither is installed by this lab. The local APIs
@@ -152,8 +155,9 @@ AI vector persistence, and rollback. The latest local test reports show 68
 passed, two opt-in smoke tests skipped, and no failures (70 total). The two
 smoke tests were also run separately against a disposable Oracle instance.
 The documented full Compose file passes `docker compose config --quiet`, and
-`scripts/setup-lab.sh --dry-run` accepts the README's environment contract
-without exposing either password. `mvn package` also passes and produces an
+the former shell bootstrap accepted the README's environment contract
+without exposing either password. It has since been replaced by the directly
+mounted `db/init.sql` startup hook. `mvn package` also passes and produces an
 executable Spring Boot JAR. A fresh full Compose start subsequently brought up
 healthy primary and True Cache databases, healthy LGTM, and a registration
 helper that exited successfully. The Maven app started with
@@ -244,7 +248,7 @@ created ticket completes without the expected AI or deliberate failure;
 local response fixtures exercised both wrong-profile paths.
 
 Regional placement remains a descriptor, with no physical multi-region topology.
-The optional `events,ai,blockchain` chapter uses a separately installed V2
+The optional `events,ai,blockchain` chapter uses a Compose-bootstrapped V2
 blockchain table to preserve human decisions, summary snapshots, SHA-256
 summary digests, model/prompt metadata, and self-declared reviewer names.
 An action UUID deduplicates retries; corrections append a new action.
