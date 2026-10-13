@@ -78,7 +78,7 @@ resource "terraform_data" "k8s_cfgmgt_validation" {
   count = 1
   lifecycle {
     precondition {
-      condition     = var.init_destroy || !var.k8s_run_cfgmgt || var.k8s_api_is_public || var.current_user_ocid != ""
+      condition     = var.fsdr_init_destroy || !var.k8s_run_cfgmgt || var.k8s_api_is_public || var.current_user_ocid != ""
       error_message = "Cannot run configuration management with a private K8s API endpoint from local Terraform. Set k8s_api_is_public=true, k8s_run_cfgmgt=false, or use ORM."
     }
   }
@@ -119,7 +119,7 @@ module "kubernetes" {
   api_endpoint_allowed_cidrs  = var.k8s_api_endpoint_allowed_cidrs
   use_cluster_addons          = var.k8s_use_cluster_addons
   use_local_charts            = var.k8s_use_local_charts
-  run_cfgmgt                  = var.k8s_run_cfgmgt && !var.init_destroy
+  run_cfgmgt                  = var.k8s_run_cfgmgt && !var.fsdr_init_destroy
   apply_cfgmgt                = !var.fsdr_enabled || coalesce(local.db_role, "PRIMARY") == "PRIMARY"
   persistent_storage          = module.kubernetes_storage.persistent_storage
   recovery_external_databases = local.fsdr_external_databases

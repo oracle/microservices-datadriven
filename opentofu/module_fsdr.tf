@@ -8,6 +8,12 @@ variable "fsdr_enabled" {
   default     = false
 }
 
+variable "fsdr_init_destroy" {
+  description = "Prepare FSDR for destroy: disassociate groups, disable storage replication and skip configuration management. Apply before destroy."
+  type        = bool
+  default     = false
+}
+
 variable "fsdr_region_1" {
   description = "Subscribed OCI standby region, distinct from region."
   type        = string
@@ -165,7 +171,7 @@ module "fsdr" {
   backup_schedule                 = var.fsdr_backup_schedule
   backup_retention                = var.fsdr_backup_retention
   adb_drill_standby_type          = coalesce(var.fsdr_adb_drill_standby_type, "SNAPSHOT_STANDBY")
-  init_destroy                    = var.init_destroy
+  init_destroy                    = var.fsdr_init_destroy
   plan_types                      = var.fsdr_plan_types
   plan_refresh_trigger            = var.fsdr_plan_refresh_trigger
   plan_verify_trigger             = var.fsdr_plan_verify_trigger

@@ -57,7 +57,6 @@ variableGroups:
       - compartment_ocid
       - label_prefix
       - deploy_optimizer
-      - init_destroy
     visible: true
 
   #########################################################################
@@ -66,6 +65,7 @@ variableGroups:
   - title: "Full Stack Disaster Recovery"
     variables:
       - fsdr_enabled
+      - fsdr_init_destroy
       - fsdr_region_1
       - fsdr_dns_zone_ocid
       - fsdr_dns_name
@@ -155,7 +155,7 @@ variables:
     pattern: "^$|^[a-zA-Z0-9]{1,12}$"
     required: false
 
-  init_destroy:
+  fsdr_init_destroy:
     type: boolean
     title: "Prepare for Destroy?"
     description: "Disassociate FSDR groups, disable storage replication and skip configuration management. Run Apply before Destroy."
