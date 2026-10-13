@@ -8,12 +8,16 @@ locals {
     (var.region_0) = oci_objectstorage_bucket.fsdr_backup_primary.name
     (var.region_1) = oci_objectstorage_bucket.fsdr_backup_standby.name
   }
-  groups = { for region, discovery in {
+  group_summaries = { for region, discovery in {
     (var.region_0) = data.oci_disaster_recovery_dr_protection_groups.region_0.dr_protection_group_collection
     (var.region_1) = data.oci_disaster_recovery_dr_protection_groups.region_1.dr_protection_group_collection
     } : region => try(one([
       for group in discovery[0].items : group if contains(["ACTIVE", "INACTIVE"], group.state)
   ]), null) }
+  groups = {
+    (var.region_0) = one(data.oci_disaster_recovery_dr_protection_group.region_0[*])
+    (var.region_1) = one(data.oci_disaster_recovery_dr_protection_group.region_1[*])
+  }
   roles = {
     (var.region_0) = try(local.groups[var.region_0].role, "PRIMARY")
     (var.region_1) = try(local.groups[var.region_1].role, "STANDBY")

@@ -13,6 +13,18 @@ data "oci_disaster_recovery_dr_protection_groups" "region_1" {
   provider       = oci.fsdr_region_1
 }
 
+# The list data source omits member details, so fetch each existing group by ID.
+data "oci_disaster_recovery_dr_protection_group" "region_0" {
+  count                  = local.group_summaries[var.region_0] == null ? 0 : 1
+  dr_protection_group_id = local.group_summaries[var.region_0].id
+}
+
+data "oci_disaster_recovery_dr_protection_group" "region_1" {
+  count                  = local.group_summaries[var.region_1] == null ? 0 : 1
+  dr_protection_group_id = local.group_summaries[var.region_1].id
+  provider               = oci.fsdr_region_1
+}
+
 data "oci_disaster_recovery_dr_plan_executions" "region_0" {
   count                  = local.groups[var.region_0] == null ? 0 : 1
   dr_protection_group_id = local.groups[var.region_0].id
