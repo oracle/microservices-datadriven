@@ -771,7 +771,7 @@ whose `storage.db.credentialSecretKey` (default `secret`) contains
 `{"username":"...","password":"..."}`; this mode requires an explicit connection
 string. Custom wallet secrets or ConfigMaps can also be selected under `storage.db`.
 
-Database persistence requires a MicroTx edition that supports durable storage and
+Database persistence requires MicroTx Enterprise Edition, which enables durable storage and
 the database schema and privileges required by that edition. For `storage.type: db`,
 the chart runs the coordinator image in `INIT_CONTAINER_ENABLED=true` mode before
 starting the service, using the same credentials and wallet. This initializes or
