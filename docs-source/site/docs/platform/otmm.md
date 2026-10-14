@@ -77,4 +77,8 @@ When the workflow server is enabled, it uses the OBaaS application database secr
 
 ## Upgrading to the commercial version
 
-If you have licensed Oracle Transaction Manager for Microservices Enterprise Edition, please see the [documentation](https://docs.oracle.com/en/database/oracle/transaction-manager-for-microservices/26.1/index.html) for details of how to install and configure MicroTx. Oracle recommends that you perform a new installation rather than attempting to upgrade the provided MicroTx Free installation to the commercial version.
+If you have licensed Oracle Transaction Manager for Microservices Enterprise Edition (EE), upgrade the MicroTx components as follows:
+
+- **Transaction Coordinator:** Replace the Free container image with the EE container image from [Oracle Container Registry](https://container-registry.oracle.com/ords/ocr/ba/database/microtx-ee-coordinator). You must also configure persistence when upgrading to EE. Follow the [Set Up Oracle Database as Data Store](https://docs.oracle.com/en/database/oracle/transaction-manager-for-microservices/26.1/tmmdg/create-data-store.html) instructions.
+- **Workflow Server:** Replace the Free container image with the EE container image from [Oracle Container Registry](https://container-registry.oracle.com/ords/ocr/ba/database/microtx-ee-workflow).
+- **Console:** Replace the Free container image with the EE container image from [Oracle Container Registry](https://container-registry.oracle.com/ords/ocr/ba/database/microtx-ee-console).
