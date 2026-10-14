@@ -13,7 +13,7 @@ output "dr_protection_group_id" {
 }
 
 output "dr_plans" {
-  value = oci_disaster_recovery_dr_plan.dr_plan
+  value = local.dr_plans
 }
 
 output "dr_plan_executions" {
@@ -22,7 +22,7 @@ output "dr_plan_executions" {
 
 output "dr_plan_ids" {
   description = "DR plan OCIDs by plan key."
-  value       = { for key, plan in oci_disaster_recovery_dr_plan.dr_plan : key => plan.id }
+  value       = { for key, plan in local.dr_plans : key => plan.id }
 }
 
 output "dr_plan_execution_ids" {

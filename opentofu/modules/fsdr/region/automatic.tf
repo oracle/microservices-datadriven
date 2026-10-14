@@ -5,12 +5,12 @@
 locals {
   default_switchover_dr_plan_id = var.automatic_dr == null ? null : (
     var.automatic_dr.default_switchover_dr_plan_id != null ? var.automatic_dr.default_switchover_dr_plan_id : (
-      anytrue([for member in var.automatic_dr.members : member.is_auto_switchover_enabled]) ? try(oci_disaster_recovery_dr_plan.dr_plan["switchover"].id, null) : null
+      anytrue([for member in var.automatic_dr.members : member.is_auto_switchover_enabled]) ? try(local.dr_plans["switchover"].id, null) : null
     )
   )
   default_failover_dr_plan_id = var.automatic_dr == null ? null : (
     var.automatic_dr.default_failover_dr_plan_id != null ? var.automatic_dr.default_failover_dr_plan_id : (
-      anytrue([for member in var.automatic_dr.members : member.is_auto_failover_enabled]) ? try(oci_disaster_recovery_dr_plan.dr_plan["failover"].id, null) : null
+      anytrue([for member in var.automatic_dr.members : member.is_auto_failover_enabled]) ? try(local.dr_plans["failover"].id, null) : null
     )
   )
 }

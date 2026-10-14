@@ -1,307 +1,77 @@
-# Oracle Backend for Microservices and AI - Terraform for OCI
+# OBaaS Infrastructure Source for OCI
 
-This directory contains Terraform configuration to deploy Oracle Backend for Microservices and AI (OBaaS) on Oracle Cloud Infrastructure (OCI).
+This directory contains the OpenTofu/Terraform configuration, OCI Resource Manager schema, and configuration-management scripts for Oracle Backend for Microservices and AI (OBaaS).
 
-## Prerequisites
+For prerequisites, configuration choices, deployment, verification, disaster recovery, and cleanup, use the [OCI deployment guide](../docs-source/site/docs/setup/cloud/oci.mdx). This README covers developing and administering the source.
 
-- [Terraform](https://www.terraform.io/) (>= 1.5)
-- [OCI CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm) configured with API key authentication
-- OCI tenancy with sufficient quotas for:
-  - OKE (Oracle Kubernetes Engine) cluster
-  - Flexible compute shapes (VM.Standard.E4/E5.Flex or VM.Standard.A1/A2.Flex)
-  - Autonomous Database (unless using BYO database)
-  - Load Balancer (flexible shape)
+## Source Map
 
-## Quick Start
+| Path | Responsibility |
+|------|----------------|
+| `main.tf`, `locals.tf`, `data.tf`, `nsgs.tf` | Root resources, derived settings, discovery, and network security |
+| `variables.tf`, `provider.tf`, `output.tf` | Root inputs, provider configuration, and outputs |
+| `versions.tf` | Release-managed application, OS, and Kubernetes versions |
+| `module_network.tf`, `module_kubernetes.tf`, `module_fsdr.tf` | Module wiring and deployment-specific inputs and outputs |
+| `schema.yaml` | Resource Manager form layout |
+| `modules/network/` | VCN, subnets, and gateways |
+| `modules/kubernetes/` | OKE clusters, workers, add-ons, and generated configuration |
+| `modules/kubernetes/storage/` | Primary volume inventory and PV configuration |
+| `modules/fsdr/` | Regional recovery coordination, buckets, and IAM |
+| `modules/fsdr/storage/` | Volume groups and replication for supplied primary volumes |
+| `modules/fsdr/region/` | Protection groups, plans, executions, and Automatic DR |
+| `cfgmgt/` | Installation scripts and generated files under `stage/` |
+| `examples/` | Deployment inputs |
+| `tests/` | Root and module suites, live configuration validation, and schema validation |
 
-1. **Initialize the configuration:**
-   ```bash
-   terraform init
-   ```
+Keep root inputs, the Resource Manager schema, examples, and the deployment guide aligned when changing configuration. Leave the `app_version` placeholder in `versions.tf` at `0.0.0` outside the release workflow.
 
-2. **Copy an example configuration:**
-   ```bash
-   cp examples/k8s-new-adb.tfvars terraform.tfvars
-   ```
+## Packaging IaC Stack
 
-3. **Configure OCI credentials** in `terraform.tfvars`:
-   ```hcl
-   tenancy_ocid     = "ocid1.tenancy.oc1..aaa..."
-   compartment_ocid = "ocid1.compartment.oc1..aaa..."
-   user_ocid        = "ocid1.user.oc1..aaa..."
-   fingerprint      = "xx:xx:xx:..."
-   private_key_path = "~/.oci/oci_api_key.pem"
-   region           = "us-phoenix-1"
-   ```
+The IaC is packaged and attached to each release using GitHub Actions. Below is the manual procedure:
 
-4. **Review and apply:**
-   ```bash
-   terraform plan
-   terraform apply
-   ```
+1. Zip the IaC with Archives
+    ```bash
+    zip -r obaas-iac.zip . \
+      -x "terraform*" ".terraform*" "*/terraform*" "*/.terraform*" "tests/*" \
+      -x "cfgmgt/stage/*.*" "*.tfplan*" "examples/*" "*.md" ".gitignore" "*pycache*"
+    ```
 
-5. **Configure kubectl access** (after apply completes):
-   ```bash
-   # Use the kubeconfig_cmd output
-   oci ce cluster create-kubeconfig --cluster-id <cluster_ocid> --region <region>
-   ```
+## Local Helm Chart Development
 
-## Configuration Options
-
-### General Settings
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `tenancy_ocid` | OCI Tenancy OCID | Required |
-| `compartment_ocid` | Compartment for resources | Required |
-| `region` | OCI Region | Required |
-| `label_prefix` | Prefix for resource names (max 12 chars) | Auto-generated |
-
-### Database Options
-
-The deployment supports three database configurations:
-
-#### Option 1: New Autonomous Database (Default)
-```hcl
-# Leave byo_db_type empty (default)
-adb_ecpu_core_count         = 2
-adb_data_storage_size_in_gb = 20
-adb_license_model           = "LICENSE_INCLUDED"  # or "BRING_YOUR_OWN_LICENSE"
-adb_networking              = "PRIVATE_ENDPOINT_ACCESS"  # or "SECURE_ACCESS"
-```
-
-#### Option 2: Bring Your Own Autonomous Database (ADB-S)
-```hcl
-byo_db_type    = "ADB-S"
-byo_db_password = "your_admin_password"
-byo_adb_ocid   = "ocid1.autonomousdatabase.oc1..."
-```
-
-#### Option 3: Bring Your Own Other Database
-```hcl
-byo_db_type     = "OTHER"
-byo_db_password = "your_system_password"
-byo_odb_host    = "db-host.example.com"
-byo_odb_port    = 1521
-byo_odb_service = "SERVICENAME"
-```
-
-### Kubernetes Options
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `k8s_cpu_node_pool_size` | Number of CPU worker nodes | 3 |
-| `k8s_api_is_public` | Expose K8s API publicly | true |
-| `k8s_api_endpoint_allowed_cidrs` | CIDRs allowed to access K8s API | "0.0.0.0/0" |
-| `k8s_node_pool_gpu_deploy` | Deploy GPU node pool | false |
-| `k8s_gpu_node_pool_size` | Number of GPU worker nodes | 1 |
-| `k8s_deploy_kafka` | Deploy a Kafka cluster using the Strimzi operator | false |
-| `k8s_deploy_coherence` | Deploy a Coherence cluster using the Coherence Operator | false |
-| `k8s_run_cfgmgt` | Run configuration management | true |
-| `k8s_use_cluster_addons` | Install OKE cluster add-ons | true |
-| `k8s_use_local_charts` | Use local Helm charts from `helm/` instead of the remote Helm repository | false |
-| `k8s_byo_ocir_url` | BYO Oracle Container Registry URL | "" |
-
-### Primary Storage
-
-The primary Kubernetes deployment preallocates block volumes independently of `fsdr_enabled`. The generated manifest reserves one CSI PV for each chart claim. `cfgmgt/apply.py` applies that manifest before installing Helm. With `k8s_run_cfgmgt=false`, apply the generated manifest before installing the charts manually.
-
-The inventory covers three APISIX etcd claims, one ZooKeeper claim, one SigNoz claim and one ClickHouse claim. Enabling Kafka adds three 100 GiB volumes. OCI provisions at least 50 GiB per block volume. Chart replica counts and storage requests use the same inventory as provisioning; update that inventory when changing the deployed chart's storage requirements.
-
-The `obaas-preallocated` StorageClass uses `blockvolume.csi.oraclecloud.com` so native FSDR recognizes its storage. PV claim references reserve the preallocated volumes for the chart's PVCs.
-
-After FSDR activates replica storage, native recovery owns the restored PV definitions and their volume handles. Subsequent generated manifests manage the StorageClass and chart settings while preserving those PVs, including after switching back to the initial primary region.
-
-If an earlier apply created this class with `kubernetes.io/no-provisioner`, replace its metadata before reapplying. Run from `opentofu/`:
+`cfgmgt/apply.py` resolves local charts from the sibling `helm/infra-charts/` directory. From `opentofu/`, verify the paths:
 
 ```bash
-kubectl --kubeconfig cfgmgt/stage/kubeconfig delete storageclass obaas-preallocated
-tofu apply
+ls ../helm/infra-charts/obaas-prereqs/Chart.yaml ../helm/infra-charts/obaas/Chart.yaml
 ```
 
-The apply regenerates and installs the corrected class. Existing PVs, PVCs and OCI volumes remain in place.
+[Prepare the chart dependencies](../docs-source/site/docs/setup/cloud/oci.mdx#prepare-helm-charts) and set `k8s_use_local_charts=true` in the run's variable file when developing or testing with this checkout. Follow [Local Deployment](../docs-source/site/docs/setup/cloud/oci.mdx#local-deployment) for initialization, planning, and apply, and [Clean Up](../docs-source/site/docs/setup/cloud/oci.mdx#clean-up) for teardown.
 
-### Local Helm Chart Development
+For direct IaC runs, `k8s_use_local_charts=false` selects the published chart version configured in `cfgmgt/apply.py`. The Resource Manager build vendors charts into the stack package; preserve the sibling chart layout when packaging or moving configuration management to another host.
 
-By default, the OCI Resource Manager build vendors the published Helm charts into the stack package. For local Terraform development, you can test charts from a local checkout without rebuilding the ZIP.
+## Storage and Recovery Internals
 
-`apply.py` looks for local charts under the sibling `helm` directory:
+`modules/kubernetes/storage` owns the inventory shared by OCI volume provisioning, generated PVs, and chart storage settings. Update it when changing chart replica counts or storage requests. `cfgmgt/apply.py` applies the generated manifest before Helm installation. See [Primary Storage](../docs-source/site/docs/setup/cloud/oci.mdx#primary-storage) for storage behavior and migration instructions.
 
-```text
-../helm/infra-charts/obaas-prereqs
-../helm/infra-charts/obaas
-```
+Root configuration supplies OKE, database, and network details to `modules/fsdr`. Auto-generated application labels use a separate persisted protection-group prefix available during planning; existing deployments retain their recorded group names.
 
-Verify the charts are visible:
+Standard FSDR plan keys run in order: `failover`, `switchover`, `start_drill`, then `stop_drill`. Their dependencies serialize shared OKE backup setup while other stack resources run in parallel. State moves preserve existing standard plans. Custom regional-module plan keys retain their original addresses and run in the initial stage; use the standard keys when ordering is required.
 
-```bash
-ls ../helm/infra-charts/obaas/Chart.yaml
-ls ../helm/infra-charts/obaas-prereqs/Chart.yaml
-```
+The regional submodule supports:
 
-If the charts have dependencies, update them in the chart repo before applying:
+- `plans[key].source_plan_id` for plan cloning.
+- `executions[key].plan_id` to select an existing plan; otherwise the execution selects the plan with the same key.
+- OKE `resource_modifier_mappings` for ConfigMaps describing destination resource changes.
+- `block_volume_attach_and_mount_operations` for non-movable compute storage.
 
-```bash
-cd ../helm/infra-charts
-helm dependency update obaas-prereqs
-helm dependency update obaas
-```
+Resource outputs expose provider-computed plan groups, execution progress, and automatic execution details. The protection-group resource output is sensitive because it includes secret references; `dr_protection_group_id` exposes its identifier separately.
 
-Then run Terraform with local charts enabled:
+Use [Full Stack Disaster Recovery](../docs-source/site/docs/setup/cloud/oci.mdx#full-stack-disaster-recovery) for configuration, drills, recovery, and failback procedures.
 
-```bash
-cd opentofu
-terraform plan -var='k8s_use_local_charts=true'
-terraform apply -var='k8s_use_local_charts=true'
-```
+## Running Tests
 
-You can also set this in `terraform.tfvars`:
+Use OpenTofu 1.12.6 to match the [IaC workflow](../.github/workflows/opentofu.yml).
 
-```hcl
-k8s_use_local_charts = true
-```
-
-To return to published charts for direct Terraform runs, remove that variable or set it to `false`.
-
-### Full Stack Disaster Recovery
-
-Enable FSDR by selecting a subscribed standby region:
-
-```hcl
-fsdr_enabled         = true
-fsdr_region_1        = "uk-london-1"
-k8s_use_local_charts  = true
-```
-
-With an auto-generated application label, protection groups use a separate persisted prefix available during planning. Existing deployments retain their recorded protection-group names.
-
-The `fsdr_regional_application_urls` output provides each region's load balancer URL. After recovery, direct clients to the active region's URL. To create an application DNS record initially pointing to the primary, supply both optional inputs for an existing OCI public DNS zone:
-
-```hcl
-fsdr_dns_zone_ocid = "<oci-public-dns-zone-ocid>"
-fsdr_dns_name      = "obaas.example.com"
-```
-
-The deployment creates:
-
-- A standby VCN, OKE cluster, Native Ingress load balancer, and private Autonomous Data Guard database endpoint.
-- Associated protection groups covering Autonomous Database, OKE, and the application's OCI persistent storage.
-- Regional log and backup buckets, and IAM policies for FSDR protection groups and runtime container instances.
-- Native switchover and failover plans covering database, storage and OKE recovery.
-
-The standby starts with one CPU worker for OKE add-ons. FSDR scales its node pools to the primary's configured capacity during recovery. OKE backups include the OBaaS namespace and `obaas-system`; the default schedule is hourly with 20 retained backups. Private OCIR images are replicated with the OKE backups.
-
-Run from a host with access to the primary cluster API and OCI CLI authentication. Prepare local chart dependencies when `k8s_use_local_charts=true` and grant the deployment identity the [FSDR permissions](../docs-source/site/docs/setup/cloud/oci.mdx#fsdr-policies).
-
-Plan and apply the complete deployment:
-
-```bash
-tofu init
-tofu plan -out=fsdr.tfplan
-tofu apply fsdr.tfplan
-```
-
-FSDR groups the [primary volumes](#primary-storage) by availability domain and enables standby-region replication. Setting `fsdr_enabled=false` removes the recovery volume groups while preserving primary volumes, PV definitions and chart storage settings. Additional workload namespaces need their backing storage configured for DR separately.
-
-The OCI provider manages protection-group membership and plan operations. Wait for initial storage replication and a successful OKE backup before running recovery prechecks. Increment `fsdr_plan_refresh_trigger` and `fsdr_plan_verify_trigger` after changing protected resources.
-Native FSDR restores the protected application and `obaas-system` namespaces and performs the configured database and storage transitions. Apply chart upgrades on the active cluster through `cfgmgt/apply.py`; recovery uses the protected resources captured in a subsequent successful backup. Recovery of chart CRDs, cluster-scoped RBAC and admission webhooks requires verification in a DR drill. Configure destination database OCIDs, connection settings and wallets for OBaaS, then verify application and load-balancer health before directing traffic to the recovered region. The operator maintains DNS routing. Terraform preserves the runtime DR roles, storage members, worker counts and DNS target.
-
-| Variable | Purpose | Default |
-|----------|---------|---------|
-| `fsdr_init_destroy` | Prepare recovery resources for deletion on apply, then destroy | `false` |
-| `fsdr_plan_types` | `SWITCHOVER`, `FAILOVER`, `START_DRILL`, `STOP_DRILL` plans | Switchover and failover |
-| `fsdr_plan_refresh_trigger` | Increment to refresh plans after group changes | `null` |
-| `fsdr_plan_verify_trigger` | Increment to verify plans | `null` |
-| `fsdr_adb_drill_standby_type` | ADB drill mechanism | `SNAPSHOT_STANDBY` |
-| `fsdr_timeouts` | Group, plan, and Automatic DR create/update/delete timeouts | `20m` each |
-| `fsdr_automatic_dr` | ADB events that trigger standby-group DR plans | `null` |
-| `fsdr_plan_executions` | Explicit executions keyed by lowercase plan type | `{}` |
-| `fsdr_dns_zone_ocid` | Public DNS zone for the initial application record; supply with `fsdr_dns_name` | Empty |
-| `fsdr_dns_name` | Hostname initially pointing to the primary; supply with `fsdr_dns_zone_ocid` | Empty |
-| `fsdr_standby_network` | Existing standby VCN and public/private subnet IDs | Managed network |
-| `fsdr_standby_vcn_cidr` | Managed standby VCN CIDR | `10.43.0.0/16` |
-| `fsdr_standby_cpu_node_pool_size` | Warm CPU workers for OKE add-ons | `1` |
-| `fsdr_backup_schedule` | RFC 5545 OKE backup recurrence, in UTC | `FREQ=HOURLY;INTERVAL=1` |
-| `fsdr_backup_retention` | Retained OKE backups, whole number from 1 to 20 | `20` |
-| `fsdr_additional_namespaces` | Workload namespaces using the OBaaS database | `[]` |
-
-To prepare drill plans, include `START_DRILL` and `STOP_DRILL` in `fsdr_plan_types`. The initial apply creates Start Drill. After executing it successfully, clear `fsdr_plan_executions` and apply with `k8s_run_cfgmgt=false` to create Stop Drill on the inactive standby group. Stop Drill runs OCI's native cleanup steps. After it completes, clear the execution input and apply to remove the consumed Stop Drill plan. Drills use `SNAPSHOT_STANDBY` and the standby region's load balancer URL. Validate drill database connections and wallets before exercising application traffic. Refresh and verify triggers apply to every configured plan. The regional submodule supports cloning through `plans[key].source_plan_id`.
-
-After a successful drill and recovery prechecks, opt into database-event-driven recovery:
-
-```hcl
-fsdr_automatic_dr = {
-  is_auto_switchover_enabled = true
-  is_auto_failover_enabled   = true
-}
-```
-
-[Automatic DR](https://docs.oracle.com/en-us/iaas/disaster-recovery/doc/configure-automaticdr.html) runs the selected FSDR plan after the protected database emits a switchover or failover event. Each enabled event requires its corresponding active plan. After a role transition, prepare plans and Automatic DR on the new standby group before the next recovery operation. Configuration management applies the primary installation while its database remains primary.
-
-Applying an explicit execution entry submits that operation. Start with a precheck:
-
-```hcl
-fsdr_plan_executions = {
-  switchover = {
-    plan_execution_type = "SWITCHOVER_PRECHECK"
-  }
-}
-```
-
-Execution types are the four plan types and their `_PRECHECK` variants. Submit one execution per apply. Root execution inputs enable prechecks by default and retain warnings. The regional submodule's `executions[key].plan_id` selects an existing plan when supplied; otherwise it selects the plan with the same key. Executions are stateful resources: review planned replacements before applying changes to execution inputs.
-
-The regional submodule supports OKE `resource_modifier_mappings` for ConfigMaps describing destination resource changes. Use `block_volume_attach_and_mount_operations` for non-movable compute storage. Provider-computed plan groups, execution progress, and automatic execution details are available through the existing resource outputs. The protection-group resource output is sensitive because it includes secret references; `dr_protection_group_id` exposes its identifier separately.
-
-After a switchover or failover, clear `fsdr_plan_executions`, increment the refresh and verify triggers, and review an apply once both regions are available. The provider reads current DR roles, preserves each region's native storage membership through switchover and switchback, and creates plans and Automatic DR on the current standby. New storage provisioned in the recovered region requires enrollment in that region before failback. Review replication health and run the new standby's recovery prechecks.
-
-`modules/kubernetes/storage` owns the primary volume inventory and PV configuration. `modules/fsdr` coordinates both regions and owns buckets and IAM. Its `storage` submodule groups the supplied primary volumes and provisions replication; its `region` submodule manages protection groups, plans and operations. Root configuration supplies the OKE, database and network details. See [the FSDR example](examples/k8s-fsdr.tfvars).
-
-### Compute Options
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `compute_cpu_shape` | CPU compute shape | VM.Standard.E5.Flex |
-| `compute_cpu_ocpu` | OCPUs per CPU worker | 2 |
-| `compute_gpu_shape` | GPU compute shape | VM.GPU.A10.1 |
-
-### Network Options
-
-By default, a new VCN with public and private subnets is created. To use existing networking:
-
-```hcl
-byo_vcn_ocid            = "ocid1.vcn.oc1..."
-byo_public_subnet_ocid  = "ocid1.subnet.oc1..."
-byo_private_subnet_ocid = "ocid1.subnet.oc1..."
-```
-
-### Load Balancer Options
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `lb_min_shape` | Minimum bandwidth (Mbps) | 10 |
-| `lb_max_shape` | Maximum bandwidth (Mbps) | 10 |
-| `client_allowed_cidrs` | CIDRs allowed for client access | "0.0.0.0/0" |
-| `server_allowed_cidrs` | CIDRs allowed for server API access | "0.0.0.0/0" |
-
-### AI Optimizer
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `deploy_optimizer` | Deploy AI Optimizer and Toolkit | false |
-
-## Examples
-
-See the [examples/](examples/) directory for complete configuration examples:
-
-| File | Description |
-|------|-------------|
-| `k8s-new-adb.tfvars` | Kubernetes deployment with new Autonomous Database |
-| `k8s-byo-other-db.tfvars` | Kubernetes deployment with bring-your-own database |
-| `k8s-fsdr.tfvars` | Two-region Full Stack Disaster Recovery with Autonomous Database |
-
-### Running Tests
-
-Run the mocked regression suites from `opentofu/`:
+Run the regression suites from `opentofu/` with Python 3 and OpenSSL installed:
 
 ```bash
 tofu init -backend=false
@@ -309,7 +79,9 @@ python3 tests/run-mocked-plans.py
 python3 -m unittest discover -s tests -p 'test_*.py'
 ```
 
-The IaC workflow runs the same command and discovers every root and child-module suite. Tests run in temporary copies with isolated inputs and state, using the initialized provider versions. Kubernetes image tests use a targeted mocked cluster setup; all assertions run as plans. The suites use mocked providers and execute no OCI operations or provisioners.
+Root suites live directly in `tests/`; child-module suites mirror their source paths under `tests/modules/`. The runner places each suite in its module's temporary `tests/` directory. The IaC workflow runs these commands and discovers every suite. Tests run in temporary copies with isolated inputs and state, using the initialized provider versions. Kubernetes image tests use a targeted mocked cluster setup, and generated-label tests persist a local random value; all assertions run as plans. OCI providers are mocked, and the suites execute no OCI operations or provisioners.
+
+Python regression tests also inspect FSDR plan dependencies and state migrations using the initialized OCI provider, synthetic state, generated test keys, and refresh-disabled plans.
 
 | Suite | Coverage |
 |-------|----------|
@@ -320,83 +92,17 @@ The IaC workflow runs the same command and discovers every root and child-module
 
 To run one module, use `python3 tests/run-mocked-plans.py --module modules/kubernetes` (or `--module .` for the root).
 
-The `examples/manual-test.sh` script validates configurations using your OCI credentials:
+The `tests/manual-test.sh` script validates configurations using your OCI credentials:
 
 ```bash
 # Uses ~/.oci/config [DEFAULT] profile
-./examples/manual-test.sh
+./tests/manual-test.sh
 
 # Use a specific profile
-./examples/manual-test.sh MYPROFILE
+./tests/manual-test.sh MYPROFILE
 ```
 
-## Outputs
-
-After successful deployment:
-
-| Output | Description |
-|--------|-------------|
-| `app_name` | Application label/namespace |
-| `app_version` | Deployed application version |
-| `optimizer_client_url` | AI Optimizer web UI URL |
-| `optimizer_server_url` | AI Optimizer API URL |
-| `kubeconfig_cmd` | Command to generate kubeconfig |
-
-## OCI Resource Manager (ORM)
-
-This configuration is compatible with OCI Resource Manager for deployment via the OCI Console. The `schema.yaml` file defines the ORM form layout.
-
-## Directory Structure
-
-```
-.
-├── README.md                 # This file
-├── main.tf                   # Core resources (LB, ADB)
-├── variables.tf              # Root-level variables
-├── output.tf                 # Root-level outputs
-├── locals.tf                 # Local values
-├── provider.tf               # Provider configuration
-├── versions.tf               # Version constraints
-├── data.tf                   # Data sources
-├── nsgs.tf                   # Network Security Groups
-├── module_network.tf         # Network module invocation
-├── module_kubernetes.tf      # Kubernetes module invocation
-├── module_fsdr.tf            # FSDR inputs and module invocation
-├── schema.yaml               # OCI ORM schema
-├── examples/                 # Example tfvars files
-│   ├── README.md
-│   ├── k8s-new-adb.tfvars
-│   ├── k8s-byo-other-db.tfvars
-│   └── manual-test.sh
-├── modules/
-│   ├── fsdr/                 # Two-region recovery coordination
-│   │   └── region/           # Protection groups, plans, executions, Automatic DR
-│   ├── kubernetes/           # OKE cluster and configuration
-│   └── network/              # VCN, subnets, gateways
-└── cfgmgt/                   # Configuration management scripts
-```
-
-## Cleanup
-
-For FSDR deployments, set `fsdr_init_destroy=true` and apply before starting destroy. Preparation skips chart installation, disassociates groups and disables group and member-volume replication. Keep the deployed FSDR settings unchanged and leave `fsdr_init_destroy=true` until destruction completes.
-
-```hcl
-fsdr_init_destroy = true
-```
-
-```bash
-tofu apply
-```
-
-For FSDR deployments, retire retained backups and empty the regional log and backup buckets before destroying the infrastructure. The regional buckets retain their contents until the operator retires them.
-
-See [Clean Up](../docs-source/site/docs/setup/cloud/oci.mdx#clean-up) for local and Resource Manager instructions.
-
-To destroy all resources:
-
-```bash
-terraform destroy
-```
+For live provisioning coverage and evidence requirements, use [TEST-AGENT.md](../TEST-AGENT.md) with the [OCI deployment guide](../docs-source/site/docs/setup/cloud/oci.mdx).
 
 ## License
 
