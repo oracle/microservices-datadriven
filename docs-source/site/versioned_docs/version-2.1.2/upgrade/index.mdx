@@ -130,7 +130,7 @@ with that owner and keep `gateway-helm.crds.enabled=false`.
 Skip the first pass if ClickHouse already runs `25.12.5`. If SigNoZ is disabled,
 use the normal Helm upgrade at the end of this section.
 
-**First pass: upgrade ClickHouse with migration disabled.** The migration is a
+**First pass: upgrade ClickHouse with migration and dashboard reconciliation disabled.** The migration is a
 `pre-upgrade` hook, so it otherwise runs against the old ClickHouse server.
 Keep the current SigNoZ and collector tags; these example tags match OBaaS 2.1.0:
 
@@ -139,6 +139,7 @@ helm upgrade <app-release> helm/infra-charts/obaas \
   -n <application-namespace> \
   -f <customer-values-file> \
   --set signoz.telemetryStoreMigrator.enabled=false \
+  --set signoz.setup.enabled=false \
   --set signoz.clickhouse.image.tag=25.12.5 \
   --set signoz.signoz.image.tag=v0.113.0 \
   --set signoz.otelCollector.image.tag=v0.144.1 \
@@ -148,6 +149,11 @@ helm upgrade <app-release> helm/infra-charts/obaas \
 Use your currently running tags for other starting versions. This pass also
 applies other application-chart changes. Keep the same complete values file,
 release, and namespace for both passes.
+
+`signoz.setup.enabled=false` skips the OBaaS setup hook, including dashboard
+reconciliation. The current hook uses the V2 dashboard API, which the retained
+older SigNoZ version does not support. Keep it disabled only for the first pass;
+other Helm hooks remain enabled.
 
 Verify ClickHouse is healthy and the running server reports `25.12.5` before
 continuing (configure client authentication if required):
@@ -166,6 +172,7 @@ helm upgrade <app-release> helm/infra-charts/obaas \
   -n <application-namespace> \
   -f <customer-values-file> \
   --set signoz.telemetryStoreMigrator.enabled=true \
+  --set signoz.setup.enabled=true \
   --set signoz.telemetryStoreMigrator.upgradeHelmHooks=true \
   --set signoz.clickhouse.image.tag=25.12.5 \
   --set signoz.signoz.image.tag=v0.142.1 \
@@ -173,7 +180,8 @@ helm upgrade <app-release> helm/infra-charts/obaas \
   --wait --timeout 30m
 ```
 
-Do not leave the migrator disabled. Setting only `upgradeHelmHooks=false` still
+Do not leave the migrator or setup hook disabled. The second pass re-enables
+dashboard reconciliation against the upgraded SigNoZ API. Setting only `upgradeHelmHooks=false` still
 runs a migration Job and does not provide this ordering.
 
 **Without SigNoZ**, use:

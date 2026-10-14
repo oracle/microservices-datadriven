@@ -797,6 +797,9 @@ database:
 
 signoz:
   enabled: true
+  # Disable only during the first ClickHouse upgrade pass; re-enable for SigNoz.
+  setup:
+    enabled: true
   global:
     imagePullSecrets: *imagePullSecrets
   # Utility images for setup jobs

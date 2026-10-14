@@ -89,10 +89,10 @@ volumeMounts:
   readOnly: true
 {{- else if and (eq $storage.type "etcd") $storage.etcd.credentialSecretName }}
 - name: etcd-credentials
-  mountPath: /etc/otmm/etcd
+  mountPath: /etcdecert
   readOnly: true
 - name: etcd-ca
-  mountPath: /etc/otmm/etcd-ca
+  mountPath: /etcdcacert
   readOnly: true
 {{- end }}
 {{- end }}

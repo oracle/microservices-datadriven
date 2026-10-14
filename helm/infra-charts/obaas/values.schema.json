@@ -21,6 +21,17 @@
     }
   },
   "properties": {
+    "signoz": {
+      "type": "object",
+      "properties": {
+        "setup": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" }
+          }
+        }
+      }
+    },
     "otmm": {
       "type": "object",
       "properties": {
