@@ -3,18 +3,17 @@
 # spell-checker: disable
 
 resource "oci_disaster_recovery_dr_protection_group" "dr_protection_group" {
-  compartment_id       = var.compartment_id
-  defined_tags         = var.defined_tags
-  disassociate_trigger = var.disassociate_trigger
-  display_name         = var.display_name
-  freeform_tags        = var.freeform_tags
+  compartment_id = var.compartment_id
+  defined_tags   = var.defined_tags
+  display_name   = var.display_name
+  freeform_tags  = var.freeform_tags
   log_location {
     bucket    = var.log_location["bucket"]
     namespace = var.log_location["namespace"]
   }
-  # OCI changes association roles during recovery.
+  # Preserve recovery roles and the provider's state-local, monotonic trigger.
   lifecycle {
-    ignore_changes = [association]
+    ignore_changes = [association, disassociate_trigger]
   }
   dynamic "association" {
     for_each = var.association == null ? [] : [1]

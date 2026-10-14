@@ -158,7 +158,7 @@ variables:
   fsdr_init_destroy:
     type: boolean
     title: "Prepare for Destroy?"
-    description: "Disassociate FSDR groups, disable storage replication and skip configuration management. Run Apply before Destroy."
+    description: "Prepare an existing FSDR deployment for destroy. Run Apply before Destroy."
     default: false
 
   deploy_optimizer:

@@ -9,7 +9,7 @@ variable "fsdr_enabled" {
 }
 
 variable "fsdr_init_destroy" {
-  description = "Prepare FSDR for destroy: disassociate groups, disable storage replication and skip configuration management. Apply before destroy."
+  description = "Prepare an existing FSDR deployment for destroy: disassociate groups, disable storage replication and skip configuration management."
   type        = bool
   default     = false
 }
@@ -111,9 +111,27 @@ variable "fsdr_additional_namespaces" {
   }
 }
 
-resource "terraform_data" "fsdr_validation" {
-  count = var.fsdr_enabled || var.fsdr_automatic_dr != null || length(var.fsdr_plan_executions) > 0 ? 1 : 0
+resource "terraform_data" "fsdr_database_role_guard" {
+  input = {
+    fsdr_enabled  = var.fsdr_enabled
+    database_role = local.db_role
+  }
+
   lifecycle {
+    precondition {
+      condition     = var.fsdr_enabled || coalesce(local.db_role, "UNKNOWN") == "PRIMARY"
+      error_message = "The source Autonomous Database is STANDBY. Switch it back to PRIMARY before disabling FSDR to preserve the promoted database."
+    }
+  }
+}
+
+resource "terraform_data" "fsdr_validation" {
+  count = var.fsdr_enabled || var.fsdr_init_destroy || var.fsdr_automatic_dr != null || length(var.fsdr_plan_executions) > 0 ? 1 : 0
+  lifecycle {
+    precondition {
+      condition     = !var.fsdr_init_destroy || var.fsdr_enabled
+      error_message = "FSDR destroy preparation requires fsdr_enabled=true."
+    }
     precondition {
       condition     = var.fsdr_enabled && trimspace(var.fsdr_region_1) != "" && var.fsdr_region_1 != var.region
       error_message = "Enable FSDR and select a non-empty standby region distinct from region."
@@ -179,6 +197,13 @@ module "fsdr" {
   timeouts                        = var.fsdr_timeouts
   executions                      = var.fsdr_plan_executions
   automatic_dr                    = var.fsdr_automatic_dr
+  oci_credentials = {
+    tenancy_ocid     = var.tenancy_ocid
+    user_ocid        = local.user_ocid
+    fingerprint      = var.fingerprint
+    private_key_path = var.private_key_path
+    private_key      = var.private_key
+  }
   providers = {
     oci               = oci
     oci.fsdr_region_1 = oci.fsdr_region_1

@@ -19,6 +19,23 @@ locals {
     (var.region_0) = one(data.oci_disaster_recovery_dr_protection_group.region_0[*])
     (var.region_1) = one(data.oci_disaster_recovery_dr_protection_group.region_1[*])
   }
+  # Preserve OCI's live peer association and role after recovery operations.
+  associations = {
+    for region, group in local.groups : region => try(
+      contains(["PRIMARY", "STANDBY"], group.role) &&
+      trimspace(group.peer_id) != "" &&
+      trimspace(group.peer_region) != "" ? {
+        role        = group.role
+        peer_id     = group.peer_id
+        peer_region = group.peer_region
+      } : null,
+      null
+    )
+  }
+  protection_group_ids = {
+    (var.region_0) = module.fsdr_region_0.dr_protection_group_id
+    (var.region_1) = module.fsdr_region_1.dr_protection_group_id
+  }
   roles = {
     (var.region_0) = try(local.groups[var.region_0].role, "PRIMARY")
     (var.region_1) = try(local.groups[var.region_1].role, "STANDBY")

@@ -100,5 +100,8 @@ resource "oci_database_autonomous_database" "dr_adb_standby" {
     ignore_changes = [whitelisted_ips]
   }
   provider   = oci.fsdr_region_1
-  depends_on = [terraform_data.fsdr_validation]
+  depends_on = [
+    terraform_data.fsdr_validation,
+    terraform_data.fsdr_database_role_guard,
+  ]
 }

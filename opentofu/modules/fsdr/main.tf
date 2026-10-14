@@ -17,11 +17,42 @@ resource "terraform_data" "application_ready" {
   input = { for region, cluster in var.clusters : region => cluster.configuration_ready_id }
 }
 
+resource "terraform_data" "init_destroy_validation" {
+  count = var.init_destroy ? 1 : 0
+  input = { for region, group in local.group_summaries : region => try(group.id, null) }
+
+  lifecycle {
+    precondition {
+      condition     = alltrue([for region in [var.region_0, var.region_1] : local.group_summaries[region] != null])
+      error_message = "FSDR destroy preparation requires an existing protection group in both regions.  Check that fsdr_init_destroy is not `true`."
+    }
+  }
+}
+
+resource "terraform_data" "disassociation" {
+  count = var.init_destroy ? 1 : 0
+  input = {
+    groups  = local.protection_group_ids
+    timeout = var.timeouts.update
+  }
+  triggers_replace = [local.protection_group_ids, local.associations, filesha256(format("%s/prepare.py", path.module))]
+  depends_on       = [terraform_data.init_destroy_validation, terraform_data.idle, module.storage, module.fsdr_region_0, module.fsdr_region_1]
+
+  provisioner "local-exec" {
+    command = format("python3 \"%s/prepare.py\"", path.module)
+    environment = {
+      FSDR_PREPARATION     = jsonencode(self.input)
+      FSDR_OCI_CREDENTIALS = jsonencode(var.oci_credentials)
+    }
+  }
+}
+
 module "fsdr_region_1" {
   source              = "./region"
   compartment_id      = var.compartment_id
   display_name        = format("%s-pg-%s", local.group_label_prefix, var.region_1)
   members             = [for member in local.members[var.region_1] : member if !var.init_destroy]
+  association         = local.associations[var.region_1]
   timeouts            = var.timeouts
   plan_association_id = module.fsdr_region_0.dr_protection_group_id
   log_location = {
@@ -41,21 +72,20 @@ module "fsdr_region_0" {
   display_name   = format("%s-pg-%s", local.group_label_prefix, var.region_0)
   members        = [for member in local.members[var.region_0] : member if !var.init_destroy]
   association = var.init_destroy ? null : {
-    role        = "PRIMARY"
-    peer_region = var.region_1
-    peer_id     = module.fsdr_region_1.dr_protection_group_id
+    role        = coalesce(try(local.associations[var.region_0].role, null), "PRIMARY")
+    peer_region = coalesce(try(local.associations[var.region_0].peer_region, null), var.region_1)
+    peer_id     = coalesce(try(local.associations[var.region_0].peer_id, null), module.fsdr_region_1.dr_protection_group_id)
   }
   log_location = {
     bucket    = oci_objectstorage_bucket.fsdr_logs_region_0.name
     namespace = var.objectstorage_namespace
   }
-  disassociate_trigger = var.init_destroy ? 1 : 0
-  timeouts             = var.timeouts
-  plans                = local.plans[var.region_0]
-  members_ready_id     = module.fsdr_region_1.dr_protection_group_id
-  executions           = !var.init_destroy && local.roles[var.region_0] == "STANDBY" ? var.executions : {}
-  automatic_dr         = local.automatic_dr[var.region_0]
-  depends_on           = [oci_identity_policy.fsdr, oci_identity_policy.fsdr_container, terraform_data.idle, terraform_data.application_ready]
+  timeouts         = var.timeouts
+  plans            = local.plans[var.region_0]
+  members_ready_id = module.fsdr_region_1.dr_protection_group_id
+  executions       = !var.init_destroy && local.roles[var.region_0] == "STANDBY" ? var.executions : {}
+  automatic_dr     = local.automatic_dr[var.region_0]
+  depends_on       = [oci_identity_policy.fsdr, oci_identity_policy.fsdr_container, terraform_data.idle, terraform_data.application_ready]
 }
 
 resource "terraform_data" "idle" {

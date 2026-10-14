@@ -93,6 +93,18 @@ variable "init_destroy" {
   type    = bool
   default = false
 }
+variable "oci_credentials" {
+  description = "Deployment credentials for FSDR destroy preparation."
+  sensitive   = true
+  type = object({
+    tenancy_ocid     = optional(string, "")
+    user_ocid        = optional(string, "")
+    fingerprint      = optional(string, "")
+    private_key_path = optional(string, "")
+    private_key      = optional(string, "")
+  })
+  default = {}
+}
 
 variable "plan_types" {
   type    = set(string)

@@ -98,6 +98,49 @@ variables {
   }
 }
 
+run "cleanup_from_empty_state" {
+  command = plan
+  variables {
+    init_destroy = true
+  }
+  override_data {
+    target = data.oci_disaster_recovery_dr_protection_groups.region_0
+    values = { dr_protection_group_collection = [{ items = [] }] }
+  }
+  override_data {
+    target = data.oci_disaster_recovery_dr_protection_groups.region_1
+    values = { dr_protection_group_collection = [{ items = [] }] }
+  }
+  expect_failures = [terraform_data.init_destroy_validation[0]]
+}
+
+run "cleanup_paired_groups" {
+  command = plan
+  variables {
+    init_destroy = true
+  }
+  override_data {
+    target = data.oci_disaster_recovery_dr_protection_group.region_0[0]
+    values = { role = "PRIMARY", peer_id = "pg-1", peer_region = "uk-cardiff-1", members = [] }
+  }
+  override_data {
+    target = data.oci_disaster_recovery_dr_protection_group.region_1[0]
+    values = { role = "STANDBY", peer_id = "pg-0", peer_region = "uk-london-1", members = [] }
+  }
+  override_data {
+    target = data.oci_disaster_recovery_dr_protection_group.prepared_region_0[0]
+    values = { role = "UNCONFIGURED" }
+  }
+  override_data {
+    target = data.oci_disaster_recovery_dr_protection_group.prepared_region_1[0]
+    values = { role = "UNCONFIGURED" }
+  }
+  assert {
+    condition     = length(output.regions.region_0.dr_protection_group.members) == 0 && length(output.regions.region_1.dr_protection_group.members) == 0 && length(output.plan_ids) == 0
+    error_message = "Cleanup must clear both memberships and remove recovery plans."
+  }
+}
+
 run "bootstrap" {
   command = plan
   override_data {

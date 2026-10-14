@@ -35,3 +35,16 @@ data "oci_disaster_recovery_dr_plan_executions" "region_1" {
   dr_protection_group_id = local.groups[var.region_1].id
   provider               = oci.fsdr_region_1
 }
+
+data "oci_disaster_recovery_dr_protection_group" "prepared_region_0" {
+  count                  = var.init_destroy ? 1 : 0
+  dr_protection_group_id = module.fsdr_region_0.dr_protection_group_id
+  depends_on             = [terraform_data.disassociation]
+}
+
+data "oci_disaster_recovery_dr_protection_group" "prepared_region_1" {
+  count                  = var.init_destroy ? 1 : 0
+  dr_protection_group_id = module.fsdr_region_1.dr_protection_group_id
+  provider               = oci.fsdr_region_1
+  depends_on             = [terraform_data.disassociation]
+}

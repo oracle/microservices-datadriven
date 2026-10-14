@@ -21,7 +21,7 @@ def copy_configuration(source, destination):
             continue
         if not path.is_file():
             continue
-        if path.suffix != ".tf" and not path.name.endswith(".tftest.hcl") and "templates" not in relative.parts and not (path.suffix == ".py" and "cfgmgt" in relative.parts):
+        if path.suffix != ".tf" and not path.name.endswith(".tftest.hcl") and "templates" not in relative.parts and not (path.suffix == ".py" and ("cfgmgt" in relative.parts or "fsdr" in relative.parts)):
             continue
         target = destination / relative
         target.parent.mkdir(parents=True, exist_ok=True)

@@ -4,9 +4,13 @@
 
 output "protection_group_ids" {
   description = "Protection group OCIDs by region."
-  value = {
-    (var.region_0) = module.fsdr_region_0.dr_protection_group_id
-    (var.region_1) = module.fsdr_region_1.dr_protection_group_id
+  value       = local.protection_group_ids
+  precondition {
+    condition = !var.init_destroy ? true : (
+      data.oci_disaster_recovery_dr_protection_group.prepared_region_0[0].role == "UNCONFIGURED" &&
+      data.oci_disaster_recovery_dr_protection_group.prepared_region_1[0].role == "UNCONFIGURED"
+    )
+    error_message = "FSDR destroy preparation requires both protection groups to be disassociated (UNCONFIGURED)."
   }
 }
 

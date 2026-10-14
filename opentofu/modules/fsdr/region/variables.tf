@@ -10,11 +10,6 @@ variable "defined_tags" {
   type    = map(string)
   default = null
 }
-variable "disassociate_trigger" {
-  type    = number
-  default = null
-}
-
 variable "display_name" {
   type = string
 }
