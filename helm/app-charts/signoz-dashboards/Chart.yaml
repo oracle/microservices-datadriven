@@ -5,4 +5,3 @@ name: signoz-dashboards
 description: Sample chart for installing user dashboards into an existing OBaaS SigNoz instance
 type: application
 version: 0.1.0
-
