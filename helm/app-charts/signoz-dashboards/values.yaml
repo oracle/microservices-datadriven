@@ -17,7 +17,7 @@ signoz:
 
 image:
   # The full Oracle Linux 9 image includes Python 3 and its SQLite module.
-  repository: docker.io/library/oraclelinux
+  repository: container-registry.oracle.com/os/oraclelinux
   tag: "9"
   pullPolicy: IfNotPresent
 imagePullSecrets: []

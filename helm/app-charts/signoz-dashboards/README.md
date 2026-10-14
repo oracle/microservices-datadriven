@@ -10,7 +10,7 @@ wait for SigNoz, discover its organization ID, log in, list existing dashboards,
 delete exact title matches, and create dashboards from the bundled JSON files.
 It uses a small Python standard-library importer to parse JSON reliably, including
 minified exports and titles containing quotes or other special characters.
-All containers use the plain `oraclelinux:9` image, which includes Python 3 and
+All containers use `container-registry.oracle.com/os/oraclelinux:9`, which includes Python 3 and
 its SQLite module. No custom image or runtime package installation is needed.
 
 ## Add dashboards
