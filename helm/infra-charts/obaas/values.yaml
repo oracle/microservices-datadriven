@@ -529,6 +529,54 @@ otmm:
   coordinator:
     enabled: true
     replicas: 1
+    # Native Kubernetes probe fields. Set an entry to null to disable that probe.
+    probes:
+      # Allow up to five minutes for startup and transaction recovery.
+      startup:
+        httpGet:
+          path: /health
+          port: http
+        periodSeconds: 10
+        timeoutSeconds: 5
+        failureThreshold: 30
+      readiness:
+        httpGet:
+          path: /health
+          port: http
+        periodSeconds: 5
+        timeoutSeconds: 3
+        failureThreshold: 3
+      liveness:
+        httpGet:
+          path: /health
+          port: http
+        periodSeconds: 10
+        timeoutSeconds: 5
+        failureThreshold: 6
+    # Durable stores require a MicroTx edition that supports persistence.
+    storage:
+      type: memory # memory, db, etcd
+      db:
+        # Run the image's schema initialization/migrations before starting TCS.
+        # Disable when a DBA provisions and upgrades the schema separately.
+        initializeSchema: true
+        # Empty values reuse the OBaaS application credentials, service, and wallet,
+        # as used by the metrics exporter. The coordinator image needs Python 3.
+        connectionString: ""
+        connectionParams: ""
+        # Optional separate database: pre-existing secret key contains JSON
+        # {"username":"...","password":"..."}; also set connectionString.
+        credentialSecretName: ""
+        credentialSecretKey: secret
+        walletConfigMapName: ""
+        walletSecretName: ""
+      etcd:
+        endpoints: ""
+        skipHostNameVerification: false
+        credentialSecretName: ""
+        credentialSecretKey: etcdecred.json
+        caConfigMapName: ""
+        caConfigMapKey: ca.pem
     image:
       repository: container-registry.oracle.com/database/microtx-coordinator
       tag: "26.1.2"
@@ -582,7 +630,16 @@ otmm:
       indexing:
         enabled: true
       storage:
-        fileSystem: {}
+        fileSystem:
+          # Separate from Oracle Database workflow/queue/metadata persistence.
+          persistence:
+            enabled: false
+            existingClaim: ""
+            storageClass: ""
+            size: 10Gi
+            accessModes: [ReadWriteOnce]
+            # Retention also requires global.cleanupPVCs: false.
+            retain: true
     image:
       repository: container-registry.oracle.com/database/microtx-workflow
       tag: "26.1.2"
@@ -597,6 +654,30 @@ otmm:
         memory: 4Gi
   console:
     enabled: true
+    # Native Kubernetes probe fields. Set an entry to null to disable that probe.
+    probes:
+      startup:
+        httpGet:
+          path: /health
+          port: http-console
+        periodSeconds: 10
+        timeoutSeconds: 5
+        failureThreshold: 18
+      readiness:
+        httpGet:
+          path: /health
+          port: http-console
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        timeoutSeconds: 3
+        failureThreshold: 6
+      liveness:
+        httpGet:
+          path: /health
+          port: http-console
+        periodSeconds: 10
+        timeoutSeconds: 5
+        failureThreshold: 6
     image:
       repository: container-registry.oracle.com/database/microtx-console
       tag: "26.1.2"
@@ -716,6 +797,9 @@ database:
 
 signoz:
   enabled: true
+  # Disable only during the first ClickHouse upgrade pass; re-enable for SigNoz.
+  setup:
+    enabled: true
   global:
     imagePullSecrets: *imagePullSecrets
   # Utility images for setup jobs

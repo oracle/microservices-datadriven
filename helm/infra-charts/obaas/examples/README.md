@@ -215,6 +215,33 @@ to select a supported path and [Upgrade with protected recovery](../../../../doc
 for the complete two-stage procedure, prerequisites, commands, validation, and
 recovery guidance.
 
+### 10. MicroTx Enterprise Edition ([`values-microtx-ee.yaml`](values-microtx-ee.yaml))
+
+Enables the Enterprise Edition coordinator, workflow server, and console with
+database-backed coordinator storage and a retained 10Gi workflow-file PVC.
+
+**Use case:** MicroTx Enterprise Edition deployments with durable transaction state
+and workflow files
+
+**Prerequisites:**
+
+1. Accept the Enterprise Edition image terms and create `ocr-secret` in the release namespace.
+2. Prepare database privileges and quota. The example defaults to shared OBaaS application credentials; configure a separate coordinator schema when running both the coordinator and workflow server.
+3. Select a suitable StorageClass or existing workflow-file claim. The example disables the namespace PVC cleanup hook to preserve retained files.
+
+See [MicroTx database storage](../../../../docs-source/site/docs/platform/otmm.md#coordinator-database-storage)
+for credentials, wallet configuration, and schema initialization.
+
+**Installation:**
+
+```bash
+# Run from helm/infra-charts/obaas; layer after your complete environment values.
+helm upgrade --install obaas . \
+  -n obaas --create-namespace \
+  -f <existing-obaas-values.yaml> \
+  -f examples/values-microtx-ee.yaml
+```
+
 ## Customizing Examples
 
 You can combine examples or create your own custom values file:
