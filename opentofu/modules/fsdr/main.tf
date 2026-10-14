@@ -39,11 +39,12 @@ resource "terraform_data" "disassociation" {
   depends_on       = [terraform_data.init_destroy_validation, terraform_data.idle, module.storage, module.fsdr_region_0, module.fsdr_region_1]
 
   provisioner "local-exec" {
-    command = format("python3 \"%s/prepare.py\"", path.module)
-    environment = {
-      FSDR_PREPARATION     = jsonencode(self.input)
-      FSDR_OCI_CREDENTIALS = jsonencode(var.oci_credentials)
-    }
+    command = join(" ", [for argument in [
+      "python3", "${path.module}/prepare.py",
+      "--group", var.region_0, self.input.groups[var.region_0],
+      "--group", var.region_1, self.input.groups[var.region_1],
+      "--timeout", self.input.timeout
+    ] : format("'%s'", replace(argument, "'", "'\"'\"'"))])
   }
 }
 

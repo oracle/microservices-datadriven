@@ -28,7 +28,7 @@ locals {
         required = { nodeSelectorTerms = [{ matchExpressions = [{
           key      = "topology.kubernetes.io/zone"
           operator = "In"
-          values   = [element(split(":", volume.availability_domain), -1)]
+          values   = [reverse(split(":", volume.availability_domain))[0]]
         }] }] }
       }
     }

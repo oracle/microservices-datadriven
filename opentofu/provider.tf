@@ -12,16 +12,12 @@ terraform {
   required_version = ">= 1.5"
 }
 
-data "oci_identity_region_subscriptions" "home_region" {
+data "oci_identity_region_subscriptions" "tenancy" {
   tenancy_id = var.tenancy_ocid
-  filter {
-    name   = "is_home_region"
-    values = ["true"]
-  }
 }
 
 locals {
-  home_region = data.oci_identity_region_subscriptions.home_region.region_subscriptions[0].region_name
+  home_region = one([for subscription in data.oci_identity_region_subscriptions.tenancy.region_subscriptions : subscription.region_name if subscription.is_home_region])
   user_ocid   = var.user_ocid != "" ? var.user_ocid : var.current_user_ocid
 }
 

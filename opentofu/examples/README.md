@@ -7,7 +7,7 @@ This directory contains example `.tfvars` files for different deployment scenari
 ```bash
 # Load credentials from ~/.oci/config and run all tests
 cd /path/to/terraform/
-./examples/manual-test.sh
+./tests/manual-test.sh
 ```
 
 The test script automatically loads credentials from `~/.oci/config`, sets compartment to your tenancy root, and runs `tofu plan` on all testable examples.

@@ -137,6 +137,13 @@ resource "terraform_data" "fsdr_validation" {
       error_message = "Enable FSDR and select a non-empty standby region distinct from region."
     }
     precondition {
+      condition = anytrue([
+        for subscription in data.oci_identity_region_subscriptions.tenancy.region_subscriptions :
+        subscription.region_name == var.fsdr_region_1 && subscription.state == "READY"
+      ])
+      error_message = "Standby region ${var.fsdr_region_1} must have a READY subscription in this tenancy. Subscribe to the region and wait for activation before planning FSDR."
+    }
+    precondition {
       condition     = var.fsdr_standby_cpu_node_pool_size <= var.k8s_cpu_node_pool_size
       error_message = "Standby prerequisite capacity must fit within the recovery CPU worker count."
     }
@@ -197,13 +204,6 @@ module "fsdr" {
   timeouts                        = var.fsdr_timeouts
   executions                      = var.fsdr_plan_executions
   automatic_dr                    = var.fsdr_automatic_dr
-  oci_credentials = {
-    tenancy_ocid     = var.tenancy_ocid
-    user_ocid        = local.user_ocid
-    fingerprint      = var.fingerprint
-    private_key_path = var.private_key_path
-    private_key      = var.private_key
-  }
   providers = {
     oci               = oci
     oci.fsdr_region_1 = oci.fsdr_region_1

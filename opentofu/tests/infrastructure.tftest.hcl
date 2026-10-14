@@ -3,6 +3,12 @@
 # spell-checker: disable
 
 mock_provider "oci" {
+  mock_resource "oci_objectstorage_bucket" {
+    defaults = { defined_tags = { "Oracle-Tags.CreatedBy" = "test-user" } }
+  }
+  mock_resource "oci_database_autonomous_database" {
+    defaults = { role = "PRIMARY" }
+  }
   mock_data "oci_disaster_recovery_dr_protection_groups" {
     defaults = { dr_protection_group_collection = [{ items = [] }] }
   }
@@ -10,7 +16,10 @@ mock_provider "oci" {
     defaults = { ip_address_details = [{ ip_address = "192.0.2.10", is_public = true, reserved_ip = [] }] }
   }
   mock_data "oci_identity_region_subscriptions" {
-    defaults = { region_subscriptions = [{ region_name = "uk-london-1", region_key = "LHR", is_home_region = true, state = "READY", tenancy_id = "test-tenancy" }] }
+    defaults = { region_subscriptions = [
+      { region_name = "uk-london-1", region_key = "LHR", is_home_region = true, state = "READY", tenancy_id = "test-tenancy" },
+      { region_name = "uk-cardiff-1", region_key = "CWL", is_home_region = false, state = "READY", tenancy_id = "test-tenancy" }
+    ] }
   }
   mock_data "oci_identity_availability_domains" {
     defaults = { availability_domains = [{ name = "TEST:UK-LONDON-1-AD-1", id = "test-ad", compartment_id = "test-tenancy" }] }
@@ -19,7 +28,7 @@ mock_provider "oci" {
     defaults = { services = [{ id = "services", cidr_block = "all-lhr-services-in-oracle-services-network", name = "All LHR Services In Oracle Services Network", description = "test-services" }] }
   }
   mock_data "oci_database_autonomous_database" {
-    defaults = { id = "byo-adb", db_name = "BYODB", compartment_id = "database-compartment" }
+    defaults = { id = "byo-adb", db_name = "BYODB", compartment_id = "database-compartment", role = "PRIMARY" }
   }
   mock_data "oci_core_subnet" {
     defaults = { cidr_block = "10.80.0.0/24" }

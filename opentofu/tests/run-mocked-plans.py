@@ -14,14 +14,14 @@ import tempfile
 
 
 def copy_configuration(source, destination):
-    """Copy configuration, suites, templates, and the root provider lockfile."""
+    """Copy configuration, templates, and the root provider lockfile."""
     for path in source.rglob("*"):
         relative = path.relative_to(source)
-        if any(part.startswith(".") for part in relative.parts):
+        if relative.parts[0] == "tests" or any(part.startswith(".") for part in relative.parts):
             continue
         if not path.is_file():
             continue
-        if path.suffix != ".tf" and not path.name.endswith(".tftest.hcl") and "templates" not in relative.parts and not (path.suffix == ".py" and ("cfgmgt" in relative.parts or "fsdr" in relative.parts)):
+        if path.suffix != ".tf" and "templates" not in relative.parts and not (path.suffix == ".py" and ("cfgmgt" in relative.parts or "fsdr" in relative.parts)):
             continue
         target = destination / relative
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -30,7 +30,7 @@ def copy_configuration(source, destination):
 
 
 def check_suite(path):
-    """Require plan commands except the targeted mock cluster fixture."""
+    """Require plans except targeted cluster and local label fixtures."""
     content = path.read_text()
     runs = re.findall(r'^\s*run\s+"[^"]+"\s*\{', content, re.MULTILINE)
     plans = re.findall(r"^\s*command\s*=\s*plan\s*$", content, re.MULTILINE)
@@ -39,10 +39,16 @@ def check_suite(path):
         r'plan_options\s*\{\s*target\s*=\s*\[oci_containerengine_cluster\.default_cluster\]\s*\}\s*\}',
         content,
     )
-    if not runs or len(runs) != len(plans) + len(fixtures):
-        raise ValueError(f"{path}: each run must plan or use the targeted mock cluster fixture")
-    if re.search(r'^\s*provider\s+"', content, re.MULTILINE):
-        raise ValueError(f"{path}: test providers must use mock_provider")
+    label_fixtures = re.findall(
+        r'run "persist_generated_label"\s*\{\s*command\s*=\s*apply\s*'
+        r'plan_options\s*\{\s*target\s*=\s*\[random_pet\.label\]\s*\}\s*\}',
+        content,
+    )
+    if not runs or len(runs) != len(plans) + len(fixtures) + len(label_fixtures):
+        raise ValueError(f"{path}: each run must plan or use a targeted fixture")
+    providers = re.findall(r'^\s*provider\s+"([^"]+)"', content, re.MULTILINE)
+    if any(provider != "random" or not label_fixtures for provider in providers):
+        raise ValueError(f"{path}: only the local label fixture may use a real random provider")
     if not re.search(r'^\s*mock_provider\s+"', content, re.MULTILINE):
         raise ValueError(f"{path}: a mocked provider is required")
 
@@ -53,9 +59,9 @@ def main():
     parser.add_argument("--module", action="append", default=[], help="Run only this module path, such as modules/kubernetes")
     args = parser.parse_args()
     source = Path(__file__).resolve().parent.parent
-    suites = sorted(source.glob("tests/*.tftest.hcl"))
-    suites += sorted(path for path in (source / "modules").rglob("*.tftest.hcl") if ".terraform" not in path.parts)
-    modules = {suite.parent.parent.relative_to(source) for suite in suites}
+    tests = source / "tests"
+    suites = sorted(tests.rglob("*.tftest.hcl"))
+    modules = {suite.parent.relative_to(tests) for suite in suites}
     if args.module:
         selected = {Path(module) for module in args.module}
         if selected - modules:
@@ -75,6 +81,10 @@ def main():
     with tempfile.TemporaryDirectory(prefix="obaas-iac-tests-") as directory:
         snapshot = Path(directory)
         copy_configuration(source, snapshot)
+        for suite in suites:
+            target = snapshot / suite.parent.relative_to(tests) / "tests" / suite.name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(suite, target)
         providers = source / ".terraform" / "providers"
         for relative in sorted(modules):
             module = snapshot / relative

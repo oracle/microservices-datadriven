@@ -174,7 +174,7 @@ variables:
     default: false
 
   fsdr_region_1:
-    type: string
+    type: oci:identity:region:name
     title: "Standby OCI Region"
     description: "Subscribed region distinct from the primary region."
     required: true

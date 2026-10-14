@@ -3,42 +3,14 @@
 
 """Disassociate an existing FSDR pair before Terraform deletes its groups."""
 
+import argparse
 import json
 import math
-import os
 import re
 import shutil
 import subprocess
 import sys
 import time
-
-
-def cli_environment(credentials):
-    environment = os.environ.copy()
-    environment.pop("FSDR_OCI_CREDENTIALS", None)
-    for field, provider_name, cli_name in (
-        ("tenancy_ocid", "OCI_TENANCY_OCID", "OCI_CLI_TENANCY"),
-        ("user_ocid", "OCI_USER_OCID", "OCI_CLI_USER"),
-        ("fingerprint", "OCI_FINGERPRINT", "OCI_CLI_FINGERPRINT"),
-        ("private_key_path", "OCI_PRIVATE_KEY_PATH", "OCI_CLI_KEY_FILE"),
-        ("private_key", "OCI_PRIVATE_KEY", "OCI_CLI_KEY_CONTENT"),
-    ):
-        environment.pop(cli_name, None)
-        value = credentials.get(field) or environment.get(provider_name)
-        if value:
-            environment[cli_name] = value
-    environment["OCI_CLI_PROFILE"] = environment.get("OCI_CONFIG_FILE_PROFILE", "DEFAULT")
-    auth = environment.get("OCI_AUTH")
-    if not auth:
-        auth = "ResourcePrincipal" if environment.get("OCI_RESOURCE_PRINCIPAL_VERSION") else "APIKey"
-    environment["OCI_CLI_AUTH"] = {
-        "APIKey": "api_key",
-        "InstancePrincipal": "instance_principal",
-        "ResourcePrincipal": "resource_principal",
-        "SecurityToken": "security_token",
-        "OKEWorkloadIdentity": "oke_workload_identity",
-    }[auth]
-    return environment
 
 
 def timeout_seconds(value):
@@ -51,14 +23,13 @@ def timeout_seconds(value):
     return seconds
 
 
-def prepare(configuration, credentials):
+def prepare(configuration):
     executable = shutil.which("oci")
     if executable is None:
         raise RuntimeError("FSDR destroy preparation requires the OCI CLI on the Terraform runner.")
     groups = configuration["groups"]
     if len(groups) != 2 or len(set(groups.values())) != 2 or not all(groups.values()):
         raise ValueError("FSDR destroy preparation requires two existing regional protection groups.")
-    environment = cli_environment(credentials)
     deadline = time.monotonic() + timeout_seconds(configuration["timeout"])
 
     def remaining():
@@ -71,7 +42,6 @@ def prepare(configuration, credentials):
         result = subprocess.run(
             [executable, "--region", region, "--output", "json", "disaster-recovery",
              "dr-protection-group", operation, "--dr-protection-group-id", group_id, *arguments],
-            env=environment,
             capture_output=True,
             text=True,
             timeout=remaining(),
@@ -106,8 +76,12 @@ def prepare(configuration, credentials):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--group", nargs=2, action="append", required=True, metavar=("REGION", "OCID"))
+    parser.add_argument("--timeout", required=True)
+    args = parser.parse_args()
     try:
-        prepare(json.loads(os.environ["FSDR_PREPARATION"]), json.loads(os.environ["FSDR_OCI_CREDENTIALS"]))
+        prepare({"groups": dict(args.group), "timeout": args.timeout})
     except (KeyError, ValueError, OSError, RuntimeError, subprocess.SubprocessError) as error:
         print(f"FSDR destroy preparation failed: {error}", file=sys.stderr)
         raise SystemExit(1) from None

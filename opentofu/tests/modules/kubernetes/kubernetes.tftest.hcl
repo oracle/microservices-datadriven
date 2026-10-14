@@ -325,13 +325,17 @@ run "bootstrap_pv_manifest" {
         claim_name          = "data-obaas-etcd-0"
         namespace           = "kubetest"
         size_in_gbs         = 50
-        availability_domain = "TEST:AD-1"
+        availability_domain = "TEST:UK-LONDON-1-AD-3"
       } }
     }
   }
   assert {
     condition     = length(local.storage_manifests) == 2 && yamldecode(local.storage_manifests[1]).spec.csi.volumeHandle == "original-volume"
     error_message = "Bootstrap must render the reserved PV using its provisioned volume handle."
+  }
+  assert {
+    condition     = yamldecode(local.storage_manifests[1]).spec.nodeAffinity.required.nodeSelectorTerms[0].matchExpressions[0].values == ["UK-LONDON-1-AD-3"]
+    error_message = "PV zone affinity must use the availability-domain name without the tenancy prefix."
   }
 }
 
