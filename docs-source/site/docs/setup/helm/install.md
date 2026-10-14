@@ -639,19 +639,14 @@ helm upgrade --install <app-release> obaas/obaas -f examples/values-signoz-exist
 
 #### Upgrade SigNoZ during an existing-release upgrade
 
-The optional OBaaS patch release upgrades SigNoZ in place. Existing telemetry,
-dashboards, users, alerts, ClickHouse data, and ZooKeeper data are retained.
+Follow the [OBaaS upgrade guide](../../upgrade/index.mdx) for prerequisite and
+Envoy Gateway CRD updates and the two-step ClickHouse/SigNoZ upgrade. Older
+ClickHouse versions must be upgraded before the new pre-upgrade migration runs.
 
-Use the complete values file for the installed release:
-
-```bash
-helm upgrade <app-release> helm/infra-charts/obaas \
-  -n <application-namespace> \
-  --timeout 30m \
-  -f <customer-values-file>
-```
-
-Do not set `signozUpgrade.mode=destructive-replace` for this patch upgrade.
+The two-step procedure without protected recovery is for installations where
+observability data loss is acceptable. For backup and preservation, follow
+[SigNoZ's ClickHouse upgrade and backup guidance](https://signoz.io/docs/operate/migration/upgrade-0-131/).
+Do not set `signozUpgrade.mode=destructive-replace` for the in-place upgrade.
 
 #### SigNoz Cold Storage (`values-signoz-cold-storage.yaml`)
 
@@ -742,6 +737,50 @@ kubectl get pods -n <application-namespace>
 ```
 
 The example does not create persistent storage. Configure `coherence.coherence.persistence` with a suitable StorageClass and volume size when durable Coherence data is required.
+
+#### MicroTx Coordinator Database Storage
+
+To persist coordinator transaction state in the OBaaS database, configure:
+
+```yaml
+otmm:
+  coordinator:
+    storage:
+      type: db
+```
+
+With `storage.db.credentialSecretName` empty, the coordinator reuses the application
+credential secret and database wallet used by the metrics exporter, including
+custom `database.authN` secret names and keys. At startup, Python 3 in the
+coordinator image serializes the username and password into MicroTx's JSON
+credential format, then starts `/app/tcs`. The default `26.1.2` image contains this
+runtime; custom images must provide it too. Coordinator settings are loaded through
+`envFrom` from the chart's ConfigMap, allowing the secret-backed connection string
+to take effect. The connection string defaults to the
+application secret's service key; set `storage.db.connectionString` to override it.
+For the shared wallet, the chart overlays `sqlnet.ora` with an explicit wallet
+directory of `/etc/config/dbwallet`. This avoids the downloaded wallet's
+`?/network/admin` path, which does not point to the coordinator's mount. The wallet
+Secret itself is unchanged. Custom wallet secrets and ConfigMaps must supply a
+`sqlnet.ora` that matches this mount path.
+
+If an existing values file sets `storage.db.credentialSecretName` to
+`microtx-coordinator-db`, remove that override or set it to `""` to use the shared
+application secret. A nonempty value still selects a pre-existing, separate secret
+whose `storage.db.credentialSecretKey` (default `secret`) contains
+`{"username":"...","password":"..."}`; this mode requires an explicit connection
+string. Custom wallet secrets or ConfigMaps can also be selected under `storage.db`.
+
+Database persistence requires a MicroTx edition that supports durable storage and
+the database schema and privileges required by that edition. For `storage.type: db`,
+the chart runs the coordinator image in `INIT_CONTAINER_ENABLED=true` mode before
+starting the service, using the same credentials and wallet. This initializes or
+upgrades the MicroTx schema; the user needs its documented schema-creation
+privileges and tablespace quota. Check `initialize-coordinator-schema` container
+logs if initialization fails. Set `storage.db.initializeSchema: false` when a DBA
+provisions and upgrades these objects separately. Review the MicroTx migration and
+backup requirements before upgrading an existing transaction store. The chart
+defaults to coordinator memory storage.
 
 #### Private Registry Configuration (`values-private-registry.yaml`)
 

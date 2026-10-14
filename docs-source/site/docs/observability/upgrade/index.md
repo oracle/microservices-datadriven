@@ -5,21 +5,14 @@ sidebar_position: 9
 
 # Upgrade SigNoZ in place
 
-## In-place patch upgrade
+OBaaS 2.1.2 requires ClickHouse `25.12.5` before its new telemetry-store
+migrations run. The migrator is a Helm `pre-upgrade` hook, so a single application
+upgrade from an older ClickHouse version can fail before the database is updated.
 
-The optional OBaaS 2.1.2 patch release upgrades SigNoZ in place. Existing
-telemetry, dashboards, users, alerts, ClickHouse data, and ZooKeeper data are
-retained. The application database and other OBaaS services are unchanged.
+Follow the [two-step ClickHouse and SigNoZ upgrade procedure](../../upgrade/index.mdx#upgrade-signoz-and-clickhouse-in-two-steps)
+after applying the required operator and Gateway API CRD updates. That procedure
+is for installations where data loss is acceptable and does not create backups.
 
-Do not set `signozUpgrade.mode=destructive-replace` for this patch upgrade.
-
-## Upgrade command
-
-Use the complete values file for the installed release:
-
-```bash
-helm upgrade <app-release> helm/infra-charts/obaas \
-  -n <application-namespace> \
-  --timeout 30m \
-  -f <customer-values-file>
-```
+If existing data must be preserved, follow [SigNoZ's ClickHouse upgrade and backup guidance](https://signoz.io/docs/operate/migration/upgrade-0-131/)
+and validate your recovery point before upgrading. Do not select
+`signozUpgrade.mode=destructive-replace` for this in-place upgrade.

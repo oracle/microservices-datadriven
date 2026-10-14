@@ -639,19 +639,14 @@ helm upgrade --install <app-release> obaas/obaas -f examples/values-signoz-exist
 
 #### Upgrade SigNoZ during an existing-release upgrade
 
-The optional OBaaS patch release upgrades SigNoZ in place. Existing telemetry,
-dashboards, users, alerts, ClickHouse data, and ZooKeeper data are retained.
+Follow the [OBaaS upgrade guide](../../upgrade/index.mdx) for prerequisite and
+Envoy Gateway CRD updates and the two-step ClickHouse/SigNoZ upgrade. Older
+ClickHouse versions must be upgraded before the new pre-upgrade migration runs.
 
-Use the complete values file for the installed release:
-
-```bash
-helm upgrade <app-release> helm/infra-charts/obaas \
-  -n <application-namespace> \
-  --timeout 30m \
-  -f <customer-values-file>
-```
-
-Do not set `signozUpgrade.mode=destructive-replace` for this patch upgrade.
+The two-step procedure without protected recovery is for installations where
+observability data loss is acceptable. For backup and preservation, follow
+[SigNoZ's ClickHouse upgrade and backup guidance](https://signoz.io/docs/operate/migration/upgrade-0-131/).
+Do not set `signozUpgrade.mode=destructive-replace` for the in-place upgrade.
 
 #### SigNoz Cold Storage (`values-signoz-cold-storage.yaml`)
 
