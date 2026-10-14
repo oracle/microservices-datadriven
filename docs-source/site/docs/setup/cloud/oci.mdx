@@ -107,6 +107,8 @@ Choose a database mode under **Database Options**:
 
 A new database uses Oracle Autonomous Database 26ai ATP with 2 ECPU and 20 GB storage by default. Adjust sizing and the license model for your environment. `adb_networking` selects `SECURE_ACCESS` or `PRIVATE_ENDPOINT_ACCESS`; the new-ADB example uses a private endpoint.
 
+Use **Autonomous Database Compartment** (`adb_compartment_ocid`) to place databases created by the stack, including the FSDR standby, in a separate compartment. It defaults to `compartment_ocid`. Grant the deployment identity the Autonomous Database permissions below in the selected compartment; the stack scopes database operator and FSDR database policies to that compartment.
+
 For an existing database, grant the privileged user the permissions required for OBaaS schema creation and runtime grants. The generated application values select `ADB-S` for Autonomous Database and `OTHER` for other databases.
 
 For local deployment, configure the selected mode in `terraform.tfvars`:

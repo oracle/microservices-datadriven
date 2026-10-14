@@ -113,6 +113,74 @@ variables {
   k8s_run_cfgmgt       = false
 }
 
+run "adb_compartment_default" {
+  command = plan
+  variables {
+    fsdr_enabled  = true
+    fsdr_region_1 = "uk-cardiff-1"
+  }
+  assert {
+    condition     = oci_database_autonomous_database.default_adb["managed"].compartment_id == "test-compartment" && oci_database_autonomous_database.dr_adb_standby["fsdr_region_1"].compartment_id == "test-compartment"
+    error_message = "Both managed databases must default to the deployment compartment."
+  }
+}
+
+run "adb_compartment_override" {
+  command = plan
+  variables {
+    adb_compartment_ocid = "database-compartment"
+    fsdr_enabled         = true
+    fsdr_region_1        = "uk-cardiff-1"
+  }
+  assert {
+    condition     = oci_database_autonomous_database.default_adb["managed"].compartment_id == "database-compartment" && oci_database_autonomous_database.dr_adb_standby["fsdr_region_1"].compartment_id == "database-compartment" && oci_load_balancer_load_balancer.lb.compartment_id == "test-compartment"
+    error_message = "The ADB compartment must apply to both databases while other infrastructure stays in the deployment compartment."
+  }
+  assert {
+    condition     = contains(module.fsdr["managed"].iam_policy_statements.groups, "Allow dynamic-group iactest-fsdr-groups to manage autonomous-database-family in compartment id database-compartment") && contains(module.fsdr["managed"].iam_policy_statements.groups, "Allow dynamic-group iactest-fsdr-groups to manage cluster-family in compartment id test-compartment")
+    error_message = "FSDR database permissions must follow the ADB compartment while cluster permissions retain their scope."
+  }
+}
+
+run "adb_compartment_without_fsdr" {
+  command = plan
+  variables {
+    adb_compartment_ocid = "database-compartment"
+  }
+  assert {
+    condition     = oci_database_autonomous_database.default_adb["managed"].compartment_id == "database-compartment" && length(oci_database_autonomous_database.dr_adb_standby) == 0
+    error_message = "The ADB compartment must also work without FSDR."
+  }
+}
+
+run "adb_compartment_tenancy_fallback" {
+  command = plan
+  variables {
+    compartment_ocid     = ""
+    adb_compartment_ocid = " "
+  }
+  assert {
+    condition     = oci_database_autonomous_database.default_adb["managed"].compartment_id == "test-tenancy"
+    error_message = "An empty ADB compartment must follow the deployment's tenancy fallback."
+  }
+}
+
+run "adb_compartment_with_existing_primary" {
+  command = plan
+  variables {
+    adb_compartment_ocid = "standby-database-compartment"
+    fsdr_enabled         = true
+    fsdr_region_1        = "uk-cardiff-1"
+    byo_db_type          = "ADB-S"
+    byo_adb_ocid         = "byo-adb"
+    byo_db_password      = "test-password"
+  }
+  assert {
+    condition     = length(oci_database_autonomous_database.default_adb) == 0 && local.fsdr_external_databases == tomap({ "byo-adb" = "database-compartment" }) && oci_database_autonomous_database.dr_adb_standby["fsdr_region_1"].compartment_id == "standby-database-compartment"
+    error_message = "An existing primary keeps its actual compartment while the managed standby uses the selected compartment."
+  }
+}
+
 run "disabled_by_default" {
   command = plan
   assert {

@@ -16,7 +16,7 @@ resource "oci_identity_policy" "fsdr" {
   name           = format("%s-groups", var.label_prefix)
   description    = "OBaaS full-stack recovery"
   statements = concat([for family in ["disaster-recovery-family", "autonomous-database-family", "cluster-family", "instance-family", "compute-container-family", "object-family", "volume-family", "file-family", "virtual-network-family", "load-balancers", "repos"] :
-    format("Allow dynamic-group %s to manage %s in compartment id %s", oci_identity_dynamic_group.fsdr.name, family, var.compartment_id)
+    format("Allow dynamic-group %s to manage %s in compartment id %s", oci_identity_dynamic_group.fsdr.name, family, family == "autonomous-database-family" ? coalesce(var.adb_compartment_id, var.compartment_id) : var.compartment_id)
     ], [
     format("Allow dynamic-group %s to read objectstorage-namespaces in tenancy", oci_identity_dynamic_group.fsdr.name),
     format("Allow dynamic-group %s to read all-resources in compartment id %s", oci_identity_dynamic_group.fsdr.name, var.compartment_id),

@@ -98,6 +98,17 @@ run "setup_cluster" {
   }
 }
 
+run "adb_compartment_policy" {
+  command = plan
+  variables {
+    adb_compartment_id = "database-compartment"
+  }
+  assert {
+    condition     = contains(oci_identity_policy.workers_policies.statements, "allow any-user to manage autonomous-database-family in compartment id database-compartment where all {request.principal.type = 'workload', request.principal.namespace = 'oracle-database-operator-system', request.principal.service_account = 'default', request.principal.cluster_id = 'test-cluster'}")
+    error_message = "Database operator permissions must follow the selected ADB compartment."
+  }
+}
+
 run "cpu_cluster_and_addons" {
   command = plan
   assert {

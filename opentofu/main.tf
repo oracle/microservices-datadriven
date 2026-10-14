@@ -58,7 +58,7 @@ resource "oci_database_autonomous_database" "default_adb" {
   admin_password                       = local.db_conn.password
   autonomous_maintenance_schedule_type = "REGULAR"
   character_set                        = "AL32UTF8"
-  compartment_id                       = local.compartment_ocid
+  compartment_id                       = local.adb_compartment_ocid
   compute_count                        = var.adb_ecpu_core_count
   compute_model                        = "ECPU"
   data_storage_size_in_gb              = var.adb_data_storage_size_in_gb
@@ -86,7 +86,7 @@ resource "oci_database_autonomous_database" "default_adb" {
 // Cross-Region ADB Standby (Autonomous Data Guard — required before FSDR can manage ADB failover)
 resource "oci_database_autonomous_database" "dr_adb_standby" {
   for_each                      = local.fsdr_include_adb ? { fsdr_region_1 = true } : {}
-  compartment_id                = local.compartment_ocid
+  compartment_id                = local.adb_compartment_ocid
   source                        = "CROSS_REGION_DISASTER_RECOVERY"
   source_id                     = local.db_ocid
   db_name                       = local.db_name
@@ -99,7 +99,7 @@ resource "oci_database_autonomous_database" "dr_adb_standby" {
   lifecycle {
     ignore_changes = [whitelisted_ips]
   }
-  provider   = oci.fsdr_region_1
+  provider = oci.fsdr_region_1
   depends_on = [
     terraform_data.fsdr_validation,
     terraform_data.fsdr_database_role_guard,

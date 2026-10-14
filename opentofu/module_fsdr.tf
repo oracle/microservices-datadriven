@@ -182,6 +182,7 @@ module "fsdr" {
   source                          = "./modules/fsdr"
   tenancy_id                      = var.tenancy_ocid
   compartment_id                  = local.compartment_ocid
+  adb_compartment_id              = local.adb_compartment_ocid
   label_prefix                    = local.fsdr_label_prefix
   group_label_prefix              = local.fsdr_group_label_prefix
   region_0                        = var.region

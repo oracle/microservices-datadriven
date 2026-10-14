@@ -126,6 +126,7 @@ variableGroups:
     variables:
       - byo_db
       - byo_db_type
+      - adb_compartment_ocid
       - adb_license_model
       - adb_edition
       - adb_networking
@@ -406,6 +407,14 @@ variables:
     visible: byo_db
 
   ### Provision New ADB ###
+  adb_compartment_ocid:
+    type: oci:identity:compartment:id
+    title: "Autonomous Database Compartment"
+    description: "Compartment for databases created by the stack, including the FSDR standby."
+    required: true
+    default: compartment_ocid
+    visible: true
+
   adb_license_model:
     type: enum
     title: "Autonomous Database License Model"

@@ -94,14 +94,15 @@ module "kubernetes_storage" {
 }
 
 module "kubernetes" {
-  for_each       = { managed = true }
-  source         = "./modules/kubernetes"
-  label_prefix   = local.label_prefix
-  tenancy_id     = var.tenancy_ocid
-  compartment_id = local.compartment_ocid
-  vcn_id         = local.vcn_ocid
-  oci_services   = data.oci_core_services.core_services.services.0
-  region         = var.region
+  for_each           = { managed = true }
+  source             = "./modules/kubernetes"
+  label_prefix       = local.label_prefix
+  tenancy_id         = var.tenancy_ocid
+  compartment_id     = local.compartment_ocid
+  adb_compartment_id = local.adb_compartment_ocid
+  vcn_id             = local.vcn_ocid
+  oci_services       = data.oci_core_services.core_services.services.0
+  region             = var.region
   lb = {
     id                 = oci_load_balancer_load_balancer.lb.id
     compartment_id     = oci_load_balancer_load_balancer.lb.compartment_id
@@ -159,16 +160,17 @@ variable "fsdr_standby_cpu_node_pool_size" {
 }
 
 module "fsdr_kubernetes" {
-  for_each        = var.fsdr_enabled ? { standby = true } : {}
-  source          = "./modules/kubernetes"
-  label_prefix    = local.fsdr_standby_label
-  app_namespace   = local.label_prefix
-  stage_directory = format("%s/cfgmgt/stage/fsdr/standby", path.root)
-  tenancy_id      = var.tenancy_ocid
-  compartment_id  = local.compartment_ocid
-  vcn_id          = local.fsdr_standby_vcn_id
-  oci_services    = data.oci_core_services.fsdr_standby[0].services[0]
-  region          = var.fsdr_region_1
+  for_each           = var.fsdr_enabled ? { standby = true } : {}
+  source             = "./modules/kubernetes"
+  label_prefix       = local.fsdr_standby_label
+  app_namespace      = local.label_prefix
+  stage_directory    = format("%s/cfgmgt/stage/fsdr/standby", path.root)
+  tenancy_id         = var.tenancy_ocid
+  compartment_id     = local.compartment_ocid
+  adb_compartment_id = local.adb_compartment_ocid
+  vcn_id             = local.fsdr_standby_vcn_id
+  oci_services       = data.oci_core_services.fsdr_standby[0].services[0]
+  region             = var.fsdr_region_1
   lb = {
     id                 = oci_load_balancer_load_balancer.fsdr_standby[0].id
     compartment_id     = oci_load_balancer_load_balancer.fsdr_standby[0].compartment_id

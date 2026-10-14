@@ -10,6 +10,12 @@ variable "compartment_id" {
   type = string
 }
 
+variable "adb_compartment_id" {
+  description = "Compartment for managed Autonomous Databases; defaults to compartment_id."
+  type        = string
+  default     = null
+}
+
 variable "vcn_id" {
   type = string
 }
