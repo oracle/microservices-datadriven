@@ -20,6 +20,18 @@ import static org.mockito.Mockito.when;
 
 class TicketTelemetryTest {
     @Test
+    void exportsZeroFailuresBeforeTrafficAndIncrementsTheSameCounter() {
+        SimpleMeterRegistry registry = new SimpleMeterRegistry();
+        TicketTelemetry telemetry = new TicketTelemetry(registry, ObservationRegistry.create());
+        var failures = registry.get("support.ticket.events").tag("outcome", "failed").counter();
+        assertEquals(0, failures.count());
+
+        telemetry.completed("failed", TicketWorkEvent.submitted(42L, null), 1_000_000);
+
+        assertEquals(1, failures.count());
+    }
+
+    @Test
     void recordsBoundedOutcomesAndStepFailures() {
         SimpleMeterRegistry registry = new SimpleMeterRegistry();
         TicketTelemetry telemetry = new TicketTelemetry(registry, ObservationRegistry.create());

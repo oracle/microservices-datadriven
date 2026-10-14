@@ -1,51 +1,212 @@
 {
   "uid": "customer-support-workflow",
   "title": "Customer Support Workflow",
-  "tags": ["customer-support", "observability"],
+  "tags": [
+    "customer-support",
+    "observability"
+  ],
   "schemaVersion": 40,
-  "version": 1,
+  "version": 2,
   "refresh": "5s",
-  "time": { "from": "now-15m", "to": "now" },
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
   "templating": {
-    "list": [{
-      "name": "datasource",
-      "type": "datasource",
-      "query": "prometheus",
-      "current": { "text": "Prometheus", "value": "prometheus" }
-    }]
+    "list": [
+      {
+        "name": "datasource",
+        "type": "datasource",
+        "query": "prometheus",
+        "current": {
+          "text": "Prometheus",
+          "value": "prometheus"
+        }
+      },
+      {
+        "name": "failure_window",
+        "label": "Failure window",
+        "type": "custom",
+        "query": "1m,5m,15m,30m",
+        "current": {
+          "text": "5m",
+          "value": "5m"
+        },
+        "options": [
+          {
+            "text": "1m",
+            "value": "1m",
+            "selected": false
+          },
+          {
+            "text": "5m",
+            "value": "5m",
+            "selected": true
+          },
+          {
+            "text": "15m",
+            "value": "15m",
+            "selected": false
+          },
+          {
+            "text": "30m",
+            "value": "30m",
+            "selected": false
+          }
+        ],
+        "multi": false,
+        "includeAll": false
+      }
+    ]
   },
   "panels": [
     {
-      "id": 1, "title": "Tickets by workflow state", "type": "timeseries",
-      "description": "No data means the ticket-state gauge has not reached Prometheus; it is not a zero-ticket reading.",
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
-      "targets": [{ "refId": "A", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "expr": "sum by (state) (support_ticket_state)", "legendFormat": "{{state}}" }]
+      "id": 1,
+      "title": "Failed events in last ${failure_window}",
+      "type": "gauge",
+      "description": "Estimated increase in committed failed event outcomes during the rolling window. Green below 5; red at 5 or more. Edit the red threshold and gauge maximum to change the limit. No data indicates missing samples, not zero failures. Replays do not erase the original failure.",
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 0
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(increase(support_ticket_events_total{outcome=\"failed\"}[${failure_window}]))",
+          "instant": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 1,
+          "min": 0,
+          "max": 5,
+          "noValue": "No data",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 5
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        },
+        "orientation": "auto",
+        "showThresholdLabels": true,
+        "showThresholdMarkers": true
+      }
     },
     {
-      "id": 2, "title": "Failed event worklist", "type": "stat",
-      "gridPos": { "h": 8, "w": 6, "x": 12, "y": 0 },
-      "targets": [{ "refId": "A", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "expr": "support_ticket_failed_worklist", "instant": true }]
+      "id": 3,
+      "title": "Event outcomes per minute",
+      "type": "timeseries",
+      "gridPos": {
+        "h": 8,
+        "w": 16,
+        "x": 8,
+        "y": 0
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "sum by (outcome) (rate(support_ticket_events_total[5m])) * 60",
+          "legendFormat": "{{outcome}}"
+        }
+      ]
     },
     {
-      "id": 3, "title": "Event outcomes per minute", "type": "timeseries",
-      "gridPos": { "h": 8, "w": 6, "x": 18, "y": 0 },
-      "targets": [{ "refId": "A", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "expr": "sum by (outcome) (rate(support_ticket_events_total[5m])) * 60", "legendFormat": "{{outcome}}" }]
-    },
-    {
-      "id": 4, "title": "Retry attempts per minute", "type": "timeseries",
+      "id": 4,
+      "title": "Retry attempts per minute",
+      "type": "timeseries",
       "description": "The original demo failure is non-retryable; its replayed event simulates one transient failure before succeeding when retries are enabled.",
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
-      "targets": [{ "refId": "A", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "expr": "sum(rate(support_ticket_retries_total[5m])) * 60" }]
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(rate(support_ticket_retries_total[5m])) * 60"
+        }
+      ]
     },
     {
-      "id": 5, "title": "Mean event processing time (seconds)", "type": "timeseries",
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
-      "targets": [{ "refId": "A", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "expr": "sum(rate(support_ticket_processing_milliseconds_sum[5m])) / clamp_min(sum(rate(support_ticket_processing_milliseconds_count[5m])), 0.001) / 1000" }]
+      "id": 5,
+      "title": "Mean event processing time (seconds)",
+      "type": "timeseries",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(rate(support_ticket_processing_milliseconds_sum[5m])) / clamp_min(sum(rate(support_ticket_processing_milliseconds_count[5m])), 0.001) / 1000"
+        }
+      ]
     },
     {
-      "id": 6, "title": "Ticket reads by served path (per minute)", "type": "timeseries",
-      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 16 },
-      "targets": [{ "refId": "A", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "expr": "sum by (path) (rate(support_ticket_reads_total{outcome=\"success\"}[5m])) * 60", "legendFormat": "{{path}}" }]
+      "id": 6,
+      "title": "Ticket reads by served path (per minute)",
+      "type": "timeseries",
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "sum by (path) (rate(support_ticket_reads_total{outcome=\"success\"}[5m])) * 60",
+          "legendFormat": "{{path}}"
+        }
+      ]
     }
   ]
 }

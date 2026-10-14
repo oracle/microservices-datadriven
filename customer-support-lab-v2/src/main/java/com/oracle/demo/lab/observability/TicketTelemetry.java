@@ -29,6 +29,8 @@ public class TicketTelemetry {
     public TicketTelemetry(MeterRegistry meters, ObservationRegistry observations) {
         this.meters = meters;
         this.observations = observations;
+        // Export a baseline before failures occur, for rolling-window counter queries.
+        meters.counter("support.ticket.events", "outcome", "failed");
     }
 
     public Observation eventObservation() {

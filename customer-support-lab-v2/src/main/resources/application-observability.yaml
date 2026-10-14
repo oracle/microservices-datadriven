@@ -12,7 +12,3 @@ management:
     export:
       otlp:
         enabled: ${MANAGEMENT_OTLP_TRACING_EXPORT_ENABLED:true}
-
-app:
-  observability:
-    state-refresh-ms: ${TICKET_STATE_REFRESH_MS:10000}

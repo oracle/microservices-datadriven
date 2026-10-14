@@ -116,8 +116,11 @@ AI event path against an authorized OCI model before claiming it is live.
 
 ### 4. Show operational evidence for the standard cache path
 
-Use a small dashboard for emitted ticket states, event outcomes/retries,
-failed-worklist depth, processing latency, and served read paths. Show one correlated
+Use a small dashboard for event outcomes/retries, a rolling-window failure
+gauge, processing latency, and served read paths. The application emits
+time series from event handling; metric collection must not run ticket-count
+queries. Grafana computes recent failures from the failure counter, with a
+default five-minute window and a red threshold of five. Show one correlated
 HTTP → event-consumer → JDBC trace, plus useful Oracle JDBC/UCP signals.
 Only add log panels after application logs are actually delivered to LGTM.
 Avoid placeholder consumer-lag, OCI-cost, regional, or approval panels.
@@ -208,12 +211,12 @@ and JSON fields are unchanged.
 LGTM received workflow metrics and an HTTP → consumer → JDBC trace. App logs
 are not forwarded to LGTM. The dashboard now includes a served-read-path panel;
 router tests verify the `primary`, `true-cache`, and `primary-fallback` metric
-labels. In the full-stack run, all six provisioned dashboard expressions
+labels. In the earlier full-stack run, all six original dashboard expressions
 returned live Prometheus data: two `TRIAGED` tickets, an empty final worklist,
 failed and processed event counters, retries, processing time, and both
 `primary` and `true-cache` reads. Tempo returned one trace containing
 `http post /tickets`, `support.ticket.consume`, and `Execute query` spans.
-The dashboard does not render synthetic zeroes for absent state or retry
+The dashboard does not render synthetic zeroes for missing telemetry or retry
 metrics. Read metrics fail open so instrumentation cannot convert a successful
 GET into an error or hide the real read exception; focused tests cover both
 outcomes. Stopping this lab's cache yielded HTTP 200 with

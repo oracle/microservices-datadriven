@@ -125,7 +125,7 @@ in the next step.
 | `events` | Enables ticket submission/read APIs, the failure worklist and replay API, topic setup, and the background consumer. Default when no active profiles are supplied. |
 | `demo-failures` | With `events`, injects deterministic failures for tickets whose title starts with `[demo-fail-once]`. |
 | `ai` | Selects the OCI-backed processor and enables the saved-assistance API. Use with `events` to process tickets. |
-| `observability` | Enables metrics/trace export and JSON console logs; with `events`, also refreshes database-backed state gauges. |
+| `observability` | Enables metrics/trace export and JSON console logs. Grafana calculates failure windows from emitted event counters. |
 | `blockchain` | With `events`, enables approval-history POST/GET endpoints. Compose already creates its table; a new review requires saved AI assistance. |
 
 ### 4. Demonstrate failure, replay, and cache reads
@@ -322,15 +322,31 @@ Stop the app and restart with:
 
 Run the replay walkthrough again, then open Grafana at
 `http://localhost:3000`. Under **Oracle AI Database**, use **Customer Support
-Workflow** for event outcomes, retries, enrichment steps, ticket states, and
+Workflow** for recent failures, event outcomes, retries, processing latency, and
 read paths, and **Oracle UCP Metrics** for pool activity. To observe AI steps,
 start with `events,ai,observability` and run the AI script.
 
-The observability profile enables OTLP metrics and trace export, JSON console
-logs, and database-backed state gauges. Metrics export every 5 seconds by
-default; gauges refresh every 10 seconds. A quick replay may finish before a
-gauge captures the brief `FAILED` state, while event counters retain both
-outcomes. Search traces for service `customer-support-lab-v2`.
+The observability profile enables OTLP metrics and trace export and JSON
+console logs. Metrics export every 5 seconds by default. The application emits
+event counters after commit; it does not query ticket counts for metrics.
+Search traces for service `customer-support-lab-v2`.
+
+The **Failed events** dashboard gauge shows failures in a rolling window,
+defaulting to five minutes. It is green below five failures and red at five
+or more. Select **Failure window** to change the window; edit the panel's red
+threshold and maximum to change the limit. This changes the gauge's color;
+it does not create a notification alert rule.
+
+Grafana queries `sum(increase(support_ticket_events_total{outcome="failed"}[5m]))`
+for the default window. A successful replay does not erase the original failure;
+the gauge drops as failures leave the window. This is a sampled estimate,
+not the current failed worklist size. Prometheus accounts for counter resets
+on app restart and can return fractional increases. See
+[Prometheus increase](https://prometheus.io/docs/prometheus/latest/querying/functions/#increase).
+The failure counter is registered at startup to emit a zero baseline, but the
+query needs at least two exported samples. Missing samples show **No data**,
+rather than a synthetic healthy zero. Use `/ticket-events/failures` to inspect
+the current worklist.
 
 If Grafana is empty, check a local meter first:
 
@@ -425,13 +441,12 @@ customer-support-lab-v2/
 │   └── demo-ai-assistance.sh
 ├── src/main/java/com/oracle/demo/lab/
 │   ├── Application.java         Boot entry point, executor, JDBC tracing import
-│   ├── config/                  Required database credential validation
 │   ├── web/                     Ticket, replay, and assistance endpoints
 │   ├── model/                   Tickets, workflow status, event envelopes, failure metadata
 │   ├── messaging/               OKafka setup, lifecycle, transactional publish/consume
 │   ├── processing/              Core/AI processors and opt-in demo failures
 │   ├── persistence/             Ticket storage, outcomes, UUID binding, cache routing
-│   ├── observability/           Trace propagation, workflow metrics, state gauges
+│   ├── observability/           Trace propagation and event-driven workflow metrics
 │   └── ai/                      Summaries, vector retrieval, policy indexing, assistance
 ├── src/main/resources/          Base, AI, and observability configuration
 ├── src/test/                    Unit/profile tests, opt-in Oracle tests, startup scripts
@@ -509,7 +524,7 @@ curl -i -X POST 'http://localhost:9001/ticket-events/failures/<event-uuid>/repla
 | `MANAGEMENT_SERVER_PORT` | `9002`. |
 | `MANAGEMENT_OTLP_METRICS_EXPORT_URL` | `http://localhost:4318/v1/metrics`. |
 | `MANAGEMENT_OTLP_TRACING_ENDPOINT` | `http://localhost:4318/v1/traces`. |
-| `MANAGEMENT_OTLP_METRICS_EXPORT_STEP`, `TICKET_STATE_REFRESH_MS` | `5s`, `10000` ms. |
+| `MANAGEMENT_OTLP_METRICS_EXPORT_STEP` | `5s`. |
 
 Changing Compose ports does not change the Maven app's connection defaults.
 Update `JDBC_URL`, `OKAFKA_BOOTSTRAP_SERVERS`, and
