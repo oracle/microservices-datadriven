@@ -40,6 +40,10 @@ Oracle Backend for Microservices and AI ships with a fully integrated observabil
       <td>Catalog of 20+ ready-to-use dashboards (Spring Boot, Kafka, Kubernetes, Oracle DB, and more)</td>
     </tr>
     <tr>
+      <th scope="row"><a href="./custom-dashboards">Custom Dashboards</a></th>
+      <td>Install and update your own SigNoz dashboards with a separate Helm chart</td>
+    </tr>
+    <tr>
       <th scope="row"><a href="./configure">Configure Applications for SigNoz</a></th>
       <td>Add OpenTelemetry and Micrometer dependencies to your application</td>
     </tr>
