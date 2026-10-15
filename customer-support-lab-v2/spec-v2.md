@@ -38,7 +38,7 @@ connection variants and tuning after the walkthrough, not before it.
 
 ## Design rules
 
-- One ticket writer, one read API, one SQL ticket store, one event type, and
+- One ticket writer, one read API, one SQL ticket store, two work event types, and
   one consumer flow. Do not restore a parallel JSON duality/ORDS writer or
   add a framework for branching demo scripts.
 - The event envelope contains only ticket ID, event ID, correlation ID,
@@ -47,8 +47,12 @@ connection variants and tuning after the walkthrough, not before it.
   HTTP and OSON stringify only at their boundaries.
 - Ticket states are `RECEIVED`, `TRIAGED`, `ENRICHED`, and `FAILED`. `REPLAYED`
   describes an event outcome, not a ticket state. Human reviews append to a
-  separate optional blockchain history; they do not change workflow status
-  or execute customer actions. Resolution states remain out of scope.
+  separate optional blockchain history. Approval accepts the saved summary;
+  rejection appends required feedback to the ticket, resets it to `RECEIVED`,
+  and publishes `TICKET_FEEDBACK_SUBMITTED` in the same transaction. The AI
+  consumer regenerates its summary, embedding, and matches, returning it to
+  `ENRICHED`. Reviews do not execute customer actions. Resolution states remain
+  out of scope.
 - Preserve atomic ticket/event submission, idempotent processing, bounded
   retries, a durable failed-event worklist, and explicit replay. Replay
   publishes a new event linked to the original; a redelivered original must
@@ -255,5 +259,10 @@ The optional `events,ai,blockchain` chapter uses a Compose-bootstrapped V2
 blockchain table to preserve human decisions, summary snapshots, SHA-256
 summary digests, model/prompt metadata, and self-declared reviewer names.
 An action UUID deduplicates retries; corrections append a new action.
+Rejected reviews also request summary regeneration through TxEventQ. Current
+assistance is replaced on success; reviewed snapshots remain in blockchain
+history. This extension has automated tests and a runnable HTTP walkthrough in
+`scripts/demo-human-feedback.sh`; earlier live validation results above do not
+cover the feedback workflow.
 Production authentication, cross-service transactions, production retention,
 and cache freshness SLOs remain later work.

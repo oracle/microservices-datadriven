@@ -75,6 +75,20 @@ class TicketEventConsumerTest {
     }
 
     @Test
+    void feedbackEventUsesTheSameProcessingAndOutcomeTransaction() throws Exception {
+        TicketWorkEvent event = TicketWorkEvent.feedbackSubmitted(42L, UUID.randomUUID());
+        SupportTicket ticket = ticket("Lost MFA authenticator");
+        ticket.setReviewFeedback("Use the test tenant.");
+        when(tickets.findById(42L)).thenReturn(Optional.of(ticket));
+
+        assertEquals("processed", consumer().processRecord(connection, record(event)));
+
+        verify(processor).processRecord(connection, event, ticket);
+        verify(outcomes).markProcessed(connection, event);
+        verify(outcomes, never()).recordFailure(any(), any(), anyInt(), any());
+    }
+
+    @Test
     void acknowledgesOnlyAfterIdempotencyWrite() throws Exception {
         TicketWorkEvent event = TicketWorkEvent.submitted(42L, null);
         SupportTicket ticket = ticket("Lost MFA authenticator");

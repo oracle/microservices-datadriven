@@ -27,6 +27,9 @@ public record TicketApproval(UUID actionId, long ticketId, Decision decision, St
                         "Supply an actionId UUID, APPROVED/REJECTED decision, actorId (1–128 characters), "
                                 + "and optional reason (up to 1000 characters)");
             }
+            if (decision == Decision.REJECTED && (reason == null || reason.isBlank())) {
+                throw new IllegalArgumentException("A REJECTED review requires feedback in reason");
+            }
         }
     }
 }

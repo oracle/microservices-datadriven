@@ -3,6 +3,7 @@
 package com.oracle.demo.lab.web;
 
 import com.oracle.demo.lab.model.TicketApproval;
+import com.oracle.demo.lab.messaging.TicketReviewService;
 import com.oracle.demo.lab.persistence.TicketApprovalStore;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
@@ -16,18 +17,20 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@Profile("events & blockchain")
+@Profile("events & ai & blockchain")
 public class TicketApprovalController {
     private final TicketApprovalStore approvals;
+    private final TicketReviewService reviews;
 
-    public TicketApprovalController(TicketApprovalStore approvals) {
+    public TicketApprovalController(TicketApprovalStore approvals, TicketReviewService reviews) {
         this.approvals = approvals;
+        this.reviews = reviews;
     }
 
     @PostMapping("/tickets/{id}/approvals")
     public TicketApproval record(@PathVariable long id, @RequestBody TicketApproval.Request request) {
         try {
-            return approvals.record(id, request);
+            return reviews.record(id, request);
         } catch (IllegalArgumentException error) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, error.getMessage());
         } catch (TicketApprovalStore.TicketNotFoundException error) {

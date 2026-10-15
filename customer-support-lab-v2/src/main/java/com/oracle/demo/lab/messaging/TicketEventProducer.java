@@ -17,6 +17,7 @@ import java.util.UUID;
 import org.oracle.okafka.clients.producer.KafkaProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -32,7 +33,7 @@ public class TicketEventProducer {
     private final TicketTelemetry telemetry;
     private final String topic;
 
-    public TicketEventProducer(KafkaProducer<String, TicketWorkEvent> producer,
+    public TicketEventProducer(@Qualifier("ticketProducer") KafkaProducer<String, TicketWorkEvent> producer,
                                TicketStore ticketStore,
                                TicketEventOutcomeStore outcomeStore,
                                TicketTelemetry telemetry,
@@ -44,48 +45,52 @@ public class TicketEventProducer {
         this.topic = topic;
     }
 
-    public synchronized Long produce(SupportTicket ticket, UUID correlationId) {
-        ticket.setWorkflowStatus(TicketStatus.RECEIVED);
-        producer.beginTransaction();
-        TicketWorkEvent event;
-        try {
-            ticket.setId(ticketStore.insert(producer.getDBConnection(), ticket));
-            event = TicketWorkEvent.submitted(ticket.getId(), correlationId);
-            EventTraceContext.inject(event);
-            producer.send(event.toProducerRecord(topic));
-            producer.commitTransaction();
-        } catch (Exception e) {
-            throw abortAfterFailure(e);
+    public Long produce(SupportTicket ticket, UUID correlationId) {
+        synchronized (producer) {
+            ticket.setWorkflowStatus(TicketStatus.RECEIVED);
+            producer.beginTransaction();
+            TicketWorkEvent event;
+            try {
+                ticket.setId(ticketStore.insert(producer.getDBConnection(), ticket));
+                event = TicketWorkEvent.submitted(ticket.getId(), correlationId);
+                EventTraceContext.inject(event);
+                producer.send(event.toProducerRecord(topic));
+                producer.commitTransaction();
+            } catch (Exception e) {
+                throw abortAfterFailure(e);
+            }
+            recordPublished("submitted");
+            log.info("Created ticket id={} status={} eventId={} correlationId={}",
+                    ticket.getId(), ticket.getWorkflowStatus(), event.getEventId(), event.getCorrelationId());
+            return ticket.getId();
         }
-        recordPublished("submitted");
-        log.info("Created ticket id={} status={} eventId={} correlationId={}",
-                ticket.getId(), ticket.getWorkflowStatus(), event.getEventId(), event.getCorrelationId());
-        return ticket.getId();
     }
 
-    public synchronized TicketWorkEvent replay(UUID failedEventId) {
-        producer.beginTransaction();
-        TicketWorkEvent replay;
-        try {
-            Connection connection = producer.getDBConnection();
-            TicketWorkEvent original = outcomeStore.lockFailedEvent(connection, failedEventId)
-                    .orElseThrow(() -> new FailedEventNotFoundException(failedEventId));
-            if (!original.isReplayable()) {
-                throw new IllegalStateException("Failed event has an unsupported or incomplete envelope");
+    public TicketWorkEvent replay(UUID failedEventId) {
+        synchronized (producer) {
+            producer.beginTransaction();
+            TicketWorkEvent replay;
+            try {
+                Connection connection = producer.getDBConnection();
+                TicketWorkEvent original = outcomeStore.lockFailedEvent(connection, failedEventId)
+                        .orElseThrow(() -> new FailedEventNotFoundException(failedEventId));
+                if (!original.isReplayable()) {
+                    throw new IllegalStateException("Failed event has an unsupported or incomplete envelope");
+                }
+                replay = original.replayed(UUID.randomUUID());
+                EventTraceContext.inject(replay);
+                outcomeStore.markReplayed(connection, failedEventId);
+                ticketStore.resetFailedForReplay(connection, replay.getTicketId());
+                producer.send(replay.toProducerRecord(topic));
+                producer.commitTransaction();
+            } catch (Exception e) {
+                throw abortAfterFailure(e);
             }
-            replay = original.replayed(UUID.randomUUID());
-            EventTraceContext.inject(replay);
-            outcomeStore.markReplayed(connection, failedEventId);
-            ticketStore.resetFailedForReplay(connection, replay.getTicketId());
-            producer.send(replay.toProducerRecord(topic));
-            producer.commitTransaction();
-        } catch (Exception e) {
-            throw abortAfterFailure(e);
+            recordPublished("replayed");
+            log.info("Replayed ticket event originalEventId={} replayEventId={} ticketId={}",
+                    failedEventId, replay.getEventId(), replay.getTicketId());
+            return replay;
         }
-        recordPublished("replayed");
-        log.info("Replayed ticket event originalEventId={} replayEventId={} ticketId={}",
-                failedEventId, replay.getEventId(), replay.getTicketId());
-        return replay;
     }
 
     private RuntimeException abortAfterFailure(Exception failure) {

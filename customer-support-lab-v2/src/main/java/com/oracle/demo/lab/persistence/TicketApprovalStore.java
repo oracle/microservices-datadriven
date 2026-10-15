@@ -21,7 +21,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-/** Append-only reviews on the primary. No workflow state changes or external actions. */
+/** Append-only review persistence; the caller owns the write transaction. */
 @Component
 @Profile("events & blockchain")
 public class TicketApprovalStore {
@@ -31,37 +31,11 @@ public class TicketApprovalStore {
         this.dataSource = dataSource;
     }
 
-    public TicketApproval record(long ticketId, TicketApproval.Request request) {
-        request.validate();
-        try (Connection connection = dataSource.getConnection()) {
-            boolean autoCommit = connection.getAutoCommit();
-            connection.setAutoCommit(false);
-            try {
-                // Serializes reviews for this ticket, including concurrent retries of an actionId.
-                requireTicket(connection, ticketId, true);
-                TicketApproval approval = append(connection, ticketId, request);
-                connection.commit();
-                return approval;
-            } catch (SQLException | RuntimeException failure) {
-                try {
-                    connection.rollback();
-                } catch (SQLException rollbackFailure) {
-                    failure.addSuppressed(rollbackFailure);
-                }
-                throw failure;
-            } finally {
-                connection.setAutoCommit(autoCommit);
-            }
-        } catch (SQLException error) {
-            if (error.getErrorCode() == 1) {
-                throw new ApprovalConflictException("actionId already belongs to another review");
-            }
-            throw new IllegalStateException("Could not record ticket approval", error);
-        }
-    }
-
-    private TicketApproval append(Connection connection, long ticketId, TicketApproval.Request request)
+    public RecordedReview record(Connection connection, long ticketId, TicketApproval.Request request)
             throws SQLException {
+        request.validate();
+        // Serialize reviews and their action-ID retries with ticket processing.
+        requireTicket(connection, ticketId, true);
         Optional<TicketApproval> previous = findAction(connection, request.actionId());
         if (previous.isPresent()) {
             TicketApproval saved = previous.get();
@@ -69,7 +43,7 @@ public class TicketApprovalStore {
                     || !saved.actorId().equals(request.actorId()) || !Objects.equals(saved.reason(), request.reason())) {
                 throw new ApprovalConflictException("actionId already belongs to a different review");
             }
-            return saved;
+            return new RecordedReview(saved, false);
         }
 
         try (var statement = connection.prepareStatement("""
@@ -102,7 +76,10 @@ public class TicketApprovalStore {
                 }
             }
         }
-        return findAction(connection, request.actionId()).orElseThrow();
+        return new RecordedReview(findAction(connection, request.actionId()).orElseThrow(), true);
+    }
+
+    public record RecordedReview(TicketApproval approval, boolean created) {
     }
 
     public List<TicketApproval> history(long ticketId) {

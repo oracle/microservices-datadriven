@@ -6,7 +6,8 @@ package com.oracle.demo.lab.ai;
 import oracle.jdbc.OracleType;
 import oracle.sql.VECTOR;
 import org.springframework.ai.embedding.EmbeddingModel;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
@@ -17,32 +18,29 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-/** Embeds the small seeded corpus once per embedding model, outside ticket transactions. */
+/** Ensures the seeded policy corpus has embeddings before AI startup completes. */
 @Component
 @Profile("ai")
-public class PolicyIndex {
+public class PolicyIndex implements ApplicationRunner {
     private static final int EMBEDDING_DIMENSIONS = 1536;
 
     private final JdbcClient jdbcClient;
     private final DataSource dataSource;
     private final EmbeddingModel embeddingModel;
-    private final String modelId;
 
-    public PolicyIndex(JdbcClient jdbcClient, DataSource dataSource, EmbeddingModel embeddingModel,
-                       @Value("${app.ai.embedding-model-id}") String modelId) {
+    public PolicyIndex(JdbcClient jdbcClient, DataSource dataSource, EmbeddingModel embeddingModel) {
         this.jdbcClient = jdbcClient;
         this.dataSource = dataSource;
         this.embeddingModel = embeddingModel;
-        this.modelId = modelId;
     }
 
-    public synchronized void ensureIndexed() {
+    @Override
+    public void run(ApplicationArguments args) {
         List<Policy> missing = jdbcClient.sql("""
                 select policy_id, title, body from support_policy
-                where embedding is null or embedding_model is null or embedding_model <> ?
+                where embedding is null
                 order by policy_id
                 """)
-                .param(modelId)
                 .query((rs, rowNum) -> new Policy(
                         rs.getString("policy_id"), rs.getString("title"), rs.getString("body")))
                 .list();
@@ -65,13 +63,12 @@ public class PolicyIndex {
             boolean autoCommit = connection.getAutoCommit();
             connection.setAutoCommit(false);
             try (PreparedStatement statement = connection.prepareStatement("""
-                    update support_policy set embedding = ?, embedding_model = ? where policy_id = ?
+                    update support_policy set embedding = ? where policy_id = ?
                     """)) {
                 for (int i = 0; i < missing.size(); i++) {
                     statement.setObject(1, VECTOR.ofFloat32Values(embeddings.get(i)),
                             OracleType.VECTOR.getVendorTypeNumber());
-                    statement.setString(2, modelId);
-                    statement.setString(3, missing.get(i).id());
+                    statement.setString(2, missing.get(i).id());
                     statement.addBatch();
                 }
                 statement.executeBatch();

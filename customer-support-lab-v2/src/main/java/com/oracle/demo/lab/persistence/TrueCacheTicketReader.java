@@ -61,7 +61,7 @@ public class TrueCacheTicketReader {
     public List<SupportTicket> getAllTickets() {
         try (Connection connection = openReadOnly();
              PreparedStatement statement = connection.prepareStatement(
-                     "select id, title, description, workflow_status from support_ticket");
+                     "select id, title, description, review_feedback, workflow_status from support_ticket");
              ResultSet rows = statement.executeQuery()) {
             List<SupportTicket> tickets = new ArrayList<>();
             while (rows.next()) {
@@ -76,7 +76,7 @@ public class TrueCacheTicketReader {
     public Optional<SupportTicket> findById(long id) {
         try (Connection connection = openReadOnly();
              PreparedStatement statement = connection.prepareStatement(
-                     "select id, title, description, workflow_status from support_ticket where id = ?")) {
+                     "select id, title, description, review_feedback, workflow_status from support_ticket where id = ?")) {
             statement.setLong(1, id);
             try (ResultSet rows = statement.executeQuery()) {
                 return rows.next() ? Optional.of(new SupportTicket(rows)) : Optional.empty();

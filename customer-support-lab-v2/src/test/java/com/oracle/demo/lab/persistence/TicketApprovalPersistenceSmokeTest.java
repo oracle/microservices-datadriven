@@ -50,11 +50,11 @@ class TicketApprovalPersistenceSmokeTest {
         var store = new TicketApprovalStore(source);
         var request = new TicketApproval.Request(UUID.randomUUID(), TicketApproval.Decision.APPROVED,
                 "smoke-reviewer", "Reviewed manually");
-        TicketApproval saved = store.record(ticketId, request);
-        assertEquals(saved, store.record(ticketId, request));
+        TicketApproval saved = record(store, source, ticketId, request);
+        assertEquals(saved, record(store, source, ticketId, request));
         assertEquals(1, store.history(ticketId).size());
         assertEquals(TicketApprovalStore.digest(saved.reviewedSummary()), saved.summaryDigest());
-        assertThrows(TicketApprovalStore.ApprovalConflictException.class, () -> store.record(ticketId,
+        assertThrows(TicketApprovalStore.ApprovalConflictException.class, () -> record(store, source, ticketId,
                 new TicketApproval.Request(request.actionId(), TicketApproval.Decision.REJECTED,
                         request.actorId(), request.reason())));
 
@@ -98,6 +98,21 @@ class TicketApprovalPersistenceSmokeTest {
             }
         }
         assertEquals(1, store.history(ticketId).size());
+    }
+
+    private static TicketApproval record(TicketApprovalStore store, javax.sql.DataSource source,
+                                         long ticketId, TicketApproval.Request request) throws Exception {
+        try (var connection = source.getConnection()) {
+            connection.setAutoCommit(false);
+            try {
+                TicketApproval saved = store.record(connection, ticketId, request).approval();
+                connection.commit();
+                return saved;
+            } catch (Exception failure) {
+                connection.rollback();
+                throw failure;
+            }
+        }
     }
 
     private static String required(String name) {

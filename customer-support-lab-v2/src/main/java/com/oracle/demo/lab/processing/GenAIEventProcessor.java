@@ -3,7 +3,6 @@
 
 package com.oracle.demo.lab.processing;
 
-import com.oracle.demo.lab.ai.PolicyIndex;
 import com.oracle.demo.lab.ai.PolicyMatch;
 import com.oracle.demo.lab.ai.PolicyVectorStore;
 import com.oracle.demo.lab.ai.TicketAssistanceStore;
@@ -33,7 +32,6 @@ public class GenAIEventProcessor implements TicketEventProcessor {
     private final TicketVectorStore ticketVectorStore;
     private final EmbeddingModel embeddingModel;
     private final TicketStore ticketStore;
-    private final PolicyIndex policyIndex;
     private final PolicyVectorStore policyVectorStore;
     private final TicketSummarizer ticketSummarizer;
     private final TicketAssistanceStore assistanceStore;
@@ -41,13 +39,12 @@ public class GenAIEventProcessor implements TicketEventProcessor {
 
     public GenAIEventProcessor(TicketVectorStore ticketVectorStore,
                                EmbeddingModel embeddingModel, TicketStore ticketStore,
-                               PolicyIndex policyIndex, PolicyVectorStore policyVectorStore,
+                               PolicyVectorStore policyVectorStore,
                                TicketSummarizer ticketSummarizer, TicketAssistanceStore assistanceStore,
                                TicketTelemetry telemetry) {
         this.ticketVectorStore = ticketVectorStore;
         this.embeddingModel = embeddingModel;
         this.ticketStore = ticketStore;
-        this.policyIndex = policyIndex;
         this.policyVectorStore = policyVectorStore;
         this.ticketSummarizer = ticketSummarizer;
         this.assistanceStore = assistanceStore;
@@ -58,17 +55,24 @@ public class GenAIEventProcessor implements TicketEventProcessor {
     public void processRecord(Connection conn, TicketWorkEvent event, SupportTicket ticket) {
         log.info("Enriching ticket eventId={} correlationId={} ticketId={}",
                 event.getEventId(), event.getCorrelationId(), ticket.getId());
-        float[] vector = telemetry.step("embedding",
-                () -> embeddingModel.embed(ticket.getTitle() + "\n" + ticket.getDescription()));
+        String embeddingText = ticket.getTitle() + "\n" + ticket.getDescription();
+        if (ticket.getReviewFeedback() != null && !ticket.getReviewFeedback().isBlank()) {
+            embeddingText += "\nReviewer feedback: " + ticket.getReviewFeedback();
+        }
+        String text = embeddingText;
+        float[] vector = telemetry.step("embedding", () -> embeddingModel.embed(text));
         List<RelatedTicket> relatedTickets = telemetry.step("related_tickets",
                 () -> ticketVectorStore.search(0.2, vector, ticket.getId(), conn));
         telemetry.matches("ticket", relatedTickets.size());
-        List<PolicyMatch> policies = telemetry.step("policies", () -> {
-            policyIndex.ensureIndexed();
-            return policyVectorStore.search(conn, vector);
-        });
+        List<PolicyMatch> policies = telemetry.step("policies",
+                () -> policyVectorStore.search(conn, vector));
         telemetry.matches("policy", policies.size());
-        String summary = telemetry.step("summary", () -> ticketSummarizer.summarize(ticket));
+        String summary = telemetry.step("summary", () -> {
+            if (TicketWorkEvent.TICKET_FEEDBACK_SUBMITTED.equals(event.getEventType())) {
+                return ticketSummarizer.summarize(ticket, assistanceStore.findSummary(conn, ticket.getId()));
+            }
+            return ticketSummarizer.summarize(ticket);
+        });
         ticket.setWorkflowStatus(TicketStatus.ENRICHED);
 
         log.info("Enriched ticket eventId={} ticketId={} relatedTicketCount={} policyCount={} status={}",

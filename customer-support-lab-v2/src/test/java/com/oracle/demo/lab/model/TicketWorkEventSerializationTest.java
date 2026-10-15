@@ -37,6 +37,26 @@ class TicketWorkEventSerializationTest {
     }
 
     @Test
+    void feedbackEventRetainsItsTypeAndReviewLinkAcrossSerializationAndReplay() {
+        OSONKafkaSerializationFactory factory = new OSONKafkaSerializationFactory(JSONB.createDefault());
+        Serializer<TicketWorkEvent> serializer = factory.createSerializer();
+        Deserializer<TicketWorkEvent> deserializer = factory.createDeserializer(TicketWorkEvent.class);
+        UUID reviewId = UUID.randomUUID();
+        TicketWorkEvent event = TicketWorkEvent.feedbackSubmitted(42L, reviewId);
+
+        TicketWorkEvent decoded = deserializer.deserialize("ticket_event",
+                serializer.serialize("ticket_event", event));
+
+        assertTrue(decoded.isReplayable());
+        assertEquals(TicketWorkEvent.TICKET_FEEDBACK_SUBMITTED, decoded.getEventType());
+        assertEquals(reviewId, decoded.getCausationId());
+        TicketWorkEvent replay = decoded.replayed(UUID.randomUUID());
+        assertEquals(decoded.getEventType(), replay.getEventType());
+        assertEquals(decoded.getEventId(), replay.getCausationId());
+        assertEquals(reviewId, replay.getCorrelationId());
+    }
+
+    @Test
     void replayRequiresSupportedCompleteEnvelope() {
         TicketWorkEvent event = TicketWorkEvent.submitted(42L, null);
         assertTrue(event.isReplayable());

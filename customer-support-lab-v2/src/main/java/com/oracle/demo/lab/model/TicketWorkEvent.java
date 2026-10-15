@@ -11,6 +11,7 @@ import java.util.UUID;
 public class TicketWorkEvent {
     public static final int CURRENT_SCHEMA_VERSION = 1;
     public static final String TICKET_SUBMITTED = "TICKET_SUBMITTED";
+    public static final String TICKET_FEEDBACK_SUBMITTED = "TICKET_FEEDBACK_SUBMITTED";
 
     private int schemaVersion;
     private Long ticketId;
@@ -48,13 +49,20 @@ public class TicketWorkEvent {
         return replay;
     }
 
+    public static TicketWorkEvent feedbackSubmitted(Long ticketId, UUID actionId) {
+        TicketWorkEvent event = submitted(ticketId, actionId);
+        event.setEventType(TICKET_FEEDBACK_SUBMITTED);
+        event.setCausationId(actionId);
+        return event;
+    }
+
     public boolean isReplayable() {
         return isSupportedEnvelope(schemaVersion, eventType, ticketId);
     }
 
     public static boolean isSupportedEnvelope(int schemaVersion, String eventType, Long ticketId) {
         return schemaVersion == CURRENT_SCHEMA_VERSION
-                && TICKET_SUBMITTED.equals(eventType)
+                && (TICKET_SUBMITTED.equals(eventType) || TICKET_FEEDBACK_SUBMITTED.equals(eventType))
                 && ticketId != null;
     }
 

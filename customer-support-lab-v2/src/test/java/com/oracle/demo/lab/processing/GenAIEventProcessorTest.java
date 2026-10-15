@@ -3,7 +3,6 @@
 
 package com.oracle.demo.lab.processing;
 
-import com.oracle.demo.lab.ai.PolicyIndex;
 import com.oracle.demo.lab.ai.PolicyMatch;
 import com.oracle.demo.lab.ai.PolicyVectorStore;
 import com.oracle.demo.lab.ai.TicketAssistanceStore;
@@ -29,15 +28,54 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 class GenAIEventProcessorTest {
+    @Test
+    void feedbackRevisesPreviousSummaryAndRefreshesEmbeddingAndMatches() {
+        Connection connection = mock(Connection.class);
+        TicketVectorStore ticketVectors = mock(TicketVectorStore.class);
+        EmbeddingModel embeddingModel = mock(EmbeddingModel.class);
+        TicketStore ticketStore = mock(TicketStore.class);
+        PolicyVectorStore policyVectors = mock(PolicyVectorStore.class);
+        TicketSummarizer summarizer = mock(TicketSummarizer.class);
+        TicketAssistanceStore assistanceStore = mock(TicketAssistanceStore.class);
+        TicketTelemetry telemetry = new TicketTelemetry(new io.micrometer.core.instrument.simple.SimpleMeterRegistry(),
+                io.micrometer.observation.ObservationRegistry.create());
+        SupportTicket ticket = new SupportTicket();
+        ticket.setId(42L);
+        ticket.setTitle("Sign-in failure");
+        ticket.setDescription("Cannot access account");
+        ticket.setReviewFeedback("The account belongs to the test tenant.");
+        float[] embedding = new float[1536];
+        when(embeddingModel.embed(any(String.class))).thenReturn(embedding);
+        when(ticketVectors.search(0.2, embedding, 42L, connection)).thenReturn(List.of());
+        when(policyVectors.search(connection, embedding)).thenReturn(List.of());
+        when(assistanceStore.findSummary(connection, 42L)).thenReturn("Production account cannot sign in.");
+        when(summarizer.summarize(ticket, "Production account cannot sign in."))
+                .thenReturn("Test tenant account cannot sign in.");
+        when(summarizer.modelId()).thenReturn("chat");
+        GenAIEventProcessor processor = new GenAIEventProcessor(ticketVectors, embeddingModel,
+                ticketStore, policyVectors, summarizer, assistanceStore, telemetry);
+
+        processor.processRecord(connection,
+                TicketWorkEvent.feedbackSubmitted(42L, java.util.UUID.randomUUID()), ticket);
+
+        verify(embeddingModel).embed("Sign-in failure\nCannot access account\nReviewer feedback: The account belongs to the test tenant.");
+        var calls = inOrder(assistanceStore, ticketStore);
+        calls.verify(assistanceStore).findSummary(connection, 42L);
+        calls.verify(ticketStore).saveEnrichment(connection, 42L, embedding);
+        calls.verify(assistanceStore).save(connection, 42L, "Test tenant account cannot sign in.",
+                "chat", TicketSummarizer.PROMPT_VERSION, List.of(), List.of());
+        assertEquals(TicketStatus.ENRICHED, ticket.getWorkflowStatus());
+    }
+
     @Test
     void persistsSummaryAndPolicyMatchesWithTicketOnConsumerConnection() {
         Connection connection = mock(Connection.class);
         TicketVectorStore ticketVectors = mock(TicketVectorStore.class);
         EmbeddingModel embeddingModel = mock(EmbeddingModel.class);
         TicketStore ticketStore = mock(TicketStore.class);
-        PolicyIndex policyIndex = mock(PolicyIndex.class);
         PolicyVectorStore policyVectors = mock(PolicyVectorStore.class);
         TicketSummarizer summarizer = mock(TicketSummarizer.class);
         TicketAssistanceStore assistanceStore = mock(TicketAssistanceStore.class);
@@ -56,13 +94,12 @@ class GenAIEventProcessorTest {
         when(summarizer.summarize(ticket)).thenReturn("User lost MFA access.");
         when(summarizer.modelId()).thenReturn("demo-chat-model");
         GenAIEventProcessor processor = new GenAIEventProcessor(ticketVectors, embeddingModel,
-                ticketStore, policyIndex, policyVectors, summarizer, assistanceStore, telemetry);
+                ticketStore, policyVectors, summarizer, assistanceStore, telemetry);
 
         processor.processRecord(connection, TicketWorkEvent.submitted(42L, null), ticket);
 
         assertEquals(TicketStatus.ENRICHED, ticket.getWorkflowStatus());
-        var calls = inOrder(policyIndex, policyVectors, ticketStore, assistanceStore);
-        calls.verify(policyIndex).ensureIndexed();
+        var calls = inOrder(policyVectors, ticketStore, assistanceStore);
         calls.verify(policyVectors).search(connection, embedding);
         calls.verify(ticketStore).saveEnrichment(connection, 42L, embedding);
         calls.verify(assistanceStore).save(eq(connection), eq(42L), eq("User lost MFA access."),

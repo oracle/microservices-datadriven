@@ -2,7 +2,7 @@
 # Copyright (c) 2026, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
-# Shared setup for the three HTTP demos; sourced by their entry points.
+# Shared setup for the HTTP demos; sourced by their entry points.
 if ! command -v jq >/dev/null 2>&1; then
   echo "This demo needs jq to read the API responses." >&2
   exit 1

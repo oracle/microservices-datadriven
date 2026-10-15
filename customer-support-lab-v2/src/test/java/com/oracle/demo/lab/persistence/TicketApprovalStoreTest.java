@@ -9,7 +9,6 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -26,60 +25,51 @@ class TicketApprovalStoreTest {
             new TicketApproval.Request(actionId, TicketApproval.Decision.APPROVED, "demo-reviewer", null);
 
     @Test
-    void invalidInputNeverBorrowsAConnection() {
-        assertThrows(IllegalArgumentException.class, () -> store.record(42,
+    void validatesInputBeforeDatabaseAccessAndRequiresRejectionFeedback() {
+        assertThrows(IllegalArgumentException.class, () -> store.record(connection, 42,
                 new TicketApproval.Request(null, null, "", null)));
-        verifyNoInteractions(source);
+        assertThrows(IllegalArgumentException.class, () -> store.record(connection, 42,
+                new TicketApproval.Request(actionId, TicketApproval.Decision.REJECTED, "demo-reviewer", "  ")));
+        verifyNoInteractions(source, connection);
         assertNull(new TicketApproval.Request(actionId, request.decision(), request.actorId(), "").reason());
     }
 
     @Test
     void repeatedActionReturnsSavedReviewWithoutAnotherInsert() throws Exception {
-        ResultSet saved = prepareExistingAction("APPROVED");
-        TicketApproval result = store.record(42, request);
-        assertEquals(actionId, result.actionId());
-        assertEquals("saved summary", result.reviewedSummary());
-        verify(connection).commit();
-        verify(connection, never()).rollback();
+        prepareExistingAction("APPROVED");
+
+        TicketApprovalStore.RecordedReview result = store.record(connection, 42, request);
+
+        assertFalse(result.created());
+        assertEquals(actionId, result.approval().actionId());
+        assertEquals("saved summary", result.approval().reviewedSummary());
         verify(connection, times(2)).prepareStatement(anyString());
-        verify(saved).getString("reviewed_summary");
-    }
-
-    @Test
-    void reusingActionWithDifferentDecisionRollsBack() throws Exception {
-        prepareExistingAction("REJECTED");
-        assertThrows(TicketApprovalStore.ApprovalConflictException.class, () -> store.record(42, request));
-        verify(connection).rollback();
         verify(connection, never()).commit();
+        verifyNoInteractions(source);
     }
 
     @Test
-    void absentTicketRollsBackBeforeReadingAssistance() throws Exception {
-        when(source.getConnection()).thenReturn(connection);
+    void reusingActionWithDifferentDecisionIsRejected() throws Exception {
+        prepareExistingAction("REJECTED");
+        assertThrows(TicketApprovalStore.ApprovalConflictException.class,
+                () -> store.record(connection, 42, request));
+    }
+
+    @Test
+    void absentTicketFailsBeforeReadingAssistance() throws Exception {
         PreparedStatement statement = mock(PreparedStatement.class);
-        ResultSet rows = mock(ResultSet.class);
         when(connection.prepareStatement(anyString())).thenReturn(statement);
-        when(statement.executeQuery()).thenReturn(rows);
-        assertThrows(TicketApprovalStore.TicketNotFoundException.class, () -> store.record(42, request));
-        verify(connection).rollback();
+        when(statement.executeQuery()).thenReturn(mock(ResultSet.class));
+
+        assertThrows(TicketApprovalStore.TicketNotFoundException.class,
+                () -> store.record(connection, 42, request));
         verify(connection, times(1)).prepareStatement(anyString());
     }
 
     @Test
-    void commitFailureDoesNotReportSuccess() throws Exception {
-        prepareExistingAction("APPROVED");
-        doThrow(new SQLException("commit failed")).when(connection).commit();
-        assertThrows(IllegalStateException.class, () -> store.record(42, request));
-        verify(connection).rollback();
-    }
-
-    @Test
-    void newReviewSnapshotsSavedAssistanceAndCommits() throws Exception {
+    void newReviewSnapshotsSavedAssistanceOnCallerConnection() throws Exception {
         ResultSet saved = prepareExistingAction("APPROVED");
-        PreparedStatement ticket = mock(PreparedStatement.class);
-        ResultSet ticketRow = mock(ResultSet.class);
-        when(ticket.executeQuery()).thenReturn(ticketRow);
-        when(ticketRow.next()).thenReturn(true);
+        PreparedStatement ticket = ticketStatement();
         PreparedStatement missingAction = mock(PreparedStatement.class);
         when(missingAction.executeQuery()).thenReturn(mock(ResultSet.class));
         PreparedStatement assistance = mock(PreparedStatement.class);
@@ -94,13 +84,14 @@ class TicketApprovalStoreTest {
         when(readBack.executeQuery()).thenReturn(saved);
         when(connection.prepareStatement(anyString())).thenReturn(ticket, missingAction, assistance, insert, readBack);
 
-        assertEquals("saved summary", store.record(42, request).reviewedSummary());
+        assertTrue(store.record(connection, 42, request).created());
+
         verify(insert).setString(6, "saved summary");
         verify(insert).setString(7, TicketApprovalStore.digest("saved summary"));
         verify(insert).setString(8, "chat-model");
         verify(insert).executeUpdate();
-        verify(connection).commit();
-        verify(connection, never()).rollback();
+        verify(connection, never()).commit();
+        verify(connection, never()).close();
     }
 
     @Test
@@ -111,33 +102,28 @@ class TicketApprovalStoreTest {
     }
 
     @Test
-    void ticketWithoutSavedEnrichedAssistanceCannotBeReviewed() throws Exception {
-        when(source.getConnection()).thenReturn(connection);
-        when(connection.getAutoCommit()).thenReturn(true);
-        PreparedStatement ticket = mock(PreparedStatement.class);
-        ResultSet ticketRow = mock(ResultSet.class);
-        when(ticket.executeQuery()).thenReturn(ticketRow);
-        when(ticketRow.next()).thenReturn(true);
+    void pendingTicketCannotReceiveAnotherNewReview() throws Exception {
         PreparedStatement noAction = mock(PreparedStatement.class);
         when(noAction.executeQuery()).thenReturn(mock(ResultSet.class));
         PreparedStatement noAssistance = mock(PreparedStatement.class);
         when(noAssistance.executeQuery()).thenReturn(mock(ResultSet.class));
+        PreparedStatement ticket = ticketStatement();
         when(connection.prepareStatement(anyString())).thenReturn(ticket, noAction, noAssistance);
 
-        assertThrows(TicketApprovalStore.ApprovalConflictException.class, () -> store.record(42, request));
-        verify(connection).rollback();
-        verify(connection, never()).commit();
-        verify(connection, times(3)).prepareStatement(anyString());
-        verify(connection).setAutoCommit(true);
+        assertThrows(TicketApprovalStore.ApprovalConflictException.class,
+                () -> store.record(connection, 42, request));
+    }
+
+    private PreparedStatement ticketStatement() throws Exception {
+        PreparedStatement statement = mock(PreparedStatement.class);
+        ResultSet row = mock(ResultSet.class);
+        when(statement.executeQuery()).thenReturn(row);
+        when(row.next()).thenReturn(true);
+        return statement;
     }
 
     private ResultSet prepareExistingAction(String decision) throws Exception {
-        when(source.getConnection()).thenReturn(connection);
-        when(connection.getAutoCommit()).thenReturn(true);
-        PreparedStatement ticket = mock(PreparedStatement.class);
-        ResultSet ticketRow = mock(ResultSet.class);
-        when(ticket.executeQuery()).thenReturn(ticketRow);
-        when(ticketRow.next()).thenReturn(true);
+        PreparedStatement ticket = ticketStatement();
         PreparedStatement action = mock(PreparedStatement.class);
         ResultSet row = mock(ResultSet.class);
         when(action.executeQuery()).thenReturn(row);

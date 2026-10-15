@@ -4,13 +4,14 @@ Build a support-ticket workflow with Spring Boot and Oracle AI Database:
 create a ticket, process its TxEventQ event, record a deliberate failure, replay
 it, and read the same ticket through True Cache. Optional profiles add OCI
 Generative AI assistance and metrics and traces in Grafana.
-An optional blockchain chapter records human reviews of saved AI summaries.
+An optional blockchain chapter records human reviews and feeds rejected-summary
+corrections back into the ticket for regeneration through TxEventQ.
 Regional placement is described as a deployment option; the Compose stack
 remains a single local primary and its True Cache.
 
 The application runs locally through Maven. Docker Compose supplies Oracle
 Database Free, a separate True Cache instance, and Grafana LGTM. This is a
-teaching lab: the ticket and replay APIs have no authentication, and the cache
+teaching lab: its HTTP APIs have no authentication, and the cache
 registration helper mounts the local Docker socket. Use a trusted development
 host.
 
@@ -31,6 +32,11 @@ flowchart LR
     App -->|Optional metrics and traces| LGTM[Grafana LGTM]
 ```
 
+See the [complete event-flow loop](ui/public/diagrams/14-complete-event-loop.svg) for
+submission, human feedback, approval, and failure replay. The
+[diagram gallery](ui/public/diagrams/index.html) and [schema guide](ui/public/diagrams/README.md#schema-reading-guide)
+explain the technologies and table relationships.
+
 ## Prerequisites
 
 - JDK 21 or later and Maven, or the included Maven wrapper.
@@ -38,6 +44,7 @@ flowchart LR
   database instances alongside LGTM.
 - SQLcl (`sql`) or SQL*Plus (`sqlplus`) only for optional database checks.
 - `curl` and `jq` for the walkthrough scripts.
+- `uuidgen` for the human-feedback walkthrough and manual review examples.
 
 Run the commands below from `customer-support-lab-v2`. The core walkthrough
 requires no OCI credentials. The schema includes Oracle `VECTOR` columns even
@@ -116,6 +123,10 @@ credentials again before starting Maven. Check health with:
 curl -fsS http://localhost:9002/actuator/health
 ```
 
+Wait for `Subscribed to topic ticket_event` in the application logs before
+running the walkthroughs. Topic preparation and consumer startup happen on the
+application-ready event, after any AI policy indexing completes.
+
 `events` is the default profile. Include it whenever you supply an explicit
 profile list. `demo-failures` enables the deliberate failure and retry used
 in the next step.
@@ -124,9 +135,9 @@ in the next step.
 | --- | --- |
 | `events` | Enables ticket submission/read APIs, the failure worklist and replay API, topic setup, and the background consumer. Default when no active profiles are supplied. |
 | `demo-failures` | With `events`, injects deterministic failures for tickets whose title starts with `[demo-fail-once]`. |
-| `ai` | Selects the OCI-backed processor and enables the saved-assistance API. Use with `events` to process tickets. |
+| `ai` | Creates missing policy embeddings at startup, selects the OCI-backed processor, and enables the saved-assistance API. Use with `events` to process tickets. |
 | `observability` | Enables metrics/trace export and JSON console logs. Grafana calculates failure windows from emitted event counters. |
-| `blockchain` | With `events`, enables approval-history POST/GET endpoints. Compose already creates its table; a new review requires saved AI assistance. |
+| `blockchain` | With `events,ai`, enables review POST/GET endpoints. Approval accepts a saved summary; rejection saves feedback and queues regeneration. Compose already creates the history table. |
 
 ### 4. Demonstrate failure, replay, and cache reads
 
@@ -160,6 +171,43 @@ LAB_TICKET_ID=42 ./scripts/demo-true-cache-reads.sh
 
 All demo scripts accept `LAB_BASE_URL`, defaulting to `http://localhost:9001`.
 
+## Local Vue workspace
+
+The optional [Vue UI](ui/README.md) provides **Overview**, **Tickets**,
+**Human Review**, **Failed Events**, **Components**, and **Diagrams** tabs.
+Create tickets, inspect saved assistance and review history, submit feedback,
+approve revisions, and replay failed events through the existing APIs.
+The Diagrams tab presents all 16 SVGs with gallery and presentation layouts.
+
+For the complete experience, start Maven with the OCI settings from the next
+section and all profiles enabled:
+
+```bash
+mvn spring-boot:run -Dspring-boot.run.profiles=events,ai,blockchain,demo-failures,observability
+```
+
+In another terminal with Node.js 22.12+ or 24+, run:
+
+```bash
+cd ui
+npm ci
+npm run dev
+```
+
+Open **http://127.0.0.1:5173**. Vite proxies API calls to port 9001; use
+`LAB_API_URL` to target another backend. The UI refreshes every five seconds,
+can pause polling, and reports the actual primary/cache list-read path.
+Ticket details and reviews always read primary. Human Review starts with
+enriched summaries that have not been approved since their latest generation;
+approved summaries remain accessible through the All tickets filter.
+This local demo uses the existing unauthenticated API and self-declared reviewer IDs.
+Profile badges show configuration, not external service health.
+
+`npm run build` creates `ui/dist`; `npm run preview` serves that build on
+loopback port 4173 with the same proxy. Maven and Compose do not start the UI.
+The original scrolling gallery remains available at `/diagrams/index.html`
+through the UI server. Canonical assets now live under `ui/public/diagrams`.
+
 ## Optional AI assistance
 
 Stop the Maven app, retain the schema, and configure OCI authentication and
@@ -184,12 +232,13 @@ Then run:
 AI processing embeds the ticket, searches related tickets and the seeded
 policy corpus, generates a short summary, and persists the assistance and
 `ENRICHED` status on the consumer's database connection. Policy embeddings
-are created on first use and refreshed when the configured model changes.
-Policy indexing commits on a separate primary connection, so it can remain
-available even if the current ticket attempt rolls back. Ticket retrieval
+are created at AI startup for policies with missing vectors, before the event
+consumer starts. Indexing failures prevent startup from completing. Existing
+policy embeddings are reused across application restarts. Ticket retrieval
 returns up to five other tickets that already have embeddings; policy
-retrieval returns up to three policies. The summary prompt contains only the
-ticket title and description. Retrieved matches are saved alongside the
+retrieval returns up to three policies. The initial summary prompt contains the
+ticket title and description. Revisions also include the previous summary and
+accumulated human feedback. Retrieved matches are saved alongside the
 summary for human review; they are not supplied as context to the chat model.
 The small datasets use exact cosine search with a minimum score of 0.2.
 The default chat model is `cohere.command-a-03-2025` with temperature 0.2
@@ -197,9 +246,9 @@ and a 512-token output limit. Embeddings use `cohere.embed-v4.0`, requesting
 1536 dimensions to match the schema and policy-index validation. Create a
 fresh schema when changing vector dimensions; changing the model environment
 variable does not migrate existing vector columns or stored embeddings.
-Only policy embeddings are refreshed automatically after a model change;
-existing ticket embeddings are not regenerated. For a model change, use a
-fresh lab or deliberately rebuild the ticket embeddings to avoid comparing
+Policy and ticket embeddings are not regenerated after a model change. This
+demo assumes one embedding model. For a model change, use a fresh lab or
+deliberately rebuild all embeddings to avoid comparing
 vectors from different models, even when their dimensions match.
 
 The script succeeds when the ticket is `ENRICHED` and its saved assistance
@@ -214,18 +263,42 @@ not guarantee exactly-once external OCI calls.
 
 ## Optional blockchain approval history
 
-Record a human's `APPROVED` or `REJECTED` review of a saved AI summary. This
-appends history without changing workflow status or executing customer
-actions. `actorId` is a self-declared demo reviewer, not a verified identity;
+Record a human's `APPROVED` or `REJECTED` review of a saved AI summary.
+`APPROVED` accepts the current summary. `REJECTED` requires written feedback
+in `reason`, saves that feedback on the ticket, and requests a revised summary
+through TxEventQ. Both decisions preserve the reviewed summary in blockchain
+history. `actorId` is a self-declared demo reviewer, not a verified identity;
 the local APIs remain unauthenticated.
 
-![Saved summary, human review, and blockchain approval history](visuals/blockchain-approval-history.svg)
+![Saved summary, human review, and blockchain approval history](ui/public/diagrams/context/blockchain-approval-history.svg)
 
 Compose creates the blockchain table with the rest of the schema. Stop Maven
 and restart with the OCI settings from the AI chapter:
 
 ```bash
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=events,ai,blockchain
+```
+
+In another terminal with `APP_DB_USERNAME` and `APP_DB_PASSWORD` exported,
+run the complete feedback walkthrough:
+
+```bash
+./scripts/demo-human-feedback.sh
+```
+
+It creates a ticket, rejects its first summary with written feedback, retries
+the same review action, waits for regeneration, and approves the revision.
+It checks that feedback is retained, assistance has a new generation timestamp,
+and two review snapshots are preserved. Inspect the printed summaries to assess
+how the model incorporated the correction. The
+[complete event-flow diagram](ui/public/diagrams/14-complete-event-loop.svg) shows this loop.
+
+Review endpoints require all three profiles: `events,ai,blockchain`. Use a fresh
+lab schema from the current `db/init.sql`, including `support_ticket.review_feedback`.
+
+For manual reviews, first create a separate enriched ticket:
+
+```bash
 ./scripts/demo-ai-assistance.sh
 ```
 
@@ -247,12 +320,50 @@ curl -fsS "http://localhost:9001/tickets/${ticket_id}/approvals" | jq
 ```
 
 Each record preserves the summary text, SHA-256 digest of its exact UTF-8
-bytes, model/prompt metadata, reviewer, decision, optional reason, and UTC
-timestamp. The store locks the ticket, checks the action UUID, reads saved
-`ENRICHED` assistance, and appends on one primary connection. It commits before
-returning HTTP 200. Reusing the UUID with different request fields returns 409.
-A correction uses a new UUID and appends another decision. The endpoint does
-not generate a summary or publish a queue event.
+bytes, model/prompt metadata, reviewer, decision, reason, and UTC timestamp.
+`reason` is optional for approval and required for rejection, with a maximum
+of 1000 characters; `actorId` must contain 1–128 characters and cannot be blank.
+The review service uses its producer's primary connection to lock the ticket,
+check the action UUID, read saved `ENRICHED` assistance, and append the snapshot.
+It commits the review transaction before returning HTTP 200; regeneration runs
+asynchronously. Reusing the UUID with different request fields returns 409.
+A correction uses a new UUID and appends another decision. To request a revision,
+submit a new action with feedback:
+
+```bash
+payload="$(jq -cn --arg actionId "$(uuidgen)" \
+  '{actionId: $actionId, decision: "REJECTED", actorId: "demo-reviewer",
+    reason: "The affected account belongs to the test tenant. Include that context."}')"
+curl -fsS -H 'Content-Type: application/json' -d "$payload" \
+  "http://localhost:9001/tickets/${ticket_id}/approvals" | jq
+```
+
+For a new rejection, the review row, appended `support_ticket.review_feedback`,
+status reset to `RECEIVED`, and `TICKET_FEEDBACK_SUBMITTED` event commit together
+using the OKafka producer's database connection. An identical action retry
+returns the recorded review without appending feedback or publishing again.
+Feedback has its own producer instance, built from the same configuration as
+ticket submission and replay. Each producer serializes its own transactions;
+feedback does not share their producer lock. Spring closes both on shutdown.
+The event carries IDs and trace context; feedback text stays in Oracle.
+Its causation and correlation IDs reference the review action UUID.
+
+The consumer re-embeds the ticket with its feedback, retrieves fresh matches,
+and generates a summary using the ticket, previous summary, and accumulated
+feedback in chronological order. It replaces the current assistance and matches,
+returns the ticket to `ENRICHED`, records the event outcome, and acknowledges the
+event in one transaction. The reviewed summary remains in blockchain history.
+`GET /tickets/{id}?readPath=primary` includes `reviewFeedback`; poll it and
+`GET /tickets/{id}/assistance` until the ticket is `ENRICHED` with a new
+`generatedAt` before reviewing the revision.
+
+While regeneration is pending, new review actions return 409; assistance GETs
+still expose the last saved summary. If generation fails, that prior assistance
+is retained, the ticket becomes `FAILED`, and the feedback event can be replayed
+through the existing failure API. Run with the `ai` profile when replaying it;
+a consumer without AI records a failure rather than accepting the feedback as
+ordinary triage. Approval does not regenerate or resolve the ticket, and no
+review executes customer actions.
 
 The table uses Oracle V2 blockchain SHA2-512 chaining, separately from the
 summary digest. Recent rows cannot be deleted during the 16-day row retention.
@@ -293,7 +404,7 @@ event outcomes, and approval history there. Curated support policies can be
 shared across regions. This diagram describes that topology; it does not
 demonstrate geographic placement or automatic routing.
 
-![Conceptual EU and US placement of ticket data with shared policies](visuals/regional-data-placement.svg)
+![Conceptual EU and US placement of ticket data with shared policies](ui/public/diagrams/context/regional-data-placement.svg)
 
 One avenue is regional app/database deployments with tenant routing. Oracle
 Globally Distributed AI Database is another, using placement and sharding
@@ -325,6 +436,10 @@ Run the replay walkthrough again, then open Grafana at
 Workflow** for recent failures, event outcomes, retries, processing latency, and
 read paths, and **Oracle UCP Metrics** for pool activity. To observe AI steps,
 start with `events,ai,observability` and run the AI script.
+To observe the feedback loop, use `events,ai,blockchain,observability` and run
+`./scripts/demo-human-feedback.sh`. Regeneration uses the same event-outcome
+and AI-step metrics; feedback publication increments `support.ticket.published`
+with `kind=feedback`.
 
 The observability profile enables OTLP metrics and trace export and JSON
 console logs. Metrics export every 5 seconds by default. The application emits
@@ -383,8 +498,11 @@ default cache reads can lag behind it.
 5. Replay locks a failed record, marks it `REPLAYED`, resets its failed ticket
    to `RECEIVED`, and publishes a new event in one producer transaction. The
    new event's causation ID identifies the original failure.
+6. A rejected review appends feedback, resets its enriched ticket to `RECEIVED`,
+   and publishes a regeneration event atomically with the review snapshot.
+   Processing follows the same consumer path; approval keeps the current summary.
 
-Without `ai`, `LogEventProcessor` logs the ticket and leaves its committed
+Without `ai`, `LogEventProcessor` logs submitted tickets and leaves their committed
 status at `TRIAGED`. With `ai`, `GenAIEventProcessor` saves the embedding,
 summary, and scored matches and commits `ENRICHED`. The intermediate
 `TRIAGED` update belongs to that same transaction, so a separate HTTP read
@@ -411,11 +529,20 @@ fails, it creates a new failure record that can be inspected and replayed.
 Outcome checks deduplicate by event UUID, including failures already marked
 `REPLAYED`. Replay intentionally creates a new event, so it is eligible for
 processing. This transaction boundary protects database changes and queue
-acknowledgements; OCI calls and policy indexing are outside its rollback scope.
+acknowledgements. External OCI calls cannot be rolled back. Policy indexing
+completes in a separate startup transaction before event consumption begins.
 
 The event carries a schema version, ticket ID, event type, UUIDs, timestamp,
-and W3C trace context. Ticket text stays in the database. UUIDs use canonical
-strings in HTTP/OSON and `RAW(16)` in database event tables.
+and W3C trace context. Ticket text and feedback stay in the database. UUIDs use
+canonical strings in HTTP/OSON and `RAW(16)` in database event tables.
+
+| Event type | Purpose |
+| --- | --- |
+| `TICKET_SUBMITTED` | Initial ticket processing. |
+| `TICKET_FEEDBACK_SUBMITTED` | Regenerate assistance using accumulated reviewer feedback and the previous summary. Requires AI; a consumer without `ai` records a replayable failure. |
+
+Replay preserves the original event type. The failure worklist and processed-event
+tables record outcomes; neither is polled as a queue. TxEventQ owns message delivery.
 
 Primary and cache reads have separate connection pools. Only ticket list and
 detail GETs use True Cache; writes, processing, replay, worklist queries, and
@@ -433,19 +560,22 @@ customer-support-lab-v2/
 ├── docker-compose.yml           Primary, True Cache, registration helpers, LGTM
 ├── db/                          User grants, schema/seed data, reset and cleanup SQL
 ├── dashboards/                  Grafana provisioning and workflow/UCP dashboards
-├── visuals/                     Approval-history and conceptual regional-placement SVGs
+├── ui/                          Vue workspace, Vite proxy, package.json
+│   ├── src/                     Views, API client, review form, diagram gallery
+│   └── public/diagrams/         Animated SVGs, source notes, standalone gallery
 ├── scripts/
 │   ├── demo-common.sh           Sourced setup and ticket creation for HTTP demos
 │   ├── demo-failed-event-replay.sh
 │   ├── demo-true-cache-reads.sh
-│   └── demo-ai-assistance.sh
+│   ├── demo-ai-assistance.sh
+│   └── demo-human-feedback.sh
 ├── src/main/java/com/oracle/demo/lab/
 │   ├── Application.java         Boot entry point, executor, JDBC tracing import
-│   ├── web/                     Ticket, replay, and assistance endpoints
-│   ├── model/                   Tickets, workflow status, event envelopes, failure metadata
-│   ├── messaging/               OKafka setup, lifecycle, transactional publish/consume
+│   ├── web/                     Ticket, replay, assistance, and review endpoints
+│   ├── model/                   Tickets, event envelopes, failures, and human reviews
+│   ├── messaging/               OKafka lifecycle, ticket/feedback producers, event consumer
 │   ├── processing/              Core/AI processors and opt-in demo failures
-│   ├── persistence/             Ticket storage, outcomes, UUID binding, cache routing
+│   ├── persistence/             Tickets, outcomes, approval history, UUID binding, cache routing
 │   ├── observability/           Trace propagation and event-driven workflow metrics
 │   └── ai/                      Summaries, vector retrieval, policy indexing, assistance
 ├── src/main/resources/          Base, AI, and observability configuration
@@ -459,16 +589,17 @@ workflow writes and uses Spring's primary `JdbcClient` for ordinary reads.
 `persistence.TicketReadRouter` selects `TicketStore` or `TrueCacheTicketReader`
 for ticket GETs. Tests mirror the production packages.
 
-`demo-common.sh` is sourced by the three walkthroughs; run their entry-point
-scripts directly. Compose creates all eight tables; the blockchain API remains
-an optional profile:
+`demo-common.sh` is sourced by the four walkthroughs; run their entry-point
+scripts directly. Compose creates all eight application tables; the blockchain
+API remains an optional profile. TxEventQ backing objects are prepared separately
+by the application and are not included in this table list:
 
 | Table | Stores |
 | --- | --- |
-| `support_ticket` | Ticket text, workflow state, optional embedding |
+| `support_ticket` | Ticket text, accumulated review feedback, workflow state, optional embedding |
 | `ticket_event_processed` | Completed-event idempotency keys |
 | `failed_ticket_event` | Failure envelope, attempt metadata, replay state |
-| `support_policy` | Seeded policy text and model-specific embeddings |
+| `support_policy` | Seeded policy text and embeddings |
 | `ticket_assistance` | Saved summary, model, prompt version, generation time |
 | `related_ticket` | Scored links to similar tickets |
 | `ticket_policy_match` | Scored links to policies |
@@ -478,14 +609,15 @@ an optional profile:
 
 | Method and path | Behavior |
 | --- | --- |
+| `GET /api/lab` | Read-only UI snapshot: active/default profiles, review availability, configured model/topic names, eight table counts, policy corpus, and latest-review timestamps. No credentials are returned. |
 | `POST /tickets` | Accepts `title` and `description`; returns the created ticket. Optional `X-Correlation-ID` header accepts a UUID. |
-| `GET /tickets` | Lists core ticket fields; accepts `readPath=primary` or `readPath=cache`. |
-| `GET /tickets/{id}` | Reads one ticket; returns 404 when absent. Accepts the same read-path options. |
+| `GET /tickets` | Lists ticket fields, including accumulated `reviewFeedback` when present; accepts `readPath=primary` or `readPath=cache`. |
+| `GET /tickets/{id}` | Reads one ticket, including `reviewFeedback` when present; returns 404 when absent. Accepts the same read-path options. |
 | `GET /ticket-events/failures` | Lists failed-event metadata, including replayability. |
 | `POST /ticket-events/failures/{eventId}/replay` | Returns 202 with the new event; 404 for absent/already replayed failures; 409 for unsupported envelopes or a ticket no longer eligible for replay. |
 | `GET /tickets/{id}/assistance` | Available with `ai`; returns saved assistance or 404 before it is available. |
-| `POST /tickets/{id}/approvals` | Available with `events,blockchain`; accepts `actionId` UUID, `decision`, `actorId`, and optional `reason`. Returns 200 with the review; 400 for invalid input, 404 for missing ticket, 409 for missing ENRICHED assistance or conflicting action UUID. |
-| `GET /tickets/{id}/approvals` | Available with `events,blockchain`; reads primary history, returns an empty list before review, or 404 for missing ticket. |
+| `POST /tickets/{id}/approvals` | Requires `events,ai,blockchain`; accepts `actionId` UUID, `APPROVED`/`REJECTED` decision, `actorId`, and `reason` (required for rejection). Returns 200 with the committed review; rejection queues asynchronous regeneration. Returns 400 for invalid input, 404 for missing ticket, or 409 for an ineligible ticket or conflicting action UUID. |
+| `GET /tickets/{id}/approvals` | Requires `events,ai,blockchain`; reads primary history, returns an empty list before review, or 404 for missing ticket. |
 
 Ticket GETs default to cache. Their `X-Read-Path` header reports `primary`,
 `true-cache`, or `primary-fallback`, including on 404. A successful cache query
@@ -517,6 +649,7 @@ curl -i -X POST 'http://localhost:9001/ticket-events/failures/<event-uuid>/repla
 | `TRUE_CACHE_DB_UNIQUE_NAME`, `TRUE_CACHE_MAX_POOL_SIZE` | `TRUEFREE`, `8`. |
 | `TICKET_EVENT_MAX_ATTEMPTS`, `TICKET_EVENT_RETRY_BACKOFF_MS` | `3` total attempts, `250` ms initial backoff. |
 | `LAB_BASE_URL`, `LAB_TICKET_ID` | Demo API URL; optional existing ID for the cache demo. |
+| `LAB_API_URL` | UI development/preview proxy target, `http://localhost:9001`. Set when starting Vite. |
 | `OCI_COMPARTMENT_ID` | Required with the `ai` profile. |
 | `OCI_AUTHENTICATION_TYPE`, `OCI_CONFIG_FILE`, `OCI_PROFILE` | `FILE`, `${user.home}/.oci/config`, `DEFAULT`. |
 | `OCI_CHAT_MODEL_ID`, `OCI_EMBEDDING_MODEL_ID` | `cohere.command-a-03-2025`, `cohere.embed-v4.0`; embeddings request 1536 dimensions. |
@@ -558,9 +691,11 @@ export LAB_SMOKE_PASSWORD="$APP_DB_PASSWORD"
 ./mvnw test -Dtest=TicketEventOutcomePersistenceSmokeTest,TicketAssistancePersistenceSmokeTest
 ```
 
-These checks exercise persistence and rollback, not the complete OKafka,
-True Cache, or OCI model flow. Use the walkthrough scripts against the running
-app for those paths. The AI walkthrough requires actual OCI model access.
+These checks exercise persistence and rollback, including replacement of saved
+assistance/matches and rollback of a failed revision. They do not exercise the
+complete OKafka, True Cache, or OCI model flow. Use the walkthrough scripts
+against the running app for those paths. The AI and human-feedback walkthroughs
+require actual OCI model access.
 
 The separate blockchain smoke test uses the same Compose-prepared schema,
 including its blockchain table and verification grant. It commits
@@ -572,6 +707,10 @@ verification. Use a disposable lab with the same `LAB_SMOKE_*` exports above:
 ```bash
 LAB_BLOCKCHAIN_SMOKE_TEST=true ./mvnw test -Dtest=TicketApprovalPersistenceSmokeTest
 ```
+
+The blockchain smoke test calls review persistence directly; it does not publish
+a feedback event. Use `./scripts/demo-human-feedback.sh` with the running
+`events,ai,blockchain` app to exercise review publication and regeneration together.
 
 ## Reset, recovery, and troubleshooting
 
@@ -609,6 +748,9 @@ a fresh run instead of repairing or restarting the database containers.
 | Replay demo finishes without a deliberate failure | Restart with `events,demo-failures`. |
 | AI demo reports `TRIAGED` | Restart with `events,ai`. |
 | AI startup or enrichment fails | Check OCI credentials, compartment/model access, and 1536-dimensional embeddings; inspect failed-event metadata before replay. |
+| Review endpoint returns 404 | Enable all three profiles: `events,ai,blockchain`; for an enabled endpoint, verify the ticket ID. |
+| Review returns 400 or 409 | Supply nonblank `reason` for rejection and valid reviewer/action fields. New actions require an `ENRICHED` ticket with saved assistance; wait for any pending regeneration. Reusing an action UUID with different fields also returns 409. |
+| Feedback regeneration fails | Inspect the failed-event worklist, correct the cause, and replay with `events,ai,blockchain`. Previously saved assistance is retained until a successful revision. |
 | Cache read falls back | Check database health, `true-cache-configure` logs/exit status, the cache URL, and expected `DB_UNIQUE_NAME`. |
 | Cache returns 404 after a write | Allow for redo lag; the cache demo polls for visibility. |
 | True Cache exits during creation | Inspect `docker inspect truecache --format '{{.State.OOMKilled}}'`; if true, free Docker memory before retrying. |

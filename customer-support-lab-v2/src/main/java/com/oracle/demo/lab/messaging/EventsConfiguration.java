@@ -101,8 +101,19 @@ public class EventsConfiguration {
         return AdminClient.create(okafkaAuth());
     }
 
-    @Bean
+    @Bean(destroyMethod = "close")
     public KafkaProducer<String, TicketWorkEvent> ticketProducer(OSONKafkaSerializationFactory serializationFactory) throws IOException {
+        return createTransactionalProducer(serializationFactory);
+    }
+
+    @Bean(destroyMethod = "close")
+    @Profile("ai & blockchain")
+    public KafkaProducer<String, TicketWorkEvent> reviewProducer(OSONKafkaSerializationFactory serializationFactory) throws IOException {
+        return createTransactionalProducer(serializationFactory);
+    }
+
+    private KafkaProducer<String, TicketWorkEvent> createTransactionalProducer(
+            OSONKafkaSerializationFactory serializationFactory) throws IOException {
         Properties props = new Properties();
         props.putAll(okafkaAuth());
         props.put("enable.idempotence", "true");

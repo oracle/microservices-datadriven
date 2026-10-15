@@ -30,12 +30,12 @@ public class TicketStore {
     }
 
     public List<SupportTicket> getAllTickets() {
-        return jdbcClient.sql("select id, title, description, workflow_status from support_ticket")
+        return jdbcClient.sql("select id, title, description, review_feedback, workflow_status from support_ticket")
                 .query((rows, rowNumber) -> new SupportTicket(rows)).list();
     }
 
     public Optional<SupportTicket> findById(Long id) {
-        return jdbcClient.sql("select id, title, description, workflow_status from support_ticket where id = ?")
+        return jdbcClient.sql("select id, title, description, review_feedback, workflow_status from support_ticket where id = ?")
                 .param(id)
                 .query((rows, rowNumber) -> new SupportTicket(rows)).optional();
     }
@@ -81,6 +81,23 @@ public class TicketStore {
             }
         } catch (SQLException e) {
             throw new IllegalStateException("Could not persist ticket enrichment", e);
+        }
+    }
+
+    public void addReviewFeedback(Connection connection, long ticketId, String feedback) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement("""
+                update support_ticket
+                set review_feedback = case when review_feedback is null then to_clob(?)
+                        else review_feedback || chr(10) || chr(10) || ? end,
+                    workflow_status = 'RECEIVED'
+                where id = ? and workflow_status = 'ENRICHED'
+                """)) {
+            statement.setString(1, feedback);
+            statement.setString(2, feedback);
+            statement.setLong(3, ticketId);
+            if (statement.executeUpdate() != 1) {
+                throw new IllegalStateException("Only an ENRICHED ticket can receive review feedback");
+            }
         }
     }
 

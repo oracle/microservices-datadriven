@@ -3,6 +3,7 @@
 package com.oracle.demo.lab.web;
 
 import com.oracle.demo.lab.model.TicketApproval;
+import com.oracle.demo.lab.messaging.TicketReviewService;
 import com.oracle.demo.lab.persistence.TicketApprovalStore;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -17,12 +18,13 @@ class TicketApprovalControllerTest {
     @Test
     void mapsInvalidInputMissingTicketAndIneligibleReview() {
         TicketApprovalStore store = mock(TicketApprovalStore.class);
-        TicketApprovalController controller = new TicketApprovalController(store);
+        TicketReviewService reviews = mock(TicketReviewService.class);
+        TicketApprovalController controller = new TicketApprovalController(store, reviews);
         var request = new TicketApproval.Request(UUID.randomUUID(), TicketApproval.Decision.APPROVED, "demo", null);
-        when(store.record(42, request)).thenThrow(new IllegalArgumentException("invalid"));
+        when(reviews.record(42, request)).thenThrow(new IllegalArgumentException("invalid"));
         assertEquals(400, assertThrows(ResponseStatusException.class,
                 () -> controller.record(42, request)).getStatusCode().value());
-        doThrow(new TicketApprovalStore.ApprovalConflictException("not enriched")).when(store).record(42, request);
+        doThrow(new TicketApprovalStore.ApprovalConflictException("not enriched")).when(reviews).record(42, request);
         assertEquals(409, assertThrows(ResponseStatusException.class,
                 () -> controller.record(42, request)).getStatusCode().value());
         when(store.history(42)).thenThrow(new TicketApprovalStore.TicketNotFoundException(42));
@@ -31,14 +33,15 @@ class TicketApprovalControllerTest {
     }
 
     @Test
-    void requiresBothEventsAndBlockchainProfiles() {
-        for (String[] profiles : new String[][]{{"events"}, {"blockchain"}, {"events", "blockchain"}}) {
+    void requiresEventsAiAndBlockchainProfiles() {
+        for (String[] profiles : new String[][]{{"events"}, {"blockchain"}, {"events", "blockchain"}, {"events", "ai", "blockchain"}}) {
             try (var context = new AnnotationConfigApplicationContext()) {
                 context.getEnvironment().setActiveProfiles(profiles);
                 context.registerBean(TicketApprovalStore.class, () -> mock(TicketApprovalStore.class));
+                context.registerBean(TicketReviewService.class, () -> mock(TicketReviewService.class));
                 context.register(TicketApprovalController.class);
                 context.refresh();
-                assertEquals(profiles.length == 2 ? 1 : 0,
+                assertEquals(profiles.length == 3 ? 1 : 0,
                         context.getBeansOfType(TicketApprovalController.class).size());
             }
         }

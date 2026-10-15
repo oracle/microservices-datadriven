@@ -25,14 +25,23 @@ public class TicketAssistanceStore {
         this.jdbcClient = jdbcClient;
     }
 
-    /** Persists the first successful enrichment on the consumer's TxEventQ connection. */
+    /** Replaces the current assistance and matches on the consumer's TxEventQ connection. */
     public void save(Connection connection, long ticketId, String summary, String modelId,
                      String promptVersion, List<RelatedTicket> relatedTickets,
                      List<PolicyMatch> policies) {
         try (PreparedStatement assistance = connection.prepareStatement("""
-                insert into ticket_assistance (ticket_id, summary, summary_model, prompt_version)
-                values (?, ?, ?, ?)
+                merge into ticket_assistance a
+                using (select ? ticket_id, ? summary, ? summary_model, ? prompt_version from dual) s
+                on (a.ticket_id = s.ticket_id)
+                when matched then update set a.summary = s.summary, a.summary_model = s.summary_model,
+                    a.prompt_version = s.prompt_version, a.generated_at = systimestamp
+                when not matched then insert (ticket_id, summary, summary_model, prompt_version)
+                    values (s.ticket_id, s.summary, s.summary_model, s.prompt_version)
                 """);
+             PreparedStatement clearRelated = connection.prepareStatement(
+                     "delete from related_ticket where ticket_id = ?");
+             PreparedStatement clearPolicies = connection.prepareStatement(
+                     "delete from ticket_policy_match where ticket_id = ?");
              PreparedStatement addRelated = connection.prepareStatement("""
                      insert into related_ticket (ticket_id, related, score) values (?, ?, ?)
                      """);
@@ -44,6 +53,10 @@ public class TicketAssistanceStore {
             assistance.setString(3, modelId);
             assistance.setString(4, promptVersion);
             assistance.executeUpdate();
+            clearRelated.setLong(1, ticketId);
+            clearRelated.executeUpdate();
+            clearPolicies.setLong(1, ticketId);
+            clearPolicies.executeUpdate();
 
             for (RelatedTicket related : relatedTickets) {
                 addRelated.setLong(1, ticketId);
@@ -65,6 +78,21 @@ public class TicketAssistanceStore {
             }
         } catch (SQLException e) {
             throw new IllegalStateException("Could not persist ticket assistance", e);
+        }
+    }
+
+    public String findSummary(Connection connection, long ticketId) {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "select summary from ticket_assistance where ticket_id = ?")) {
+            statement.setLong(1, ticketId);
+            try (var rows = statement.executeQuery()) {
+                if (!rows.next()) {
+                    throw new IllegalStateException("Summary regeneration requires saved assistance");
+                }
+                return rows.getString("summary");
+            }
+        } catch (SQLException failure) {
+            throw new IllegalStateException("Could not read the previous summary", failure);
         }
     }
 

@@ -227,8 +227,7 @@ public class TicketEventConsumer implements Runnable {
         if (event.getSchemaVersion() != TicketWorkEvent.CURRENT_SCHEMA_VERSION) {
             throw new NonRetryableTicketEventException("Unsupported ticket event schema version");
         }
-        if (!TicketWorkEvent.TICKET_SUBMITTED.equals(event.getEventType())
-                || event.getTicketId() == null) {
+        if (!event.isReplayable()) {
             throw new NonRetryableTicketEventException("Invalid ticket work event");
         }
     }

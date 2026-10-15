@@ -23,4 +23,3 @@ spring:
 app:
   ai:
     chat-model-id: ${OCI_CHAT_MODEL_ID:cohere.command-a-03-2025}
-    embedding-model-id: ${OCI_EMBEDDING_MODEL_ID:cohere.embed-v4.0}

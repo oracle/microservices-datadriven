@@ -19,6 +19,9 @@ public class LogEventProcessor implements TicketEventProcessor {
     private static final Logger log = LoggerFactory.getLogger(LogEventProcessor.class.getName());
     @Override
     public void processRecord(Connection conn, TicketWorkEvent event, SupportTicket ticket) {
+        if (TicketWorkEvent.TICKET_FEEDBACK_SUBMITTED.equals(event.getEventType())) {
+            throw new IllegalArgumentException("Summary regeneration requires the ai profile");
+        }
         log.info("Processed ticket event eventId={} correlationId={} ticketId={} status={}",
                 event.getEventId(), event.getCorrelationId(), ticket.getId(), ticket.getWorkflowStatus());
     }

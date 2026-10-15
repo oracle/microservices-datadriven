@@ -17,6 +17,7 @@ import java.sql.ResultSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /** Opt-in check against a disposable schema prepared by Compose. */
 class TicketAssistancePersistenceSmokeTest {
@@ -47,6 +48,21 @@ class TicketAssistancePersistenceSmokeTest {
                 assertEquals("smoke-chat-model", saved.summaryModel());
                 assertEquals(relatedId, saved.similarTickets().getFirst().relatedTicketId());
                 assertEquals("MFA_RECOVERY", saved.policies().getFirst().policyId());
+                tickets.addReviewFeedback(connection, ticketId, "Use the test tenant.");
+                var pendingRevision = connection.setSavepoint();
+                assertThrows(IllegalStateException.class, () -> assistance.save(connection, ticketId,
+                        "Incomplete revision", "smoke-chat-model", TicketSummarizer.PROMPT_VERSION,
+                        List.of(), List.of(new PolicyMatch("UNKNOWN_POLICY", "Invalid fixture", 0.8))));
+                connection.rollback(pendingRevision);
+                assertEquals(saved, assistance.findByTicketId(ticketId).orElseThrow());
+                tickets.saveEnrichment(connection, ticketId, embedding);
+                assistance.save(connection, ticketId, "Test tenant MFA recovery needs review.",
+                        "smoke-chat-model", TicketSummarizer.PROMPT_VERSION, List.of(), List.of());
+                TicketAssistance revised = assistance.findByTicketId(ticketId).orElseThrow();
+                assertEquals("Test tenant MFA recovery needs review.", revised.summary());
+                assertEquals(List.of(), revised.similarTickets());
+                assertEquals(List.of(), revised.policies());
+                assertEquals("Use the test tenant.", tickets.findById(ticketId).orElseThrow().getReviewFeedback());
                 try (PreparedStatement statement = connection.prepareStatement(
                         "select workflow_status, embedding from support_ticket where id = ?")) {
                     statement.setLong(1, ticketId);

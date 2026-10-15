@@ -13,6 +13,7 @@ public class SupportTicket {
     private Long id;
     private String title;
     private String description;
+    private String reviewFeedback;
     private TicketStatus workflowStatus = TicketStatus.RECEIVED;
 
     public SupportTicket() {
@@ -22,6 +23,7 @@ public class SupportTicket {
         this.id = rs.getLong("id");
         this.title = rs.getString("title");
         this.description = rs.getString("description");
+        this.reviewFeedback = rs.getString("review_feedback");
         this.workflowStatus = TicketStatus.valueOf(rs.getString("workflow_status"));
     }
 
@@ -51,6 +53,14 @@ public class SupportTicket {
 
     public TicketStatus getWorkflowStatus() {
         return workflowStatus;
+    }
+
+    public String getReviewFeedback() {
+        return reviewFeedback;
+    }
+
+    public void setReviewFeedback(String reviewFeedback) {
+        this.reviewFeedback = reviewFeedback;
     }
 
     public void setWorkflowStatus(TicketStatus workflowStatus) {

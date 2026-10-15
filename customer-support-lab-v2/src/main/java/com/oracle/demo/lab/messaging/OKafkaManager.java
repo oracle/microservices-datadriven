@@ -3,7 +3,6 @@
 
 package com.oracle.demo.lab.messaging;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import org.apache.kafka.clients.admin.Admin;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -12,7 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.stereotype.Component;
 
@@ -39,7 +40,7 @@ public class OKafkaManager {
         this.topic = topic;
     }
 
-    @PostConstruct
+    @EventListener(ApplicationReadyEvent.class)
     public void init() {
         NewTopic newTopic = new NewTopic(topic, 1, (short) 0);
         try {

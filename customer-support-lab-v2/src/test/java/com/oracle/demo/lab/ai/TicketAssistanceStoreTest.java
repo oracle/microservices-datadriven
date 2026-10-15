@@ -13,6 +13,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -21,9 +22,12 @@ class TicketAssistanceStoreTest {
     void savesSummaryAndScoredReferencesOnSuppliedConnection() throws Exception {
         Connection connection = mock(Connection.class);
         PreparedStatement assistance = mock(PreparedStatement.class);
+        PreparedStatement clearRelated = mock(PreparedStatement.class);
+        PreparedStatement clearPolicies = mock(PreparedStatement.class);
         PreparedStatement addRelated = mock(PreparedStatement.class);
         PreparedStatement addPolicy = mock(PreparedStatement.class);
-        when(connection.prepareStatement(anyString())).thenReturn(assistance, addRelated, addPolicy);
+        when(connection.prepareStatement(anyString()))
+                .thenReturn(assistance, clearRelated, clearPolicies, addRelated, addPolicy);
         RelatedTicket related = new RelatedTicket(7L, 0.82);
         PolicyMatch policy = new PolicyMatch("MFA_RECOVERY", "MFA recovery", 0.87);
 
@@ -43,5 +47,11 @@ class TicketAssistanceStoreTest {
         verify(addPolicy).setString(2, "MFA_RECOVERY");
         verify(addPolicy).setDouble(3, 0.87);
         verify(addPolicy).executeBatch();
+        var calls = inOrder(assistance, clearRelated, clearPolicies, addRelated, addPolicy);
+        calls.verify(assistance).executeUpdate();
+        calls.verify(clearRelated).executeUpdate();
+        calls.verify(clearPolicies).executeUpdate();
+        calls.verify(addRelated).executeBatch();
+        calls.verify(addPolicy).executeBatch();
     }
 }

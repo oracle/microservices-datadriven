@@ -44,6 +44,22 @@ class TicketStoreSqlTest {
     }
 
     @Test
+    void reviewFeedbackUpdatesOnlyAnEnrichedTicket() throws Exception {
+        Connection connection = mock(Connection.class);
+        PreparedStatement statement = mock(PreparedStatement.class);
+        when(connection.prepareStatement(anyString())).thenReturn(statement);
+        when(statement.executeUpdate()).thenReturn(1, 0);
+
+        store.addReviewFeedback(connection, 42L, "Test tenant, not production.");
+
+        verify(statement).setString(1, "Test tenant, not production.");
+        verify(statement).setString(2, "Test tenant, not production.");
+        verify(statement).setLong(3, 42L);
+        assertThrows(IllegalStateException.class,
+                () -> store.addReviewFeedback(connection, 42L, "Another correction."));
+    }
+
+    @Test
     void replayResetRequiresFailedTicket() throws Exception {
         Connection connection = mock(Connection.class);
         PreparedStatement statement = mock(PreparedStatement.class);

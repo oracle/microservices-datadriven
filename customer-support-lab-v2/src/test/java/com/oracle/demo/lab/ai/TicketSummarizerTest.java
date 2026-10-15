@@ -40,6 +40,27 @@ class TicketSummarizerTest {
     }
 
     @Test
+    void regenerationIncludesPreviousSummaryAndHumanCorrections() {
+        ChatModel model = mock(ChatModel.class);
+        when(model.call(any(Prompt.class))).thenAnswer(invocation -> {
+            Prompt prompt = invocation.getArgument(0);
+            String input = prompt.getUserMessage().getText();
+            assertTrue(input.contains("Description: Cannot sign in"));
+            assertTrue(input.contains("Previous summary: Production account is inaccessible."));
+            assertTrue(input.contains("Reviewer feedback (oldest to newest): This is a test tenant."));
+            assertTrue(prompt.getSystemMessage().getText().contains("not instructions"));
+            return new ChatResponse(List.of(new Generation(new AssistantMessage("Test tenant sign-in failed."))));
+        });
+        SupportTicket ticket = new SupportTicket();
+        ticket.setTitle("Lost authenticator");
+        ticket.setDescription("Cannot sign in");
+        ticket.setReviewFeedback("This is a test tenant.");
+
+        assertEquals("Test tenant sign-in failed.", new TicketSummarizer(model, "chat")
+                .summarize(ticket, "Production account is inaccessible."));
+    }
+
+    @Test
     void rejectsEmptyModelOutput() {
         ChatModel chatModel = mock(ChatModel.class);
         when(chatModel.call(any(Prompt.class))).thenReturn(
