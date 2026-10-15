@@ -5,11 +5,12 @@ const props = defineProps({
   ticket: Object,
   assistance: Object,
   enabled: Boolean,
+  initialFeedback: { type: String, default: "" },
 });
-const emit = defineEmits(["saved"]);
+const emit = defineEmits(["saved", "busy"]);
 const actor = ref("demo-reviewer");
 const decision = ref("REJECTED");
-const reason = ref("");
+const reason = ref(props.initialFeedback);
 const pending = ref(false);
 const error = ref("");
 const notice = ref("");
@@ -23,10 +24,19 @@ const eligible = computed(
 watch(
   () => props.ticket.id,
   () => {
-    reason.value = "";
+    reason.value = props.initialFeedback;
     error.value = "";
     notice.value = "";
     retry = null;
+  },
+);
+watch(
+  () => props.initialFeedback,
+  (value) => {
+    if (!pending.value) {
+      reason.value = value;
+      decision.value = "REJECTED";
+    }
   },
 );
 watch(
@@ -40,13 +50,13 @@ async function submit() {
   const ticketId = props.ticket.id;
   const reviewedGeneration = props.assistance.generatedAt;
   pending.value = true;
+  emit("busy", true);
   error.value = "";
   notice.value = "";
   try {
     // Preserve the exact action after an uncertain response so retry cannot publish twice.
     if (!retry) {
-      const current = (await request(`/tickets/${ticketId}/assistance`))
-        .data;
+      const current = (await request(`/tickets/${ticketId}/assistance`)).data;
       if (current.generatedAt !== reviewedGeneration)
         throw new Error(
           "A new summary is available. Refresh and review it before submitting.",
@@ -65,11 +75,12 @@ async function submit() {
     notice.value = rejected
       ? "Feedback saved. A revision has been requested through TxEventQ."
       : "Summary approved. Your review snapshot is saved.";
-    emit("saved");
+    emit("saved", result.data);
   } catch (e) {
     error.value = e.message;
   } finally {
     pending.value = false;
+    emit("busy", false);
   }
 }
 </script>

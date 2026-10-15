@@ -4,7 +4,6 @@
 package com.oracle.demo.lab.messaging;
 
 import com.oracle.demo.lab.model.TicketWorkEvent;
-import com.oracle.demo.lab.observability.EventTraceContext;
 import com.oracle.demo.lab.observability.TicketTelemetry;
 import com.oracle.demo.lab.persistence.TicketEventOutcomeStore;
 import com.oracle.demo.lab.model.SupportTicket;
@@ -46,6 +45,10 @@ public class TicketEventProducer {
     }
 
     public Long produce(SupportTicket ticket, UUID correlationId) {
+        return telemetry.operation("support.ticket.submit", () -> submit(ticket, correlationId));
+    }
+
+    private Long submit(SupportTicket ticket, UUID correlationId) {
         synchronized (producer) {
             ticket.setWorkflowStatus(TicketStatus.RECEIVED);
             producer.beginTransaction();
@@ -53,9 +56,11 @@ public class TicketEventProducer {
             try {
                 ticket.setId(ticketStore.insert(producer.getDBConnection(), ticket));
                 event = TicketWorkEvent.submitted(ticket.getId(), correlationId);
-                EventTraceContext.inject(event);
-                producer.send(event.toProducerRecord(topic));
-                producer.commitTransaction();
+                var record = event.toProducerRecord(topic);
+                telemetry.publish(record, () -> {
+                    producer.send(record);
+                    producer.commitTransaction();
+                });
             } catch (Exception e) {
                 throw abortAfterFailure(e);
             }
@@ -67,6 +72,10 @@ public class TicketEventProducer {
     }
 
     public TicketWorkEvent replay(UUID failedEventId) {
+        return telemetry.operation("support.ticket.replay", () -> replayFailedEvent(failedEventId));
+    }
+
+    private TicketWorkEvent replayFailedEvent(UUID failedEventId) {
         synchronized (producer) {
             producer.beginTransaction();
             TicketWorkEvent replay;
@@ -78,11 +87,13 @@ public class TicketEventProducer {
                     throw new IllegalStateException("Failed event has an unsupported or incomplete envelope");
                 }
                 replay = original.replayed(UUID.randomUUID());
-                EventTraceContext.inject(replay);
                 outcomeStore.markReplayed(connection, failedEventId);
                 ticketStore.resetFailedForReplay(connection, replay.getTicketId());
-                producer.send(replay.toProducerRecord(topic));
-                producer.commitTransaction();
+                var record = replay.toProducerRecord(topic);
+                telemetry.publish(record, () -> {
+                    producer.send(record);
+                    producer.commitTransaction();
+                });
             } catch (Exception e) {
                 throw abortAfterFailure(e);
             }

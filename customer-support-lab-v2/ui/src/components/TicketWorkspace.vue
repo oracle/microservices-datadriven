@@ -14,6 +14,19 @@ const emit = defineEmits(["updated"]);
 const query = ref(""),
   filter = ref(props.reviewMode ? "REVIEW" : "ALL"),
   selected = ref(props.initialId || null);
+// Hide a committed approval immediately, even while the workspace refresh is in flight.
+// A later summary generation becomes eligible again.
+const approvedGenerations = ref(new Map());
+function awaitingReview(ticket) {
+  const generation = props.snapshot?.reviewStates.find(
+    (review) => review.ticketId === ticket.id,
+  )?.generatedAt;
+  const accepted = approvedGenerations.value.get(ticket.id);
+  return (
+    needsReview(ticket, props.snapshot) &&
+    !(accepted && (!generation || accepted === generation))
+  );
+}
 const filtered = computed(() =>
   props.tickets.filter((t) => {
     const text = `${t.id} ${t.title} ${t.description}`.toLowerCase();
@@ -21,7 +34,7 @@ const filtered = computed(() =>
       text.includes(query.value.toLowerCase()) &&
       (filter.value === "ALL" ||
         (filter.value === "REVIEW"
-          ? needsReview(t, props.snapshot)
+          ? awaitingReview(t)
           : t.workflowStatus === filter.value))
     );
   }),
@@ -47,6 +60,13 @@ function selectRelated(id) {
   selected.value = id;
   filter.value = "ALL";
   query.value = "";
+}
+function reviewed(review) {
+  if (!props.reviewMode || review.decision !== "APPROVED") return;
+  approvedGenerations.value.set(review.ticketId, review.generatedAt);
+  query.value = "";
+  filter.value = "REVIEW";
+  selected.value = props.tickets.find(awaitingReview)?.id || null;
 }
 </script>
 <template>
@@ -107,9 +127,7 @@ function selectRelated(id) {
         </div>
         <strong>{{ ticket.title }}</strong>
         <p>{{ ticket.description }}</p>
-        <span
-          v-if="reviewMode && needsReview(ticket, snapshot)"
-          class="review-hint"
+        <span v-if="reviewMode && awaitingReview(ticket)" class="review-hint"
           >● Ready for human review</span
         >
       </button>
@@ -121,8 +139,30 @@ function selectRelated(id) {
       :refreshed-at="refreshedAt"
       :review-mode="reviewMode"
       @updated="emit('updated')"
+      @reviewed="reviewed"
       @select="selectRelated"
     />
+    <div
+      v-else-if="
+        reviewMode &&
+        snapshot?.reviewEnabled &&
+        filter === 'REVIEW' &&
+        !query &&
+        !filtered.length
+      "
+      class="panel empty detail-placeholder"
+      role="status"
+    >
+      <span class="clear-icon">✓</span>
+      <h3>You're all caught up</h3>
+      <p>
+        No summaries are awaiting human review. New or regenerated summaries
+        will appear here when they are ready.
+      </p>
+      <button class="text-button" @click="filter = 'ALL'">
+        View all tickets and review history →
+      </button>
+    </div>
     <div v-else class="panel empty detail-placeholder">
       <span class="placeholder-icon">▤</span>
       <h3>Your workflow, in detail</h3>

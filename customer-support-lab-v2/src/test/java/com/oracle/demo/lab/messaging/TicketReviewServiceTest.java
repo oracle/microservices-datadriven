@@ -9,6 +9,8 @@ import com.oracle.demo.lab.persistence.TicketApprovalStore;
 import com.oracle.demo.lab.persistence.TicketStore;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.junit.jupiter.api.Test;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
+import io.micrometer.observation.ObservationRegistry;
 import org.mockito.ArgumentCaptor;
 import org.oracle.okafka.clients.producer.KafkaProducer;
 
@@ -26,7 +28,7 @@ class TicketReviewServiceTest {
     private final KafkaProducer<String, TicketWorkEvent> producer = mock(KafkaProducer.class);
     private final TicketApprovalStore approvals = mock(TicketApprovalStore.class);
     private final TicketStore tickets = mock(TicketStore.class);
-    private final TicketTelemetry telemetry = mock(TicketTelemetry.class);
+    private final TicketTelemetry telemetry = spy(new TicketTelemetry(new SimpleMeterRegistry(), ObservationRegistry.create()));
     private final Connection connection = mock(Connection.class);
     private final TicketReviewService service = new TicketReviewService(producer, approvals, tickets, telemetry, "ticket_event");
     private final TicketApproval.Request rejection = new TicketApproval.Request(UUID.randomUUID(),
@@ -61,7 +63,8 @@ class TicketReviewServiceTest {
 
         service.record(42, rejection);
 
-        verifyNoInteractions(tickets, telemetry);
+        verifyNoInteractions(tickets);
+        verify(telemetry, never()).published(any());
         verify(producer, never()).send(any());
         verify(producer).commitTransaction();
     }
@@ -73,7 +76,8 @@ class TicketReviewServiceTest {
 
         service.record(42, approved);
 
-        verifyNoInteractions(tickets, telemetry);
+        verifyNoInteractions(tickets);
+        verify(telemetry, never()).published(any());
         verify(producer, never()).send(any());
         verify(producer).commitTransaction();
     }
@@ -95,7 +99,7 @@ class TicketReviewServiceTest {
 
         verify(producer).abortTransaction();
         verify(producer, never()).commitTransaction();
-        verifyNoInteractions(telemetry);
+        verify(telemetry, never()).published(any());
     }
 
     @Test
@@ -120,7 +124,7 @@ class TicketReviewServiceTest {
 
         assertSame(commitFailure, assertThrows(IllegalStateException.class, () -> service.record(42, rejection)));
         assertSame(abortFailure, commitFailure.getSuppressed()[0]);
-        verifyNoInteractions(telemetry);
+        verify(telemetry, never()).published(any());
     }
 
     @Test

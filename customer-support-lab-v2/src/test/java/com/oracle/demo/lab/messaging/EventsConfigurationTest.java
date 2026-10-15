@@ -15,6 +15,8 @@ import org.oracle.okafka.clients.producer.KafkaProducer;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -84,6 +86,30 @@ class EventsConfigurationTest {
                 configuration::okafkaAuth);
 
         assertEquals("OKAFKA_SECURITY_PROTOCOL must be SSL or PLAINTEXT", error.getMessage());
+    }
+
+    @Test
+    void plaintextConnectionFileEnablesJdbcTracingForOkafkaConnections() throws Exception {
+        EventsConfiguration configuration = new EventsConfiguration();
+        ReflectionTestUtils.setField(configuration, "securityProtocol", "PLAINTEXT");
+        ReflectionTestUtils.setField(configuration, "bootstrapServers", "localhost:1522");
+        ReflectionTestUtils.setField(configuration, "tnsAdmin", "FREEPDB1");
+        ReflectionTestUtils.setField(configuration, "dbUsername", "LAB_USER");
+        ReflectionTestUtils.setField(configuration, "dbPassword", "test-only-password");
+        var properties = configuration.okafkaAuth();
+        Path directory = Path.of(properties.getProperty("oracle.net.tns_admin"));
+        Path file = directory.resolve("ojdbc.properties");
+        try (var reader = Files.newBufferedReader(file)) {
+            var jdbc = new Properties();
+            jdbc.load(reader);
+            assertEquals("open-telemetry-trace-event-listener-provider",
+                    jdbc.getProperty("oracle.jdbc.provider.traceEventListener"));
+            assertEquals("LAB_USER", jdbc.getProperty("user"));
+            assertEquals("test-only-password", jdbc.getProperty("password"));
+        } finally {
+            Files.deleteIfExists(file);
+            Files.deleteIfExists(directory);
+        }
     }
 
     @Test

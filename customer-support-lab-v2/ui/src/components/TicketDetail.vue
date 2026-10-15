@@ -10,7 +10,7 @@ const props = defineProps({
   refreshedAt: Date,
   reviewMode: Boolean,
 });
-const emit = defineEmits(["updated", "select"]);
+const emit = defineEmits(["updated", "select", "reviewed"]);
 const ticket = ref(null),
   assistance = ref(null),
   history = ref([]),
@@ -56,9 +56,10 @@ watch(
 );
 watch(() => props.refreshedAt, load);
 onUnmounted(() => generation++);
-async function saved() {
-  await load();
+async function saved(review) {
   emit("updated");
+  emit("reviewed", { ...review, generatedAt: assistance.value?.generatedAt });
+  if (review.decision !== "APPROVED") await load();
 }
 </script>
 <template>

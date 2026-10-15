@@ -13,6 +13,8 @@ import com.oracle.demo.lab.persistence.TicketStore;
 
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.junit.jupiter.api.Test;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
+import io.micrometer.observation.ObservationRegistry;
 import org.oracle.okafka.clients.producer.KafkaProducer;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
@@ -27,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
@@ -46,7 +49,7 @@ class TicketEventProducerReplayTest {
         when(ticketStore.insert(connection, ticket)).thenReturn(42L);
 
         long ticketId = new TicketEventProducer(producer, ticketStore,
-                mock(TicketEventOutcomeStore.class), mock(TicketTelemetry.class), "ticket_event")
+                mock(TicketEventOutcomeStore.class), spy(new TicketTelemetry(new SimpleMeterRegistry(), ObservationRegistry.create())), "ticket_event")
                 .produce(ticket, null);
 
         ArgumentCaptor<ProducerRecord<String, TicketWorkEvent>> sent = ArgumentCaptor.forClass(ProducerRecord.class);
@@ -65,7 +68,7 @@ class TicketEventProducerReplayTest {
     void metricFailureAfterSubmissionCommitDoesNotAbort() throws Exception {
         KafkaProducer<String, TicketWorkEvent> producer = mock(KafkaProducer.class);
         TicketStore ticketStore = mock(TicketStore.class);
-        TicketTelemetry telemetry = mock(TicketTelemetry.class);
+        TicketTelemetry telemetry = spy(new TicketTelemetry(new SimpleMeterRegistry(), ObservationRegistry.create()));
         Connection connection = mock(Connection.class);
         SupportTicket ticket = new SupportTicket();
         when(producer.getDBConnection()).thenReturn(connection);
@@ -97,7 +100,7 @@ class TicketEventProducerReplayTest {
 
         RuntimeException thrown = assertThrows(RuntimeException.class,
                 () -> new TicketEventProducer(producer, ticketStore,
-                        mock(TicketEventOutcomeStore.class), mock(TicketTelemetry.class), "ticket_event")
+                        mock(TicketEventOutcomeStore.class), spy(new TicketTelemetry(new SimpleMeterRegistry(), ObservationRegistry.create())), "ticket_event")
                         .produce(ticket, null));
 
         assertSame(insertFailure, thrown);
@@ -117,7 +120,7 @@ class TicketEventProducerReplayTest {
         when(outcomeStore.lockFailedEvent(connection, original.getEventId())).thenReturn(Optional.of(original));
 
         TicketWorkEvent replay = new TicketEventProducer(producer, ticketStore, outcomeStore,
-                mock(TicketTelemetry.class), "ticket_event")
+                spy(new TicketTelemetry(new SimpleMeterRegistry(), ObservationRegistry.create())), "ticket_event")
                 .replay(original.getEventId());
 
         ArgumentCaptor<ProducerRecord<String, TicketWorkEvent>> sent = ArgumentCaptor.forClass(ProducerRecord.class);
@@ -140,7 +143,7 @@ class TicketEventProducerReplayTest {
         KafkaProducer<String, TicketWorkEvent> producer = mock(KafkaProducer.class);
         TicketStore ticketStore = mock(TicketStore.class);
         TicketEventOutcomeStore outcomeStore = mock(TicketEventOutcomeStore.class);
-        TicketTelemetry telemetry = mock(TicketTelemetry.class);
+        TicketTelemetry telemetry = spy(new TicketTelemetry(new SimpleMeterRegistry(), ObservationRegistry.create()));
         Connection connection = mock(Connection.class);
         TicketWorkEvent original = TicketWorkEvent.submitted(42L, null);
         when(producer.getDBConnection()).thenReturn(connection);
@@ -171,7 +174,7 @@ class TicketEventProducerReplayTest {
 
         assertThrows(IllegalStateException.class,
                 () -> new TicketEventProducer(producer, ticketStore, outcomeStore,
-                        mock(TicketTelemetry.class), "ticket_event").replay(eventId));
+                        spy(new TicketTelemetry(new SimpleMeterRegistry(), ObservationRegistry.create())), "ticket_event").replay(eventId));
 
         verify(producer).abortTransaction();
         verify(producer, never()).send(org.mockito.ArgumentMatchers.any());
@@ -190,7 +193,7 @@ class TicketEventProducerReplayTest {
 
         assertThrows(TicketEventProducer.FailedEventNotFoundException.class,
                 () -> new TicketEventProducer(producer, ticketStore, outcomeStore,
-                        mock(TicketTelemetry.class), "ticket_event")
+                        spy(new TicketTelemetry(new SimpleMeterRegistry(), ObservationRegistry.create())), "ticket_event")
                         .replay(eventId));
 
         verify(producer).abortTransaction();
@@ -213,7 +216,7 @@ class TicketEventProducerReplayTest {
 
         assertThrows(IllegalStateException.class,
                 () -> new TicketEventProducer(producer, ticketStore, outcomeStore,
-                        mock(TicketTelemetry.class), "ticket_event")
+                        spy(new TicketTelemetry(new SimpleMeterRegistry(), ObservationRegistry.create())), "ticket_event")
                         .replay(original.getEventId()));
 
         verify(producer).abortTransaction();

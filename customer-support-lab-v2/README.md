@@ -174,10 +174,15 @@ All demo scripts accept `LAB_BASE_URL`, defaulting to `http://localhost:9001`.
 ## Local Vue workspace
 
 The optional [Vue UI](ui/README.md) provides **Overview**, **Tickets**,
-**Human Review**, **Failed Events**, **Components**, and **Diagrams** tabs.
+**Human Review**, **Failed Events**, **Sample Data**, **Components**, and **Diagrams** tabs.
 Create tickets, inspect saved assistance and review history, submit feedback,
 approve revisions, and replay failed events through the existing APIs.
 The Diagrams tab presents all 16 SVGs with gallery and presentation layouts.
+Sample Data offers editable MFA, account-access, billing, and deliberate-failure
+presets, custom ticket submission, feedback presets, and replay controls. It
+uses the normal transactional APIs; the server creates event envelopes. The
+failure preset requires `demo-failures`, and feedback requires
+`events,ai,blockchain`. An optional correlation UUID groups submitted work.
 
 For the complete experience, start Maven with the OCI settings from the next
 section and all profiles enabled:
@@ -444,7 +449,17 @@ with `kind=feedback`.
 The observability profile enables OTLP metrics and trace export and JSON
 console logs. Metrics export every 5 seconds by default. The application emits
 event counters after commit; it does not query ticket counts for metrics.
-Search traces for service `customer-support-lab-v2`.
+Search traces for service `customer-support-lab-v2`. Ticket submission adds a
+`support.ticket.submit` span below the HTTP span. Publication creates an
+`okafka.produce` producer span; `support.ticket.consume` continues its trace as
+a consumer span, including enrichment steps when AI is enabled. W3C context
+travels in Kafka headers and is also retained in the OSON envelope for compatibility.
+
+Review POSTs add `support.ticket.review`. Rejection also adds `okafka.produce`
+and links the regeneration consumer to that review request. Approval saves the
+review without publishing an event. Replay adds `support.ticket.replay` and a
+new producer span under the replay request. Restart the Maven application after
+changing instrumentation; existing traces retain their original spans.
 
 The **Failed events** dashboard gauge shows failures in a rolling window,
 defaulting to five minutes. It is green below five failures and red at five
@@ -666,7 +681,11 @@ Update `JDBC_URL`, `OKAFKA_BOOTSTRAP_SERVERS`, and
 query parameter on custom JDBC URLs when using JDBC tracing.
 
 The local PLAINTEXT OKafka path writes app credentials to a temporary
-`ojdbc.properties` file. Wallet-based SSL connections use `WALLET_DIR` and
+`ojdbc.properties` file, including the JDBC trace listener used by the primary
+and cache URLs. OKafka owns separate JDBC connections and does not inherit
+`spring.datasource.url`. For wallet-based SSL connections, configure
+`oracle.jdbc.provider.traceEventListener=open-telemetry-trace-event-listener-provider`
+in the wallet's `ojdbc.properties` too. SSL connections use `WALLET_DIR` and
 `TNS_ALIAS`. Full property definitions are in
 [`application.yaml`](src/main/resources/application.yaml),
 [`application-ai.yaml`](src/main/resources/application-ai.yaml), and

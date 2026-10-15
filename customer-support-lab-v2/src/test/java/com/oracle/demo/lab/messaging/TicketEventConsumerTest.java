@@ -94,7 +94,7 @@ class TicketEventConsumerTest {
         SupportTicket ticket = ticket("Lost MFA authenticator");
         when(connection.setSavepoint()).thenReturn(mock(Savepoint.class));
         when(tickets.findById(42L)).thenReturn(Optional.of(ticket));
-        when(telemetry.eventObservation()).thenReturn(
+        when(telemetry.eventObservation(any())).thenReturn(
                 Observation.createNotStarted("support.ticket.consume", ObservationRegistry.create()));
 
         consumer().consumeAndCommit(connection, record(event));
@@ -111,7 +111,7 @@ class TicketEventConsumerTest {
         SupportTicket ticket = ticket("Lost MFA authenticator");
         when(connection.setSavepoint()).thenReturn(mock(Savepoint.class));
         when(tickets.findById(42L)).thenReturn(Optional.of(ticket));
-        when(telemetry.eventObservation()).thenReturn(
+        when(telemetry.eventObservation(any())).thenReturn(
                 Observation.createNotStarted("support.ticket.consume", ObservationRegistry.create()));
         doThrow(new IllegalStateException("metric exporter unavailable"))
                 .when(telemetry).completed(eq("processed"), eq(event), anyLong());
@@ -128,7 +128,7 @@ class TicketEventConsumerTest {
         SupportTicket ticket = ticket("Lost MFA authenticator");
         when(connection.setSavepoint()).thenReturn(mock(Savepoint.class));
         when(tickets.findById(42L)).thenReturn(Optional.of(ticket));
-        when(telemetry.eventObservation()).thenReturn(
+        when(telemetry.eventObservation(any())).thenReturn(
                 Observation.createNotStarted("support.ticket.consume", ObservationRegistry.create()));
         doThrow(new IllegalStateException("commit failed")).when(kafka).commitSync();
 

@@ -5,6 +5,8 @@ package com.oracle.demo.lab.observability;
 
 import com.oracle.demo.lab.model.TicketWorkEvent;
 
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
 import io.micrometer.observation.Observation;
@@ -33,8 +35,21 @@ public class TicketTelemetry {
         meters.counter("support.ticket.events", "outcome", "failed");
     }
 
-    public Observation eventObservation() {
-        return Observation.createNotStarted("support.ticket.consume", observations);
+    public <T> T operation(String name, Supplier<T> work) {
+        return Observation.createNotStarted(name, observations).observe(work);
+    }
+
+    public void publish(ProducerRecord<String, TicketWorkEvent> record, Runnable work) {
+        Observation.createNotStarted("okafka.produce", () -> EventTraceContext.sender(record), observations)
+                .lowCardinalityKeyValue("messaging.system", "oracle_txeventq")
+                .lowCardinalityKeyValue("messaging.destination.name", record.topic())
+                .observe(work);
+    }
+
+    public Observation eventObservation(ConsumerRecord<String, TicketWorkEvent> record) {
+        return Observation.createNotStarted("support.ticket.consume", () -> EventTraceContext.receiver(record), observations)
+                .lowCardinalityKeyValue("messaging.system", "oracle_txeventq")
+                .lowCardinalityKeyValue("messaging.destination.name", record.topic());
     }
 
     public void published(String kind) {

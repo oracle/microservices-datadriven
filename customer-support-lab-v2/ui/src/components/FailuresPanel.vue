@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { post, formatTime } from "../api";
 import StatusBadge from "./StatusBadge.vue";
 defineProps({ failures: Array });
-const emit = defineEmits(["updated", "select"]);
+const emit = defineEmits(["updated", "select", "replayed"]);
 const pending = ref(null),
   error = ref(""),
   notice = ref("");
@@ -17,6 +17,7 @@ async function replay(event) {
     );
     notice.value = `Replay requested for ticket #${event.ticketId}. New event: ${result.data.eventId}. Processing runs asynchronously.`;
     emit("updated");
+    emit("replayed", result.data);
   } catch (e) {
     error.value = e.message;
   } finally {

@@ -7,6 +7,7 @@ import FailuresPanel from "./components/FailuresPanel.vue";
 import ComponentsPanel from "./components/ComponentsPanel.vue";
 import DiagramsPanel from "./components/DiagramsPanel.vue";
 import NewTicketDialog from "./components/NewTicketDialog.vue";
+import SampleDataPanel from "./components/SampleDataPanel.vue";
 const {
   snapshot,
   tickets,
@@ -45,6 +46,12 @@ const tabs = [
     title: "Failed Events",
     icon: "↻",
     subtitle: "Inspect failures and recover work through replay.",
+  },
+  {
+    id: "samples",
+    title: "Sample Data",
+    icon: "⊕",
+    subtitle: "Publish a lab scenario, send feedback, or replay failed work.",
   },
   {
     id: "components",
@@ -227,6 +234,17 @@ window.addEventListener("hashchange", () => {
             :grafana-url="grafanaUrl"
           />
           <DiagramsPanel v-if="active === 'diagrams'" />
+          <KeepAlive>
+            <SampleDataPanel
+              v-if="active === 'samples'"
+              :snapshot="snapshot"
+              :tickets="tickets"
+              :failures="failures"
+              :refreshed-at="refreshedAt"
+              @updated="refresh"
+              @select="select"
+            />
+          </KeepAlive>
         </template>
         <div v-else class="panel empty">
           <h2>

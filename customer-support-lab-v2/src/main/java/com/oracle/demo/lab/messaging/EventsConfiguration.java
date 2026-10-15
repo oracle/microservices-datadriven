@@ -91,6 +91,8 @@ public class EventsConfiguration {
         try (Writer w = Files.newBufferedWriter(ojdbcProps)) {
             w.write("user=" + dbUsername + "\n");
             w.write("password=" + dbPassword + "\n");
+            // OKafka opens its own JDBC connections, independently of spring.datasource.url.
+            w.write("oracle.jdbc.provider.traceEventListener=open-telemetry-trace-event-listener-provider\n");
         }
         ojdbcProps.toFile().deleteOnExit();
         return dir;

@@ -22,8 +22,8 @@ export async function request(path, { optional = false, ...options } = {}) {
   return { data, readPath: response.headers.get("X-Read-Path") };
 }
 
-export const post = (path, data) =>
-  request(path, { method: "POST", body: JSON.stringify(data) });
+export const post = (path, data, options = {}) =>
+  request(path, { ...options, method: "POST", body: JSON.stringify(data) });
 export const formatTime = (value) =>
   value
     ? new Date(value).toLocaleString(undefined, {

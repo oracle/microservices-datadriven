@@ -43,9 +43,19 @@ field is a self-declared ID.
 - **Human Review:** starts with enriched tickets whose current summary has not
   been approved. Request revision with written feedback, or approve the current
   summary. A revision returns here after enrichment; an approved summary leaves
-  the Needs review filter. All tickets/history remain available through filters.
+  the Needs review filter and the view advances to the next pending ticket.
+  When none remain, the review workspace shows an all-caught-up summary.
+  All tickets/history remain available through filters.
 - **Failed Events:** failure metadata and replay action. Replay runs
   asynchronously and can call OCI again. Correct the cause before replaying.
+- **Sample Data:** publish editable MFA, account-access, billing, and deliberate
+  failure presets, or write a custom ticket. Inspect the JSON request preview
+  and optionally supply a correlation UUID. The feedback mode lets you select
+  an existing enriched ticket, load a feedback preset or write your own, and
+  request regeneration through the normal review API. Replay mode uses the
+  current failed worklist and preserves the original event type. Accepted
+  requests are listed in the screen's in-memory session history; drafts/history
+  survive tab navigation and reset on page reload.
 - **Components:** database, TxEventQ/OKafka, OCI models, True Cache, blockchain,
   observability, row counts for all eight application tables, and policy corpus.
   Enabled indicators describe profile configuration, not external health checks.
@@ -81,6 +91,7 @@ Vite server local; deployment/authentication are outside this lab.
 - `src/api.js`: API requests, readable errors, and shared formatting.
 - `src/components/`: individual views, details, review form, and history.
 - `src/diagrams.js`: titles/descriptions and categories for the gallery.
+- `src/samples.js`: editable scenarios based on walkthroughs, tests, and policies.
 - `public/diagrams/`: canonical SVGs, standalone gallery, and source notes.
 - `vite.config.js`: loopback listeners and development/preview proxies.
 

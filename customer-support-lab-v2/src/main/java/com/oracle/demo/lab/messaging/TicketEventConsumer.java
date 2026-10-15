@@ -4,7 +4,6 @@
 package com.oracle.demo.lab.messaging;
 
 import com.oracle.demo.lab.model.TicketWorkEvent;
-import com.oracle.demo.lab.observability.EventTraceContext;
 import com.oracle.demo.lab.observability.TicketTelemetry;
 import com.oracle.demo.lab.persistence.TicketEventOutcomeStore;
 import com.oracle.demo.lab.processing.DemoFailureInjector;
@@ -107,13 +106,10 @@ public class TicketEventConsumer implements Runnable {
             throws Exception {
         TicketWorkEvent event = record.value();
         long started = System.nanoTime();
-        try (io.opentelemetry.context.Scope traceScope = event == null ?
-                io.opentelemetry.context.Context.root().makeCurrent() :
-                EventTraceContext.extract(event).makeCurrent();
-             MDC.MDCCloseable eventId = MDC.putCloseable("eventId", event == null ? null : String.valueOf(event.getEventId()));
+        try (MDC.MDCCloseable eventId = MDC.putCloseable("eventId", event == null ? null : String.valueOf(event.getEventId()));
              MDC.MDCCloseable correlationId = MDC.putCloseable("correlationId", event == null ? null : String.valueOf(event.getCorrelationId()));
              MDC.MDCCloseable ticketId = MDC.putCloseable("ticketId", event == null ? null : String.valueOf(event.getTicketId()))) {
-            Observation observation = telemetry.eventObservation().start();
+            Observation observation = telemetry.eventObservation(record).start();
             String outcome = null;
             boolean committed = false;
             try (Observation.Scope scope = observation.openScope()) {

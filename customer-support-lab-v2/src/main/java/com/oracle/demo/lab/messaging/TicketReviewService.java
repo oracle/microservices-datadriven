@@ -4,7 +4,6 @@ package com.oracle.demo.lab.messaging;
 
 import com.oracle.demo.lab.model.TicketApproval;
 import com.oracle.demo.lab.model.TicketWorkEvent;
-import com.oracle.demo.lab.observability.EventTraceContext;
 import com.oracle.demo.lab.observability.TicketTelemetry;
 import com.oracle.demo.lab.persistence.TicketApprovalStore;
 import com.oracle.demo.lab.persistence.TicketStore;
@@ -41,6 +40,10 @@ public class TicketReviewService {
     }
 
     public TicketApproval record(long ticketId, TicketApproval.Request request) {
+        return telemetry.operation("support.ticket.review", () -> recordReview(ticketId, request));
+    }
+
+    private TicketApproval recordReview(long ticketId, TicketApproval.Request request) {
         request.validate();
         TicketApprovalStore.RecordedReview recorded;
         boolean feedbackPublished = false;
@@ -53,11 +56,15 @@ public class TicketReviewService {
                 if (recorded.created() && request.decision() == TicketApproval.Decision.REJECTED) {
                     tickets.addReviewFeedback(connection, ticketId, request.reason());
                     TicketWorkEvent event = TicketWorkEvent.feedbackSubmitted(ticketId, request.actionId());
-                    EventTraceContext.inject(event);
-                    producer.send(event.toProducerRecord(topic));
+                    var record = event.toProducerRecord(topic);
+                    telemetry.publish(record, () -> {
+                        producer.send(record);
+                        producer.commitTransaction();
+                    });
                     feedbackPublished = true;
+                } else {
+                    producer.commitTransaction();
                 }
-                producer.commitTransaction();
             } catch (Exception failure) {
                 try {
                     producer.abortTransaction();
