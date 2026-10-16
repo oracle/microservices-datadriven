@@ -188,7 +188,7 @@ oracle-database-exporter:
   replicas: 1
   image:
     repository: myregistry.example.com/database/observability-exporter
-    tag: "2.4.2"
+    tag: "2.5.0"
   # Busybox sidecar for tailing alert.log
   busybox:
     repository: myregistry.example.com/busybox
