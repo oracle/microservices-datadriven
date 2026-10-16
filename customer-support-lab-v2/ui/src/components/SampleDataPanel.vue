@@ -7,6 +7,7 @@ import FailuresPanel from "./FailuresPanel.vue";
 import StatusBadge from "./StatusBadge.vue";
 
 const props = defineProps({
+  launch: Object,
   snapshot: Object,
   tickets: Array,
   failures: Array,
@@ -184,6 +185,15 @@ function replayed(event) {
     message: `Replay published for ticket #${event.ticketId}; new event ${event.eventId}.`,
   });
 }
+watch(
+  () => props.launch,
+  (launch) => {
+    if (!launch) return;
+    mode.value = launch.mode || "ticket";
+    if (launch.preset) choose(launch.preset);
+  },
+  { immediate: true },
+);
 onUnmounted(() => ++loadVersion);
 </script>
 <template>

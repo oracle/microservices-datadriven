@@ -4,7 +4,7 @@ import { useLab } from "./composables/useLab";
 import OverviewPanel from "./components/OverviewPanel.vue";
 import TicketWorkspace from "./components/TicketWorkspace.vue";
 import FailuresPanel from "./components/FailuresPanel.vue";
-import ComponentsPanel from "./components/ComponentsPanel.vue";
+import LabWalkthrough from "./components/LabWalkthrough.vue";
 import DiagramsPanel from "./components/DiagramsPanel.vue";
 import NewTicketDialog from "./components/NewTicketDialog.vue";
 import SampleDataPanel from "./components/SampleDataPanel.vue";
@@ -54,10 +54,11 @@ const tabs = [
     subtitle: "Publish a lab scenario, send feedback, or replay failed work.",
   },
   {
-    id: "components",
-    title: "Components",
+    id: "walkthrough",
+    title: "Lab Walkthrough",
     icon: "⬡",
-    subtitle: "Understand the services, schema, and models behind the lab.",
+    subtitle:
+      "Follow a request through every component, then try each handoff.",
   },
   {
     id: "diagrams",
@@ -66,7 +67,14 @@ const tabs = [
     subtitle: "Walk through the architecture, schema, and complete event loop.",
   },
 ];
-const initialTab = location.hash.slice(1);
+const tabFromHash = () =>
+  location.hash.slice(1) === "components"
+    ? "walkthrough"
+    : location.hash.slice(1);
+const initialTab = tabFromHash();
+const walkthroughStep = ref(0);
+const walkthroughStarted = ref(initialTab === "walkthrough");
+const sampleLaunch = ref(null);
 const active = ref(
   tabs.some((t) => t.id === initialTab) ? initialTab : "overview",
 );
@@ -76,8 +84,15 @@ const current = computed(() => tabs.find((t) => t.id === active.value));
 const grafanaUrl = `${location.protocol}//${location.hostname}:3000`;
 const has = (profile) => snapshot.value?.profiles.includes(profile);
 function navigate(id) {
+  if (id === "walkthrough") walkthroughStarted.value = true;
   active.value = id;
   location.hash = id;
+}
+function walkthroughAction(action) {
+  if (action.readPath) readPath.value = action.readPath;
+  if (action.tab === "samples")
+    sampleLaunch.value = { mode: action.mode, preset: action.preset };
+  navigate(action.tab);
 }
 function select(id) {
   selectedId.value = id;
@@ -89,8 +104,11 @@ async function created(id) {
 }
 watch(readPath, refresh);
 window.addEventListener("hashchange", () => {
-  const id = location.hash.slice(1);
-  if (tabs.some((t) => t.id === id)) active.value = id;
+  const id = tabFromHash();
+  if (tabs.some((t) => t.id === id)) {
+    active.value = id;
+    if (id === "walkthrough") walkthroughStarted.value = true;
+  }
 });
 </script>
 <template>
@@ -184,6 +202,14 @@ window.addEventListener("hashchange", () => {
             </button>
           </div>
         </div>
+        <div
+          v-if="walkthroughStarted && active !== 'walkthrough'"
+          class="walkthrough-return"
+        >
+          <button class="text-button" @click="navigate('walkthrough')">
+            ← Return to Lab Walkthrough · Chapter {{ walkthroughStep + 1 }}
+          </button>
+        </div>
         <div v-if="error" class="alert error" role="alert">{{ error }}</div>
         <div v-if="snapshot && !eventsEnabled" class="alert info">
           Enable the events profile to create, browse, and process tickets.
@@ -227,16 +253,21 @@ window.addEventListener("hashchange", () => {
             @updated="refresh"
             @select="select"
           />
-          <ComponentsPanel
-            v-if="active === 'components'"
+          <LabWalkthrough
+            v-if="active === 'walkthrough'"
+            v-model:step="walkthroughStep"
             :snapshot="snapshot"
+            :tickets="tickets"
+            :failures="failures"
             :actual-path="actualPath"
             :grafana-url="grafanaUrl"
+            @action="walkthroughAction"
           />
           <DiagramsPanel v-if="active === 'diagrams'" />
           <KeepAlive>
             <SampleDataPanel
               v-if="active === 'samples'"
+              :launch="sampleLaunch"
               :snapshot="snapshot"
               :tickets="tickets"
               :failures="failures"

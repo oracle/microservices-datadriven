@@ -453,6 +453,10 @@ input[type="radio"] {
   margin: 0;
 }
 .refresh-controls .text-button {
+  inline-size: 8em;
+  flex-shrink: 0;
+  white-space: nowrap;
+  text-align: left;
   padding-left: 10px;
   border-left: 1px solid var(--line);
 }
@@ -1720,4 +1724,220 @@ td.count-cell {
   .sample-presets {
     grid-template-columns: 1fr;
   }
+}
+
+/* Shared walkthrough: the diagram is illustrative; snapshot values are live. */
+.walkthrough-intro {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 24px;
+  margin-bottom: 22px;
+}
+.walkthrough-intro h2 {
+  margin: 8px 0;
+  font-size: 26px;
+}
+.walkthrough-intro p {
+  max-width: 760px;
+  color: var(--muted);
+  margin-bottom: 0;
+}
+.walkthrough-intro > a {
+  flex-shrink: 0;
+}
+.walkthrough-chapters {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 22px;
+}
+.walkthrough-chapters button {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 6px;
+  padding: 14px 12px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: white;
+  color: var(--ink);
+  font-weight: 650;
+  text-align: left;
+}
+.walkthrough-chapters button span {
+  font-size: 10px;
+  color: var(--muted);
+}
+.walkthrough-chapters button.selected {
+  background: var(--green);
+  border-color: var(--green);
+  color: white;
+}
+.walkthrough-chapters button.selected span {
+  color: #c5dbc6;
+}
+.walkthrough-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.9fr) minmax(0, 1.3fr);
+  align-items: start;
+  gap: 22px;
+  margin-bottom: 22px;
+}
+.walkthrough-chapter h2 {
+  margin: 10px 0;
+  font-size: 24px;
+}
+.walkthrough-summary {
+  font-size: 15px;
+  color: var(--muted);
+}
+.walkthrough-chapter ol {
+  padding-left: 22px;
+}
+.walkthrough-chapter li {
+  padding: 4px 0 10px 5px;
+}
+.walkthrough-chapter li::marker {
+  color: var(--green);
+  font-weight: 700;
+}
+.walkthrough-explanation {
+  border-top: 1px solid var(--line);
+  margin-top: 14px;
+  padding-top: 6px;
+}
+.walkthrough-explanation h3 {
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+.walkthrough-explanation p {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 0;
+}
+.walkthrough-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+.walkthrough-pagination {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+  margin-top: 22px;
+}
+.walkthrough-diagram-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 22px 0;
+  flex-wrap: wrap;
+}
+.walkthrough-diagram-heading p {
+  margin-bottom: 0;
+}
+.walkthrough-diagram {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.walkthrough-diagram .flow-active {
+  stroke: #26825c;
+  stroke-width: 3;
+  stroke-dasharray: 7 5;
+}
+.walkthrough-diagram.playing .flow-active {
+  animation: walkthrough-flow 1.2s linear infinite;
+}
+.walkthrough-diagram .node-active rect {
+  fill: #e7f2df;
+  stroke: #538657;
+}
+.walkthrough-diagram-caption {
+  margin: 0 22px 22px;
+  padding: 16px;
+  border-radius: 8px;
+  background: var(--soft);
+  min-height: 116px;
+}
+.walkthrough-diagram-caption p {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+.walkthrough-snapshot {
+  margin-bottom: 22px;
+}
+.walkthrough-observations {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.walkthrough-observations p {
+  color: var(--muted);
+  font-size: 12px;
+  margin: 0;
+}
+.walkthrough-observations strong {
+  display: block;
+  color: var(--ink);
+  font-size: 19px;
+  overflow-wrap: anywhere;
+}
+.walkthrough-reference > summary {
+  cursor: pointer;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: white;
+  font-weight: 650;
+  margin-bottom: 20px;
+}
+@keyframes walkthrough-flow {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .walkthrough-diagram.playing .flow-active {
+    animation: none;
+  }
+}
+@media (max-width: 1150px) {
+  .walkthrough-layout {
+    grid-template-columns: 1fr;
+  }
+  .walkthrough-illustration {
+    grid-row: 1;
+  }
+  .walkthrough-chapters {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+@media (max-width: 650px) {
+  .walkthrough-intro {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .walkthrough-chapters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .walkthrough-observations {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .walkthrough-diagram-heading {
+    padding: 16px;
+  }
+  .walkthrough-diagram-caption {
+    margin: 0 16px 16px;
+  }
+}
+
+.walkthrough-return {
+  margin-bottom: 20px;
 }

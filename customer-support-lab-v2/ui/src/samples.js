@@ -9,7 +9,7 @@ export const ticketSamples = [
       "I lost my authenticator and cannot sign in. How can I recover access safely?",
     outcome:
       "Enriches with an MFA recovery summary and matching policies when ai is enabled. Submit twice to demonstrate related-ticket retrieval.",
-    source: "demo-ai-assistance.sh / demo-human-feedback.sh",
+    source: "README manual AI and human-review walkthrough",
   },
   {
     id: "access",
@@ -42,7 +42,7 @@ export const ticketSamples = [
       "I lost my authenticator and cannot sign in. How can I recover access safely?",
     outcome:
       "Fails deliberately on first delivery. Replay creates a new event; with at least two attempts configured, its first attempt fails transiently before succeeding.",
-    source: "demo-failed-event-replay.sh / DemoFailureInjector",
+    source: "README failure walkthrough / DemoFailureInjector",
     requires: "demo-failures",
   },
 ];

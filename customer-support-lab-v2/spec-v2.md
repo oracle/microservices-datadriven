@@ -250,9 +250,9 @@ span. AI span attributes confirmed the requested models and generation settings.
 The AI walkthrough rejects an `ENRICHED` ticket if its saved summary,
 model/prompt metadata, or policy matches are missing; local HTTP fixtures also
 exercised acceptance and rejection.
-The AI and replay scripts now stop promptly with a profile hint when a newly
-created ticket completes without the expected AI or deliberate failure;
-local response fixtures exercised both wrong-profile paths.
+Earlier script-based checks exercised wrong-profile paths for AI and deliberate
+failures. The scripts have since been replaced by the Lab Walkthrough UI and
+manual API commands in README.md.
 
 Regional placement remains a descriptor, with no physical multi-region topology.
 The optional `events,ai,blockchain` chapter uses a Compose-bootstrapped V2
@@ -261,8 +261,8 @@ summary digests, model/prompt metadata, and self-declared reviewer names.
 An action UUID deduplicates retries; corrections append a new action.
 Rejected reviews also request summary regeneration through TxEventQ. Current
 assistance is replaced on success; reviewed snapshots remain in blockchain
-history. This extension has automated tests and a runnable HTTP walkthrough in
-`scripts/demo-human-feedback.sh`; earlier live validation results above do not
+history. This extension has automated tests and a manual HTTP walkthrough in
+README.md; earlier live validation results above do not
 cover the feedback workflow.
 Production authentication, cross-service transactions, production retention,
 and cache freshness SLOs remain later work.
