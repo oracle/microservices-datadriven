@@ -73,6 +73,10 @@ public class TrueCacheTicketReader {
         }
     }
 
+    PoolDataSource dataSource() {
+        return pool;
+    }
+
     public Optional<SupportTicket> findById(long id) {
         try (Connection connection = openReadOnly();
              PreparedStatement statement = connection.prepareStatement(

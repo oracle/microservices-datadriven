@@ -4,6 +4,11 @@ export const walkthrough = [
     id: "ready",
     title: "Meet the lab",
     short: "Start here",
+    animation: {
+      title: "Complete event loop",
+      file: "/diagrams/14-complete-event-loop.svg",
+      alt: "Animated overview of ticket submission, AI enrichment, review, feedback, and replay.",
+    },
     summary:
       "One request connects a Vue console, Spring Boot, Oracle AI Database, OCI Generative AI, True Cache, and Grafana.",
     steps: [
@@ -36,6 +41,11 @@ export const walkthrough = [
     practice: "Publish a ticket, then follow its progress",
     title: "Submit a request",
     short: "Submit",
+    animation: {
+      title: "Atomic ticket publication",
+      file: "/diagrams/02-transaction-boundaries.svg",
+      alt: "Animated transaction boundaries showing the ticket and event committed together, followed by the consumer outcome and queue acknowledgement.",
+    },
     summary: "Create a ticket and publish its work event in one transaction.",
     steps: [
       "Use the MFA sample below. Read or edit the title and description; leave the optional correlation ID blank.",
@@ -62,6 +72,11 @@ export const walkthrough = [
     practice: "Inspect assistance or publish a comparison",
     title: "Follow AI enrichment",
     short: "Enrich",
+    animation: {
+      title: "AI enrichment and vector search",
+      file: "/diagrams/04-ai-and-vector-search.svg",
+      alt: "Animated flow from ticket text through OCI Generative AI and Oracle vector search to saved assistance and scored matches.",
+    },
     summary:
       "A background consumer embeds the request, retrieves matches, and saves generated assistance.",
     steps: [
@@ -93,6 +108,11 @@ export const walkthrough = [
     practice: "Revise and approve a saved summary",
     title: "Revise, then approve",
     short: "Review",
+    animation: {
+      title: "Human review and blockchain history",
+      file: "/diagrams/08-blockchain-reviews.svg",
+      alt: "Animated flow from saved AI assistance through human review to blockchain history, with feedback requesting a revised summary.",
+    },
     summary:
       "Human feedback returns through the event loop; each reviewed version is preserved.",
     steps: [
@@ -114,6 +134,11 @@ export const walkthrough = [
     practice: "Create a failure, replay it, and inspect the result",
     title: "Recover a failed event",
     short: "Recover",
+    animation: {
+      title: "Retries and manual replay",
+      file: "/diagrams/03-retry-and-replay.svg",
+      alt: "Animated flow showing bounded processing attempts, durable success or failure, acknowledgement, and manual replay with a new event ID.",
+    },
     summary:
       "Deliberately fail an event, inspect the durable worklist, and replay the work.",
     steps: [
@@ -142,6 +167,11 @@ export const walkthrough = [
     practice: "Compare primary and True Cache reads",
     title: "Compare the read paths",
     short: "Cache",
+    animation: {
+      title: "Primary and True Cache reads",
+      file: "/diagrams/05-true-cache.svg",
+      alt: "Animated comparison of primary and True Cache reads, with redo replication and a primary fallback when the cache is unavailable.",
+    },
     summary:
       "Read the ticket list through True Cache while keeping detail and review reads fresh.",
     steps: [
@@ -166,18 +196,24 @@ export const walkthrough = [
     practice: "Follow your work into Grafana",
     title: "Connect the telemetry",
     short: "Observe",
+    animation: {
+      title: "Telemetry into Grafana",
+      file: "/diagrams/06-observability.svg",
+      alt: "Animated flow from Spring Boot through OTLP export to Grafana LGTM for correlated metrics, traces, and logs.",
+    },
     summary:
       "Follow the same work through traces, event metrics, retries, and connection pool activity.",
     steps: [
       "Generate tickets, feedback, and a replay using the earlier chapters. Allow several five-second metric export intervals.",
       "Open Grafana → Oracle AI Database → Customer Support Workflow. Inspect event outcomes, retry attempts, processing time, and read paths.",
       "Open Oracle UCP Metrics to inspect pool usage and connection acquisition activity.",
+      "Open Oracle Database Health to compare primary and True Cache sessions, waits, CPU, memory, and I/O. Check cache lag together with the age of its statistics.",
       "In Explore, select Tempo and search service customer-support-lab-v2. Follow HTTP, publication, consumption, AI, feedback, replay, and JDBC spans.",
     ],
     mechanism:
-      "Spring Boot exports OpenTelemetry traces and metrics to LGTM. Trace context travels with the event envelope so work can be correlated across the asynchronous handoff.",
+      "Spring Boot exports OpenTelemetry traces, metrics, and logs to LGTM. The database exporter separately queries the primary and True Cache every fifteen seconds. Trace context travels with the event envelope so work can be correlated across the asynchronous handoff.",
     evidence:
-      "The failed-events gauge estimates failures in a rolling window; it is not the current worklist. In Grafana Explore, select Loki and query {service_name=\"customer-support-lab-v2\"} for application logs. Console logs also remain in the Maven terminal.",
+      "The rolling failure count estimates failures in a window; it is not the current worklist. In Grafana Explore, select Loki and query {service_name=\"customer-support-lab-v2\"} for application logs. Console logs also remain in the Maven terminal.",
     nodes: ["app", "queue", "worker", "ai", "telemetry"],
     edges: ["submit", "consume", "app-telemetry", "worker-telemetry"],
     actions: [{ label: "Open Grafana", external: true }],

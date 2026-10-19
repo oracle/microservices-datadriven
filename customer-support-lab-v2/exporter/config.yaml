@@ -1,0 +1,39 @@
+# 2.5.0 supports multiple databases and scheduled OTLP/gRPC publication.
+databases:
+  primary:
+    username: C##LAB_METRICS
+    password: ${METRICS_DB_PASSWORD}
+    url: oracle-free:1521/FREE
+    queryTimeout: 5
+    maxOpenConns: 2
+    maxIdleConns: 2
+  primary-pdb:
+    username: C##LAB_METRICS
+    password: ${METRICS_DB_PASSWORD}
+    url: oracle-free:1521/FREEPDB1
+    queryTimeout: 5
+    maxOpenConns: 2
+    maxIdleConns: 2
+  true-cache:
+    username: C##LAB_METRICS
+    password: ${METRICS_DB_PASSWORD}
+    # V$TRUE_CACHE_STAT must be queried in the cache's CDB root.
+    url: true-cache:1521/TRUEFREE
+    queryTimeout: 5
+    maxOpenConns: 2
+    maxIdleConns: 2
+
+metrics:
+  # Curated, explicitly scoped queries avoid PDB and read-only-cache mismatches.
+  default: /exporter/database-metrics.toml
+  custom:
+    - /exporter/lab-metrics.toml
+  scrapeInterval: 15s
+
+otlp:
+  endpoint: http://grafana-lgtm:4317
+  timeout: 10s
+
+log:
+  # Application logs already reach Loki through Spring Boot's OTLP appender.
+  disable: 1

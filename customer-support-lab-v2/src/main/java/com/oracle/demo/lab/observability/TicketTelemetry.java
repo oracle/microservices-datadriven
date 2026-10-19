@@ -29,8 +29,17 @@ public class TicketTelemetry {
     public TicketTelemetry(MeterRegistry meters, ObservationRegistry observations) {
         this.meters = meters;
         this.observations = observations;
-        // Export a baseline before failures occur, for rolling-window counter queries.
-        meters.counter("support.ticket.events", "outcome", "failed");
+        // Export baselines so an idle workflow has zeros, while missing telemetry
+        // still appears as missing data. No event IDs or ticket IDs become labels.
+        recordMetric("baselines", () -> {
+            for (String outcome : new String[]{"processed", "failed", "duplicate"}) {
+                meters.counter("support.ticket.events", "outcome", outcome);
+            }
+            for (String kind : new String[]{"submitted", "replayed", "feedback"}) {
+                meters.counter("support.ticket.published", "kind", kind);
+            }
+            meters.counter("support.ticket.retries");
+        });
     }
 
     public <T> T operation(String name, Supplier<T> work) {

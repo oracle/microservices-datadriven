@@ -1754,6 +1754,28 @@ td.count-cell {
   font-size: 15px;
   color: var(--muted);
 }
+.walkthrough-animation {
+  margin: 18px 0 22px;
+  max-width: 720px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #0a121e;
+}
+.walkthrough-animation img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.walkthrough-animation figcaption {
+  padding: 9px 12px;
+  background: var(--paper);
+  color: var(--muted);
+  font-size: 12px;
+}
+.walkthrough-animation figcaption a {
+  color: var(--green);
+}
 .walkthrough-chapter ol {
   padding-left: 22px;
 }

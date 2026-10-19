@@ -30,6 +30,15 @@ public class TicketReadRouter {
         this.primary = primary;
         this.cache = cache;
         this.meters = meters;
+        try {
+            for (String path : new String[]{"primary", "true-cache", "primary-fallback"}) {
+                for (String outcome : new String[]{"success", "failure"}) {
+                    meters.counter("support.ticket.reads", "path", path, "outcome", outcome);
+                }
+            }
+        } catch (RuntimeException error) {
+            log.warn("Could not initialize ticket read counters ({})", error.getClass().getSimpleName());
+        }
     }
 
     public ReadResult<List<SupportTicket>> all(String requestedPath) {

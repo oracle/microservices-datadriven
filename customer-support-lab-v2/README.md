@@ -7,7 +7,8 @@ approve the result, and recover a failed event through replay.
 All features run by default: events, AI assistance, blockchain review, deliberate
 demo failures, and observability. No Spring profiles are needed.
 
-Docker Compose runs Oracle AI Database Free, True Cache, and Grafana LGTM.
+Docker Compose runs Oracle AI Database Free, True Cache, Grafana LGTM, and the
+Oracle AI Database Metrics Exporter (pinned to `2.5.0`).
 You start the Java application with Maven and the UI with npm. OCI Generative
 AI supplies the chat and embedding models. TxEventQ runs inside Oracle;
 OKafka provides its Kafka-style Java API, so no separate Kafka broker is needed.
@@ -21,7 +22,10 @@ flowchart LR
     Consumer -->|Saved assistance and event outcomes| DB
     DB -->|Redo| Cache[(True Cache)]
     App -->|Ticket list reads| Cache
-    App -->|Metrics and traces| Grafana[Grafana LGTM]
+    App -->|Metrics, traces, and logs| Grafana[Grafana LGTM]
+    Exporter[Database Metrics Exporter] -->|Read-only queries| DB
+    Exporter -->|Read-only queries| Cache
+    Exporter -->|OTLP metrics| Grafana
 ```
 
 ## Before you start
@@ -77,17 +81,26 @@ docker compose up -d
 ```
 
 Wait for `oracle-free` and `true-cache` to show **healthy**, and for
-`true-cache-password-volume-init` and `true-cache-configure` to exit with code **0**.
+`true-cache-password-volume-init`, `true-cache-configure`, and `metrics-db-setup`
+to exit with code **0**. `oracle-metrics-exporter` remains running.
 The initial database startup can take several minutes.
 
 Compose runs [db/init.sql](db/init.sql) to create the application user, all eight
 application tables, required grants, and three support policies. It also
 configures the `FREEPDB1_TC` service for True Cache. No manual schema setup is needed.
 
+The additive `metrics-db-setup` service creates the read-only `C##LAB_METRICS`
+common user on the primary; redo replicates that user to True Cache. It grants
+access only to the monitoring views and application tables queried by the
+exporter. The exporter never connects as `SYS` or as the application user.
+Set `METRICS_DB_PASSWORD` before Compose if you want a separate monitoring
+password; otherwise this local lab reuses `APP_DB_PASSWORD` for that account.
+Use the same supported password characters listed above.
+
 If setup fails, inspect:
 
 ```bash
-docker compose logs oracle-free true-cache true-cache-configure
+docker compose logs oracle-free true-cache true-cache-configure metrics-db-setup oracle-metrics-exporter
 ```
 
 ### 3. Start Java
@@ -242,18 +255,61 @@ to **Primary · fresh** when checking the latest workflow state.
 
 Open **[Grafana](http://localhost:3000)** and the **Oracle AI Database** dashboard folder:
 
-- **Customer Support Workflow** shows event outcomes, retry attempts, processing
-  time, and ticket read paths.
-- **Oracle UCP Metrics** shows connection pool usage and acquisition activity.
+- **Customer Support Workflow** shows current ticket/failure state, committed
+  publications and outcomes, retries, processing/event-age latency, AI operation
+  latency and tokens, retrieval steps, read paths, cache fallbacks, and HTTP metrics.
+  Use its application selector and links to open matching Loki logs or Tempo traces.
+- **Oracle UCP Metrics** compares `DemoConnectionPool` and `TrueCacheReadPool`:
+  utilization, capacity, pending requests, acquisition outcomes, and mean/peak
+  acquisition time. The headline utilization is the busiest selected pool.
+- **Oracle Database Health** compares primary and True Cache sessions, blocking,
+  resource limits, CPU, memory, I/O, SQL activity, and non-idle waits. It also shows
+  primary PDB tablespaces, configured recovery-area usage, and True Cache apply/
+  transport lag, lag-statistic age, and primary block-fetch latency.
 
-Metrics export every five seconds by default. Generate a few tickets and allow
+Application metrics export every five seconds; the database exporter collects
+and publishes every fifteen seconds. Generate a few tickets and allow
 time for samples to arrive. In **Explore**, select the Tempo data source and
 search for service **`customer-support-lab-v2`** to follow submission, queue
 publication, consumption, AI steps, feedback, and replay traces.
 
-The dashboard's failed-events gauge estimates failures during a rolling window;
+The dashboard's rolling failed-events count estimates failures during a window;
 a successful replay does not erase the original failure from that window.
-**Failed Events** in the lab UI shows the current replayable worklist.
+The separate **Replayable failures** panel and **Failed Events** in the lab UI
+show the current worklist. **Tickets awaiting processing** counts `RECEIVED`
+tickets, not TxEventQ queue depth. Event age includes both waiting and processing.
+
+Latency panels include means and p95 where finite histogram buckets are configured
+in `application.yaml`. UCP function timers support mean/peak panels, not p95.
+No data can mean no matching activity, an unconfigured optional feature (such as
+the fast recovery area), or missing telemetry; it is not automatically zero.
+
+The exporter uses three targets with bounded pools, configured in
+[exporter/config.yaml](exporter/config.yaml):
+
+| Target | Service | Purpose |
+| --- | --- | --- |
+| `primary` | `oracle-free:1521/FREE` | Primary instance statistics |
+| `primary-pdb` | `oracle-free:1521/FREEPDB1` | Application state and PDB tablespaces |
+| `true-cache` | `true-cache:1521/TRUEFREE` | Cache instance statistics and `V$TRUE_CACHE_STAT` in CDB root |
+
+Instance metrics are collected only on the root connections to avoid counting
+them again through the PDB. Queries run every fifteen seconds with a five-second
+timeout and at most two connections per target. The HTTP metrics endpoint is
+bound to [localhost:9161/metrics](http://localhost:9161/metrics); change
+`LAB_EXPORTER_PORT` if needed. OTLP/gRPC uses the Compose hostname
+`grafana-lgtm:4317` and the exporter service name `oracledb_exporter`.
+
+Inspect `oracledb_up` for all three targets and
+`oracledb_exporter_last_scrape_error` for query failures. A zero cache lag should
+be read alongside **Lag statistic data age**, because stale statistics can report
+an old zero. Recovery-area usage does not measure archive destinations outside
+the FRA or the container filesystem.
+
+Dashboard JSON lives in [dashboards/](dashboards/) and is provisioned from files;
+make lasting edits there. Existing database installations need no reset: the
+monitoring setup is idempotent and changes grants/views only. Restart Java after
+updating the lab to register the cache pool and new histogram buckets.
 
 Application logs are exported over OTLP to `http://localhost:4318/v1/logs` and
 remain available as JSON in the Maven terminal. In **Explore**, select **Loki**
@@ -424,6 +480,6 @@ the same exported configuration. Restarting Maven alone preserves database data.
 - [Database bootstrap](db/init.sql) and [blockchain verification script](db/verify-approvals.sql).
 - [Base configuration](src/main/resources/application.yaml),
   [OCI AI configuration](src/main/resources/application-ai.yaml), and
-  [observability configuration](src/main/resources/application-observability.yaml).
+  [observability configuration](src/main/resources/application.yaml).
 - [Lab design](spec-v2.md): workflow details and evolution notes. The running lab
   uses one local primary and True Cache; regional placement is a deployment concept.

@@ -70,6 +70,17 @@ spring:
 server:
   port: 9001
 management:
+  metrics:
+    distribution:
+      # Explicit finite buckets support aggregatable p95 panels over OTLP.
+      # Function timers from UCP remain mean/peak metrics, not percentiles.
+      slo:
+        http.server.requests: 5ms,10ms,25ms,50ms,100ms,250ms,500ms,1s,2s,5s,10s
+        support.ticket.read.latency: 1ms,5ms,10ms,25ms,50ms,100ms,250ms,500ms,1s,3s,5s
+        support.ticket.processing: 10ms,100ms,500ms,1s,2s,5s,10s,30s,60s,120s
+        support.ticket.event.age: 100ms,500ms,1s,2s,5s,10s,30s,60s,120s,300s
+        support.ticket.enrichment.step: 1ms,10ms,50ms,100ms,250ms,500ms,1s,2s,5s,10s,30s,60s
+        gen_ai.client.operation: 10ms,50ms,100ms,250ms,500ms,1s,2s,5s,10s,30s,60s
   endpoints:
     web:
       exposure:

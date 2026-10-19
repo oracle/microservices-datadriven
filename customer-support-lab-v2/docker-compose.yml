@@ -21,6 +21,41 @@ services:
       - ./dashboards/dashboards.yaml:/otel-lgtm/grafana/conf/provisioning/dashboards/ucp.yaml:ro
       - ./dashboards/ucp-metrics.json:/otel-lgtm/grafana/conf/provisioning/dashboards/custom/ucp-metrics.json:ro
       - ./dashboards/customer-support-workflow.json:/otel-lgtm/grafana/conf/provisioning/dashboards/custom/customer-support-workflow.json:ro
+      - ./dashboards/oracle-database-health.json:/otel-lgtm/grafana/conf/provisioning/dashboards/custom/oracle-database-health.json:ro
+
+  # A read-only common user is created on the primary and replicated to True Cache.
+  metrics-db-setup:
+    image: container-registry.oracle.com/database/free:latest
+    entrypoint: ["/bin/bash", "/exporter/setup.sh"]
+    environment:
+      ORACLE_PWD: ${ORACLE_PWD:-Welcome12345}
+      APP_DB_USERNAME: ${APP_DB_USERNAME:-LAB_USER}
+      METRICS_DB_PASSWORD: ${METRICS_DB_PASSWORD:-${APP_DB_PASSWORD:?Set APP_DB_PASSWORD before starting Compose}}
+    volumes:
+      - ./exporter:/exporter:ro
+    depends_on:
+      oracle-free:
+        condition: service_healthy
+      true-cache-configure:
+        condition: service_completed_successfully
+    restart: "no"
+
+  oracle-metrics-exporter:
+    image: container-registry.oracle.com/database/observability-exporter:2.5.0
+    command: ["--config.file", "/exporter/config.yaml"]
+    environment:
+      METRICS_DB_PASSWORD: ${METRICS_DB_PASSWORD:-${APP_DB_PASSWORD:?Set APP_DB_PASSWORD before starting Compose}}
+      APP_DB_USERNAME: ${APP_DB_USERNAME:-LAB_USER}
+    volumes:
+      - ./exporter:/exporter:ro
+    ports:
+      - "127.0.0.1:${LAB_EXPORTER_PORT:-9161}:9161"
+    depends_on:
+      metrics-db-setup:
+        condition: service_completed_successfully
+      grafana-lgtm:
+        condition: service_started
+    restart: unless-stopped
 
   oracle-free:
     container_name: oracledb

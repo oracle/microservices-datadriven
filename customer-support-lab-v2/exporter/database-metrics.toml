@@ -1,0 +1,96 @@
+# Instance statistics: use only the CDB-root connections to avoid double counting.
+[[metric]]
+context = "sessions"
+databases = ["primary", "true-cache"]
+labels = ["inst_id", "status"]
+metricsdesc = { value = "Current user sessions by instance and status." }
+request = "select inst_id, status, count(*) value from gv$session where type = 'USER' group by inst_id, status"
+
+[[metric]]
+context = "blocked_sessions"
+databases = ["primary", "true-cache"]
+metricsdesc = { value = "Current user sessions with a valid blocking session." }
+request = "select count(*) value from gv$session where type = 'USER' and blocking_session_status = 'VALID'"
+
+[[metric]]
+context = "resource"
+databases = ["primary", "true-cache"]
+labels = ["inst_id", "resource_name"]
+metricsdesc = { current_utilization = "Current resource use.", limit_value = "Configured resource limit; -1 means unlimited." }
+request = "select inst_id, resource_name, current_utilization, case when trim(limit_value) = 'UNLIMITED' then -1 else to_number(trim(limit_value)) end limit_value from gv$resource_limit where resource_name in ('sessions', 'processes')"
+
+[[metric]]
+context = "activity"
+databases = ["primary", "true-cache"]
+labels = ["inst_id", "name"]
+metricsdesc = { value_total = "Cumulative database activity since instance startup." }
+metricstype = { value_total = "counter" }
+request = "select inst_id, name, value value_total from gv$sysstat where name in ('user commits', 'user rollbacks', 'execute count', 'parse count (hard)', 'physical read total bytes', 'physical write total bytes', 'redo size')"
+
+[[metric]]
+context = "wait_time"
+databases = ["primary", "true-cache"]
+labels = ["inst_id", "wait_class"]
+metricsdesc = { seconds_total = "Non-idle wait seconds since instance startup." }
+metricstype = { seconds_total = "counter" }
+request = "select inst_id, wait_class, time_waited / 100 seconds_total from gv$system_wait_class where wait_class <> 'Idle' and con_id = 0"
+
+[[metric]]
+context = "system"
+databases = ["primary", "true-cache"]
+labels = ["inst_id", "name"]
+metricsdesc = { value = "Oracle one-minute system metric, in the unit implied by name." }
+request = "select inst_id, metric_name name, value from gv$sysmetric where group_id = 2 and metric_name in ('CPU Usage Per Sec', 'Host CPU Utilization (%)', 'Physical Read Total Bytes Per Sec', 'Physical Write Total Bytes Per Sec', 'Database CPU Time Ratio', 'Database Wait Time Ratio')"
+
+[[metric]]
+context = "memory"
+databases = ["primary", "true-cache"]
+labels = ["inst_id", "area"]
+metricsdesc = { bytes = "Current allocated SGA and PGA memory." }
+request = "select inst_id, 'SGA' area, sum(value) bytes from gv$sga where con_id = 0 group by inst_id union all select inst_id, 'PGA' area, value bytes from gv$pgastat where name = 'total PGA allocated' and con_id = 0"
+
+[[metric]]
+context = "tablespace"
+databases = ["primary-pdb"]
+labels = ["tablespace"]
+metricsdesc = { used_percent = "PDB tablespace used percent.", used_bytes = "PDB tablespace bytes in use.", max_bytes = "PDB tablespace maximum bytes." }
+request = "select t.tablespace_name tablespace, m.used_percent, t.block_size * m.used_space used_bytes, t.block_size * m.tablespace_size max_bytes from dba_tablespace_usage_metrics m join dba_tablespaces t on t.tablespace_name = m.tablespace_name"
+
+[[metric]]
+context = "recovery_area"
+databases = ["primary"]
+metricsdesc = { limit_bytes = "Fast recovery area limit.", used_bytes = "Fast recovery area space used.", reclaimable_bytes = "Fast recovery area space reclaimable." }
+request = "select space_limit limit_bytes, space_used used_bytes, space_reclaimable reclaimable_bytes from v$recovery_file_dest"
+ignorezeroresult = true
+
+[[metric]]
+context = "true_cache"
+databases = ["true-cache"]
+labels = ["name"]
+metricsdesc = { lag_seconds = "True Cache redo lag in seconds." }
+request = '''
+select name,
+       extract(day from to_dsinterval(value)) * 86400 +
+       extract(hour from to_dsinterval(value)) * 3600 +
+       extract(minute from to_dsinterval(value)) * 60 +
+       extract(second from to_dsinterval(value)) lag_seconds
+from v$true_cache_stat
+where name in ('apply lag', 'transport lag') and value is not null
+'''
+ignorezeroresult = true
+
+[[metric]]
+context = "true_cache"
+databases = ["true-cache"]
+labels = ["name"]
+metricsdesc = { data_age_seconds = "Age of the data used to compute cache lag; an increasing age indicates stale statistics." }
+request = "select name, greatest((sysdate - to_date(data_time, 'MM/DD/YYYY HH24:MI:SS')) * 86400, 0) data_age_seconds from v$true_cache_stat where name in ('apply lag', 'transport lag') and data_time is not null"
+ignorezeroresult = true
+
+[[metric]]
+context = "true_cache"
+databases = ["true-cache"]
+labels = ["name"]
+metricsdesc = { fetch_latency_seconds = "Average primary block-fetch latency in seconds." }
+request = "select name, to_number(value) / 1000000 fetch_latency_seconds from v$true_cache_stat where name in ('single block fetch latency', 'multiblock fetch latency', 'list of blocks fetch latency') and value is not null"
+ignorezeroresult = true

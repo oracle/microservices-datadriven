@@ -37,7 +37,7 @@ export const diagrams = [
     file: "/diagrams/05-true-cache.svg",
     title: "Offload freshness-tolerant reads",
     description:
-      "Oracle primary redo feeds True Cache. Ticket GETs default to True Cache and can lag committed writes. Explicit primary reads bypass cache; connection unavailability falls back to primary, while a successful cache miss remains 404.",
+      "Oracle primary redo feeds True Cache. The walkthrough lets you select primary or True Cache for the ticket list. Cached reads can lag committed writes. Detail and review screens read primary; cache unavailability falls back to primary.",
     category: "Workflow",
   },
   {
@@ -45,7 +45,7 @@ export const diagrams = [
     file: "/diagrams/06-observability.svg",
     title: "See outcomes and read paths",
     description:
-      "The application sends metrics and traces over OTLP to Grafana LGTM. Workflow and UCP dashboards expose outcomes and read paths. Console logs have no automatic LGTM forwarding; JDBC tracing does not guarantee all OKafka internal spans.",
+      "The application sends metrics, traces, and logs over OTLP to Grafana LGTM. Workflow and UCP dashboards expose outcomes and read paths. The OpenTelemetry Logback appender exports application logs to Loki with trace and span context; JDBC tracing does not guarantee all OKafka internal spans.",
     category: "Workflow",
   },
   {
@@ -61,7 +61,7 @@ export const diagrams = [
     file: "/diagrams/08-blockchain-reviews.svg",
     title: "Preserve the human decision",
     description:
-      "With events, ai, and blockchain active, human review preserves the saved summary in blockchain history. Approval accepts the summary. Rejection requires feedback, appends it to the ticket, resets its status to RECEIVED, and publishes TICKET_FEEDBACK_SUBMITTED using the same OKafka transaction. The AI consumer regenerates the summary, embedding, and matches, returning the ticket to ENRICHED. Duplicate review actions do not publish again. Actor identity is supplied by the caller, not authenticated. Reviews do not execute customer actions.",
+      "Human review preserves the saved summary in blockchain history. Approval accepts the summary. Rejection requires feedback, appends it to the ticket, resets its status to RECEIVED, and publishes TICKET_FEEDBACK_SUBMITTED using the same OKafka transaction. The AI consumer regenerates the summary, embedding, and matches, returning the ticket to ENRICHED. Duplicate review actions do not publish again. Actor identity is supplied by the caller, not authenticated. Reviews do not execute customer actions.",
     category: "Workflow",
   },
   {

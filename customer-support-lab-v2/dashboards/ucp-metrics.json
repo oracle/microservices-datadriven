@@ -25,7 +25,18 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "links": [],
+  "links": [
+    {
+      "title": "Lab dashboards",
+      "type": "dashboards",
+      "tags": [
+        "customer-support"
+      ],
+      "asDropdown": true,
+      "includeVars": true,
+      "keepTime": true
+    }
+  ],
   "liveNow": false,
   "panels": [
     {
@@ -84,7 +95,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum({__name__=~\"db_client_connection_count(_connections)?\", db_client_connection_pool_name=~\"${pool:regex}\", db_client_connection_state=\"used\"})",
+          "expr": "sum({service_name=~\"${service:regex}\", __name__=~\"db_client_connection_count(_connections)?\", db_client_connection_pool_name=~\"${pool:regex}\", db_client_connection_state=\"used\"})",
           "instant": true,
           "legendFormat": "Used",
           "range": false,
@@ -150,7 +161,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum({__name__=~\"db_client_connection_count(_connections)?\", db_client_connection_pool_name=~\"${pool:regex}\", db_client_connection_state=\"idle\"})",
+          "expr": "sum({service_name=~\"${service:regex}\", __name__=~\"db_client_connection_count(_connections)?\", db_client_connection_pool_name=~\"${pool:regex}\", db_client_connection_state=\"idle\"})",
           "instant": true,
           "legendFormat": "Idle",
           "range": false,
@@ -165,7 +176,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Borrowed connections as a percentage of the configured maximum pool size.",
+      "description": "Highest utilization among selected pools. A busy small pool is not hidden by an idle larger pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -227,14 +238,14 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "100 * sum({__name__=~\"db_client_connection_count(_connections)?\", db_client_connection_pool_name=~\"${pool:regex}\", db_client_connection_state=\"used\"}) / clamp_min(sum({__name__=~\"db_client_connection_max(_connections)?\", db_client_connection_pool_name=~\"${pool:regex}\"}), 1)",
+          "expr": "max(100 * sum by (db_client_connection_pool_name) ({__name__=~\"db_client_connection_count(_connections)?\", service_name=~\"${service:regex}\", db_client_connection_pool_name=~\"${pool:regex}\", db_client_connection_state=\"used\"}) / clamp_min(sum by (db_client_connection_pool_name) ({__name__=~\"db_client_connection_max(_connections)?\", service_name=~\"${service:regex}\", db_client_connection_pool_name=~\"${pool:regex}\"}), 1))",
           "instant": true,
           "legendFormat": "Utilization",
           "range": false,
           "refId": "A"
         }
       ],
-      "title": "Pool Utilization",
+      "title": "Highest Pool Utilization",
       "type": "stat"
     },
     {
@@ -301,7 +312,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum({__name__=~\"db_client_connection_pending_requests(_requests)?\", db_client_connection_pool_name=~\"${pool:regex}\"})",
+          "expr": "sum({service_name=~\"${service:regex}\", __name__=~\"db_client_connection_pending_requests(_requests)?\", db_client_connection_pool_name=~\"${pool:regex}\"})",
           "instant": true,
           "legendFormat": "Pending",
           "range": false,
@@ -399,7 +410,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (db_client_connection_pool_name, db_client_connection_state) ({__name__=~\"db_client_connection_count(_connections)?\", db_client_connection_pool_name=~\"${pool:regex}\"})",
+          "expr": "sum by (db_client_connection_pool_name, db_client_connection_state) ({service_name=~\"${service:regex}\", __name__=~\"db_client_connection_count(_connections)?\", db_client_connection_pool_name=~\"${pool:regex}\"})",
           "instant": false,
           "legendFormat": "{{db_client_connection_pool_name}} {{db_client_connection_state}}",
           "range": true,
@@ -496,7 +507,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "{__name__=~\"db_client_connection_max(_connections)?\", db_client_connection_pool_name=~\"${pool:regex}\"}",
+          "expr": "{service_name=~\"${service:regex}\", __name__=~\"db_client_connection_max(_connections)?\", db_client_connection_pool_name=~\"${pool:regex}\"}",
           "instant": false,
           "legendFormat": "{{db_client_connection_pool_name}} max",
           "range": true,
@@ -508,7 +519,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "{__name__=~\"db_client_connection_idle_min(_connections)?\", db_client_connection_pool_name=~\"${pool:regex}\"}",
+          "expr": "{service_name=~\"${service:regex}\", __name__=~\"db_client_connection_idle_min(_connections)?\", db_client_connection_pool_name=~\"${pool:regex}\"}",
           "instant": false,
           "legendFormat": "{{db_client_connection_pool_name}} minimum idle",
           "range": true,
@@ -520,7 +531,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "ucp_connections_capacity{pool=~\"${pool:regex}\"}",
+          "expr": "ucp_connections_capacity{service_name=~\"${service:regex}\", pool=~\"${pool:regex}\"}",
           "instant": false,
           "legendFormat": "{{pool}} remaining capacity",
           "range": true,
@@ -618,7 +629,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (pool) (rate(ucp_connections_borrowed_total{pool=~\"${pool:regex}\"}[$__rate_interval]))",
+          "expr": "sum by (pool) (rate(ucp_connections_borrowed_total{service_name=~\"${service:regex}\", pool=~\"${pool:regex}\"}[$__rate_interval]))",
           "instant": false,
           "legendFormat": "{{pool}} borrowed",
           "range": true,
@@ -630,7 +641,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (pool) (rate(ucp_connections_returned_total{pool=~\"${pool:regex}\"}[$__rate_interval]))",
+          "expr": "sum by (pool) (rate(ucp_connections_returned_total{service_name=~\"${service:regex}\", pool=~\"${pool:regex}\"}[$__rate_interval]))",
           "instant": false,
           "legendFormat": "{{pool}} returned",
           "range": true,
@@ -655,7 +666,7 @@
             "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
-          "axisLabel": "Milliseconds",
+            "axisLabel": "Milliseconds",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
@@ -693,7 +704,7 @@
               }
             ]
           },
-        "unit": "ms"
+          "unit": "ms"
         },
         "overrides": []
       },
@@ -728,7 +739,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "ucp_connections_acquire_average_milliseconds{pool=~\"${pool:regex}\"}",
+          "expr": "ucp_connections_acquire_average_milliseconds{service_name=~\"${service:regex}\", pool=~\"${pool:regex}\"}",
           "instant": false,
           "legendFormat": "{{pool}} average",
           "range": true,
@@ -740,7 +751,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "ucp_connections_acquire_peak_milliseconds{pool=~\"${pool:regex}\"}",
+          "expr": "ucp_connections_acquire_peak_milliseconds{service_name=~\"${service:regex}\", pool=~\"${pool:regex}\"}",
           "instant": false,
           "legendFormat": "{{pool}} peak",
           "range": true,
@@ -755,7 +766,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Successful and failed connection acquisition rates, plus connection creation attempts.",
+      "description": "Successful and failed connection-acquisition rates. Created connections are shown separately in Connection Lifecycle.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -838,7 +849,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (pool) (rate(ucp_connections_acquire_milliseconds_count{pool=~\"${pool:regex}\"}[$__rate_interval]))",
+          "expr": "sum by (pool) (rate(ucp_connections_acquire_milliseconds_count{service_name=~\"${service:regex}\", pool=~\"${pool:regex}\"}[$__rate_interval]))",
           "instant": false,
           "legendFormat": "{{pool}} successful acquires",
           "range": true,
@@ -850,23 +861,11 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (pool) (rate(ucp_connections_acquire_failed_milliseconds_count{pool=~\"${pool:regex}\"}[$__rate_interval]))",
+          "expr": "sum by (pool) (rate(ucp_connections_acquire_failed_milliseconds_count{service_name=~\"${service:regex}\", pool=~\"${pool:regex}\"}[$__rate_interval]))",
           "instant": false,
           "legendFormat": "{{pool}} failed acquires",
           "range": true,
           "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "sum by (pool) (rate(ucp_connections_creation_attempts_total{pool=~\"${pool:regex}\"}[$__rate_interval]))",
-          "instant": false,
-          "legendFormat": "{{pool}} creation attempts",
-          "range": true,
-          "refId": "C"
         }
       ],
       "title": "Acquisition Outcomes",
@@ -887,7 +886,7 @@
             "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
-          "axisLabel": "Milliseconds",
+            "axisLabel": "Milliseconds",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
@@ -925,7 +924,7 @@
               }
             ]
           },
-        "unit": "ms"
+          "unit": "ms"
         },
         "overrides": []
       },
@@ -960,7 +959,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (pool) (rate(ucp_connections_usage_milliseconds_sum{pool=~\"${pool:regex}\"}[$__rate_interval])) / clamp_min(sum by (pool) (rate(ucp_connections_usage_milliseconds_count{pool=~\"${pool:regex}\"}[$__rate_interval])), 0.000000001)",
+          "expr": "sum by (pool) (rate(ucp_connections_usage_milliseconds_sum{service_name=~\"${service:regex}\", pool=~\"${pool:regex}\"}[$__rate_interval])) / clamp_min(sum by (pool) (rate(ucp_connections_usage_milliseconds_count{service_name=~\"${service:regex}\", pool=~\"${pool:regex}\"}[$__rate_interval])), 0.000000001)",
           "instant": false,
           "legendFormat": "{{pool}} average usage",
           "range": true,
@@ -972,7 +971,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (pool) (rate(ucp_connections_acquire_total_milliseconds_sum{pool=~\"${pool:regex}\"}[$__rate_interval])) / clamp_min(sum by (pool) (rate(ucp_connections_acquire_total_milliseconds_count{pool=~\"${pool:regex}\"}[$__rate_interval])), 0.000000001)",
+          "expr": "sum by (pool) (rate(ucp_connections_acquire_total_milliseconds_sum{service_name=~\"${service:regex}\", pool=~\"${pool:regex}\"}[$__rate_interval])) / clamp_min(sum by (pool) (rate(ucp_connections_acquire_total_milliseconds_count{service_name=~\"${service:regex}\", pool=~\"${pool:regex}\"}[$__rate_interval])), 0.000000001)",
           "instant": false,
           "legendFormat": "{{pool}} average total wait",
           "range": true,
@@ -1044,7 +1043,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (pool) (ucp_connections{pool=~\"${pool:regex}\"})",
+          "expr": "sum by (pool) (ucp_connections{service_name=~\"${service:regex}\", pool=~\"${pool:regex}\"})",
           "instant": false,
           "legendFormat": "{{pool}} total",
           "range": true,
@@ -1056,7 +1055,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (pool) (ucp_connections_min{pool=~\"${pool:regex}\"})",
+          "expr": "sum by (pool) (ucp_connections_min{service_name=~\"${service:regex}\", pool=~\"${pool:regex}\"})",
           "instant": false,
           "legendFormat": "{{pool}} minimum",
           "range": true,
@@ -1068,7 +1067,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (pool) (ucp_connections_peak{pool=~\"${pool:regex}\"})",
+          "expr": "sum by (pool) (ucp_connections_peak{service_name=~\"${service:regex}\", pool=~\"${pool:regex}\"})",
           "instant": false,
           "legendFormat": "{{pool}} peak",
           "range": true,
@@ -1080,7 +1079,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (pool) (ucp_connections_active_average{pool=~\"${pool:regex}\"})",
+          "expr": "sum by (pool) (ucp_connections_active_average{service_name=~\"${service:regex}\", pool=~\"${pool:regex}\"})",
           "instant": false,
           "legendFormat": "{{pool}} average borrowed",
           "range": true,
@@ -1092,7 +1091,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (pool) (ucp_connections_active_peak{pool=~\"${pool:regex}\"})",
+          "expr": "sum by (pool) (ucp_connections_active_peak{service_name=~\"${service:regex}\", pool=~\"${pool:regex}\"})",
           "instant": false,
           "legendFormat": "{{pool}} peak borrowed",
           "range": true,
@@ -1164,7 +1163,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (pool) (ucp_connections_created{pool=~\"${pool:regex}\"})",
+          "expr": "sum by (pool) (ucp_connections_created{service_name=~\"${service:regex}\", pool=~\"${pool:regex}\"})",
           "instant": false,
           "legendFormat": "{{pool}} created",
           "range": true,
@@ -1176,7 +1175,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (pool) (ucp_connections_closed{pool=~\"${pool:regex}\"})",
+          "expr": "sum by (pool) (ucp_connections_closed{service_name=~\"${service:regex}\", pool=~\"${pool:regex}\"})",
           "instant": false,
           "legendFormat": "{{pool}} closed",
           "range": true,
@@ -1188,7 +1187,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (pool) (ucp_connections_labeled{pool=~\"${pool:regex}\"})",
+          "expr": "sum by (pool) (ucp_connections_labeled{service_name=~\"${service:regex}\", pool=~\"${pool:regex}\"})",
           "instant": false,
           "legendFormat": "{{pool}} labeled",
           "range": true,
@@ -1200,7 +1199,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (pool) (ucp_connections_abandoned{pool=~\"${pool:regex}\"})",
+          "expr": "sum by (pool) (ucp_connections_abandoned{service_name=~\"${service:regex}\", pool=~\"${pool:regex}\"})",
           "instant": false,
           "legendFormat": "{{pool}} abandoned",
           "range": true,
@@ -1272,7 +1271,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (pool) (rate(ucp_connections_acquire_milliseconds_sum{pool=~\"${pool:regex}\"}[$__rate_interval])) / clamp_min(sum by (pool) (rate(ucp_connections_acquire_milliseconds_count{pool=~\"${pool:regex}\"}[$__rate_interval])), 0.000000001)",
+          "expr": "sum by (pool) (rate(ucp_connections_acquire_milliseconds_sum{service_name=~\"${service:regex}\", pool=~\"${pool:regex}\"}[$__rate_interval])) / clamp_min(sum by (pool) (rate(ucp_connections_acquire_milliseconds_count{service_name=~\"${service:regex}\", pool=~\"${pool:regex}\"}[$__rate_interval])), 0.000000001)",
           "instant": false,
           "legendFormat": "{{pool}} successful acquire",
           "range": true,
@@ -1284,7 +1283,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (pool) (rate(ucp_connections_acquire_failed_milliseconds_sum{pool=~\"${pool:regex}\"}[$__rate_interval])) / clamp_min(sum by (pool) (rate(ucp_connections_acquire_failed_milliseconds_count{pool=~\"${pool:regex}\"}[$__rate_interval])), 0.000000001)",
+          "expr": "sum by (pool) (rate(ucp_connections_acquire_failed_milliseconds_sum{service_name=~\"${service:regex}\", pool=~\"${pool:regex}\"}[$__rate_interval])) / clamp_min(sum by (pool) (rate(ucp_connections_acquire_failed_milliseconds_count{service_name=~\"${service:regex}\", pool=~\"${pool:regex}\"}[$__rate_interval])), 0.000000001)",
           "instant": false,
           "legendFormat": "{{pool}} failed acquire",
           "range": true,
@@ -1296,7 +1295,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (pool) (rate(ucp_connections_acquire_total_milliseconds_sum{pool=~\"${pool:regex}\"}[$__rate_interval])) / clamp_min(sum by (pool) (rate(ucp_connections_acquire_total_milliseconds_count{pool=~\"${pool:regex}\"}[$__rate_interval])), 0.000000001)",
+          "expr": "sum by (pool) (rate(ucp_connections_acquire_total_milliseconds_sum{service_name=~\"${service:regex}\", pool=~\"${pool:regex}\"}[$__rate_interval])) / clamp_min(sum by (pool) (rate(ucp_connections_acquire_total_milliseconds_count{service_name=~\"${service:regex}\", pool=~\"${pool:regex}\"}[$__rate_interval])), 0.000000001)",
           "instant": false,
           "legendFormat": "{{pool}} total acquire",
           "range": true,
@@ -1305,15 +1304,71 @@
       ],
       "title": "Acquire Duration by Outcome",
       "type": "timeseries"
+    },
+    {
+      "id": 14,
+      "title": "Utilization by pool",
+      "type": "timeseries",
+      "description": "",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 45,
+        "w": 24,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "expr": "100 * sum by (db_client_connection_pool_name) ({__name__=~\"db_client_connection_count(_connections)?\", service_name=~\"${service:regex}\", db_client_connection_pool_name=~\"${pool:regex}\", db_client_connection_state=\"used\"}) / clamp_min(sum by (db_client_connection_pool_name) ({__name__=~\"db_client_connection_max(_connections)?\", service_name=~\"${service:regex}\", db_client_connection_pool_name=~\"${pool:regex}\"}), 1)",
+          "legendFormat": "{{db_client_connection_pool_name}}",
+          "instant": false,
+          "range": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "noValue": "No data",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 8,
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      }
     }
   ],
   "refresh": "10s",
   "schemaVersion": 41,
   "tags": [
-    "Oracle AI Database",
-    "UCP",
-    "Micrometer",
-    "OpenTelemetry"
+    "customer-support",
+    "oracle",
+    "observability"
   ],
   "templating": {
     "list": [
@@ -1338,6 +1393,29 @@
         "type": "datasource"
       },
       {
+        "name": "service",
+        "label": "Application",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "query": {
+          "query": "label_values(support_ticket_events_total, service_name)",
+          "refId": "service"
+        },
+        "definition": "label_values(support_ticket_events_total, service_name)",
+        "refresh": 2,
+        "multi": false,
+        "includeAll": false,
+        "allValue": ".+",
+        "current": {
+          "text": "customer-support-lab-v2",
+          "value": "customer-support-lab-v2"
+        },
+        "options": []
+      },
+      {
         "allValue": ".+",
         "current": {
           "selected": false,
@@ -1348,7 +1426,7 @@
           "type": "prometheus",
           "uid": "${datasource}"
         },
-        "definition": "label_values({__name__=~\"db_client_connection_count(_connections)?\"}, db_client_connection_pool_name)",
+        "definition": "label_values({__name__=~\"db_client_connection_count(_connections)?\", service_name=~\"${service:regex}\"}, db_client_connection_pool_name)",
         "description": "Select one or more UCP connection pools.",
         "hide": 0,
         "includeAll": true,
@@ -1357,7 +1435,7 @@
         "name": "pool",
         "options": [],
         "query": {
-          "query": "label_values({__name__=~\"db_client_connection_count(_connections)?\"}, db_client_connection_pool_name)",
+          "query": "label_values({__name__=~\"db_client_connection_count(_connections)?\", service_name=~\"${service:regex}\"}, db_client_connection_pool_name)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 2,
@@ -1397,6 +1475,6 @@
   "timezone": "browser",
   "title": "Oracle UCP Metrics",
   "uid": "oracle-ucp-metrics",
-  "version": 2,
+  "version": 3,
   "weekStart": ""
 }

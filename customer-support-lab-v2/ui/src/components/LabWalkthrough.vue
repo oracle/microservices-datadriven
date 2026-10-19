@@ -111,15 +111,27 @@ const count = (name) =>
       </div>
       <h2 id="chapter-title">{{ chapter.title }}</h2>
       <p class="walkthrough-summary">{{ chapter.summary }}</p>
-      <p v-if="chapter.id === 'ready'">
+      <figure v-if="chapter.animation" class="walkthrough-animation">
         <a
-          class="text-button"
-          href="/diagrams/14-complete-event-loop.svg"
+          :href="chapter.animation.file"
           target="_blank"
           rel="noopener"
-          >Watch the complete event-loop animation ↗</a
-        >
-      </p>
+          :aria-label="`Open ${chapter.animation.title} at full size`"
+          ><img
+            :key="chapter.animation.file"
+            :src="chapter.animation.file"
+            :alt="chapter.animation.alt"
+            width="800"
+            height="600"
+          />
+        </a>
+        <figcaption>
+          {{ chapter.animation.title }} ·
+          <a :href="chapter.animation.file" target="_blank" rel="noopener"
+            >Open at full size ↗</a
+          >
+        </figcaption>
+      </figure>
       <ol>
         <li v-for="instruction in chapter.steps" :key="instruction">
           {{ instruction }}
