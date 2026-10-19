@@ -30,7 +30,7 @@ You need:
 
 - JDK 21 or later; use the included Maven wrapper (`./mvnw`).
 - Docker with Docker Compose 2.23.1 or later and enough available memory for
-  two Oracle database instances and LGTM.
+  two Oracle database instances and Grafana LGTM.
 - Node.js 22.12 or later for the UI.
 - An OCI API-key configuration in `~/.oci/config`, with a usable profile,
   region, and private key. The identity must have access to OCI Generative AI
@@ -51,16 +51,10 @@ In the terminal you will use for **both Compose and Maven**, replace the passwor
 and compartment placeholders, then export:
 
 ```bash
-export ORACLE_PWD='Choose-Your-Admin-Password'
 export APP_DB_USERNAME=LAB_USER
 export APP_DB_PASSWORD='Choose-Your-Lab-Password'
 
 export OCI_COMPARTMENT_ID='<your-compartment-ocid>'
-export OCI_AUTHENTICATION_TYPE=FILE
-export OCI_CONFIG_FILE="$HOME/.oci/config"
-export OCI_PROFILE=DEFAULT
-export OCI_CHAT_MODEL_ID=cohere.command-a-03-2025
-export OCI_EMBEDDING_MODEL_ID=cohere.embed-v4.0
 ```
 
 **`OCI_COMPARTMENT_ID` is required for this walkthrough.** Set it to the
@@ -80,7 +74,6 @@ digits, and `. _ ! # % + -`, matching the lab's SQL*Plus bootstrap.
 
 ```bash
 docker compose up -d
-docker compose ps -a
 ```
 
 Wait for `oracle-free` and `true-cache` to show **healthy**, and for
