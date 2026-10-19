@@ -13,34 +13,29 @@ import org.springframework.core.env.StandardEnvironment;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class ObservabilityProfilesTest {
+class ObservabilityConfigurationTest {
     @Test
-    void coreDoesNotExportOtlp() {
-        try (ConfigurableApplicationContext context = start("events,demo-failures")) {
-            Environment environment = context.getEnvironment();
-            assertEquals("false", environment.getProperty("management.otlp.metrics.export.enabled"));
-            assertEquals("false", environment.getProperty("management.tracing.export.otlp.enabled"));
-        }
-    }
-
-    @Test
-    void observabilityProfileExportsMetricsAndTraces() {
-        try (ConfigurableApplicationContext context = start("events,observability")) {
+    void defaultConfigurationExportsMetricsTracesAndLogs() {
+        try (ConfigurableApplicationContext context = start()) {
             Environment environment = context.getEnvironment();
             assertEquals("true", environment.getProperty("management.otlp.metrics.export.enabled"));
             assertEquals("true", environment.getProperty("management.tracing.export.otlp.enabled"));
-            assertEquals("false", environment.getProperty("management.logging.export.otlp.enabled"));
+            assertEquals("true", environment.getProperty("management.logging.export.otlp.enabled"));
+            assertEquals("logstash", environment.getProperty("logging.structured.format.console"));
+            assertEquals("oci-genai", environment.getProperty("spring.ai.model.chat"));
+            assertEquals("oci-genai", environment.getProperty("spring.ai.model.embedding"));
+            assertEquals("1536", environment.getProperty("spring.ai.oci.genai.embedding.dimensions"));
         }
     }
 
-    private ConfigurableApplicationContext start(String profiles) {
+    private ConfigurableApplicationContext start() {
         StandardEnvironment environment = new StandardEnvironment();
         environment.getPropertySources().remove(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME);
         environment.getPropertySources().remove(StandardEnvironment.SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME);
         return new SpringApplicationBuilder(EmptyConfiguration.class)
                 .environment(environment)
                 .web(WebApplicationType.NONE)
-                .properties("spring.profiles.active=" + profiles, "spring.main.log-startup-info=false")
+                .properties("spring.main.log-startup-info=false")
                 .run();
     }
 

@@ -6,10 +6,10 @@ UI service account, or frontend CDN is needed. Dependencies are bundled locally.
 ## Run
 
 Start the lab services and Spring application as described in the
-[lab README](../README.md). For the full UI, use all five profiles:
+[lab README](../README.md). All features run by default:
 
 ```bash
-mvn spring-boot:run -Dspring-boot.run.profiles=events,ai,blockchain,demo-failures,observability
+mvn spring-boot:run
 ```
 
 In another terminal, from this `ui` directory, with Node.js 22.12+ or 24+:
@@ -27,9 +27,8 @@ If your backend uses another endpoint, set it when starting Vite:
 LAB_API_URL=http://localhost:9011 npm run dev
 ```
 
-The UI reads active profiles from the backend. With fewer profiles enabled,
-optional assistance/review features explain which profiles they need. Diagrams
-can be browsed even when the backend is unavailable. This is the same
+All workflow tools are available without Spring profiles. Diagrams can be
+browsed even when the backend is unavailable. This is the same
 unauthenticated local demo API as the command-line walkthrough; the reviewer
 field is a self-declared ID.
 
@@ -58,7 +57,7 @@ field is a self-declared ID.
   survive tab navigation and reset on page reload.
 - **Components:** database, TxEventQ/OKafka, OCI models, True Cache, blockchain,
   observability, row counts for all eight application tables, and policy corpus.
-  Enabled indicators describe profile configuration, not external health checks.
+  The component inventory does not establish external service health.
 - **Diagrams:** all 16 SVGs, category filters, presentation navigation, a gallery,
   full-size SVG links, and the preserved original scrolling gallery. Assets live
   in [`public/diagrams`](public/diagrams/README.md).
@@ -95,6 +94,6 @@ Vite server local; deployment/authentication are outside this lab.
 - `public/diagrams/`: canonical SVGs, standalone gallery, and source notes.
 - `vite.config.js`: loopback listeners and development/preview proxies.
 
-The backend adds one read-only `GET /api/lab` endpoint for profiles, configured
+The backend adds one read-only `GET /api/lab` endpoint for configured
 model/topic names, schema counts, policy data, and latest-review timestamps.
 All ticket creation, assistance, review, and replay actions reuse existing APIs.

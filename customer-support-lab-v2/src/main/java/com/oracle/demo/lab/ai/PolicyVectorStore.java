@@ -5,7 +5,6 @@ package com.oracle.demo.lab.ai;
 
 import oracle.jdbc.OracleType;
 import oracle.sql.VECTOR;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
@@ -16,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-@Profile("ai")
 public class PolicyVectorStore {
     public List<PolicyMatch> search(Connection connection, float[] ticketEmbedding) {
         // The three-row demo corpus uses exact cosine search; an ANN index adds no value here.

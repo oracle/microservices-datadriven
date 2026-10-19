@@ -6,13 +6,11 @@ package com.oracle.demo.lab.processing;
 import com.oracle.demo.lab.model.TicketWorkEvent;
 import com.oracle.demo.lab.model.SupportTicket;
 
-import org.springframework.context.annotation.Profile;
 import org.springframework.dao.TransientDataAccessResourceException;
 import org.springframework.stereotype.Component;
 
 /** Deterministic, opt-in failures that show both replay and bounded retry. */
 @Component
-@Profile("events & demo-failures")
 public class DemoFailureInjector {
     public static final String TITLE_PREFIX = "[demo-fail-once]";
 

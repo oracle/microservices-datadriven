@@ -45,6 +45,13 @@
 			<artifactId>spring-boot-starter-opentelemetry</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>io.opentelemetry.instrumentation</groupId>
+			<artifactId>opentelemetry-logback-appender-1.0</artifactId>
+			<!-- Aligned with Spring Boot's OpenTelemetry 1.62 SDK. -->
+			<version>2.28.1-alpha</version>
+		</dependency>
+
 <!--		Oracle Spring Boot starters-->
 		<dependency>
 			<groupId>com.oracle.database.spring</groupId>

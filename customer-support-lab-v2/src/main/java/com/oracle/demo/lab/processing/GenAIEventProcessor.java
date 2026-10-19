@@ -18,14 +18,12 @@ import com.oracle.demo.lab.persistence.TicketStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.embedding.EmbeddingModel;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.util.List;
 
 @Component
-@Profile("ai")
 public class GenAIEventProcessor implements TicketEventProcessor {
     private static final Logger log = LoggerFactory.getLogger(GenAIEventProcessor.class);
 

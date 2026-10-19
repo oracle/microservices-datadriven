@@ -14,27 +14,24 @@ export function useLab() {
   const ready = computed(() =>
     tickets.value.filter((t) => needsReview(t, snapshot.value)),
   );
-  const eventsEnabled = computed(() =>
-    snapshot.value?.profiles.includes("events"),
-  );
   let timer;
+  let refreshQueued = false;
 
   async function refresh() {
-    if (loading.value) return;
+    if (loading.value) {
+      refreshQueued = true;
+      return;
+    }
     loading.value = true;
     try {
       const info = (await request("/api/lab")).data;
-      let all = [],
-        failed = [];
-      if (info.profiles.includes("events")) {
-        const results = await Promise.all([
-          request(`/tickets?readPath=${readPath.value}`),
-          request("/ticket-events/failures"),
-        ]);
-        all = results[0].data;
-        failed = results[1].data;
-        actualPath.value = results[0].readPath;
-      }
+      const results = await Promise.all([
+        request(`/tickets?readPath=${readPath.value}`),
+        request("/ticket-events/failures"),
+      ]);
+      const all = results[0].data;
+      const failed = results[1].data;
+      actualPath.value = results[0].readPath;
       snapshot.value = info;
       tickets.value = all.sort((a, b) => b.id - a.id);
       failures.value = failed;
@@ -44,6 +41,10 @@ export function useLab() {
       error.value = `${e.message} Check that the Spring application is running and the Vite API proxy points to it. Displayed data may be stale.`;
     } finally {
       loading.value = false;
+      if (refreshQueued) {
+        refreshQueued = false;
+        refresh();
+      }
     }
   }
 
@@ -65,7 +66,6 @@ export function useLab() {
     actualPath,
     autoRefresh,
     ready,
-    eventsEnabled,
     refresh,
   };
 }

@@ -8,7 +8,6 @@ const dialog = ref(null),
   failOnce = ref(false),
   pending = ref(false),
   error = ref("");
-defineProps({ demoFailures: Boolean });
 defineExpose({
   open() {
     error.value = "";
@@ -76,7 +75,7 @@ async function submit() {
             placeholder="Describe the issue and what the customer needs help with…"
           />
         </label>
-        <label v-if="demoFailures" class="checkbox-label"
+        <label class="checkbox-label"
           ><input v-model="failOnce" type="checkbox" />Trigger the deliberate
           failure/replay demo</label
         >

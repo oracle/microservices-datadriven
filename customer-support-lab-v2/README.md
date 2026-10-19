@@ -4,8 +4,8 @@ Run a customer-support workflow with Spring Boot, Oracle AI Database, and a
 local Vue UI. Submit a ticket, generate AI assistance, request a revision,
 approve the result, and recover a failed event through replay.
 
-This walkthrough enables **all five profiles**: `events`, `ai`, `blockchain`,
-`demo-failures`, and `observability`.
+All features run by default: events, AI assistance, blockchain review, deliberate
+demo failures, and observability. No Spring profiles are needed.
 
 Docker Compose runs Oracle AI Database Free, True Cache, and Grafana LGTM.
 You start the Java application with Maven and the UI with npm. OCI Generative
@@ -97,12 +97,12 @@ If setup fails, inspect:
 docker compose logs oracle-free true-cache true-cache-configure
 ```
 
-### 3. Start Java with all profiles enabled
+### 3. Start Java
 
 In the **same terminal with the exports above**:
 
 ```bash
-./mvnw spring-boot:run -Dspring-boot.run.profiles=events,ai,blockchain,demo-failures,observability
+./mvnw spring-boot:run
 ```
 
 Leave Maven running. On a fresh lab, startup creates policy embeddings through
@@ -115,13 +115,13 @@ From another terminal, check the backend:
 curl -fsS http://localhost:9002/actuator/health
 ```
 
-| Profile | What it enables |
+| Feature | Behavior |
 | --- | --- |
 | `events` | Ticket APIs, TxEventQ topic setup, background processing, and replay |
 | `ai` | OCI embeddings, summaries, related-ticket and policy retrieval |
 | `blockchain` | Human review, saved review snapshots, and feedback-driven regeneration |
 | `demo-failures` | Deliberate failure and retry for the failure preset |
-| `observability` | OTLP metrics and traces, plus JSON console logs |
+| `observability` | OTLP metrics, traces, and logs, plus JSON console logs |
 
 ### 4. Start the UI
 
@@ -164,9 +164,8 @@ requests. Pause it to inspect a flow, or select a chapter to focus its component
 The diagram is mocked; the separate **Current lab snapshot** shows real counts.
 Use **Return to Lab Walkthrough** to resume your chapter after trying an action.
 Expand the component reference for the database, queue, models, all eight tables,
-and the seeded policy corpus. Confirm that all five
-profile badges appear. These badges describe configuration; they are not
-external service health checks.
+and the seeded policy corpus. Check policy indexing and table counts; the
+component inventory does not establish external service health.
 
 Open **Diagrams** for the architecture, schema, and complete event loop.
 Return here as you follow a ticket through the lab.
@@ -261,15 +260,23 @@ publication, consumption, AI steps, feedback, and replay traces.
 
 The dashboard's failed-events gauge estimates failures during a rolling window;
 a successful replay does not erase the original failure from that window.
-**Failed Events** in the lab UI shows the current replayable worklist. JSON
-console logs remain in the Maven terminal; the lab does not automatically ship
-them to LGTM.
+**Failed Events** in the lab UI shows the current replayable worklist.
+
+Application logs are exported over OTLP to `http://localhost:4318/v1/logs` and
+remain available as JSON in the Maven terminal. In **Explore**, select **Loki**
+and query `{service_name="customer-support-lab-v2"}`. Logs written inside a span
+include trace and span IDs, so you can follow the log's trace link into Tempo.
+Allow a few seconds for log batches to arrive after starting or restarting Java.
+
+Set `MANAGEMENT_OTLP_LOGGING_ENDPOINT` to change the logs endpoint, or
+`MANAGEMENT_OTLP_LOGGING_EXPORT_ENABLED=false` to disable remote log export
+while keeping console logs.
 
 ## Manual API walkthrough
 
 The **Lab Walkthrough** tab guides the same steps through the UI. The commands
 below let you perform each operation manually without helper scripts. Use a
-fresh shell with `curl`, `jq`, and `uuidgen`, and keep the all-profile Maven
+fresh shell with `curl`, `jq`, and `uuidgen`, and keep the Maven
 application running. Each ticket submission writes lab data and may call OCI.
 
 ### Submit and inspect assistance
@@ -377,7 +384,8 @@ lag, so retry a cache miss after a few seconds. Use primary for the freshest sta
 
 To inspect telemetry manually, open Grafana and follow the dashboard/Tempo steps
 in **Follow the work in Grafana** above. Metrics export every five seconds;
-JSON console logs remain in the Maven terminal unless separately forwarded.
+Logs are also exported to Loki; use `{service_name="customer-support-lab-v2"}`
+in Explore to inspect them.
 
 ## Stop or reset
 
@@ -411,7 +419,6 @@ the same exported configuration. Restarting Maven alone preserves database data.
 | Database setup does not become healthy | Inspect `docker compose logs oracle-free true-cache true-cache-configure`. Use a fresh lab if bootstrap was interrupted; recreation discards its data. |
 | UI cannot connect | Confirm Maven is running on port 9001. Vite defaults to that backend; set `LAB_API_URL` when starting Vite if the API address differs. |
 | Ticket stays `RECEIVED` or becomes `FAILED` | Wait for the subscription log, then inspect Maven output and Failed Events. Check OCI access before replaying. |
-| Ticket reaches `TRIAGED` instead of `ENRICHED` | Restart Maven with the complete profile command above, including `ai`. |
 | Review is unavailable | Confirm `events`, `ai`, and `blockchain` are active and the ticket is `ENRICHED`. Wait for regeneration before reviewing again. |
 | Failure preset succeeds immediately | Confirm `demo-failures` is active and the title starts with `[demo-fail-once]`. |
 | Cache list lags or reports `primary-fallback` | Check True Cache readiness and registration logs; use primary reads for current state. |

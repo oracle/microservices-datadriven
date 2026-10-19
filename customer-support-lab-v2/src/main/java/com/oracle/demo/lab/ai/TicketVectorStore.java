@@ -6,7 +6,6 @@ package com.oracle.demo.lab.ai;
 import com.oracle.demo.lab.model.RelatedTicket;
 import oracle.jdbc.OracleType;
 import oracle.sql.VECTOR;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
@@ -18,7 +17,6 @@ import java.util.List;
 
 /** Searches existing ticket embeddings for related support tickets. */
 @Component
-@Profile("ai")
 public class TicketVectorStore {
     public List<RelatedTicket> search(double minScore, float[] vector, Long ticketId, Connection connection) {
         final String searchQuery = """

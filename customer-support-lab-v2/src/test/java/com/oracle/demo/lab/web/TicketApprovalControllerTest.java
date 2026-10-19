@@ -33,17 +33,14 @@ class TicketApprovalControllerTest {
     }
 
     @Test
-    void requiresEventsAiAndBlockchainProfiles() {
-        for (String[] profiles : new String[][]{{"events"}, {"blockchain"}, {"events", "blockchain"}, {"events", "ai", "blockchain"}}) {
-            try (var context = new AnnotationConfigApplicationContext()) {
-                context.getEnvironment().setActiveProfiles(profiles);
-                context.registerBean(TicketApprovalStore.class, () -> mock(TicketApprovalStore.class));
-                context.registerBean(TicketReviewService.class, () -> mock(TicketReviewService.class));
-                context.register(TicketApprovalController.class);
-                context.refresh();
-                assertEquals(profiles.length == 3 ? 1 : 0,
-                        context.getBeansOfType(TicketApprovalController.class).size());
-            }
+    void registersByDefault() {
+        try (var context = new AnnotationConfigApplicationContext()) {
+            context.registerBean(TicketApprovalStore.class, () -> mock(TicketApprovalStore.class));
+            context.registerBean(TicketReviewService.class, () -> mock(TicketReviewService.class));
+            context.register(TicketApprovalController.class);
+            context.refresh();
+            assertEquals(1,
+                    context.getBeansOfType(TicketApprovalController.class).size());
         }
     }
 }

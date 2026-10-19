@@ -29,7 +29,7 @@ never automatic customer-impacting actions.
 | Workflow | Submit → `RECEIVED` → `TRIAGED`; fail → `FAILED` → replay | `ENRICHED` when AI is enabled |
 | Learner actions | Start, set up schema, run one replay script that also checks both read paths | One script and one expected observation per optional chapter |
 
-Use `docker compose up -d` for the full topology. True Cache is not a profile
+Use `docker compose up -d` for the full topology. True Cache is not a
 or an alternative route; its readiness and primary-side registration are part
 of a successful lab start. OCI credentials are not needed for the core story.
 Keep one ticket
@@ -77,7 +77,7 @@ what runs, what credentials are needed, which health and registration checks
 prove True Cache is ready, what command demonstrates success, and how to
 repeat it. Keep one full-stack Compose command.
 Measure the complete path with warm and uncached dependencies; distinguish
-host-dependent timings from a guarantee. Move profile/port/wallet variants
+host-dependent timings from a guarantee. Move port/wallet variants
 into a compact reference.
 
 **Gate:** a fresh learner can replay a ticket without OCI credentials and
@@ -106,7 +106,7 @@ focused tests. A second live walkthrough needs no database repair.
 
 ### 3. Keep AI to one visible assistance result
 
-With the `ai` profile, enrich the same ticket with one concise summary, a few
+Enrich the same ticket with one concise summary, a few
 similar tickets, and cited/scored policy matches. Reuse the Spring AI Oracle
 model integration and the small seeded policy corpus. Expose model and prompt
 version for explanation, but do not save every intermediate model artifact or
@@ -173,11 +173,10 @@ tables and three seeded policies.
 With images and Maven dependencies already cached, a fresh primary-plus-LGTM
 run reached its first replay result in 104 seconds, including operator pauses;
 this is not an uncached-startup promise. The README now starts the full Compose topology;
-True Cache reads are configured in the base app rather than a `read-scale`
-profile. An application-profile test verifies OTLP export is off without the
-optional observability profile and on with it. The revised full-stack route
+True Cache reads are configured in the default application. A configuration
+test verifies OTLP metrics and traces are enabled by default. The revised full-stack route
 has not been benchmarked as a startup-time claim. A focused Spring context
-test confirms the base profile constructs a lazy True Cache UCP reader without
+test confirms the default configuration constructs a lazy True Cache UCP reader without
 connecting. The replay script invokes the cache check for its own ticket and
 displays both workflow statuses without requiring them to match. Live runs for
 tickets 1 and 2 both passed failure → replay → `TRIAGED`, rejected a repeated
@@ -255,7 +254,7 @@ failures. The scripts have since been replaced by the Lab Walkthrough UI and
 manual API commands in README.md.
 
 Regional placement remains a descriptor, with no physical multi-region topology.
-The optional `events,ai,blockchain` chapter uses a Compose-bootstrapped V2
+The human review chapter uses a Compose-bootstrapped V2
 blockchain table to preserve human decisions, summary snapshots, SHA-256
 summary digests, model/prompt metadata, and self-declared reviewer names.
 An action UUID deduplicates retries; corrections append a new action.

@@ -29,15 +29,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import io.micrometer.observation.Observation;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.dao.TransientDataAccessException;
 import org.springframework.web.client.RestClientResponseException;
 
 @Component
-@Profile("events")
 public class TicketEventConsumer implements Runnable {
     private static final Logger log = LoggerFactory.getLogger(TicketEventConsumer.class);
     private final KafkaConsumer<String, TicketWorkEvent> consumer;
@@ -45,7 +42,7 @@ public class TicketEventConsumer implements Runnable {
     private final TicketStore ticketStore;
     private final TicketEventOutcomeStore outcomeStore;
     private final TicketTelemetry telemetry;
-    private final ObjectProvider<DemoFailureInjector> demoFailureInjector;
+    private final DemoFailureInjector demoFailureInjector;
     private final String topic;
     private final int maxAttempts;
     private final long initialBackoffMillis;
@@ -56,7 +53,7 @@ public class TicketEventConsumer implements Runnable {
                                TicketStore ticketStore,
                                TicketEventOutcomeStore outcomeStore,
                                TicketTelemetry telemetry,
-                               ObjectProvider<DemoFailureInjector> demoFailureInjector,
+                               DemoFailureInjector demoFailureInjector,
                                @Value("${okafka.topic.tickets}") String topic,
                                @Value("${app.events.retry.max-attempts:3}") int maxAttempts,
                                @Value("${app.events.retry.backoff-ms:250}") long initialBackoffMillis) {
@@ -176,10 +173,7 @@ public class TicketEventConsumer implements Runnable {
                 SupportTicket ticket = ticketStore.findById(event.getTicketId())
                         .orElseThrow(() -> new NonRetryableTicketEventException("Ticket not found"));
                 ticketExists = true;
-                DemoFailureInjector demoFailure = demoFailureInjector.getIfAvailable();
-                if (demoFailure != null) {
-                    demoFailure.failForDemo(event, ticket, attempt, maxAttempts);
-                }
+                demoFailureInjector.failForDemo(event, ticket, attempt, maxAttempts);
                 ticket.setWorkflowStatus(TicketStatus.TRIAGED);
                 ticketStore.updateWorkflowStatus(connection, ticket.getId(), ticket.getWorkflowStatus());
                 eventProcessor.processRecord(connection, event, ticket);

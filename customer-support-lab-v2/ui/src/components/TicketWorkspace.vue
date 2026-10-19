@@ -10,7 +10,7 @@ const props = defineProps({
   reviewMode: Boolean,
   initialId: Number,
 });
-const emit = defineEmits(["updated"]);
+const emit = defineEmits(["updated", "select"]);
 const query = ref(""),
   filter = ref(props.reviewMode ? "REVIEW" : "ALL"),
   selected = ref(props.initialId || null);
@@ -42,7 +42,7 @@ const filtered = computed(() =>
 watch(
   () => props.initialId,
   (id) => {
-    if (id) {
+    if (id && id !== selected.value) {
       selected.value = id;
       filter.value = "ALL";
       query.value = "";
@@ -58,6 +58,7 @@ watch(
 );
 function selectRelated(id) {
   selected.value = id;
+  emit("select", id);
   filter.value = "ALL";
   query.value = "";
 }
@@ -67,13 +68,10 @@ function reviewed(review) {
   query.value = "";
   filter.value = "REVIEW";
   selected.value = props.tickets.find(awaitingReview)?.id || null;
+  emit("select", selected.value);
 }
 </script>
 <template>
-  <div v-if="reviewMode && !snapshot?.reviewEnabled" class="alert info">
-    Human review requires the events, ai, and blockchain profiles. You can still
-    inspect tickets and saved assistance.
-  </div>
   <div class="workspace">
     <section class="ticket-list panel">
       <div class="list-controls">
@@ -119,7 +117,10 @@ function reviewed(review) {
         class="ticket-row"
         :class="{ selected: selected === ticket.id }"
         :aria-pressed="selected === ticket.id"
-        @click="selected = ticket.id"
+        @click="
+          selected = ticket.id;
+          emit('select', ticket.id);
+        "
       >
         <div class="split">
           <span class="ticket-id">#{{ ticket.id }}</span
@@ -144,11 +145,7 @@ function reviewed(review) {
     />
     <div
       v-else-if="
-        reviewMode &&
-        snapshot?.reviewEnabled &&
-        filter === 'REVIEW' &&
-        !query &&
-        !filtered.length
+        reviewMode && filter === 'REVIEW' && !query && !filtered.length
       "
       class="panel empty detail-placeholder"
       role="status"

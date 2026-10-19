@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TrueCacheConfigurationTest {
     @Test
-    void baseConfigurationCreatesLazyCacheReaderWithoutAnExtraProfile() throws Exception {
+    void defaultConfigurationCreatesLazyCacheReader() throws Exception {
         StandardEnvironment environment = new StandardEnvironment();
         environment.getPropertySources().remove(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME);
         environment.getPropertySources().remove(StandardEnvironment.SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME);
@@ -27,7 +27,7 @@ class TrueCacheConfigurationTest {
         try (ConfigurableApplicationContext context = new SpringApplicationBuilder(CacheConfiguration.class)
                 .environment(environment)
                 .web(WebApplicationType.NONE)
-                .properties("spring.profiles.active=events", "spring.main.log-startup-info=false",
+                .properties("spring.main.log-startup-info=false",
                         "APP_DB_USERNAME=LAB_USER", "APP_DB_PASSWORD=test-only",
                         "TRUE_CACHE_JDBC_URL=" + unreachableUrl)
                 .run()) {

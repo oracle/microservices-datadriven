@@ -63,7 +63,7 @@ class PolicyIndexTest {
         when(model.embed(List.of("MFA recovery\nVerify identity.")))
                 .thenReturn(List.of(new float[1536]));
 
-        try (ConfigurableApplicationContext ignored = start("events", "ai")) {
+        try (ConfigurableApplicationContext ignored = start()) {
             var calls = inOrder(model, connection, executor);
             calls.verify(model).embed(List.of("MFA recovery\nVerify identity."));
             calls.verify(connection).commit();
@@ -73,7 +73,7 @@ class PolicyIndexTest {
 
     @Test
     void existingEmbeddingsSkipEmbeddingServiceAtStartup() {
-        try (ConfigurableApplicationContext ignored = start("events", "ai")) {
+        try (ConfigurableApplicationContext ignored = start()) {
             verifyNoInteractions(model);
         }
     }
@@ -84,22 +84,14 @@ class PolicyIndexTest {
         when(model.embed(List.of("MFA recovery\nVerify identity.")))
                 .thenReturn(List.of(new float[1024]));
 
-        assertThrows(IllegalStateException.class, () -> start("events", "ai"));
+        assertThrows(IllegalStateException.class, () -> start());
 
         verifyNoInteractions(executor);
     }
 
-    @Test
-    void eventsWithoutAiDoNotIndexPolicies() {
-        try (ConfigurableApplicationContext ignored = start("events")) {
-            verifyNoInteractions(dataSource, model);
-        }
-    }
-
-    private ConfigurableApplicationContext start(String... profiles) {
+    private ConfigurableApplicationContext start() {
         return new SpringApplicationBuilder(StartupConfiguration.class)
                 .web(WebApplicationType.NONE)
-                .profiles(profiles)
                 .properties("spring.config.name=policy-index-test", "spring.main.banner-mode=off",
                         "okafka.topic.tickets=TICKET_EVENT")
                 .initializers(context -> {

@@ -17,7 +17,6 @@ const ticket = ref(null),
   error = ref(""),
   loading = ref(false);
 let generation = 0;
-const has = (profile) => props.snapshot?.profiles.includes(profile);
 async function load() {
   const version = ++generation;
   if (!props.ticketId) return;
@@ -25,12 +24,8 @@ async function load() {
   try {
     const [t, a, h] = await Promise.all([
       request(`/tickets/${props.ticketId}?readPath=primary`),
-      has("ai")
-        ? request(`/tickets/${props.ticketId}/assistance`, { optional: true })
-        : null,
-      props.snapshot?.reviewEnabled
-        ? request(`/tickets/${props.ticketId}/approvals`)
-        : null,
+      request(`/tickets/${props.ticketId}/assistance`, { optional: true }),
+      request(`/tickets/${props.ticketId}/approvals`),
     ]);
     if (version !== generation) return;
     ticket.value = t.data;
@@ -144,11 +139,7 @@ async function saved(review) {
           </p>
         </template>
         <p v-else class="empty compact">
-          {{
-            has("ai")
-              ? "No saved assistance yet. It will appear after enrichment commits."
-              : "Enable the ai profile for summaries, policy matches, and related tickets."
-          }}
+          No saved assistance yet. It will appear after enrichment commits.
         </p>
       </section>
       <ReviewForm
@@ -156,10 +147,10 @@ async function saved(review) {
         :key="ticket.id"
         :ticket="ticket"
         :assistance="assistance"
-        :enabled="snapshot?.reviewEnabled && !error"
+        :enabled="!error"
         @saved="saved"
       />
-      <ApprovalHistory v-if="snapshot?.reviewEnabled" :history="history" />
+      <ApprovalHistory :history="history" />
     </template>
   </div>
 </template>

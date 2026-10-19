@@ -61,7 +61,6 @@ class EventsConfigurationTest {
         KafkaProducer<String, TicketWorkEvent> ticket = mock(KafkaProducer.class);
         KafkaProducer<String, TicketWorkEvent> feedback = mock(KafkaProducer.class);
         try (var context = new AnnotationConfigApplicationContext()) {
-            context.getEnvironment().setActiveProfiles("events", "ai", "blockchain");
             var beans = context.getBeanFactory();
             beans.registerSingleton("ticketProducer", ticket);
             beans.registerSingleton("reviewProducer", feedback);

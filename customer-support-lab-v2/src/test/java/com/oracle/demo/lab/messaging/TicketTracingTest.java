@@ -5,6 +5,7 @@ package com.oracle.demo.lab.messaging;
 import com.oracle.demo.lab.model.SupportTicket;
 import com.oracle.demo.lab.model.TicketApproval;
 import com.oracle.demo.lab.model.TicketWorkEvent;
+import com.oracle.demo.lab.processing.DemoFailureInjector;
 import com.oracle.demo.lab.observability.TicketTelemetry;
 import com.oracle.demo.lab.persistence.TicketApprovalStore;
 import com.oracle.demo.lab.persistence.TicketEventOutcomeStore;
@@ -36,7 +37,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.oracle.okafka.clients.consumer.KafkaConsumer;
 import org.oracle.okafka.clients.producer.KafkaProducer;
-import org.springframework.beans.factory.ObjectProvider;
 
 import java.sql.Connection;
 import java.time.Instant;
@@ -162,7 +162,7 @@ class TicketTracingTest {
         // Close the HTTP/producer scopes before consuming on the worker, as in the app.
         when(outcomes.hasOutcome(connection, sent.value().getEventId())).thenReturn(true);
         new TicketEventConsumer(mock(KafkaConsumer.class), mock(TicketEventProcessor.class), tickets, outcomes,
-                telemetry, mock(ObjectProvider.class), "ticket_event", 3, 0).consumeAndCommit(connection, record);
+                telemetry, new DemoFailureInjector(), "ticket_event", 3, 0).consumeAndCommit(connection, record);
     }
 
     private ProducerRecord<String, TicketWorkEvent> sent() {

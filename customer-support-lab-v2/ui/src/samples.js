@@ -46,19 +46,3 @@ export const ticketSamples = [
     requires: "demo-failures",
   },
 ];
-
-export const feedbackSamples = [
-  {
-    id: "tenant",
-    name: "Include tenant context",
-    reason:
-      "The affected account belongs to the test tenant. Include that context in the summary.",
-  },
-  {
-    id: "correction",
-    name: "Correct the affected account",
-    reason:
-      "This request concerns a test account, not a production account. Correct the summary and retain the original access-recovery request.",
-  },
-  { id: "custom", name: "Write your own feedback", reason: "" },
-];

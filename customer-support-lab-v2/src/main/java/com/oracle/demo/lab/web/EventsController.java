@@ -11,14 +11,12 @@ import com.oracle.demo.lab.model.FailedTicketEvent;
 import com.oracle.demo.lab.persistence.TicketEventOutcomeStore;
 import com.oracle.demo.lab.model.TicketWorkEvent;
 import com.oracle.demo.lab.model.SupportTicket;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@Profile("events")
 public class EventsController {
 
     private final TicketEventProducer ticketEventProducer;

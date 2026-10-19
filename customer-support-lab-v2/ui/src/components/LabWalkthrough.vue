@@ -1,8 +1,13 @@
 <script setup>
-import { computed, ref, watch, onUnmounted } from "vue";
+import { computed, ref, watch, nextTick } from "vue";
 import { walkthrough } from "../walkthrough";
+import { needsReview } from "../api";
+import SampleDataPanel from "./SampleDataPanel.vue";
+import TicketWorkspace from "./TicketWorkspace.vue";
+import FailuresPanel from "./FailuresPanel.vue";
+import TicketDetail from "./TicketDetail.vue";
+import ReadPathControl from "./ReadPathControl.vue";
 import ComponentsPanel from "./ComponentsPanel.vue";
-import WalkthroughDiagram from "./WalkthroughDiagram.vue";
 const props = defineProps({
   snapshot: Object,
   tickets: Array,
@@ -10,32 +15,54 @@ const props = defineProps({
   actualPath: String,
   grafanaUrl: String,
   step: Number,
+  readPath: String,
+  refreshedAt: Date,
 });
-const emit = defineEmits(["action", "update:step"]);
+const emit = defineEmits(["updated", "update:step", "update:readPath"]);
 const chapter = computed(() => walkthrough[props.step]);
-const missing = computed(() =>
-  chapter.value.requires.filter(
-    (profile) => !props.snapshot.profiles.includes(profile),
-  ),
+const activeView = ref("");
+const selectedId = ref(null);
+const chapterNav = ref(null);
+const presets = { mfa: { preset: "mfa" }, failure: { preset: "failure" } };
+const sampleLaunch = computed(() =>
+  chapter.value.id === "recover" ? presets.failure : presets.mfa,
 );
-const playing = ref(false);
-const diagramStep = ref(props.step);
-let timer;
+const reviewId = computed(() =>
+  props.tickets.some(
+    (ticket) =>
+      ticket.id === selectedId.value && needsReview(ticket, props.snapshot),
+  )
+    ? selectedId.value
+    : null,
+);
 watch(
   () => props.step,
-  (value) => {
-    diagramStep.value = value;
-    playing.value = false;
+  () => {
+    activeView.value = chapter.value.actions[0]?.tab || chapter.value.id;
+    if (chapter.value.id !== "cache") emit("update:readPath", "primary");
+  },
+  { immediate: true },
+);
+watch(
+  () => props.step,
+  async () => {
+    await nextTick();
+    chapterNav.value?.scrollIntoView({
+      block: "start",
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "auto"
+        : "smooth",
+    });
   },
 );
-watch(playing, (value) => {
-  clearInterval(timer);
-  if (value)
-    timer = setInterval(() => {
-      diagramStep.value = (diagramStep.value + 1) % walkthrough.length;
-    }, 4500);
-});
-onUnmounted(() => clearInterval(timer));
+function act(action) {
+  activeView.value = action.tab || "observe";
+  if (action.readPath) emit("update:readPath", action.readPath);
+}
+function inspect(id) {
+  selectedId.value = id;
+  activeView.value = "detail";
+}
 const count = (name) =>
   props.snapshot.tables.find((table) => table.name === name)?.rows ?? 0;
 </script>
@@ -46,8 +73,8 @@ const count = (name) =>
       <h2>One workflow. Every component.</h2>
       <p>
         Seven chapters connect the architecture to the real console. Choose a
-        chapter, see the handoff, then try it yourself. Return here between
-        actions; your selected chapter stays in place.
+        chapter, try its actions below, and inspect the results without leaving
+        the walkthrough. Move to the next chapter when you’re ready.
       </p>
     </div>
     <a
@@ -58,7 +85,11 @@ const count = (name) =>
       >Read the setup guide ↗</a
     >
   </div>
-  <nav class="walkthrough-chapters" aria-label="Walkthrough chapters">
+  <nav
+    ref="chapterNav"
+    class="walkthrough-chapters"
+    aria-label="Walkthrough chapters"
+  >
     <button
       v-for="(item, index) in walkthrough"
       :key="item.id"
@@ -80,6 +111,15 @@ const count = (name) =>
       </div>
       <h2 id="chapter-title">{{ chapter.title }}</h2>
       <p class="walkthrough-summary">{{ chapter.summary }}</p>
+      <p v-if="chapter.id === 'ready'">
+        <a
+          class="text-button"
+          href="/diagrams/14-complete-event-loop.svg"
+          target="_blank"
+          rel="noopener"
+          >Watch the complete event-loop animation ↗</a
+        >
+      </p>
       <ol>
         <li v-for="instruction in chapter.steps" :key="instruction">
           {{ instruction }}
@@ -91,85 +131,122 @@ const count = (name) =>
         <h3>What to look for</h3>
         <p>{{ chapter.evidence }}</p>
       </div>
-      <p v-if="missing.length" class="alert info" role="status">
-        To try this chapter, restart Maven with the missing profiles:
-        {{ missing.join(", ") }}. You can still explore the illustration.
-      </p>
-      <div class="walkthrough-actions">
-        <template v-for="action in chapter.actions" :key="action.label"
-          ><a
-            v-if="action.external"
-            class="button primary"
-            :href="grafanaUrl"
-            target="_blank"
-            rel="noopener"
-            >{{ action.label }} ↗</a
-          ><button
-            v-else
-            class="button"
-            :disabled="!!missing.length"
-            @click="emit('action', action)"
-          >
-            {{ action.label }} →
-          </button></template
-        >
-      </div>
-      <p class="small muted">
-        Actions open the real screens. Submit, review, and replay only when you
-        choose to; those operations write lab data and may call OCI.
-      </p>
-      <div class="walkthrough-pagination">
-        <button
-          class="text-button"
-          :disabled="step === 0"
-          @click="emit('update:step', step - 1)"
-        >
-          ← Previous chapter</button
-        ><button
-          class="text-button"
-          :disabled="step === walkthrough.length - 1"
-          @click="emit('update:step', step + 1)"
-        >
-          Next chapter →
-        </button>
-      </div>
-    </section>
-    <section
-      class="panel walkthrough-illustration"
-      aria-label="Simulated component interactions"
-    >
-      <div class="walkthrough-diagram-heading">
-        <div>
-          <span class="subtle-tag">SIMULATED FLOW</span>
-          <p class="small muted">
-            {{
-              playing
-                ? "Playing an illustrated tour"
-                : diagramStep === step
-                  ? "Illustrating your selected chapter"
-                  : "Paused illustrated tour"
-            }}
-            · not live telemetry
-          </p>
-        </div>
-        <button
-          class="button"
-          :aria-pressed="playing"
-          @click="playing = !playing"
-        >
-          {{ playing ? "Pause simulation" : "Play simulation" }}
-        </button>
-      </div>
-      <WalkthroughDiagram
-        :chapter="walkthrough[diagramStep]"
-        :playing="playing"
-      />
-      <div class="walkthrough-diagram-caption" aria-live="off">
-        <strong>{{ walkthrough[diagramStep].title }}</strong>
-        <p>{{ walkthrough[diagramStep].summary }}</p>
-      </div>
     </section>
   </div>
+  <section class="walkthrough-practice" aria-labelledby="practice-title">
+    <div class="section-heading">
+      <div>
+        <div class="eyebrow">TRY IT HERE</div>
+        <h2 id="practice-title">{{ chapter.practice }}</h2>
+      </div>
+      <span v-if="selectedId" class="subtle-tag"
+        >Following ticket #{{ selectedId }}</span
+      >
+    </div>
+    <p v-if="chapter.id === 'ready'" class="small muted">
+      Check the live counts below and expand the component reference for models,
+      table counts, and policies. Then continue to Submit to create your first
+      ticket.
+    </p>
+    <p v-else class="small muted">
+      Results refresh with the console. Submit, review, and replay when you’re
+      ready; these actions write lab data and may call OCI.
+    </p>
+    <div
+      v-if="chapter.actions.length"
+      class="walkthrough-actions"
+      role="group"
+      aria-label="Chapter tools"
+    >
+      <template v-for="action in chapter.actions" :key="action.label">
+        <a
+          v-if="action.external"
+          class="button primary"
+          :href="grafanaUrl"
+          target="_blank"
+          rel="noopener"
+          >{{ action.label }} ↗</a
+        >
+        <button
+          v-else
+          class="button"
+          :class="{
+            primary:
+              activeView === action.tab &&
+              (!action.readPath || readPath === action.readPath),
+          }"
+          :aria-pressed="
+            activeView === action.tab &&
+            (!action.readPath || readPath === action.readPath)
+          "
+          @click="act(action)"
+        >
+          {{ action.label }}
+        </button>
+      </template>
+      <button
+        v-if="
+          selectedId && ['submit', 'enrich', 'recover'].includes(chapter.id)
+        "
+        class="button"
+        :class="{ primary: activeView === 'detail' }"
+        :aria-pressed="activeView === 'detail'"
+        @click="inspect(selectedId)"
+      >
+        Inspect ticket #{{ selectedId }}
+      </button>
+    </div>
+    <ReadPathControl
+      v-if="chapter.id === 'cache'"
+      :model-value="readPath"
+      :actual-path="actualPath"
+      @update:model-value="emit('update:readPath', $event)"
+    />
+    <KeepAlive>
+      <SampleDataPanel
+        v-if="activeView === 'samples'"
+        :key="chapter.id"
+        :launch="sampleLaunch"
+        :snapshot="snapshot"
+        @created="(id) => (selectedId = id)"
+        @updated="emit('updated')"
+        @select="inspect"
+      />
+    </KeepAlive>
+    <KeepAlive>
+      <TicketWorkspace
+        v-if="activeView === 'tickets' || activeView === 'review'"
+        :key="chapter.id"
+        :tickets="tickets"
+        :snapshot="snapshot"
+        :refreshed-at="refreshedAt"
+        :review-mode="activeView === 'review'"
+        :initial-id="activeView === 'review' ? reviewId : selectedId"
+        @updated="emit('updated')"
+        @select="(id) => (selectedId = id)"
+      />
+    </KeepAlive>
+    <FailuresPanel
+      v-if="activeView === 'failures'"
+      :failures="failures"
+      @updated="emit('updated')"
+      @select="inspect"
+      @replayed="(event) => (selectedId = event.ticketId)"
+    />
+    <TicketDetail
+      v-if="activeView === 'detail' && selectedId"
+      :ticket-id="selectedId"
+      :snapshot="snapshot"
+      :refreshed-at="refreshedAt"
+      @updated="emit('updated')"
+      @select="inspect"
+    />
+    <p v-if="chapter.id === 'observe'" class="alert info">
+      Use the live counts below to orient yourself, then open Grafana for
+      traces, event metrics, and connection pool activity. Grafana opens in a
+      separate tab so you can keep this chapter alongside it.
+    </p>
+  </section>
   <section
     class="panel padded walkthrough-snapshot"
     aria-label="Current lab snapshot"
@@ -177,7 +254,7 @@ const count = (name) =>
     <div class="section-heading">
       <div>
         <div class="eyebrow">CURRENT LAB SNAPSHOT</div>
-        <h3>Compare the illustration with your lab</h3>
+        <h3>Check your lab’s current state</h3>
       </div>
       <span class="subtle-tag">Refreshes with the console</span>
     </div>
@@ -211,10 +288,29 @@ const count = (name) =>
     <p class="small muted">
       These are current counts across the whole lab, not proof that a chapter
       completed. {{ tickets.length }} tickets are visible on the selected list
-      read path; cached data may lag. Profile badges above describe
-      configuration, not service health.
+      read path; cached data may lag. Check Grafana for service health.
     </p>
   </section>
+  <nav class="walkthrough-pagination" aria-label="Chapter navigation">
+    <button
+      class="text-button"
+      :disabled="step === 0"
+      @click="emit('update:step', step - 1)"
+    >
+      ← Previous chapter
+    </button>
+    <button
+      v-if="step < walkthrough.length - 1"
+      class="button primary"
+      @click="emit('update:step', step + 1)"
+    >
+      Next: {{ walkthrough[step + 1].short }} →
+    </button>
+    <span v-else class="small muted"
+      >You’ve reached the final chapter. Revisit any chapter to keep
+      exploring.</span
+    >
+  </nav>
   <details class="walkthrough-reference">
     <summary>
       Component reference, all eight tables, and the policy corpus

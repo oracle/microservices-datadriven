@@ -7,6 +7,8 @@ okafka:
   securityProtocol: ${OKAFKA_SECURITY_PROTOCOL:PLAINTEXT}
 
 app:
+  ai:
+    chat-model-id: ${OCI_CHAT_MODEL_ID:cohere.command-a-03-2025}
   events:
     retry:
       max-attempts: ${TICKET_EVENT_MAX_ATTEMPTS:3}
@@ -19,6 +21,9 @@ app:
     max-pool-size: ${TRUE_CACHE_MAX_POOL_SIZE:8}
 
 logging:
+  structured:
+    format:
+      console: logstash
   level:
     org.oracle.okafka: WARN
     org.apache.kafka: WARN
@@ -26,10 +31,25 @@ logging:
 spring:
   ai:
     model:
-      chat: none
-      embedding: none
-  profiles:
-    default: events
+      chat: oci-genai
+      embedding: oci-genai
+    oci:
+      genai:
+        authentication-type: ${OCI_AUTHENTICATION_TYPE:FILE}
+        config-file: ${OCI_CONFIG_FILE:${user.home}/.oci/config}
+        profile: ${OCI_PROFILE:DEFAULT}
+        chat:
+          compartment-id: ${OCI_COMPARTMENT_ID}
+          serving-mode: ON_DEMAND
+          model: ${OCI_CHAT_MODEL_ID:cohere.command-a-03-2025}
+          temperature: 0.2
+          max-tokens: 512
+        embedding:
+          compartment-id: ${OCI_COMPARTMENT_ID}
+          serving-mode: ON_DEMAND
+          model: ${OCI_EMBEDDING_MODEL_ID:cohere.embed-v4.0}
+          dimensions: 1536
+          truncate: END
   application:
     name: ${OTEL_SERVICE_NAME:customer-support-lab-v2}
   jmx:
@@ -71,18 +91,18 @@ management:
   otlp:
     metrics:
       export:
-        enabled: ${MANAGEMENT_OTLP_METRICS_EXPORT_ENABLED:false}
+        enabled: ${MANAGEMENT_OTLP_METRICS_EXPORT_ENABLED:true}
         url: ${MANAGEMENT_OTLP_METRICS_EXPORT_URL:http://localhost:4318/v1/metrics}
         step: ${MANAGEMENT_OTLP_METRICS_EXPORT_STEP:5s}
   tracing:
     export:
       otlp:
-        enabled: ${MANAGEMENT_OTLP_TRACING_EXPORT_ENABLED:false}
+        enabled: ${MANAGEMENT_OTLP_TRACING_EXPORT_ENABLED:true}
     sampling:
       probability: ${MANAGEMENT_TRACING_SAMPLING_PROBABILITY:1.0}
   logging:
     export:
       otlp:
-        enabled: ${MANAGEMENT_OTLP_LOGGING_EXPORT_ENABLED:false}
+        enabled: ${MANAGEMENT_OTLP_LOGGING_EXPORT_ENABLED:true}
   server:
     port: ${MANAGEMENT_SERVER_PORT:9002}

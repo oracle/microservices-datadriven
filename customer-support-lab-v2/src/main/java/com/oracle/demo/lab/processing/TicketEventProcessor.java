@@ -10,7 +10,7 @@ import java.sql.Connection;
 
 /**
  * Interface for processing consumed ticket events.
- * Implemented in {@link LogEventProcessor} and {@link GenAIEventProcessor}.
+ * Implemented by {@link GenAIEventProcessor}.
  */
 public interface TicketEventProcessor {
     void processRecord(Connection conn, TicketWorkEvent event, SupportTicket ticket);

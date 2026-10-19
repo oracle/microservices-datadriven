@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" role="img" aria-labelledby="title desc">
-<title id="title">One ticket, durable work</title><desc id="desc">Overview: Spring Boot submits tickets and events in one Oracle transaction; the consumer processes TxEventQ events. OKafka uses Kafka APIs without a separate Kafka broker. AI is optional.</desc>
+<title id="title">One ticket, durable work</title><desc id="desc">Overview: Spring Boot submits tickets and events in one Oracle transaction; the consumer processes TxEventQ events. OKafka uses Kafka APIs without a separate Kafka broker. AI enriches every ticket.</desc>
 <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#ff967b" /></marker><radialGradient id="canvas-wash" cx="15%" cy="0%" r="105%"><stop offset="0%" stop-color="#20334a" /><stop offset="65%" stop-color="#0e1928" /><stop offset="100%" stop-color="#0a121e" /></radialGradient><linearGradient id="card-surface" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1d2d42" /><stop offset="100%" stop-color="#152234" /></linearGradient></defs>
 <style>
 .focus {animation:focus 8s ease-in-out infinite} .signal {animation:travel 8s linear infinite; opacity:0}

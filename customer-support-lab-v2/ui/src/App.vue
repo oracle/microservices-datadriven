@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref, watch } from "vue";
 import { useLab } from "./composables/useLab";
+import ReadPathControl from "./components/ReadPathControl.vue";
 import OverviewPanel from "./components/OverviewPanel.vue";
 import TicketWorkspace from "./components/TicketWorkspace.vue";
 import FailuresPanel from "./components/FailuresPanel.vue";
@@ -19,7 +20,6 @@ const {
   actualPath,
   autoRefresh,
   ready,
-  eventsEnabled,
   refresh,
 } = useLab();
 const tabs = [
@@ -28,6 +28,13 @@ const tabs = [
     title: "Overview",
     icon: "◫",
     subtitle: "Your support workflow, at a glance.",
+  },
+  {
+    id: "walkthrough",
+    title: "Lab Walkthrough",
+    icon: "⬡",
+    subtitle:
+      "Follow a request through every component, then try each handoff.",
   },
   {
     id: "tickets",
@@ -51,14 +58,7 @@ const tabs = [
     id: "samples",
     title: "Sample Data",
     icon: "⊕",
-    subtitle: "Publish a lab scenario, send feedback, or replay failed work.",
-  },
-  {
-    id: "walkthrough",
-    title: "Lab Walkthrough",
-    icon: "⬡",
-    subtitle:
-      "Follow a request through every component, then try each handoff.",
+    subtitle: "Create sample tickets and publish lab scenarios.",
   },
   {
     id: "diagrams",
@@ -73,8 +73,6 @@ const tabFromHash = () =>
     : location.hash.slice(1);
 const initialTab = tabFromHash();
 const walkthroughStep = ref(0);
-const walkthroughStarted = ref(initialTab === "walkthrough");
-const sampleLaunch = ref(null);
 const active = ref(
   tabs.some((t) => t.id === initialTab) ? initialTab : "overview",
 );
@@ -82,17 +80,9 @@ const selectedId = ref(null),
   ticketDialog = ref(null);
 const current = computed(() => tabs.find((t) => t.id === active.value));
 const grafanaUrl = `${location.protocol}//${location.hostname}:3000`;
-const has = (profile) => snapshot.value?.profiles.includes(profile);
 function navigate(id) {
-  if (id === "walkthrough") walkthroughStarted.value = true;
   active.value = id;
   location.hash = id;
-}
-function walkthroughAction(action) {
-  if (action.readPath) readPath.value = action.readPath;
-  if (action.tab === "samples")
-    sampleLaunch.value = { mode: action.mode, preset: action.preset };
-  navigate(action.tab);
 }
 function select(id) {
   selectedId.value = id;
@@ -107,7 +97,6 @@ window.addEventListener("hashchange", () => {
   const id = tabFromHash();
   if (tabs.some((t) => t.id === id)) {
     active.value = id;
-    if (id === "walkthrough") walkthroughStarted.value = true;
   }
 });
 </script>
@@ -172,28 +161,18 @@ window.addEventListener("hashchange", () => {
       <div class="page-content">
         <div class="page-heading">
           <div>
-            <div class="eyebrow">CUSTOMER SUPPORT LAB / V2</div>
             <h1>{{ current.title }}</h1>
             <p>{{ current.subtitle }}</p>
           </div>
           <button
             class="button primary"
-            :disabled="!eventsEnabled || !!error"
+            :disabled="!snapshot || !!error"
             @click="ticketDialog.open()"
           >
             <span>＋</span> New ticket
           </button>
         </div>
         <div class="toolbar">
-          <div class="profile-list">
-            <span class="small muted">Profiles</span
-            ><span
-              v-for="profile in snapshot?.profiles || []"
-              :key="profile"
-              class="profile-chip"
-              >{{ profile }}</span
-            >
-          </div>
           <div class="refresh-controls">
             <label class="checkbox-label"
               ><input v-model="autoRefresh" type="checkbox" />Live · 5s</label
@@ -202,32 +181,13 @@ window.addEventListener("hashchange", () => {
             </button>
           </div>
         </div>
-        <div
-          v-if="walkthroughStarted && active !== 'walkthrough'"
-          class="walkthrough-return"
-        >
-          <button class="text-button" @click="navigate('walkthrough')">
-            ← Return to Lab Walkthrough · Chapter {{ walkthroughStep + 1 }}
-          </button>
-        </div>
         <div v-if="error" class="alert error" role="alert">{{ error }}</div>
-        <div v-if="snapshot && !eventsEnabled" class="alert info">
-          Enable the events profile to create, browse, and process tickets.
-        </div>
         <template v-if="snapshot || active === 'diagrams'">
-          <div
+          <ReadPathControl
             v-if="active === 'tickets' || active === 'review'"
-            class="read-controls"
-          >
-            <span class="small muted">Ticket list read path</span
-            ><select v-model="readPath" aria-label="Ticket list read path">
-              <option value="primary">Primary · fresh</option>
-              <option value="cache">True Cache · may lag</option></select
-            ><span class="small muted"
-              >Served by <strong>{{ actualPath || "—" }}</strong
-              >. Ticket details and review always read primary.</span
-            >
-          </div>
+            v-model="readPath"
+            :actual-path="actualPath"
+          />
           <OverviewPanel
             v-if="active === 'overview'"
             :tickets="tickets"
@@ -256,22 +216,20 @@ window.addEventListener("hashchange", () => {
           <LabWalkthrough
             v-if="active === 'walkthrough'"
             v-model:step="walkthroughStep"
+            v-model:read-path="readPath"
             :snapshot="snapshot"
             :tickets="tickets"
             :failures="failures"
             :actual-path="actualPath"
             :grafana-url="grafanaUrl"
-            @action="walkthroughAction"
+            :refreshed-at="refreshedAt"
+            @updated="refresh"
           />
           <DiagramsPanel v-if="active === 'diagrams'" />
           <KeepAlive>
             <SampleDataPanel
               v-if="active === 'samples'"
-              :launch="sampleLaunch"
               :snapshot="snapshot"
-              :tickets="tickets"
-              :failures="failures"
-              :refreshed-at="refreshedAt"
               @updated="refresh"
               @select="select"
             />
@@ -300,7 +258,6 @@ window.addEventListener("hashchange", () => {
     </main>
     <NewTicketDialog
       ref="ticketDialog"
-      :demo-failures="has('demo-failures')"
       @created="created"
     />
   </div>

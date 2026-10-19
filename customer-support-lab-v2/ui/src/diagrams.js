@@ -5,7 +5,7 @@ export const diagrams = [
     file: "/diagrams/01-workflow.svg",
     title: "One ticket, durable work",
     description:
-      "Overview: Spring Boot submits tickets and events in one Oracle transaction; the consumer processes TxEventQ events. OKafka uses Kafka APIs without a separate Kafka broker. AI is optional.",
+      "Overview: Spring Boot submits tickets and events in one Oracle transaction; the consumer processes TxEventQ events. OKafka uses Kafka APIs without a separate Kafka broker. AI enriches every ticket.",
     category: "Workflow",
   },
   {
@@ -45,7 +45,7 @@ export const diagrams = [
     file: "/diagrams/06-observability.svg",
     title: "See outcomes and read paths",
     description:
-      "The observability profile sends metrics and traces over OTLP to Grafana LGTM. Workflow and UCP dashboards expose outcomes and read paths. Console logs have no automatic LGTM forwarding; JDBC tracing does not guarantee all OKafka internal spans.",
+      "The application sends metrics and traces over OTLP to Grafana LGTM. Workflow and UCP dashboards expose outcomes and read paths. Console logs have no automatic LGTM forwarding; JDBC tracing does not guarantee all OKafka internal spans.",
     category: "Workflow",
   },
   {
@@ -69,7 +69,7 @@ export const diagrams = [
     file: "/diagrams/09-schema-overview.svg",
     title: "Eight tables, one ticket workflow",
     description:
-      "Eight application tables from db/init.sql, grouped by their consuming features. All tables are created at database bootstrap regardless of active profiles. Core processing uses support_ticket, ticket_event_processed, and failed_ticket_event. Optional AI uses support_policy, ticket_assistance, related_ticket, and ticket_policy_match. Optional blockchain review uses ticket_approval_history. TxEventQ backing objects are prepared separately by the application.",
+      "Eight application tables from db/init.sql, grouped by their consuming features. All tables are created at database bootstrap. Core processing uses support_ticket, ticket_event_processed, and failed_ticket_event. AI uses support_policy, ticket_assistance, related_ticket, and ticket_policy_match. Blockchain review uses ticket_approval_history. TxEventQ backing objects are prepared separately by the application.",
     category: "Schema",
   },
   {
@@ -109,7 +109,7 @@ export const diagrams = [
     file: "/diagrams/14-complete-event-loop.svg",
     title: "One ticket, a complete event loop",
     description:
-      "The full events, ai, and blockchain profile path. TicketEventProducer atomically inserts a RECEIVED ticket and publishes TICKET_SUBMITTED to the ticket_event topic in Oracle TxEventQ. The AI consumer embeds the ticket, finds related tickets and policies, generates a summary, and commits ENRICHED assistance, event outcome, and queue acknowledgement together. Human review preserves the reviewed summary in blockchain history. APPROVED keeps the summary without generating another event or resolving the ticket. REJECTED requires written feedback: the dedicated feedback producer atomically saves the review, appends feedback to the ticket, resets it to RECEIVED, and publishes TICKET_FEEDBACK_SUBMITTED. The same consumer regenerates assistance using the previous summary and accumulated feedback. Both producer instances use the same configuration but own separate transaction connections. After bounded retries, or immediately for a nonretryable error, the consumer records FAILED and acknowledges the event; failed_ticket_event is a failure worklist, not a queue. Manual replay marks the original failure REPLAYED, resets the ticket, and publishes a new event preserving its type and causation. Each new published event has its own UUID; redelivered IDs with durable outcomes are skipped. Main coral arrows show normal delivery and the review loop; dashed arrows show failure and manual replay. All labels and arrows are visible without animation.",
+      "The complete ticket workflow. TicketEventProducer atomically inserts a RECEIVED ticket and publishes TICKET_SUBMITTED to the ticket_event topic in Oracle TxEventQ. The AI consumer embeds the ticket, finds related tickets and policies, generates a summary, and commits ENRICHED assistance, event outcome, and queue acknowledgement together. Human review preserves the reviewed summary in blockchain history. APPROVED keeps the summary without generating another event or resolving the ticket. REJECTED requires written feedback: the dedicated feedback producer atomically saves the review, appends feedback to the ticket, resets it to RECEIVED, and publishes TICKET_FEEDBACK_SUBMITTED. The same consumer regenerates assistance using the previous summary and accumulated feedback. Both producer instances use the same configuration but own separate transaction connections. After bounded retries, or immediately for a nonretryable error, the consumer records FAILED and acknowledges the event; failed_ticket_event is a failure worklist, not a queue. Manual replay marks the original failure REPLAYED, resets the ticket, and publishes a new event preserving its type and causation. Each new published event has its own UUID; redelivered IDs with durable outcomes are skipped. Main coral arrows show normal delivery and the review loop; dashed arrows show failure and manual replay. All labels and arrows are visible without animation.",
     category: "Workflow",
   },
   {

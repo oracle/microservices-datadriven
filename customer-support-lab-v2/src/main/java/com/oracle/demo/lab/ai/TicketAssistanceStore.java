@@ -4,7 +4,6 @@
 package com.oracle.demo.lab.ai;
 
 import com.oracle.demo.lab.model.RelatedTicket;
-import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +16,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-@Profile("ai")
 public class TicketAssistanceStore {
     private final JdbcClient jdbcClient;
 

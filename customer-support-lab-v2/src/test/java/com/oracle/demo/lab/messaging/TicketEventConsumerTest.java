@@ -20,7 +20,6 @@ import org.junit.jupiter.api.Test;
 import org.oracle.okafka.clients.consumer.KafkaConsumer;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
-import org.springframework.beans.factory.ObjectProvider;
 
 import java.sql.Connection;
 import java.sql.Savepoint;
@@ -43,7 +42,7 @@ class TicketEventConsumerTest {
     private final TicketStore tickets = mock(TicketStore.class);
     private final TicketEventOutcomeStore outcomes = mock(TicketEventOutcomeStore.class);
     private final TicketTelemetry telemetry = mock(TicketTelemetry.class);
-    private final ObjectProvider<DemoFailureInjector> demoFailure = mock(ObjectProvider.class);
+    private final DemoFailureInjector demoFailure = new DemoFailureInjector();
     private final Connection connection = mock(Connection.class);
 
     @Test
@@ -159,7 +158,7 @@ class TicketEventConsumerTest {
         Savepoint attemptStart = mock(Savepoint.class);
         when(connection.setSavepoint()).thenReturn(attemptStart);
         when(tickets.findById(42L)).thenReturn(Optional.of(ticket));
-        when(demoFailure.getIfAvailable()).thenReturn(new DemoFailureInjector());
+
 
         assertEquals("failed", consumer().processRecord(connection, record(event)));
 
@@ -177,7 +176,7 @@ class TicketEventConsumerTest {
         SupportTicket ticket = ticket("[demo-fail-once] Lost MFA authenticator");
         when(connection.setSavepoint()).thenAnswer(invocation -> mock(Savepoint.class));
         when(tickets.findById(42L)).thenReturn(Optional.of(ticket));
-        when(demoFailure.getIfAvailable()).thenReturn(new DemoFailureInjector());
+
 
         assertEquals("processed", consumer().processRecord(connection, record(replay)));
 
@@ -194,7 +193,7 @@ class TicketEventConsumerTest {
         SupportTicket ticket = ticket("[demo-fail-once] Lost MFA authenticator");
         when(connection.setSavepoint()).thenReturn(mock(Savepoint.class));
         when(tickets.findById(42L)).thenReturn(Optional.of(ticket));
-        when(demoFailure.getIfAvailable()).thenReturn(new DemoFailureInjector());
+
 
         assertEquals("processed", consumer(1).processRecord(connection, record(replay)));
 

@@ -46,9 +46,7 @@ const tables = [
 </script>
 <template>
   <p class="page-intro">
-    Explore the services, models, and data behind the workflow. Profile
-    indicators show configuration; they do not assert that external services are
-    healthy.
+    Explore the services, models, and data behind the workflow. All features run by default. The inventory does not establish external service health.
   </p>
   <div class="component-grid">
     <section class="panel padded">
@@ -72,9 +70,7 @@ const tables = [
       <div class="component-icon">↔</div>
       <div class="section-heading">
         <h3>TxEventQ + OKafka</h3>
-        <StatusBadge
-          :value="snapshot.profiles.includes('events') ? 'ENABLED' : 'DISABLED'"
-        />
+        <StatusBadge value="ENABLED" />
       </div>
       <p>
         Oracle's transactional event queue, accessed through the OKafka API.
@@ -94,9 +90,7 @@ const tables = [
       <div class="component-icon">AI</div>
       <div class="section-heading">
         <h3>OCI Generative AI</h3>
-        <StatusBadge
-          :value="snapshot.profiles.includes('ai') ? 'ENABLED' : 'DISABLED'"
-        />
+        <StatusBadge value="ENABLED" />
       </div>
       <dl class="metadata">
         <dt>Summary model</dt>
@@ -132,7 +126,7 @@ const tables = [
       <div class="component-icon">✓</div>
       <div class="section-heading">
         <h3>Human review + blockchain</h3>
-        <StatusBadge :value="snapshot.reviewEnabled ? 'ENABLED' : 'DISABLED'" />
+        <StatusBadge value="ENABLED" />
       </div>
       <p>
         Approval accepts the saved summary. Rejection stores feedback and
@@ -153,11 +147,7 @@ const tables = [
       <div class="component-icon">⌁</div>
       <div class="section-heading">
         <h3>Observability</h3>
-        <StatusBadge
-          :value="
-            snapshot.profiles.includes('observability') ? 'ENABLED' : 'DISABLED'
-          "
-        />
+        <StatusBadge value="ENABLED" />
       </div>
       <p>
         OpenTelemetry traces and metrics flow to the local LGTM stack. Inspect
@@ -168,8 +158,8 @@ const tables = [
         >Open Grafana ↗</a
       >
       <p class="small muted">
-        Console logs use JSON with observability enabled; forwarding logs is a
-        separate configuration.
+        Application logs are exported to Loki over OTLP and also remain available
+        as JSON in the Maven terminal.
       </p>
     </section>
   </div>

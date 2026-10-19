@@ -47,7 +47,7 @@ create table related_ticket (
      references support_ticket(id) on delete cascade
 );
 
--- Small illustrative policy corpus. The ai profile embeds missing vectors at startup.
+-- Small illustrative policy corpus. The application embeds missing vectors at startup.
 create table support_policy (
     policy_id       varchar2(64) primary key,
     title           varchar2(255) not null,

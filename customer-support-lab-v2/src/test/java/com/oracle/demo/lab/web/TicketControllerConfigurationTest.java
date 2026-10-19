@@ -13,20 +13,11 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 
-class TicketControllerProfilesTest {
+class TicketControllerConfigurationTest {
     @Test
-    void eventsUsesSingleWriterAndReader() {
-        assertControllers(new String[]{"events"});
-    }
-
-    @Test
-    void optionalProfilesDoNotRegisterAnotherWriter() {
-        assertControllers(new String[]{"events", "ai", "observability"});
-    }
-
-    private static void assertControllers(String[] profiles) {
+    void defaultStartupUsesSingleWriterAndReader() {
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
-            context.getEnvironment().setActiveProfiles(profiles);
+
             context.registerBean(TicketStore.class, () -> mock(TicketStore.class));
             context.registerBean(TicketReadRouter.class, () -> mock(TicketReadRouter.class));
             context.registerBean(TicketEventProducer.class, () -> mock(TicketEventProducer.class));

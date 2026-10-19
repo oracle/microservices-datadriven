@@ -3,7 +3,6 @@
 package com.oracle.demo.lab.persistence;
 
 import com.oracle.demo.lab.model.TicketApproval;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
@@ -23,7 +22,6 @@ import java.util.UUID;
 
 /** Append-only review persistence; the caller owns the write transaction. */
 @Component
-@Profile("events & blockchain")
 public class TicketApprovalStore {
     private final DataSource dataSource;
 

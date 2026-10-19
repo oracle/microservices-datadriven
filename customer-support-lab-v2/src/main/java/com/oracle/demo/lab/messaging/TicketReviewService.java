@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
@@ -20,7 +19,6 @@ import java.sql.SQLException;
 
 /** Commits the review, ticket feedback, and regeneration request together. */
 @Component
-@Profile("events & ai & blockchain")
 public class TicketReviewService {
     private static final Logger log = LoggerFactory.getLogger(TicketReviewService.class);
     private final KafkaProducer<String, TicketWorkEvent> producer;

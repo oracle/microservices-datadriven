@@ -3,14 +3,12 @@
 package com.oracle.demo.lab.web;
 
 import org.springframework.core.env.Environment;
-import org.springframework.core.env.Profiles;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 /** Read-only snapshots for the local lab UI; these counts are not telemetry metrics. */
@@ -26,10 +24,6 @@ public class LabController {
 
     @GetMapping("/api/lab")
     public Snapshot snapshot() {
-        String[] profiles = environment.getActiveProfiles();
-        if (profiles.length == 0) {
-            profiles = environment.getDefaultProfiles();
-        }
         var tables = jdbc.sql("""
                 select 'support_ticket' name, count(*) row_count from support_ticket
                 union all select 'support_policy', count(*) from support_policy
@@ -61,14 +55,13 @@ public class LabController {
                             rs.getObject("generated_at", OffsetDateTime.class).toInstant(),
                             rs.getString("decision"), decidedAt == null ? null : decidedAt.toInstant());
                 }).list();
-        return new Snapshot(Instant.now(), Arrays.asList(profiles),
-                environment.acceptsProfiles(Profiles.of("events & ai & blockchain")),
+        return new Snapshot(Instant.now(),
                 environment.getProperty("app.ai.chat-model-id", "cohere.command-a-03-2025"),
                 environment.getProperty("spring.ai.oci.genai.embedding.model", "cohere.embed-v4.0"),
                 environment.getProperty("okafka.topic.tickets", "ticket_event"), tables, policies, reviews);
     }
 
-    public record Snapshot(Instant capturedAt, List<String> profiles, boolean reviewEnabled,
+    public record Snapshot(Instant capturedAt,
                            String chatModel, String embeddingModel, String topic,
                            List<TableCount> tables, List<Policy> policies, List<ReviewState> reviewStates) {}
     public record TableCount(String name, long rows) {}

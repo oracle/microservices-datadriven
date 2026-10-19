@@ -8,7 +8,6 @@ import oracle.sql.VECTOR;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +19,6 @@ import java.util.List;
 
 /** Ensures the seeded policy corpus has embeddings before AI startup completes. */
 @Component
-@Profile("ai")
 public class PolicyIndex implements ApplicationRunner {
     private static final int EMBEDDING_DIMENSIONS = 1536;
 
