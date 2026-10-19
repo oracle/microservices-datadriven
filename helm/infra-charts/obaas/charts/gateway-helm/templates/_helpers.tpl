@@ -112,20 +112,37 @@ Pull policy for the Envoy Gateway image.
 {{- end }}
 
 {{/*
+Normalize the string-list form used by OBaaS private-registry values to the
+LocalObjectReference form required by Kubernetes PodSpec and EnvoyProxy.
+Object-shaped entries are preserved for standalone gateway-helm values.
+*/}}
+{{- define "eg.pullSecrets.yaml" -}}
+{{- $normalized := list -}}
+{{- range . -}}
+  {{- if kindIs "string" . -}}
+    {{- $normalized = append $normalized (dict "name" .) -}}
+  {{- else -}}
+    {{- $normalized = append $normalized . -}}
+  {{- end -}}
+{{- end -}}
+{{- toYaml $normalized -}}
+{{- end -}}
+
+{{/*
 Pull secrets for the Envoy Gateway image.
 */}}
 {{- define "eg.image.pullSecrets" -}}
 {{- if .Values.global.imagePullSecrets -}}
 imagePullSecrets:
-{{ toYaml .Values.global.imagePullSecrets }}
+{{ include "eg.pullSecrets.yaml" .Values.global.imagePullSecrets | nindent 2 }}
 {{- else if .Values.deployment.envoyGateway.imagePullSecrets -}}
 imagePullSecrets:
-{{ toYaml .Values.deployment.envoyGateway.imagePullSecrets }}
+{{ include "eg.pullSecrets.yaml" .Values.deployment.envoyGateway.imagePullSecrets | nindent 2 }}
 {{- else if .Values.global.images.envoyGateway.pullSecrets -}}
 imagePullSecrets:
-{{ toYaml .Values.global.images.envoyGateway.pullSecrets }}
+{{ include "eg.pullSecrets.yaml" .Values.global.images.envoyGateway.pullSecrets | nindent 2 }}
 {{- else -}}
-imagePullSecrets: {{ toYaml list }}
+imagePullSecrets: []
 {{- end }}
 {{- end }}
 
@@ -149,12 +166,12 @@ Pull secrets for the Envoy Ratelimit image.
 {{- define "eg.ratelimit.image.pullSecrets" -}}
 {{- if .Values.global.imagePullSecrets }}
 imagePullSecrets:
-{{ toYaml .Values.global.imagePullSecrets }}
+{{ include "eg.pullSecrets.yaml" .Values.global.imagePullSecrets | nindent 2 }}
 {{- else if .Values.global.images.ratelimit.pullSecrets -}}
 imagePullSecrets:
-{{ toYaml .Values.global.images.ratelimit.pullSecrets }}
+{{ include "eg.pullSecrets.yaml" .Values.global.images.ratelimit.pullSecrets | nindent 2 }}
 {{- else }}
-imagePullSecrets: {{ toYaml list }}
+imagePullSecrets: []
 {{- end }}
 {{- end }}
 
@@ -178,12 +195,12 @@ Resolve the Envoy Proxy image pull secrets.
 {{- define "eg.envoyProxy.image.pullSecrets" -}}
 {{- if .Values.global.imagePullSecrets }}
 imagePullSecrets:
-{{ toYaml .Values.global.imagePullSecrets }}
+{{ include "eg.pullSecrets.yaml" .Values.global.imagePullSecrets | nindent 2 }}
 {{- else if .Values.global.images.envoyProxy.pullSecrets -}}
 imagePullSecrets:
-{{ toYaml .Values.global.images.envoyProxy.pullSecrets }}
+{{ include "eg.pullSecrets.yaml" .Values.global.images.envoyProxy.pullSecrets | nindent 2 }}
 {{- else }}
-imagePullSecrets: {{ toYaml list }}
+imagePullSecrets: []
 {{- end }}
 {{- end }}
 
