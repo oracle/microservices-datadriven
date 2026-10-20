@@ -1,0 +1,176 @@
+# Copyright (c) 2026, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/.
+
+services:
+  # The Oracle Free image runs as UID 54321. A new named volume is root-owned,
+  # so initialize its ownership before the primary exports its password file.
+  true-cache-password-volume-init:
+    image: busybox:1.36
+    command: ["sh", "-c", "chown 54321:54321 /var/tmp && chmod 0755 /var/tmp"]
+    volumes:
+      - true-cache-primary-password:/var/tmp
+
+  grafana-lgtm:
+    container_name: lgtm
+    image: grafana/otel-lgtm:latest
+    ports:
+      - "3000:3000" # Grafana UI
+      - "4317:4317" # OTLP gRPC
+      - "4318:4318" # OTLP HTTP
+    volumes:
+      - ./dashboards/dashboards.yaml:/otel-lgtm/grafana/conf/provisioning/dashboards/ucp.yaml:ro
+      - ./dashboards/ucp-metrics.json:/otel-lgtm/grafana/conf/provisioning/dashboards/custom/ucp-metrics.json:ro
+      - ./dashboards/customer-support-workflow.json:/otel-lgtm/grafana/conf/provisioning/dashboards/custom/customer-support-workflow.json:ro
+      - ./dashboards/oracle-database-health.json:/otel-lgtm/grafana/conf/provisioning/dashboards/custom/oracle-database-health.json:ro
+
+  # A read-only common user is created on the primary and replicated to True Cache.
+  metrics-db-setup:
+    image: container-registry.oracle.com/database/free:latest
+    entrypoint: ["/bin/bash", "/exporter/setup.sh"]
+    environment:
+      ORACLE_PWD: ${ORACLE_PWD:-Welcome12345}
+      APP_DB_USERNAME: ${APP_DB_USERNAME:-LAB_USER}
+      METRICS_DB_PASSWORD: ${METRICS_DB_PASSWORD:-${APP_DB_PASSWORD:?Set APP_DB_PASSWORD before starting Compose}}
+    volumes:
+      - ./exporter:/exporter:ro
+    depends_on:
+      oracle-free:
+        condition: service_healthy
+      true-cache-configure:
+        condition: service_completed_successfully
+    restart: "no"
+
+  oracle-metrics-exporter:
+    image: container-registry.oracle.com/database/observability-exporter:2.5.0
+    command: ["--config.file", "/exporter/config.yaml"]
+    environment:
+      METRICS_DB_PASSWORD: ${METRICS_DB_PASSWORD:-${APP_DB_PASSWORD:?Set APP_DB_PASSWORD before starting Compose}}
+      APP_DB_USERNAME: ${APP_DB_USERNAME:-LAB_USER}
+    volumes:
+      - ./exporter:/exporter:ro
+    ports:
+      - "127.0.0.1:${LAB_EXPORTER_PORT:-9161}:9161"
+    depends_on:
+      metrics-db-setup:
+        condition: service_completed_successfully
+      grafana-lgtm:
+        condition: service_started
+    restart: unless-stopped
+
+  oracle-free:
+    container_name: oracledb
+    # True Cache requires the full Oracle AI Database Free image. The primary
+    # also needs redo configuration so committed changes can be applied by the
+    # cache.
+    image: container-registry.oracle.com/database/free:latest
+    ports:
+      - "${LAB_PRIMARY_PORT:-1522}:1521"
+    environment:
+      ORACLE_PWD: ${ORACLE_PWD:-Welcome12345}
+      ENABLE_ARCHIVELOG: "true"
+      ENABLE_FORCE_LOGGING: "true"
+    volumes:
+      - ./src/test/resources/00-export-primary-password-file.sh:/opt/oracle/scripts/startup/00-export-primary-password-file.sh:ro
+      - ./db:/opt/oracle/lab/db:ro
+      # The startup script copies the primary password file here. The True
+      # Cache container mounts the same volume at /var/tmp/orapwFREE.
+      - true-cache-primary-password:/var/tmp
+    configs:
+      - source: lab-init
+        target: /opt/oracle/scripts/startup/10-init.sql
+    depends_on:
+      true-cache-password-volume-init:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD-SHELL", "test -r /var/tmp/orapwFREE && test -f /tmp/lab-schema-ready && printf 'WHENEVER SQLERROR EXIT FAILURE\\nSELECT 1 FROM DUAL;\\nEXIT;\\n' | sqlplus -L -s \"system/$$ORACLE_PWD@//localhost:1521/FREEPDB1\" >/dev/null"]
+      interval: 10s
+      timeout: 10s
+      retries: 60
+      start_period: 60s
+
+  # Both database services use Compose DNS names rather than fixed IPs.
+  true-cache:
+    container_name: truecache
+    image: container-registry.oracle.com/database/free:latest
+    ports:
+      - "${LAB_TRUE_CACHE_PORT:-1523}:1521"
+    environment:
+      TRUE_CACHE: "true"
+      PRIMARY_DB_CONN_STR: oracle-free:1521/FREE
+      PRIMARY_DB_PWD_FILE: /var/tmp/orapwFREE
+      PDB_TC_SVCS: FREEPDB1:FREEPDB1:FREEPDB1_TC
+      TRUEDB_UNIQUE_NAME: TRUEFREE
+      # Stable callback/redo destination; also enables the image's callback
+      # readiness wait during True Cache DBCA creation.
+      ORACLE_HOSTNAME: true-cache
+      ORACLE_PWD: ${ORACLE_PWD:-Welcome12345}
+    volumes:
+      # Keep the exported password file itself read-only (mode 0444), while
+      # allowing the cache image to create its own runtime files in /var/tmp.
+      - true-cache-primary-password:/var/tmp
+    depends_on:
+      oracle-free:
+        condition: service_healthy
+    healthcheck:
+      # The listener can open before the cached PDB is queryable.
+      test: ["CMD-SHELL", "printf 'WHENEVER SQLERROR EXIT FAILURE\\nALTER SESSION SET CONTAINER=FREEPDB1;\\nSELECT 1 FROM DUAL;\\nEXIT;\\n' | sqlplus -L -s / as sysdba >/dev/null"]
+      interval: 20s
+      timeout: 30s
+      retries: 60
+      start_period: 120s
+
+  # Compose cannot run a command inside another service after it starts. This
+  # one-shot local-development helper copies the image-supplied primary-side
+  # registration script and runs it as the Oracle software owner. It requires
+  # access to the local Docker socket and must not be used in shared hosts.
+  true-cache-configure:
+    image: docker:cli
+    environment:
+      ORACLE_PWD: ${ORACLE_PWD:-Welcome12345}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      true-cache:
+        condition: service_healthy
+    command:
+      - /bin/sh
+      - -ec
+      - |
+        script=/tmp/configure-primary-truecache-service.sh
+        docker cp truecache:/home/oracle/configure-primary-truecache-service.sh "$${script}"
+        docker cp "$${script}" oracledb:/home/oracle/configure-primary-truecache-service.sh
+        password=$$(printf %s "$$ORACLE_PWD" | base64 | tr -d '\n')
+        docker exec --user oracle oracledb \
+          bash /home/oracle/configure-primary-truecache-service.sh \
+          FREEPDB1 FREEPDB1_TC FREEPDB1 true-cache:1521/TRUEFREE FREE FREE false \
+          "B64:$${password}"
+        # A restarted, ephemeral True Cache inherits the service definition
+        # through redo but does not automatically start that service.
+        docker exec -i --user oracle truecache sqlplus -s / as sysdba <<'SQL'
+        whenever sqlerror exit failure
+        alter session set container=FREEPDB1;
+        declare
+          active_count number;
+        begin
+          select count(*) into active_count
+            from v$$active_services
+           where name = 'FREEPDB1_TC';
+          if active_count = 0 then
+            dbms_service.start_service('FREEPDB1_TC');
+          end if;
+        end;
+        /
+        exit
+        SQL
+    restart: "no"
+
+configs:
+  lab-init:
+    content: |
+      set echo off verify off
+      define app_username = "${APP_DB_USERNAME:-LAB_USER}"
+      define app_password = "${APP_DB_PASSWORD:?Set APP_DB_PASSWORD before starting Compose}"
+      @/opt/oracle/lab/db/init.sql
+
+volumes:
+  true-cache-primary-password:

@@ -1,0 +1,5 @@
+node_modules/
+dist/
+# The repository's global package* rule also ignores npm manifests.
+!package.json
+!package-lock.json

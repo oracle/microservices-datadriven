@@ -1,0 +1,44 @@
+# Setup creates read-only views over the configured application schema.
+# These are current database state gauges, not rates or queue-depth estimates.
+[[metric]]
+context = "lab_tickets"
+databases = ["primary-pdb"]
+labels = ["status"]
+metricsdesc = { value = "Current tickets by workflow status." }
+request = '''
+select s.status, count(t.id) value
+from (select 'RECEIVED' status from dual union all select 'TRIAGED' from dual
+      union all select 'ENRICHED' from dual union all select 'FAILED' from dual) s
+left join lab_ticket_state t on t.workflow_status = s.status
+group by s.status
+'''
+
+[[metric]]
+context = "lab_failures"
+databases = ["primary-pdb"]
+labels = ["status"]
+metricsdesc = { value = "Current failure-worklist records, including replayed history." }
+request = '''
+select s.status, count(f.event_id) value
+from (select 'FAILED' status from dual union all select 'REPLAYED' from dual) s
+left join lab_failure_state f on f.status = s.status
+group by s.status
+'''
+
+[[metric]]
+context = "lab_reviews"
+databases = ["primary-pdb"]
+labels = ["decision"]
+metricsdesc = { value = "Retained blockchain review snapshots by decision; not a cumulative counter." }
+request = '''
+select s.decision, count(r.action_id) value
+from (select 'APPROVED' decision from dual union all select 'REJECTED' from dual) s
+left join lab_review_state r on r.decision = s.decision
+group by s.decision
+'''
+
+[[metric]]
+context = "lab_policies"
+databases = ["primary-pdb"]
+metricsdesc = { indexed = "Policies with embeddings.", total = "Total support policies." }
+request = "select nvl(sum(indexed), 0) indexed, count(*) total from lab_policy_state"
