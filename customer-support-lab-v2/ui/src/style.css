@@ -131,6 +131,8 @@ fieldset {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  flex-wrap:
+    wrap;
 }
 .section-heading {
   margin-bottom: 20px;
@@ -193,6 +195,7 @@ fieldset {
   padding: 32px 18px 20px;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 }
 .brand {
   display: flex;
@@ -349,6 +352,8 @@ nav button.active {
   justify-content: space-between;
   gap: 18px;
   margin-bottom: 25px;
+  flex-wrap:
+    wrap;
 }
 .page-heading p {
   color: var(--muted);
@@ -501,29 +506,11 @@ footer {
   margin-bottom: 12px;
 }
 .hero p {
-  max-width: 495px;
   color: #bfd0ba;
   font-size: 18px;
   line-height: 1.75;
   margin-bottom: 22px;
-}
-.hero-mark {
-  min-width: 190px;
-  color: #b2c594;
-  display: grid;
-  gap: 8px;
-  padding-right: 35px;
-  font:
-    28px ui-monospace,
-    monospace;
-  transform: rotate(-6deg);
-  opacity: 0.75;
-}
-.hero-mark small {
-  font-size: 16px;
-  letter-spacing: 2.5px;
-  transform: rotate(6deg);
-  margin-top: 12px;
+  max-width: 65ch;
 }
 .stats {
   display: grid;
@@ -820,21 +807,6 @@ footer {
   font-size: 16px;
   line-height: 1.5;
 }
-.ticket-row p {
-  font-size: 16px;
-  color: var(--muted);
-  margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.review-hint {
-  font-size: 16px;
-  display: block;
-  color: #78934e;
-  margin-top: 12px;
-}
 .ticket-detail {
   padding: 28px;
   min-width: 0;
@@ -845,9 +817,10 @@ footer {
 }
 .ticket-description {
   color: var(--muted);
-  font-size: 18px;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
+  font-size: 20px;
+  line-height: 1.65;
 }
 .ticket-detail > section {
   border-top: 1px solid var(--line);
@@ -861,9 +834,9 @@ footer {
   border-left: 3px solid #a6b985;
   border-radius: 0 7px 7px 0;
   color: #3e5544;
-  font-size: 18px;
-  line-height: 1.85;
   white-space: pre-wrap;
+  font-size: 20px;
+  line-height: 1.65;
 }
 .metadata {
   display: grid;
@@ -1322,9 +1295,6 @@ td.count-cell {
   .stat {
     padding: 18px 15px;
   }
-  .hero-mark {
-    display: none;
-  }
   .overview-bottom {
     grid-template-columns: 1fr;
   }
@@ -1569,10 +1539,12 @@ td.count-cell {
   grid-template-columns: 1fr;
   gap: 22px;
   align-items: start;
+  max-width: 960px;
 }
 .sample-presets {
   display: grid;
   gap: 12px;
+  padding: 24px;
 }
 .sample-composer {
   min-width: 0;
@@ -1662,23 +1634,26 @@ td.count-cell {
 }
 .walkthrough-chapters {
   scroll-margin-top: 20px;
-  display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 8px;
   margin-bottom: 22px;
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 8px;
 }
 .walkthrough-chapters button {
   display: flex;
-  flex-direction: column;
-  align-items: start;
   gap: 6px;
-  padding: 14px 12px;
   border: 1px solid var(--line);
   border-radius: 9px;
   background: white;
   color: var(--ink);
   font-weight: 650;
   text-align: left;
+  width: auto;
+  flex: 0 0 auto;
+  flex-direction: row;
+  align-items: center;
+  padding: 14px 18px;
 }
 .walkthrough-chapters button span {
   font-size: 16px;
@@ -1700,16 +1675,17 @@ td.count-cell {
   font-size: 28px;
 }
 .walkthrough-summary {
-  font-size: 18px;
   color: var(--muted);
+  font-size: 22px;
+  max-width: 65ch;
 }
 .walkthrough-animation {
-  margin: 18px 0 22px;
-  max-width: 720px;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 10px;
   background: #0a121e;
+  max-width: 800px;
+  margin: 24px auto;
 }
 .walkthrough-animation img {
   display: block;
@@ -1803,11 +1779,6 @@ td.count-cell {
   font-weight: 650;
   margin-bottom: 20px;
 }
-@media (max-width: 1150px) {
-  .walkthrough-chapters {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
 @media (max-width: 650px) {
   .sidebar nav {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1815,9 +1786,6 @@ td.count-cell {
   .walkthrough-intro {
     flex-direction: column;
     gap: 12px;
-  }
-  .walkthrough-chapters {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .walkthrough-observations {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1838,18 +1806,6 @@ td.count-cell {
 .disclosure[open] > summary {
   margin-bottom: 16px;
 }
-.hero-mark {
-  display: none;
-}
-.hero p {
-  max-width: 65ch;
-}
-.sample-workspace {
-  max-width: 960px;
-}
-.sample-presets {
-  padding: 24px;
-}
 .sample-presets label {
   margin-bottom: 0;
 }
@@ -1865,40 +1821,9 @@ td.count-cell {
   padding: 18px;
   border-top: 1px solid var(--line);
 }
-.ticket-row p {
-  -webkit-line-clamp: 1;
-}
-.walkthrough-chapters {
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  padding-bottom: 8px;
-}
-.walkthrough-chapters button {
-  width: auto;
-  flex: 0 0 auto;
-  flex-direction: row;
-  align-items: center;
-  padding: 14px 18px;
-}
-.walkthrough-animation {
-  max-width: 800px;
-  margin: 24px auto;
-}
-.walkthrough-summary {
-  font-size: 22px;
-  max-width: 65ch;
-}
-.ticket-description,
-.summary-text,
 .assistance > div > .pre-wrap {
   font-size: 20px;
   line-height: 1.65;
-}
-.page-heading,
-.section-heading,
-.split {
-  flex-wrap: wrap;
 }
 @media (max-width: 1100px) {
   .workspace {
@@ -1920,21 +1845,18 @@ td.count-cell {
   }
 }
 
-.mobile-nav {
-  display: none !important;
+label.mobile-nav {
+  display: none;
 }
 .list-pagination button {
   width: auto;
   padding: 8px 0;
   font-size: 16px;
 }
-.sidebar {
-  overflow-y: auto;
-}
 @media (max-width: 900px) {
-  .mobile-nav {
-    display: block !important;
-    margin: 0 !important;
+  label.mobile-nav {
+    display: block;
+    margin: 0;
   }
   .sidebar nav,
   .sidebar .nav-label {

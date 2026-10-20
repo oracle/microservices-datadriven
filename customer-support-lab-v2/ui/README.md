@@ -1,75 +1,63 @@
 # Customer Support Lab UI
 
-A small Vue 3 / Vite app for the local Spring Boot lab. No additional database,
-UI service account, or frontend CDN is needed. Dependencies are bundled locally.
+A Vue 3 / Vite console for the local Spring Boot lab. Dependencies and diagram
+assets are bundled locally; no frontend CDN or UI service account is needed.
 
 ## Run
 
-Start the lab services and Spring application as described in the
-[lab README](../README.md). All features run by default:
-
-```bash
-mvn spring-boot:run
-```
-
-In another terminal, from this `ui` directory, with Node.js 22.12+ or 24+:
+Start Compose and Java using the [lab README](../README.md). All lab features
+run by default. From this `ui` directory, use Node.js 22.12+:
 
 ```bash
 npm ci
 npm run dev
 ```
 
-Open **http://127.0.0.1:5173**. The Vite development server binds to loopback and
-proxies `/api`, `/tickets`, and `/ticket-events` to `http://localhost:9001`.
-If your backend uses another endpoint, set it when starting Vite:
+Open **http://127.0.0.1:5173**. Vite binds to loopback and proxies `/api`,
+`/tickets`, and `/ticket-events` to `http://localhost:9001`. Override the backend
+address when needed:
 
 ```bash
 LAB_API_URL=http://localhost:9011 npm run dev
 ```
 
-All workflow tools are available without Spring profiles. Diagrams can be
-browsed even when the backend is unavailable. This is the same
-unauthenticated local demo API as the command-line walkthrough; the reviewer
-field is a self-declared ID.
+This is the lab's unauthenticated local demo API; reviewer IDs are self-declared.
+Diagrams remain available when the backend is unavailable.
 
-## Workspace tabs
+## Workspace
 
-- **Overview:** ticket state, summaries awaiting review, current failed worklist,
-  review snapshot count, recent tickets, and the feedback flow.
-- **Tickets:** search/filter requests; inspect summaries, policy matches, related
-  tickets, accumulated feedback, and immutable review snapshots. Create a ticket
-  from any tab. The optional failure-demo checkbox requires `demo-failures`.
-- **Human Review:** starts with enriched tickets whose current summary has not
-  been approved. Request revision with written feedback, or approve the current
-  summary. A revision returns here after enrichment; an approved summary leaves
-  the Needs review filter and the view advances to the next pending ticket.
-  When none remain, the review workspace shows an all-caught-up summary.
-  All tickets/history remain available through filters.
-- **Failed Events:** failure metadata and replay action. Replay runs
-  asynchronously and can call OCI again. Correct the cause before replaying.
-- **Sample Data:** publish editable MFA, account-access, billing, and deliberate
-  failure presets, or write a custom ticket. Inspect the JSON request preview
-  and optionally supply a correlation UUID. The feedback mode lets you select
-  an existing enriched ticket, load a feedback preset or write your own, and
-  request regeneration through the normal review API. Replay mode uses the
-  current failed worklist and preserves the original event type. Accepted
-  requests are listed in the screen's in-memory session history; drafts/history
-  survive tab navigation and reset on page reload.
-- **Components:** database, TxEventQ/OKafka, OCI models, True Cache, blockchain,
-  observability, row counts for all eight application tables, and policy corpus.
-  The component inventory does not establish external service health.
-- **Diagrams:** all 16 SVGs, category filters, presentation navigation, a gallery,
-  full-size SVG links, and the preserved original scrolling gallery. Assets live
-  in [`public/diagrams`](public/diagrams/README.md).
+- **Overview:** ticket and review counts, failed worklist, recent tickets, and
+  the feedback flow. Expand the component reference for services, configured
+  TxEventQ topics, all eight application tables, and the policy corpus.
+- **Lab Walkthrough:** seven chapters with animated diagrams and inline sample,
+  ticket, review, recovery, and read-path tools. The component reference is also
+  available on the first chapter.
+- **Tickets:** search and filter requests, four per page. Inspect summaries and
+  suggested resolutions; expand sources and generation details for policies,
+  recorded related-ticket outcomes, similarity scores, and model metadata.
+- **Human Review:** request a revision with feedback or approve saved assistance.
+  After approval, the view advances to the next pending ticket. Use **All
+  tickets** to revisit reviewed assistance and its immutable review history.
+- **Failed Events:** inspect failures and replay work after correcting the cause.
+  Replay runs asynchronously and can call OCI again.
+- **Sample Data:** choose one editable synthetic scenario or write a custom
+  request. Optional correlation IDs and the JSON request preview are expandable.
+  Drafts and recent submissions survive tab navigation and reset on reload.
+  Feedback and replay actions live in Human Review and Failed Events.
+- **Diagrams:** category filters, presentation navigation, gallery layout, and
+  full-size SVG links. The original standalone gallery remains available.
 
-The workspace refreshes every five seconds while visible. You can pause live
-refresh or refresh manually. List reads can use primary or True Cache and show
-the actual `X-Read-Path`; ticket details and human review always request primary.
-Cache results may lag. Connection errors retain the last snapshot with a stale
-warning. Database counts are UI snapshots, not emitted telemetry.
+Create a ticket from any tab using **New ticket**. Its deliberate-failure
+checkbox exercises the replay workflow. All views use larger text for
+presenting; smaller screens use the **Workspace** selector for navigation.
 
-Review submissions preserve the action UUID when retrying an unchanged request
-after an uncertain response. Editing its fields starts a new action. Ticket
+The console refreshes every five seconds while visible. Pause live refresh or
+refresh manually as needed. Ticket lists can use primary or True Cache and show
+the actual `X-Read-Path`; ticket details and reviews always use primary. Database
+counts are UI snapshots, not emitted telemetry or queue-depth measurements.
+
+Review submissions preserve their action UUID when retrying an unchanged request
+after an uncertain response. Editing the fields starts a new action. Ticket
 creation is not idempotent: check the list before retrying a lost response.
 
 ## Build
@@ -80,20 +68,20 @@ npm run preview
 ```
 
 The build writes `dist/`; preview serves it at **http://127.0.0.1:4173** with the
-same backend proxy. Maven and Compose do not build or start the UI. Keep this
-Vite server local; deployment/authentication are outside this lab.
+same backend proxy. Maven and Compose do not build or start the UI.
 
 ## Source map
 
 - `src/App.vue`: navigation and workspace shell.
 - `src/composables/useLab.js`: refresh lifecycle and workspace snapshot.
-- `src/api.js`: API requests, readable errors, and shared formatting.
-- `src/components/`: individual views, details, review form, and history.
-- `src/diagrams.js`: titles/descriptions and categories for the gallery.
-- `src/samples.js`: editable scenarios based on walkthroughs, tests, and policies.
-- `public/diagrams/`: canonical SVGs, standalone gallery, and source notes.
+- `src/api.js`: requests, readable errors, and shared formatting.
+- `src/components/`: views, reusable workflow tools, and review history.
+- `src/walkthrough.js`: chapter content and inline actions.
+- `src/diagrams.js`: gallery titles, descriptions, and categories.
+- `src/samples.js`: editable scenarios aligned with seeded policies and cases.
+- [`public/diagrams`](public/diagrams/README.md): SVGs, standalone gallery, and source notes.
 - `vite.config.js`: loopback listeners and development/preview proxies.
 
-The backend adds one read-only `GET /api/lab` endpoint for configured
-model/topic names, schema counts, policy data, and latest-review timestamps.
-All ticket creation, assistance, review, and replay actions reuse existing APIs.
+The read-only `GET /api/lab` endpoint supplies configured model/topic names,
+table counts, policy data, and latest-review timestamps. Workflow actions reuse
+the ticket, assistance, review, and replay APIs described in the lab README.

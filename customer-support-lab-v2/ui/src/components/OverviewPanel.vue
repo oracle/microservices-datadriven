@@ -36,10 +36,6 @@ const rowCount = (name) =>
         Start the walkthrough <span>↗</span>
       </button>
     </div>
-    <div class="hero-mark" aria-hidden="true">
-      <span>01 → 02</span><span>↖ 04 ← 03</span
-      ><small>THE FEEDBACK LOOP</small>
-    </div>
   </div>
   <div class="stats">
     <button class="stat panel" @click="$emit('navigate', 'review')">

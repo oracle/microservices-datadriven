@@ -5,7 +5,6 @@ import { ticketSamples } from "../samples";
 
 const props = defineProps({
   launch: Object,
-  snapshot: Object,
 });
 const emit = defineEmits(["updated", "select", "created"]);
 const selected = ref("mfa");

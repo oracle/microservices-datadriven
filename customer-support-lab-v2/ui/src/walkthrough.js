@@ -20,19 +20,6 @@ export const walkthrough = [
       "TxEventQ lives inside Oracle AI Database. OKafka is its Kafka-style Java API; this lab has no separate Kafka broker. The event consumer runs inside the Spring Boot process.",
     evidence:
       "The inventory below shows current table counts, configured models, and policy indexing. Table counts and indexing status do not establish external service health.",
-    nodes: [
-      "ui",
-      "app",
-      "data",
-      "queue",
-      "worker",
-      "ai",
-      "vector",
-      "history",
-      "cache",
-      "telemetry",
-    ],
-    edges: [],
     practice: "Check your starting point",
     actions: [],
   },
@@ -55,9 +42,7 @@ export const walkthrough = [
     mechanism:
       "Spring Boot commits support_ticket and the TxEventQ event together. The envelope carries IDs, timestamps, and trace context; the ticket text stays in the database.",
     evidence:
-      "The publication receipt includes the ticket ID. Inspect the ticket below for workflow status and saved assistance. TRIAGED means processing ran without AI; FAILED means continue to the Recover chapter.",
-    nodes: ["ui", "app", "data", "queue"],
-    edges: ["submit", "write", "publish"],
+      "The publication receipt includes the ticket ID. Inspect the ticket below for workflow status and saved assistance. TRIAGED identifies imported reference cases; FAILED means continue to the Recover chapter.",
     actions: [
       {
         label: "Open MFA sample",
@@ -88,8 +73,6 @@ export const walkthrough = [
       "OCI creates the embedding; Oracle performs exact cosine retrieval against tickets and policies. One chat call uses the ticket, retrieved policy bodies, and recorded resolutions from similar tickets to generate a summary and suggested next steps with source references. Unresolved descriptions and earlier AI suggestions are not proven fixes. Results, the processed event ID, and queue acknowledgement commit together.",
     evidence:
       "Look for ENRICHED, a summary and suggested resolution with source references, model/prompt metadata, indexed policies, and saved match scores. The application generates assistance; it does not change accounts or issue refunds.",
-    nodes: ["queue", "worker", "ai", "vector", "data"],
-    edges: ["consume", "generate", "retrieve", "save"],
     actions: [
       {
         label: "Inspect saved assistance",
@@ -125,8 +108,6 @@ export const walkthrough = [
       "A rejection saves a blockchain review snapshot, appends feedback, and publishes regeneration in one transaction. Revision prompts include previous assistance and accumulated feedback. Approval preserves another snapshot and accepts the current assistance without publishing a regeneration event.",
     evidence:
       "Review history preserves the earlier and revised summaries and suggested resolutions, reviewer IDs, decisions, and SHA-256 assistance digests. Oracle V2 blockchain row chaining protects the history. Approval accepts assistance; it does not resolve or close the ticket.",
-    nodes: ["ui", "app", "history", "queue", "worker", "ai"],
-    edges: ["submit", "review", "revise", "consume", "generate"],
     actions: [{ label: "Open Human Review", tab: "review" }],
   },
   {
@@ -151,8 +132,6 @@ export const walkthrough = [
       "A failed delivery stores failure metadata. Replay publishes a new event, so the normal consumer and retry path process it again. For an unexpected failure, fix its cause before replaying; OCI may be called again.",
     evidence:
       "Use the UI worklist for current replayable failures. A rolling Grafana failure count can remain positive after successful recovery because it still includes the earlier failure.",
-    nodes: ["ui", "app", "data", "queue", "worker"],
-    edges: ["submit", "write", "publish", "consume", "save"],
     actions: [
       {
         label: "Open failure sample",
@@ -184,8 +163,6 @@ export const walkthrough = [
       "True Cache is a read-only Oracle cache that follows committed changes through redo. It provides an alternate ticket-list read path; it is not a separate owner of workflow state.",
     evidence:
       "Compare the reported Served by value with the requested read path. A cache hit can be stale; primary-fallback is a different outcome. The snapshot below reports the last list read.",
-    nodes: ["app", "data", "cache"],
-    edges: ["redo", "cache-read"],
     actions: [
       { label: "Read list from primary", tab: "tickets", readPath: "primary" },
       { label: "Read list from True Cache", tab: "tickets", readPath: "cache" },
@@ -214,8 +191,6 @@ export const walkthrough = [
       "Spring Boot exports OpenTelemetry traces, metrics, and logs to LGTM. The database exporter separately queries the primary and True Cache every fifteen seconds. Trace context travels with the event envelope so work can be correlated across the asynchronous handoff.",
     evidence:
       "The rolling failure count estimates failures in a window; it is not the current worklist. In Grafana Explore, select Loki and query {service_name=\"customer-support-lab-v2\"} for application logs. Console logs also remain in the Maven terminal.",
-    nodes: ["app", "queue", "worker", "ai", "telemetry"],
-    edges: ["submit", "consume", "app-telemetry", "worker-telemetry"],
     actions: [{ label: "Open Grafana", external: true }],
   },
 ];

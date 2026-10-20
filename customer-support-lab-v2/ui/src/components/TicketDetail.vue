@@ -6,7 +6,6 @@ import ReviewForm from "./ReviewForm.vue";
 import ApprovalHistory from "./ApprovalHistory.vue";
 const props = defineProps({
   ticketId: Number,
-  snapshot: Object,
   refreshedAt: Date,
   reviewMode: Boolean,
 });

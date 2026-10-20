@@ -151,7 +151,6 @@ function reviewed(review) {
     <TicketDetail
       v-if="selected"
       :ticket-id="selected"
-      :snapshot="snapshot"
       :refreshed-at="refreshedAt"
       :review-mode="reviewMode"
       @updated="emit('updated')"

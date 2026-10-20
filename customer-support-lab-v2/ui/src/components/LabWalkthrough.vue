@@ -220,7 +220,6 @@ const count = (name) =>
         v-if="activeView === 'samples'"
         :key="chapter.id"
         :launch="sampleLaunch"
-        :snapshot="snapshot"
         @created="(id) => (selectedId = id)"
         @updated="emit('updated')"
         @select="inspect"
@@ -249,7 +248,6 @@ const count = (name) =>
     <TicketDetail
       v-if="activeView === 'detail' && selectedId"
       :ticket-id="selectedId"
-      :snapshot="snapshot"
       :refreshed-at="refreshedAt"
       @updated="emit('updated')"
       @select="inspect"

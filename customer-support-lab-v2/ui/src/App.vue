@@ -67,10 +67,7 @@ const tabs = [
     subtitle: "Walk through the architecture, schema, and complete event loop.",
   },
 ];
-const tabFromHash = () =>
-  location.hash.slice(1) === "components"
-    ? "walkthrough"
-    : location.hash.slice(1);
+const tabFromHash = () => location.hash.slice(1);
 const initialTab = tabFromHash();
 const walkthroughStep = ref(0);
 const active = ref(
@@ -236,7 +233,6 @@ window.addEventListener("hashchange", () => {
           <KeepAlive>
             <SampleDataPanel
               v-if="active === 'samples'"
-              :snapshot="snapshot"
               @updated="refresh"
               @select="select"
             />

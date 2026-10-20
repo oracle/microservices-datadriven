@@ -193,10 +193,9 @@ True Cache, and observability. Each chapter explains the handoff, what to inspec
 and which real console screen to open. The buttons load samples or change views;
 they do not submit tickets, reviews, or replay requests automatically.
 
-**Play simulation** animates an illustrative component diagram without sending
-requests. Pause it to inspect a flow, or select a chapter to focus its components.
-The diagram is mocked; the separate **Current lab snapshot** shows real counts.
-Use **Return to Lab Walkthrough** to resume your chapter after trying an action.
+Each walkthrough chapter includes an animated SVG explaining its handoff.
+The animation is illustrative; **Current lab snapshot** shows live counts.
+
 On Overview or the first walkthrough chapter, expand the component reference
 for the database, queue, models, all eight tables,
 the configured TxEventQ topic with its submission and feedback event types,
@@ -397,7 +396,8 @@ curl -fsS "$LAB_BASE_URL/tickets/$TICKET_ID?readPath=primary" | jq
 
 Repeat the last GET until `workflowStatus` is `ENRICHED`. AI calls take time.
 If it becomes `FAILED`, inspect `/ticket-events/failures` and fix the cause;
-`TRIAGED` means processing ran without AI enrichment. Once enriched:
+`TRIAGED` identifies imported reference cases. New submissions should become
+`ENRICHED`. Once enriched:
 
 ```bash
 curl -fsS "$LAB_BASE_URL/tickets/$TICKET_ID/assistance" | jq
@@ -524,8 +524,8 @@ the same exported configuration. Restarting Maven alone preserves database data.
 | Database setup does not become healthy | Inspect `docker compose logs oracle-free true-cache true-cache-configure`. Use a fresh lab if bootstrap was interrupted; recreation discards its data. |
 | UI cannot connect | Confirm Maven is running on port 9001. Vite defaults to that backend; set `LAB_API_URL` when starting Vite if the API address differs. |
 | Ticket stays `RECEIVED` or becomes `FAILED` | Wait for the subscription log, then inspect Maven output and Failed Events. Check OCI access before replaying. |
-| Review is unavailable | Confirm `events`, `ai`, and `blockchain` are active and the ticket is `ENRICHED`. Wait for regeneration before reviewing again. |
-| Failure preset succeeds immediately | Confirm `demo-failures` is active and the title starts with `[demo-fail-once]`. |
+| Review is unavailable | Confirm the ticket is `ENRICHED` and has saved assistance. Wait for regeneration before reviewing again. |
+| Failure preset succeeds immediately | Confirm the title starts with `[demo-fail-once]` and inspect its event history for an earlier replay. |
 | Cache list lags or reports `primary-fallback` | Check True Cache readiness and registration logs; use primary reads for current state. |
 | Grafana shows no data | Generate activity and wait for exported samples. Check `http://localhost:9002/actuator/metrics/support.ticket.events` and LGTM availability. |
 
@@ -534,8 +534,5 @@ the same exported configuration. Restarting Maven alone preserves database data.
 - [UI guide](ui/README.md): UI configuration, build commands, and source map.
 - [Diagram gallery](ui/public/diagrams/index.html) and [schema guide](ui/public/diagrams/README.md#schema-reading-guide).
 - [Database bootstrap](db/init.sql) and [blockchain verification script](db/verify-approvals.sql).
-- [Base configuration](src/main/resources/application.yaml),
-  [OCI AI configuration](src/main/resources/application-ai.yaml), and
-  [observability configuration](src/main/resources/application.yaml).
-- [Lab design](spec-v2.md): workflow details and evolution notes. The running lab
-  uses one local primary and True Cache; regional placement is a deployment concept.
+- [Application configuration](src/main/resources/application.yaml): database,
+  OCI AI, retry, True Cache, and observability settings.
