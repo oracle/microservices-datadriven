@@ -4,5 +4,5 @@
 package com.oracle.demo.lab.ai;
 
 /** A scored reference to an illustrative support policy. */
-public record PolicyMatch(String policyId, String title, double score) {
+public record PolicyMatch(String policyId, String title, double score, String body) {
 }

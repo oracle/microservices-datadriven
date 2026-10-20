@@ -76,7 +76,7 @@ async function saved(review) {
       <p class="ticket-description">{{ ticket.description }}</p>
       <div v-if="ticket.workflowStatus === 'RECEIVED'" class="alert info">
         Processing is pending. This view refreshes with the workspace; the
-        consumer commits the summary and ENRICHED status together.
+        consumer commits the assistance and ENRICHED status together.
       </div>
       <div v-if="ticket.workflowStatus === 'FAILED'" class="alert error">
         Processing failed. The previous assistance, if any, is retained. Inspect
@@ -86,6 +86,10 @@ async function saved(review) {
         <div class="eyebrow">ACCUMULATED HUMAN FEEDBACK</div>
         <p class="pre-wrap">{{ ticket.reviewFeedback }}</p>
       </div>
+      <div v-if="ticket.resolution" class="feedback-note">
+        <div class="eyebrow">RECORDED RESOLUTION</div>
+        <p class="pre-wrap">{{ ticket.resolution }}</p>
+      </div>
       <section class="assistance">
         <div class="section-heading">
           <h3>AI assistance</h3>
@@ -93,6 +97,11 @@ async function saved(review) {
         </div>
         <template v-if="assistance">
           <blockquote class="summary-text">{{ assistance.summary }}</blockquote>
+          <div v-if="assistance.suggestedResolution">
+            <h4>Suggested resolution</h4>
+            <p class="pre-wrap">{{ assistance.suggestedResolution }}</p>
+            <p class="small muted">Proposed steps for human review; no customer action has been executed.</p>
+          </div>
           <dl class="metadata">
             <dt>Generated</dt>
             <dd>{{ formatTime(assistance.generatedAt) }}</dd>
@@ -103,18 +112,22 @@ async function saved(review) {
           </dl>
           <div class="matches">
             <div>
-              <h4>Suggested policies</h4>
+              <h4>Retrieved policies</h4>
               <p v-if="!assistance.policies.length" class="muted small">
                 No policy matches above the threshold.
               </p>
               <div
                 v-for="policy in assistance.policies"
                 :key="policy.policyId"
-                class="match"
               >
-                <span
-                  >{{ policy.title }}<small>{{ policy.policyId }}</small></span
-                ><span class="score">{{ percentage(policy.score) }}</span>
+                <div class="match">
+                  <span>{{ policy.title }}<small>{{ policy.policyId }}</small></span>
+                  <span class="score">{{ percentage(policy.score) }}</span>
+                </div>
+                <details v-if="policy.body">
+                  <summary>Read policy</summary>
+                  <p class="pre-wrap small">{{ policy.body }}</p>
+                </details>
               </div>
             </div>
             <div>
@@ -122,24 +135,30 @@ async function saved(review) {
               <p v-if="!assistance.similarTickets.length" class="muted small">
                 No related tickets above the threshold.
               </p>
-              <button
+              <div
                 v-for="related in assistance.similarTickets"
                 :key="related.relatedTicketId"
-                class="match match-link"
-                @click="emit('select', related.relatedTicketId)"
               >
-                <span>Ticket #{{ related.relatedTicketId }}</span
-                ><span class="score">{{ percentage(related.score) }} ↗</span>
-              </button>
+                <button class="match match-link" @click="emit('select', related.relatedTicketId)">
+                  <span>Ticket #{{ related.relatedTicketId }}<small>{{ related.title }}</small></span>
+                  <span class="score">{{ percentage(related.score) }} ↗</span>
+                </button>
+                <details v-if="related.resolution">
+                  <summary>Recorded resolution</summary>
+                  <p class="pre-wrap small">{{ related.resolution }}</p>
+                </details>
+              </div>
             </div>
           </div>
           <p class="small muted">
             Scores are cosine similarity, not confidence. Matches are
-            suggestions for a human agent.
+            retrieved context for a human agent. Only tickets with a recorded
+            resolution are used as resolution examples; earlier AI suggestions are not proven fixes.
           </p>
         </template>
         <p v-else class="empty compact">
-          No saved assistance yet. It will appear after enrichment commits.
+          {{ ticket.resolution ? "Historical reference case; its recorded resolution can support similar tickets."
+            : "No saved assistance yet. It will appear after enrichment commits." }}
         </p>
       </section>
       <ReviewForm

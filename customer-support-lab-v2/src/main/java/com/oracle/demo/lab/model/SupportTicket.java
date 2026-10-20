@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SupportTicket {
@@ -14,6 +15,7 @@ public class SupportTicket {
     private String title;
     private String description;
     private String reviewFeedback;
+    private String resolution;
     private TicketStatus workflowStatus = TicketStatus.RECEIVED;
 
     public SupportTicket() {
@@ -24,6 +26,7 @@ public class SupportTicket {
         this.title = rs.getString("title");
         this.description = rs.getString("description");
         this.reviewFeedback = rs.getString("review_feedback");
+        this.resolution = rs.getString("resolution");
         this.workflowStatus = TicketStatus.valueOf(rs.getString("workflow_status"));
     }
 
@@ -57,6 +60,11 @@ public class SupportTicket {
 
     public String getReviewFeedback() {
         return reviewFeedback;
+    }
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    public String getResolution() {
+        return resolution;
     }
 
     public void setReviewFeedback(String reviewFeedback) {

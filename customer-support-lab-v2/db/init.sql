@@ -32,6 +32,7 @@ create table support_ticket (
     title        varchar2(255) not null,
     description  varchar2(2000) not null,
     review_feedback clob,
+    resolution   clob,
     workflow_status varchar2(32) default 'RECEIVED' not null
         check (workflow_status in ('RECEIVED', 'TRIAGED', 'ENRICHED', 'FAILED')),
     embedding    vector(1536, FLOAT32)
@@ -55,22 +56,12 @@ create table support_policy (
     embedding       vector(1536, FLOAT32)
 );
 
-insert into support_policy (policy_id, title, body) values (
-    'ACCOUNT_ACCESS', 'Account access and password reset',
-    'Verify the requester identity before resetting a password. Revoke compromised sessions and direct the user through the approved password reset flow.'
-);
-insert into support_policy (policy_id, title, body) values (
-    'MFA_RECOVERY', 'Multi-factor authentication recovery',
-    'Use the approved identity verification and MFA recovery process when a user loses an authenticator. Do not bypass MFA based only on a support request.'
-);
-insert into support_policy (policy_id, title, body) values (
-    'BILLING_DISPUTE', 'Billing dispute review',
-    'Capture the invoice identifier and disputed charge. Route the dispute for human review before issuing a refund or changing payment details.'
-);
+@@seed-policies.sql
 
 create table ticket_assistance (
     ticket_id       number primary key,
     summary         clob not null,
+    suggested_resolution clob,
     summary_model   varchar2(256) not null,
     prompt_version  varchar2(64) not null,
     generated_at    timestamp with time zone default systimestamp not null,
@@ -132,6 +123,8 @@ no delete until 16 days after insert
 hashing using "SHA2_512" version "v2";
 
 create index ticket_approval_ticket_idx on ticket_approval_history(ticket_id, decided_at);
+
+@@seed-resolutions.sql
 
 host touch /tmp/lab-schema-ready
 prompt Lab schema is ready.

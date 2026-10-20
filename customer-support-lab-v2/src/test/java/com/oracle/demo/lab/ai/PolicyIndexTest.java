@@ -79,6 +79,23 @@ class PolicyIndexTest {
     }
 
     @Test
+    void indexesRecordedResolutionsBeforeStartingConsumer() throws Exception {
+        when(result.next()).thenReturn(false, true, false);
+        when(result.getLong("id")).thenReturn(7L);
+        when(result.getString("description")).thenReturn("Lost phone.");
+        when(result.getString("resolution")).thenReturn("Verified identity and replaced the factor.");
+        String text = "MFA recovery\nLost phone.\nRecorded resolution: Verified identity and replaced the factor.";
+        when(model.embed(List.of(text))).thenReturn(List.of(new float[1536]));
+
+        try (ConfigurableApplicationContext ignored = start()) {
+            var calls = inOrder(model, connection, executor);
+            calls.verify(model).embed(List.of(text));
+            calls.verify(connection).commit();
+            calls.verify(executor).submit(consumer);
+        }
+    }
+
+    @Test
     void invalidEmbeddingsFailStartupBeforeConsumerStarts() throws Exception {
         when(result.next()).thenReturn(true, false);
         when(model.embed(List.of("MFA recovery\nVerify identity.")))

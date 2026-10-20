@@ -24,17 +24,18 @@ public class TicketAssistanceStore {
     }
 
     /** Replaces the current assistance and matches on the consumer's TxEventQ connection. */
-    public void save(Connection connection, long ticketId, String summary, String modelId,
+    public void save(Connection connection, long ticketId, String summary, String suggestedResolution, String modelId,
                      String promptVersion, List<RelatedTicket> relatedTickets,
                      List<PolicyMatch> policies) {
         try (PreparedStatement assistance = connection.prepareStatement("""
                 merge into ticket_assistance a
-                using (select ? ticket_id, ? summary, ? summary_model, ? prompt_version from dual) s
+                using (select ? ticket_id, ? summary, ? suggested_resolution, ? summary_model, ? prompt_version from dual) s
                 on (a.ticket_id = s.ticket_id)
-                when matched then update set a.summary = s.summary, a.summary_model = s.summary_model,
+                when matched then update set a.summary = s.summary, a.suggested_resolution = s.suggested_resolution,
+                    a.summary_model = s.summary_model,
                     a.prompt_version = s.prompt_version, a.generated_at = systimestamp
-                when not matched then insert (ticket_id, summary, summary_model, prompt_version)
-                    values (s.ticket_id, s.summary, s.summary_model, s.prompt_version)
+                when not matched then insert (ticket_id, summary, suggested_resolution, summary_model, prompt_version)
+                    values (s.ticket_id, s.summary, s.suggested_resolution, s.summary_model, s.prompt_version)
                 """);
              PreparedStatement clearRelated = connection.prepareStatement(
                      "delete from related_ticket where ticket_id = ?");
@@ -48,8 +49,9 @@ public class TicketAssistanceStore {
                      """)) {
             assistance.setLong(1, ticketId);
             assistance.setString(2, summary);
-            assistance.setString(3, modelId);
-            assistance.setString(4, promptVersion);
+            assistance.setString(3, suggestedResolution);
+            assistance.setString(4, modelId);
+            assistance.setString(5, promptVersion);
             assistance.executeUpdate();
             clearRelated.setLong(1, ticketId);
             clearRelated.executeUpdate();
@@ -79,62 +81,64 @@ public class TicketAssistanceStore {
         }
     }
 
-    public String findSummary(Connection connection, long ticketId) {
+    public String findPreviousAssistance(Connection connection, long ticketId) {
         try (PreparedStatement statement = connection.prepareStatement(
-                "select summary from ticket_assistance where ticket_id = ?")) {
+                "select summary, suggested_resolution from ticket_assistance where ticket_id = ?")) {
             statement.setLong(1, ticketId);
             try (var rows = statement.executeQuery()) {
                 if (!rows.next()) {
-                    throw new IllegalStateException("Summary regeneration requires saved assistance");
+                    throw new IllegalStateException("Regeneration requires saved assistance");
                 }
-                return rows.getString("summary");
+                return TicketAssistance.reviewText(rows.getString("summary"), rows.getString("suggested_resolution"));
             }
         } catch (SQLException failure) {
-            throw new IllegalStateException("Could not read the previous summary", failure);
+            throw new IllegalStateException("Could not read the previous assistance", failure);
         }
     }
 
     public Optional<TicketAssistance> findByTicketId(long ticketId) {
         Optional<SummaryRow> summary = jdbcClient.sql("""
-                select ticket_id, summary, summary_model, prompt_version, generated_at
+                select ticket_id, summary, suggested_resolution, summary_model, prompt_version, generated_at
                 from ticket_assistance where ticket_id = ?
                 """)
                 .param(ticketId)
                 .query((rs, rowNum) -> {
                     Timestamp generatedAt = rs.getTimestamp("generated_at");
-                    return new SummaryRow(rs.getLong("ticket_id"), rs.getString("summary"),
+                    return new SummaryRow(rs.getLong("ticket_id"), rs.getString("summary"), rs.getString("suggested_resolution"),
                             rs.getString("summary_model"), rs.getString("prompt_version"),
                             generatedAt.toInstant());
                 })
                 .optional();
-        return summary.map(row -> new TicketAssistance(row.ticketId(), row.summary(),
+        return summary.map(row -> new TicketAssistance(row.ticketId(), row.summary(), row.suggestedResolution(),
                 row.modelId(), row.promptVersion(), row.generatedAt(),
                 findSimilarTickets(ticketId), findPolicies(ticketId)));
     }
 
     private List<RelatedTicket> findSimilarTickets(long ticketId) {
         return jdbcClient.sql("""
-                select related, score from related_ticket
-                where ticket_id = ? order by score desc
+                select r.related, r.score, t.title, t.resolution from related_ticket r
+                join support_ticket t on t.id = r.related
+                where r.ticket_id = ? order by r.score desc
                 """)
                 .param(ticketId)
-                .query((rs, rowNum) -> new RelatedTicket(rs.getLong("related"), rs.getDouble("score")))
+                .query((rs, rowNum) -> new RelatedTicket(rs.getLong("related"), rs.getDouble("score"),
+                        rs.getString("title"), rs.getString("resolution")))
                 .list();
     }
 
     private List<PolicyMatch> findPolicies(long ticketId) {
         return jdbcClient.sql("""
-                select m.policy_id, p.title, m.score
+                select m.policy_id, p.title, m.score, p.body
                 from ticket_policy_match m join support_policy p on p.policy_id = m.policy_id
                 where m.ticket_id = ? order by m.score desc
                 """)
                 .param(ticketId)
                 .query((rs, rowNum) -> new PolicyMatch(rs.getString("policy_id"),
-                        rs.getString("title"), rs.getDouble("score")))
+                        rs.getString("title"), rs.getDouble("score"), rs.getString("body")))
                 .list();
     }
 
-    private record SummaryRow(long ticketId, String summary, String modelId,
+    private record SummaryRow(long ticketId, String summary, String suggestedResolution, String modelId,
                               String promptVersion, Instant generatedAt) {
     }
 }

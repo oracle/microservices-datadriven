@@ -62,22 +62,21 @@ public class GenAIEventProcessor implements TicketEventProcessor {
         List<RelatedTicket> relatedTickets = telemetry.step("related_tickets",
                 () -> ticketVectorStore.search(0.2, vector, ticket.getId(), conn));
         telemetry.matches("ticket", relatedTickets.size());
+        telemetry.matches("resolved_ticket", (int) relatedTickets.stream()
+                .filter(match -> match.resolution() != null && !match.resolution().isBlank()).count());
         List<PolicyMatch> policies = telemetry.step("policies",
                 () -> policyVectorStore.search(conn, vector));
         telemetry.matches("policy", policies.size());
-        String summary = telemetry.step("summary", () -> {
-            if (TicketWorkEvent.TICKET_FEEDBACK_SUBMITTED.equals(event.getEventType())) {
-                return ticketSummarizer.summarize(ticket, assistanceStore.findSummary(conn, ticket.getId()));
-            }
-            return ticketSummarizer.summarize(ticket);
-        });
+        var draft = telemetry.step("summary", () -> ticketSummarizer.generate(ticket, relatedTickets, policies,
+                TicketWorkEvent.TICKET_FEEDBACK_SUBMITTED.equals(event.getEventType())
+                        ? assistanceStore.findPreviousAssistance(conn, ticket.getId()) : null));
         ticket.setWorkflowStatus(TicketStatus.ENRICHED);
 
         log.info("Enriched ticket eventId={} ticketId={} relatedTicketCount={} policyCount={} status={}",
                 event.getEventId(), ticket.getId(), relatedTickets.size(), policies.size(), ticket.getWorkflowStatus());
         telemetry.step("persistence", () -> {
             ticketStore.saveEnrichment(conn, ticket.getId(), vector);
-            assistanceStore.save(conn, ticket.getId(), summary, ticketSummarizer.modelId(),
+            assistanceStore.save(conn, ticket.getId(), draft.summary(), draft.suggestedResolution(), ticketSummarizer.modelId(),
                     TicketSummarizer.PROMPT_VERSION, relatedTickets, policies);
             return null;
         });

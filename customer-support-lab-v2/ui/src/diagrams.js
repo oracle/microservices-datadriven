@@ -29,7 +29,7 @@ export const diagrams = [
     file: "/diagrams/04-ai-and-vector-search.svg",
     title: "AI assistance for human review",
     description:
-      "The processor calls OCI for an embedding, runs exact cosine vector search in Oracle for related tickets and policies, generates a summary from the ticket text alone, then saves assistance and ENRICHED status. Matches are for human review, not chat prompt context.",
+      "The processor calls OCI for an embedding, runs exact cosine vector search in Oracle for related tickets and policies, uses policy bodies and recorded resolutions from matched tickets to generate a summary and suggested resolution, then saves assistance and ENRICHED status. Source references help the reviewer inspect the evidence.",
     category: "Workflow",
   },
   {
@@ -61,7 +61,7 @@ export const diagrams = [
     file: "/diagrams/08-blockchain-reviews.svg",
     title: "Preserve the human decision",
     description:
-      "Human review preserves the saved summary in blockchain history. Approval accepts the summary. Rejection requires feedback, appends it to the ticket, resets its status to RECEIVED, and publishes TICKET_FEEDBACK_SUBMITTED using the same OKafka transaction. The AI consumer regenerates the summary, embedding, and matches, returning the ticket to ENRICHED. Duplicate review actions do not publish again. Actor identity is supplied by the caller, not authenticated. Reviews do not execute customer actions.",
+      "Human review preserves the saved summary and suggested resolution in blockchain history. Approval accepts the assistance. Rejection requires feedback, appends it to the ticket, resets its status to RECEIVED, and publishes TICKET_FEEDBACK_SUBMITTED using the same OKafka transaction. The AI consumer regenerates the summary, suggested resolution, embedding, and matches, returning the ticket to ENRICHED. Duplicate review actions do not publish again. Actor identity is supplied by the caller, not authenticated. Reviews do not execute customer actions.",
     category: "Workflow",
   },
   {
@@ -85,7 +85,7 @@ export const diagrams = [
     file: "/diagrams/11-schema-ai-relationships.svg",
     title: "Save AI results beside the ticket",
     description:
-      "AI schema relationships from db/init.sql. One ticket can own zero or one ticket_assistance row and zero or many related_ticket and ticket_policy_match rows. A policy can be referenced by zero or many ticket_policy_match rows. ticket_assistance stores a summary, summary_model, prompt_version, and generated_at. Composite primary keys prevent duplicate matches. The related column stores the matched ticket ID but does not have a foreign key. Both embedding columns are VECTOR(1536, FLOAT32). PolicyIndex fills missing policy vectors at AI startup; matches and assistance are saved with the ticket enrichment transaction. Rejected reviews append feedback to the ticket and request regeneration through TxEventQ. The current assistance and scored matches are replaced on regeneration; reviewed snapshots stay in blockchain history.",
+      "AI schema relationships from db/init.sql. One ticket can own zero or one ticket_assistance row and zero or many related_ticket and ticket_policy_match rows. A policy can be referenced by zero or many ticket_policy_match rows. support_ticket.resolution stores recorded outcomes. ticket_assistance stores a summary, suggested_resolution, summary_model, prompt_version, and generated_at. Composite primary keys prevent duplicate matches. The related column stores the matched ticket ID but does not have a foreign key. Both embedding columns are VECTOR(1536, FLOAT32). PolicyIndex fills missing policy and recorded-resolution ticket vectors at AI startup; matches and assistance are saved with the ticket enrichment transaction. Rejected reviews append feedback to the ticket and request regeneration through TxEventQ. The current assistance and scored matches are replaced on regeneration; reviewed snapshots stay in blockchain history.",
     category: "Schema",
   },
   {
@@ -99,9 +99,9 @@ export const diagrams = [
   {
     id: 13,
     file: "/diagrams/13-schema-approval-history.svg",
-    title: "Keep the exact summary reviewed",
+    title: "Keep the exact assistance reviewed",
     description:
-      "ticket_approval_history is an Oracle V2 blockchain table. It has a primary key action_id and a foreign key to support_ticket.id. The application requires saved assistance for an ENRICHED ticket and copies the summary, chat model and prompt version into the review record. The dashed arrow is an application-level copy, not a foreign key to ticket_assistance. The summary_digest is application-computed SHA-256; blockchain row hashing separately uses SHA2-512. Reviews store actor ID, reason, APPROVED or REJECTED decision, and UTC decision time. Rows have 16-day retention and the table allows deliberate lab drop with zero idle days. Approval leaves ticket workflow status ENRICHED. Rejection appends feedback to support_ticket.review_feedback, resets status to RECEIVED and requests regeneration through TxEventQ, atomically with this review. No review executes customer actions.",
+      "ticket_approval_history is an Oracle V2 blockchain table. It has a primary key action_id and a foreign key to support_ticket.id. The application requires saved assistance for an ENRICHED ticket and copies both the summary and suggested resolution into reviewed_summary, along with the chat model and prompt version in the review record. The dashed arrow is an application-level copy, not a foreign key to ticket_assistance. The summary_digest covers the complete reviewed text using application-computed SHA-256; blockchain row hashing separately uses SHA2-512. Reviews store actor ID, reason, APPROVED or REJECTED decision, and UTC decision time. Rows have 16-day retention and the table allows deliberate lab drop with zero idle days. Approval leaves ticket workflow status ENRICHED. Rejection appends feedback to support_ticket.review_feedback, resets status to RECEIVED and requests regeneration through TxEventQ, atomically with this review. No review executes customer actions.",
     category: "Schema",
   },
   {
@@ -109,7 +109,7 @@ export const diagrams = [
     file: "/diagrams/14-complete-event-loop.svg",
     title: "One ticket, a complete event loop",
     description:
-      "The complete ticket workflow. TicketEventProducer atomically inserts a RECEIVED ticket and publishes TICKET_SUBMITTED to the ticket_event topic in Oracle TxEventQ. The AI consumer embeds the ticket, finds related tickets and policies, generates a summary, and commits ENRICHED assistance, event outcome, and queue acknowledgement together. Human review preserves the reviewed summary in blockchain history. APPROVED keeps the summary without generating another event or resolving the ticket. REJECTED requires written feedback: the dedicated feedback producer atomically saves the review, appends feedback to the ticket, resets it to RECEIVED, and publishes TICKET_FEEDBACK_SUBMITTED. The same consumer regenerates assistance using the previous summary and accumulated feedback. Both producer instances use the same configuration but own separate transaction connections. After bounded retries, or immediately for a nonretryable error, the consumer records FAILED and acknowledges the event; failed_ticket_event is a failure worklist, not a queue. Manual replay marks the original failure REPLAYED, resets the ticket, and publishes a new event preserving its type and causation. Each new published event has its own UUID; redelivered IDs with durable outcomes are skipped. Main coral arrows show normal delivery and the review loop; dashed arrows show failure and manual replay. All labels and arrows are visible without animation.",
+      "The complete ticket workflow. TicketEventProducer atomically inserts a RECEIVED ticket and publishes TICKET_SUBMITTED to the ticket_event topic in Oracle TxEventQ. The AI consumer embeds the ticket, finds related tickets and policies, generates a summary and suggested resolution, and commits ENRICHED assistance, event outcome, and queue acknowledgement together. Human review preserves the reviewed assistance in blockchain history. APPROVED keeps the assistance without generating another event or resolving the ticket. REJECTED requires written feedback: the dedicated feedback producer atomically saves the review, appends feedback to the ticket, resets it to RECEIVED, and publishes TICKET_FEEDBACK_SUBMITTED. The same consumer regenerates assistance using the previous assistance and accumulated feedback. Both producer instances use the same configuration but own separate transaction connections. After bounded retries, or immediately for a nonretryable error, the consumer records FAILED and acknowledges the event; failed_ticket_event is a failure worklist, not a queue. Manual replay marks the original failure REPLAYED, resets the ticket, and publishes a new event preserving its type and causation. Each new published event has its own UUID; redelivered IDs with durable outcomes are skipped. Main coral arrows show normal delivery and the review loop; dashed arrows show failure and manual replay. All labels and arrows are visible without animation.",
     category: "Workflow",
   },
   {
@@ -117,7 +117,7 @@ export const diagrams = [
     file: "/diagrams/context/blockchain-approval-history.svg",
     title: "Blockchain approval history",
     description:
-      "A saved AI summary is reviewed by a human. The approval or rejection is appended to an Oracle blockchain table with a summary snapshot, digest, self-declared reviewer, and model metadata. Retry requests reuse the action UUID. A rejected review saves corrections on the ticket and requests regeneration through TxEventQ. Approval accepts the saved summary. The lab does not execute customer actions.",
+      "Saved AI assistance is reviewed by a human. The approval or rejection is appended to an Oracle blockchain table with a complete assistance snapshot, digest, self-declared reviewer, and model metadata. Retry requests reuse the action UUID. A rejected review saves corrections on the ticket and requests regeneration through TxEventQ. Approval accepts the saved assistance. The lab does not execute customer actions.",
     category: "Context",
   },
   {

@@ -106,7 +106,7 @@ function reviewed(review) {
         <p>
           {{
             reviewMode
-              ? "An approved summary leaves Needs review. Switch to All tickets to view its history."
+              ? "Approved assistance leaves Needs review. Switch to All tickets to view its history."
               : "Create a ticket or change your filters."
           }}
         </p>
@@ -164,7 +164,7 @@ function reviewed(review) {
       <span class="placeholder-icon">▤</span>
       <h3>Your workflow, in detail</h3>
       <p>
-        Select a ticket to see its summary, matches, feedback, and review
+        Select a ticket to see its summary, suggested resolution, matches, feedback, and review
         history.
       </p>
     </div>

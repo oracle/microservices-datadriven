@@ -42,6 +42,6 @@ const steps = [
   </div>
   <div class="flow-note">
     <span>↳</span> Rejection loops back through TxEventQ. Approval accepts the
-    saved summary. Failed events can be replayed.
+    saved assistance. Failed events can be replayed.
   </div>
 </template>

@@ -3,6 +3,7 @@
 package com.oracle.demo.lab.persistence;
 
 import com.oracle.demo.lab.model.TicketApproval;
+import com.oracle.demo.lab.ai.TicketAssistance;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
@@ -45,7 +46,7 @@ public class TicketApprovalStore {
         }
 
         try (var statement = connection.prepareStatement("""
-                select a.summary, a.summary_model, a.prompt_version
+                select a.summary, a.suggested_resolution, a.summary_model, a.prompt_version
                 from ticket_assistance a join support_ticket t on t.id = a.ticket_id
                 where a.ticket_id = ? and t.workflow_status = 'ENRICHED'
                 """)) {
@@ -54,7 +55,8 @@ public class TicketApprovalStore {
                 if (!rows.next()) {
                     throw new ApprovalConflictException("Ticket must have saved ENRICHED assistance before review");
                 }
-                String summary = rows.getString("summary");
+                String summary = TicketAssistance.reviewText(rows.getString("summary"),
+                        rows.getString("suggested_resolution"));
                 try (var insert = connection.prepareStatement("""
                         insert into ticket_approval_history
                             (action_id, ticket_id, decision, actor_id, reason, reviewed_summary,

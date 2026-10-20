@@ -30,12 +30,12 @@ public class TicketStore {
     }
 
     public List<SupportTicket> getAllTickets() {
-        return jdbcClient.sql("select id, title, description, review_feedback, workflow_status from support_ticket")
+        return jdbcClient.sql("select id, title, description, review_feedback, resolution, workflow_status from support_ticket")
                 .query((rows, rowNumber) -> new SupportTicket(rows)).list();
     }
 
     public Optional<SupportTicket> findById(Long id) {
-        return jdbcClient.sql("select id, title, description, review_feedback, workflow_status from support_ticket where id = ?")
+        return jdbcClient.sql("select id, title, description, review_feedback, resolution, workflow_status from support_ticket where id = ?")
                 .param(id)
                 .query((rows, rowNumber) -> new SupportTicket(rows)).optional();
     }

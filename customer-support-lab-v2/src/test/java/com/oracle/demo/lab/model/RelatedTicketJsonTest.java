@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class RelatedTicketJsonTest {
     @Test
     void scoredReferenceKeepsTheExistingResponseFields() {
-        var json = new ObjectMapper().valueToTree(new RelatedTicket(7L, 0.82));
+        var json = new ObjectMapper().valueToTree(new RelatedTicket(7L, 0.82, null, null));
 
         assertEquals(2, json.size());
         assertEquals(7L, json.get("relatedTicketId").asLong());

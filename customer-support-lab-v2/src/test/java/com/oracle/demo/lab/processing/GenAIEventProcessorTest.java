@@ -51,9 +51,9 @@ class GenAIEventProcessorTest {
         when(embeddingModel.embed(any(String.class))).thenReturn(embedding);
         when(ticketVectors.search(0.2, embedding, 42L, connection)).thenReturn(List.of());
         when(policyVectors.search(connection, embedding)).thenReturn(List.of());
-        when(assistanceStore.findSummary(connection, 42L)).thenReturn("Production account cannot sign in.");
-        when(summarizer.summarize(ticket, "Production account cannot sign in."))
-                .thenReturn("Test tenant account cannot sign in.");
+        when(assistanceStore.findPreviousAssistance(connection, 42L)).thenReturn("Production account cannot sign in.");
+        when(summarizer.generate(ticket, List.of(), List.of(), "Production account cannot sign in."))
+                .thenReturn(new TicketSummarizer.Draft("Test tenant account cannot sign in.", "Ask for test-tenant details."));
         when(summarizer.modelId()).thenReturn("chat");
         GenAIEventProcessor processor = new GenAIEventProcessor(ticketVectors, embeddingModel,
                 ticketStore, policyVectors, summarizer, assistanceStore, telemetry);
@@ -63,9 +63,9 @@ class GenAIEventProcessorTest {
 
         verify(embeddingModel).embed("Sign-in failure\nCannot access account\nReviewer feedback: The account belongs to the test tenant.");
         var calls = inOrder(assistanceStore, ticketStore);
-        calls.verify(assistanceStore).findSummary(connection, 42L);
+        calls.verify(assistanceStore).findPreviousAssistance(connection, 42L);
         calls.verify(ticketStore).saveEnrichment(connection, 42L, embedding);
-        calls.verify(assistanceStore).save(connection, 42L, "Test tenant account cannot sign in.",
+        calls.verify(assistanceStore).save(connection, 42L, "Test tenant account cannot sign in.", "Ask for test-tenant details.",
                 "chat", TicketSummarizer.PROMPT_VERSION, List.of(), List.of());
         assertEquals(TicketStatus.ENRICHED, ticket.getWorkflowStatus());
     }
@@ -86,12 +86,13 @@ class GenAIEventProcessorTest {
         ticket.setTitle("Lost authenticator");
         ticket.setDescription("Cannot sign in");
         float[] embedding = new float[1536];
-        RelatedTicket similar = new RelatedTicket(7L, 0.82);
-        PolicyMatch policy = new PolicyMatch("MFA_RECOVERY", "MFA recovery", 0.9);
+        RelatedTicket similar = new RelatedTicket(7L, 0.82, null, null);
+        PolicyMatch policy = new PolicyMatch("MFA_RECOVERY", "MFA recovery", 0.9, null);
         when(embeddingModel.embed(any(String.class))).thenReturn(embedding);
         when(ticketVectors.search(0.2, embedding, 42L, connection)).thenReturn(List.of(similar));
         when(policyVectors.search(connection, embedding)).thenReturn(List.of(policy));
-        when(summarizer.summarize(ticket)).thenReturn("User lost MFA access.");
+        when(summarizer.generate(ticket, List.of(similar), List.of(policy), null))
+                .thenReturn(new TicketSummarizer.Draft("User lost MFA access.", "Verify identity [Policy MFA_RECOVERY]."));
         when(summarizer.modelId()).thenReturn("demo-chat-model");
         GenAIEventProcessor processor = new GenAIEventProcessor(ticketVectors, embeddingModel,
                 ticketStore, policyVectors, summarizer, assistanceStore, telemetry);
@@ -103,7 +104,7 @@ class GenAIEventProcessorTest {
         calls.verify(policyVectors).search(connection, embedding);
         calls.verify(ticketStore).saveEnrichment(connection, 42L, embedding);
         calls.verify(assistanceStore).save(eq(connection), eq(42L), eq("User lost MFA access."),
-                eq("demo-chat-model"), eq(TicketSummarizer.PROMPT_VERSION),
+                eq("Verify identity [Policy MFA_RECOVERY]."), eq("demo-chat-model"), eq(TicketSummarizer.PROMPT_VERSION),
                 eq(List.of(similar)), eq(List.of(policy)));
     }
 }

@@ -34,7 +34,7 @@ class PolicyVectorStoreTest {
         var matches = new PolicyVectorStore().search(connection, new float[1536]);
 
         assertEquals(1, matches.size());
-        assertEquals(new PolicyMatch("MFA_RECOVERY", "MFA recovery", 0.87), matches.getFirst());
+        assertEquals(new PolicyMatch("MFA_RECOVERY", "MFA recovery", 0.87, null), matches.getFirst());
         verify(statement).setObject(eq(1), any(VECTOR.class), eq(OracleType.VECTOR.getVendorTypeNumber()));
         verify(statement).setDouble(2, 0.2);
     }

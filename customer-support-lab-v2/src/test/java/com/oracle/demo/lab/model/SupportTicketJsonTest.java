@@ -13,6 +13,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SupportTicketJsonTest {
     @Test
+    void ticketSubmissionCannotSupplyARecordedResolution() throws Exception {
+        SupportTicket ticket = new ObjectMapper().readValue(
+                "{\"title\":\"New problem\",\"description\":\"Details\",\"resolution\":\"Claimed fix\"}", SupportTicket.class);
+        org.junit.jupiter.api.Assertions.assertNull(ticket.getResolution());
+    }
+
+    @Test
     void ticketResponseContainsOnlyCoreFields() throws Exception {
         SupportTicket ticket = new SupportTicket();
         ticket.setId(42L);

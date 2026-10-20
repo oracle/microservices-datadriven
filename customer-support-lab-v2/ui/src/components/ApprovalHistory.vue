@@ -24,14 +24,14 @@ defineProps({ history: Array });
           ><span v-if="review.reason"> · {{ review.reason }}</span>
         </p>
         <details>
-          <summary>Reviewed summary &amp; integrity details</summary>
-          <blockquote>{{ review.reviewedSummary }}</blockquote>
+          <summary>Reviewed assistance &amp; integrity details</summary>
+          <blockquote class="pre-wrap">{{ review.reviewedSummary }}</blockquote>
           <dl class="metadata">
             <dt>Model / prompt</dt>
             <dd>{{ review.summaryModel }} / {{ review.promptVersion }}</dd>
             <dt>Action UUID</dt>
             <dd class="mono">{{ review.actionId }}</dd>
-            <dt>Summary SHA-256</dt>
+            <dt>Assistance SHA-256</dt>
             <dd class="mono">{{ review.summaryDigest }}</dd>
           </dl>
         </details>

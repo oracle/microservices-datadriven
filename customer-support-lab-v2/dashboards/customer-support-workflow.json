@@ -1094,7 +1094,7 @@
       "id": 22,
       "title": "Enrichment step mean latency",
       "type": "timeseries",
-      "description": "Embedding, related-ticket retrieval, policy retrieval, summary generation, and persistence. Attempts may roll back after these steps run.",
+      "description": "Embedding, related-ticket retrieval, policy retrieval, assistance generation, and persistence. The legacy summary step generates both summary and suggested resolution in one chat call. Attempts may roll back after these steps run.",
       "datasource": {
         "type": "prometheus",
         "uid": "${datasource}"
@@ -1151,7 +1151,7 @@
       "id": 23,
       "title": "Mean retrieved matches per search",
       "type": "timeseries",
-      "description": "Number of related-ticket/policy matches, not model quality or match relevance. Zero matches may be expected for a first ticket.",
+      "description": "Retrieved policies and tickets per attempt. resolved_ticket counts the subset of ticket matches with recorded resolutions supplied to the chat prompt; it is not an additional search. Counts describe available context, not citation usage, model quality, or relevance.",
       "datasource": {
         "type": "prometheus",
         "uid": "${datasource}"

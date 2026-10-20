@@ -103,6 +103,28 @@ If setup fails, inspect:
 docker compose logs oracle-free true-cache true-cache-configure metrics-db-setup oracle-metrics-exporter
 ```
 
+### Upgrade an existing lab database
+
+Fresh databases include these fields and reference cases automatically. For an
+existing database, run the additive script before restarting Java:
+
+```bash
+docker exec -i --user oracle oracledb sqlplus -L -s / as sysdba <<'SQL'
+whenever sqlerror exit failure
+alter session set container=FREEPDB1;
+alter session set current_schema=LAB_USER;
+@/opt/oracle/lab/db/upgrade-assistance.sql
+exit
+SQL
+```
+
+The script adds two nullable CLOB columns and refreshes the three illustrative
+policies and three synthetic reference cases without duplicating them. Changed
+seed text has its embedding cleared so Java startup can index the new content.
+Submitted tickets, saved assistance, and review history are preserved. Only
+imported, unreviewed reference cases are refreshed. Restart Java after running
+the script and wait for the consumer subscription before submitting new tickets.
+
 ### 3. Start Java
 
 In the **same terminal with the exports above**:
@@ -111,7 +133,7 @@ In the **same terminal with the exports above**:
 ./mvnw spring-boot:run
 ```
 
-Leave Maven running. On a fresh lab, startup creates policy embeddings through
+Leave Maven running. On a fresh lab, startup creates embeddings for policies and three synthetic resolved reference tickets through
 OCI before starting the event consumer. Wait for **`Subscribed to topic ticket_event`**
 in the application logs before submitting tickets.
 
@@ -183,44 +205,65 @@ Return here as you follow a ticket through the lab.
    leave the optional correlation ID blank.
 3. Click **Publish ticket event →**, then **View ticket #…** in the receipt.
 4. Wait for the ticket to move from `RECEIVED` to **`ENRICHED`**.
-5. Inspect its saved summary, model metadata, policy matches, and related tickets.
+5. Inspect its saved summary, suggested resolution, model metadata, policy matches, and related tickets.
 
 Submission commits the ticket and its event together. The background consumer
-embeds the ticket, searches policies and related tickets, calls the chat model,
-and saves the assistance with the event outcome. The first ticket may have no
-related tickets; submit the MFA preset again to build a comparison history.
+embeds the ticket, retrieves policies and related tickets, and makes one chat
+call to generate a summary and suggested resolution. Policy bodies and recorded
+resolutions from matched tickets ground the proposed steps, with inline source
+references. Expand the sources to inspect the evidence. Revisions also include
+the previous assistance and accumulated feedback.
 
-Policy and related-ticket matches are saved for the reviewer. The initial chat
-prompt uses the ticket title and description; retrieved matches are not included
-in that prompt. Revisions also include the previous summary and accumulated feedback.
+Three clearly labeled synthetic reference tickets provide recorded resolutions
+for MFA recovery, account access, and billing. These are training examples.
+Unresolved ticket descriptions and earlier AI suggestions are not treated as
+proven fixes. The recorded `support_ticket.resolution` is separate from the AI's
+`suggestedResolution` and cannot be supplied through the ticket submission API.
+Approval does not turn a suggestion into a recorded resolution.
 
-You can also try **Account access**, **Billing dispute**, or **Custom ticket**.
+The presets demonstrate different decisions:
+
+| Sample | Facts supplied | What to inspect |
+| --- | --- | --- |
+| Lost MFA authenticator | Lost phone, no backup factor, password reset completed, identity not yet verified | Verification and administrator-assisted recovery; no MFA bypass |
+| Account access | Personal reset succeeded, work tenant says account not found, MFA still works | Correct account/tenant troubleshooting; no unnecessary MFA replacement |
+| Billing dispute | Invoice DEMO-1042, two posted USD 49.00 charges with dates | Collect details and route billing review; no automatic refund |
+| Outside the policy corpus | CSV separator configuration | Missing evidence and product/report questions; no invented menu instructions |
+| Failure → replay → retry | Same MFA scenario with the failure marker | Recovery returns to the same grounded enrichment flow |
+
+The billing reference uses a different invoice (DEMO-1038), so its recorded
+adjustment is evidence of a past workflow, not proof that this requester is owed
+a refund. These policies are illustrative lab rules. Similarity scores are not
+confidence, and exact retrieved sources or generated wording can vary.
+
+You can also try **Custom ticket**.
 Each submission creates a new ticket. The lab generates assistance; it does not
 execute account changes, refunds, or other customer actions.
 
 ### 3. Request a revision, then approve it
 
 1. Open **Human Review** and select your enriched ticket.
-2. Read the summary and enter a **Reviewer** ID, such as `demo-reviewer`.
+2. Read the summary and suggested resolution, then enter a **Reviewer** ID, such as `demo-reviewer`.
 3. Select **Request revision** and enter feedback, for example:
    `The affected account belongs to the test tenant. Include that context in the summary.`
 4. Click **Send feedback & regenerate**.
 5. Wait for the ticket to return to **`ENRICHED`** with a new generation timestamp.
    Compare the revised summary with the feedback.
-6. Select **Approve**, then click **Approve summary**.
+6. Select **Approve**, then click **Approve assistance**.
 
-Requesting a revision saves the reviewed summary in the Oracle blockchain
+Requesting a revision saves the reviewed summary and suggested resolution in the Oracle blockchain
 history, appends feedback to the ticket, and publishes a regeneration event in
-one transaction. The revised assistance replaces the current summary; the
+one transaction. The revised assistance replaces the current assistance; the
 review snapshot preserves the earlier version. Approval saves another snapshot
-and accepts the current summary without generating another event.
+and accepts the current assistance without generating another event.
 
 After approval, Human Review advances to the next pending ticket or shows
 **You're all caught up**. Use **All tickets** to revisit the approved ticket and
-its review history. Approval accepts the summary; it does not resolve the ticket.
+its review history. Approval accepts the assistance; it does not resolve the ticket.
 
-For preset feedback, **Sample Data → 02 · Submit feedback** lets you select an
-enriched ticket and load a suggested correction before sending it.
+The existing `reviewed_summary` field stores both labeled outputs; `summary_digest`
+covers that complete snapshot. Earlier review rows retain their original text
+and digest. No new blockchain table is required.
 
 ### 4. Recover a failed event
 
@@ -258,6 +301,10 @@ Open **[Grafana](http://localhost:3000)** and the **Oracle AI Database** dashboa
 - **Customer Support Workflow** shows current ticket/failure state, committed
   publications and outcomes, retries, processing/event-age latency, AI operation
   latency and tokens, retrieval steps, read paths, cache fallbacks, and HTTP metrics.
+  The existing `summary` step measures the combined summary/suggested-resolution
+  call. Retrieved-match metrics include `resolved_ticket`, the subset of related
+  matches with recorded resolutions supplied to the prompt. This measures context
+  availability, not whether the model cited it or whether its answer is correct.
   Use its application selector and links to open matching Loki logs or Tempo traces.
 - **Oracle UCP Metrics** compares `DemoConnectionPool` and `TrueCacheReadPool`:
   utilization, capacity, pending requests, acquisition outcomes, and mean/peak
@@ -333,7 +380,7 @@ application running. Each ticket submission writes lab data and may call OCI.
 ```bash
 export LAB_BASE_URL=http://localhost:9001
 TICKET_ID=$(curl -fsS -H 'Content-Type: application/json' \
-  -d '{"title":"Lost MFA authenticator","description":"I lost my authenticator and cannot sign in. How can I recover access safely?"}' \
+  -d '{"title":"Lost MFA authenticator","description":"I replaced my lost phone and cannot sign in to our Northstar demo tenant because the MFA prompt still targets the old authenticator. My password reset completed, but I have no registered backup factor or recovery method. I have not completed identity verification with support. How can I restore access without bypassing MFA?"}' \
   "$LAB_BASE_URL/tickets" | jq -er '.id')
 
 curl -fsS "$LAB_BASE_URL/tickets/$TICKET_ID?readPath=primary" | jq
@@ -347,9 +394,9 @@ If it becomes `FAILED`, inspect `/ticket-events/failures` and fix the cause;
 curl -fsS "$LAB_BASE_URL/tickets/$TICKET_ID/assistance" | jq
 ```
 
-Inspect `summary`, `summaryModel`, `promptVersion`, `generatedAt`, `policies`,
+Inspect `summary`, `suggestedResolution`, `summaryModel`, `promptVersion`, `generatedAt`, `policies`,
 and `similarTickets`. Submit another MFA ticket to build related-ticket history.
-The first ticket may have no related matches.
+Related matches can include the three synthetic resolved reference cases.
 
 ### Request a revision and approve the result
 
@@ -380,9 +427,9 @@ curl -fsS -H 'Content-Type: application/json' -d "$APPROVAL" \
 curl -fsS "$LAB_BASE_URL/tickets/$TICKET_ID/approvals" | jq
 ```
 
-The history includes the rejected and approved summary snapshots. Approval
+The history includes the rejected and approved assistance snapshots. Approval
 accepts the current assistance; it does not close the ticket or generate another
-revision. Revisions use the previous summary and accumulated feedback.
+revision. Revisions use the previous assistance and accumulated feedback.
 
 ### Fail, inspect, and replay an event
 
@@ -390,7 +437,7 @@ With `demo-failures` enabled, create a separate deliberate failure:
 
 ```bash
 FAILED_TICKET_ID=$(curl -fsS -H 'Content-Type: application/json' \
-  -d '{"title":"[demo-fail-once] Lost MFA authenticator","description":"I lost my authenticator and cannot sign in. How can I recover access safely?"}' \
+  -d '{"title":"[demo-fail-once] Lost MFA authenticator","description":"I replaced my lost phone and cannot sign in to our Northstar demo tenant because the MFA prompt still targets the old authenticator. My password reset completed, but I have no registered backup factor or recovery method. I have not completed identity verification with support. How can I restore access without bypassing MFA?"}' \
   "$LAB_BASE_URL/tickets" | jq -er '.id')
 curl -fsS "$LAB_BASE_URL/ticket-events/failures" | jq
 ```

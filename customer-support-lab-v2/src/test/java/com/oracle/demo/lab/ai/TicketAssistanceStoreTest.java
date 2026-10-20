@@ -28,17 +28,18 @@ class TicketAssistanceStoreTest {
         PreparedStatement addPolicy = mock(PreparedStatement.class);
         when(connection.prepareStatement(anyString()))
                 .thenReturn(assistance, clearRelated, clearPolicies, addRelated, addPolicy);
-        RelatedTicket related = new RelatedTicket(7L, 0.82);
-        PolicyMatch policy = new PolicyMatch("MFA_RECOVERY", "MFA recovery", 0.87);
+        RelatedTicket related = new RelatedTicket(7L, 0.82, null, null);
+        PolicyMatch policy = new PolicyMatch("MFA_RECOVERY", "MFA recovery", 0.87, null);
 
         new TicketAssistanceStore(mock(JdbcClient.class)).save(connection, 42L,
-                "User lost MFA access.", "chat-model", "ticket-summary-v1",
+                "User lost MFA access.", "Verify identity [Policy MFA_RECOVERY].", "chat-model", "ticket-summary-v1",
                 List.of(related), List.of(policy));
 
         verify(assistance).setLong(1, 42L);
         verify(assistance).setString(2, "User lost MFA access.");
-        verify(assistance).setString(3, "chat-model");
-        verify(assistance).setString(4, "ticket-summary-v1");
+        verify(assistance).setString(3, "Verify identity [Policy MFA_RECOVERY].");
+        verify(assistance).setString(4, "chat-model");
+        verify(assistance).setString(5, "ticket-summary-v1");
         verify(assistance).executeUpdate();
         verify(addRelated).setLong(1, 42L);
         verify(addRelated).setLong(2, 7L);

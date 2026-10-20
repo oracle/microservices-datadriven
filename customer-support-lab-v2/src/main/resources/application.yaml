@@ -43,7 +43,7 @@ spring:
           serving-mode: ON_DEMAND
           model: ${OCI_CHAT_MODEL_ID:cohere.command-a-03-2025}
           temperature: 0.2
-          max-tokens: 512
+          max-tokens: 1024
         embedding:
           compartment-id: ${OCI_COMPARTMENT_ID}
           serving-mode: ON_DEMAND

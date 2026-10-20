@@ -19,8 +19,8 @@ public class PolicyVectorStore {
     public List<PolicyMatch> search(Connection connection, float[] ticketEmbedding) {
         // The three-row demo corpus uses exact cosine search; an ANN index adds no value here.
         String sql = """
-                select policy_id, title, score from (
-                    select policy_id, title,
+                select policy_id, title, body, score from (
+                    select policy_id, title, body,
                            1 - vector_distance(embedding, ?, cosine) as score
                     from support_policy where embedding is not null
                 ) where score >= ?
@@ -35,7 +35,7 @@ public class PolicyVectorStore {
                 List<PolicyMatch> matches = new ArrayList<>();
                 while (result.next()) {
                     matches.add(new PolicyMatch(result.getString("policy_id"),
-                            result.getString("title"), result.getDouble("score")));
+                            result.getString("title"), result.getDouble("score"), result.getString("body")));
                 }
                 return matches;
             }

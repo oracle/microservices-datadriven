@@ -3,6 +3,9 @@
 
 package com.oracle.demo.lab.model;
 
-/** A scored reference to another support ticket. */
-public record RelatedTicket(long relatedTicketId, double score) {
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+/** A scored ticket reference; only recorded resolutions are grounding evidence. */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public record RelatedTicket(long relatedTicketId, double score, String title, String resolution) {
 }

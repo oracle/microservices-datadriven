@@ -77,6 +77,7 @@ class TicketApprovalStoreTest {
         when(assistance.executeQuery()).thenReturn(summary);
         when(summary.next()).thenReturn(true);
         when(summary.getString("summary")).thenReturn("saved summary");
+        when(summary.getString("suggested_resolution")).thenReturn("Verify identity [Policy MFA_RECOVERY].");
         when(summary.getString("summary_model")).thenReturn("chat-model");
         when(summary.getString("prompt_version")).thenReturn("prompt-v1");
         PreparedStatement insert = mock(PreparedStatement.class);
@@ -86,8 +87,9 @@ class TicketApprovalStoreTest {
 
         assertTrue(store.record(connection, 42, request).created());
 
-        verify(insert).setString(6, "saved summary");
-        verify(insert).setString(7, TicketApprovalStore.digest("saved summary"));
+        String snapshot = "Summary:\nsaved summary\n\nSuggested resolution:\nVerify identity [Policy MFA_RECOVERY].";
+        verify(insert).setString(6, snapshot);
+        verify(insert).setString(7, TicketApprovalStore.digest(snapshot));
         verify(insert).setString(8, "chat-model");
         verify(insert).executeUpdate();
         verify(connection, never()).commit();
@@ -99,6 +101,9 @@ class TicketApprovalStoreTest {
         assertEquals("ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad",
                 TicketApprovalStore.digest("abc"));
         assertNotEquals(TicketApprovalStore.digest("summary"), TicketApprovalStore.digest("summary\n"));
+        assertNotEquals(TicketApprovalStore.digest(com.oracle.demo.lab.ai.TicketAssistance.reviewText("same summary", "first suggestion")),
+                TicketApprovalStore.digest(com.oracle.demo.lab.ai.TicketAssistance.reviewText("same summary", "revised suggestion")));
+        assertEquals("legacy summary", com.oracle.demo.lab.ai.TicketAssistance.reviewText("legacy summary", null));
     }
 
     @Test

@@ -12,9 +12,15 @@ import java.util.List;
 public record TicketAssistance(
         long ticketId,
         String summary,
+        String suggestedResolution,
         String summaryModel,
         String promptVersion,
         Instant generatedAt,
         List<RelatedTicket> similarTickets,
         List<PolicyMatch> policies) {
+    /** Reuse the existing audit CLOB and hash the complete reviewed output. */
+    public static String reviewText(String summary, String suggestedResolution) {
+        return suggestedResolution == null || suggestedResolution.isBlank() ? summary
+                : "Summary:\n" + summary + "\n\nSuggested resolution:\n" + suggestedResolution;
+    }
 }

@@ -59,7 +59,7 @@ async function submit() {
       const current = (await request(`/tickets/${ticketId}/assistance`)).data;
       if (current.generatedAt !== reviewedGeneration)
         throw new Error(
-          "A new summary is available. Refresh and review it before submitting.",
+          "New assistance is available. Refresh and review it before submitting.",
         );
       retry = {
         actionId: crypto.randomUUID(),
@@ -74,7 +74,7 @@ async function submit() {
     reason.value = "";
     notice.value = rejected
       ? "Feedback saved. A revision has been requested through TxEventQ."
-      : "Summary approved. Your review snapshot is saved.";
+      : "Assistance approved. Your review snapshot is saved.";
     emit("saved", result.data);
   } catch (e) {
     error.value = e.message;
@@ -87,13 +87,13 @@ async function submit() {
 <template>
   <section class="review-box">
     <div class="eyebrow">HUMAN IN THE LOOP</div>
-    <h3>Review this summary</h3>
+    <h3>Review this assistance</h3>
     <p v-if="!enabled" class="muted">
       Enable events, ai, and blockchain to submit reviews.
     </p>
     <p v-else-if="!eligible" class="muted">
       Review is available when the ticket reaches ENRICHED. The last saved
-      summary stays visible during regeneration.
+      assistance stays visible during regeneration.
     </p>
     <form v-else @submit.prevent="submit">
       <fieldset :disabled="pending">
@@ -120,7 +120,7 @@ async function submit() {
         <label
           >{{
             decision === "REJECTED"
-              ? "Feedback for the revised summary"
+              ? "Feedback for the revised assistance"
               : "Review note (optional)"
           }}
           <textarea
@@ -130,8 +130,8 @@ async function submit() {
             rows="4"
             :placeholder="
               decision === 'REJECTED'
-                ? 'What should the summary correct or include?'
-                : 'Why does this summary look right?'
+                ? 'What should the summary or suggested resolution correct?'
+                : 'Why does this assistance look right?'
             "
           />
         </label>
@@ -148,7 +148,7 @@ async function submit() {
                 ? "Saving…"
                 : decision === "REJECTED"
                   ? "Send feedback & regenerate"
-                  : "Approve summary"
+                  : "Approve assistance"
             }}
           </button>
         </div>
@@ -160,7 +160,7 @@ async function submit() {
     <p v-if="notice" class="alert success" role="status">{{ notice }}</p>
     <p class="small muted">
       Rejection regenerates assistance using your feedback. Approval accepts the
-      current summary. Reviewer IDs are self-declared in this local demo.
+      current summary and suggested resolution. Reviewer IDs are self-declared in this local demo.
     </p>
   </section>
 </template>

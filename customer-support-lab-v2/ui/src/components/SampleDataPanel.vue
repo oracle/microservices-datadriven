@@ -96,7 +96,7 @@ watch(
     </button>
   </div>
   <p class="page-intro">
-    Choose a scenario, edit its data, and publish. Each submission creates a
+    Choose a synthetic scenario, edit its data, and publish. Each submission creates a
     new ticket and a TICKET_SUBMITTED event in one transaction.
   </p>
   <div class="sample-workspace">

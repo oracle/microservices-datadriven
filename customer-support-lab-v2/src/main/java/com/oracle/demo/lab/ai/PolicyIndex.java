@@ -17,7 +17,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-/** Ensures the seeded policy corpus has embeddings before AI startup completes. */
+/** Indexes policies and recorded reference resolutions before the consumer starts. */
 @Component
 public class PolicyIndex implements ApplicationRunner {
     private static final int EMBEDDING_DIMENSIONS = 1536;
@@ -34,39 +34,50 @@ public class PolicyIndex implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        List<Policy> missing = jdbcClient.sql("""
+        List<Reference> missing = jdbcClient.sql("""
                 select policy_id, title, body from support_policy
                 where embedding is null
                 order by policy_id
                 """)
-                .query((rs, rowNum) -> new Policy(
-                        rs.getString("policy_id"), rs.getString("title"), rs.getString("body")))
+                .query((rs, rowNum) -> new Reference(rs.getString("policy_id"),
+                        rs.getString("title") + "\n" + rs.getString("body")))
                 .list();
+        index(missing, "update support_policy set embedding = ? where policy_id = ?");
+        List<Reference> resolved = jdbcClient.sql("""
+                select id, title, description, resolution from support_ticket
+                where resolution is not null and embedding is null order by id
+                """)
+                .query((rs, rowNum) -> new Reference(rs.getLong("id"),
+                        rs.getString("title") + "\n" + rs.getString("description")
+                                + "\nRecorded resolution: " + rs.getString("resolution")))
+                .list();
+        index(resolved, "update support_ticket set embedding = ? where id = ?");
+    }
+
+    private void index(List<Reference> missing, String updateSql) {
         if (missing.isEmpty()) {
             return;
         }
 
-        List<String> texts = missing.stream().map(policy -> policy.title() + "\n" + policy.body()).toList();
+        List<String> texts = missing.stream().map(Reference::text).toList();
         List<float[]> embeddings = embeddingModel.embed(texts);
         if (embeddings.size() != missing.size()) {
-            throw new IllegalStateException("Policy embedding count did not match the policy corpus");
+            throw new IllegalStateException("Reference embedding count did not match the corpus");
         }
         for (float[] embedding : embeddings) {
             if (embedding == null || embedding.length != EMBEDDING_DIMENSIONS) {
-                throw new IllegalStateException("Policy embeddings must have 1536 dimensions");
+                throw new IllegalStateException("Reference embeddings must have 1536 dimensions");
             }
         }
 
         try (Connection connection = dataSource.getConnection()) {
             boolean autoCommit = connection.getAutoCommit();
             connection.setAutoCommit(false);
-            try (PreparedStatement statement = connection.prepareStatement("""
-                    update support_policy set embedding = ? where policy_id = ?
-                    """)) {
+            try (PreparedStatement statement = connection.prepareStatement(updateSql)) {
                 for (int i = 0; i < missing.size(); i++) {
                     statement.setObject(1, VECTOR.ofFloat32Values(embeddings.get(i)),
                             OracleType.VECTOR.getVendorTypeNumber());
-                    statement.setString(2, missing.get(i).id());
+                    statement.setObject(2, missing.get(i).id());
                     statement.addBatch();
                 }
                 statement.executeBatch();
@@ -78,10 +89,10 @@ public class PolicyIndex implements ApplicationRunner {
                 connection.setAutoCommit(autoCommit);
             }
         } catch (SQLException e) {
-            throw new IllegalStateException("Could not index support policies", e);
+            throw new IllegalStateException("Could not index reference data", e);
         }
     }
 
-    private record Policy(String id, String title, String body) {
+    private record Reference(Object id, String text) {
     }
 }

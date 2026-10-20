@@ -13,7 +13,7 @@ export const walkthrough = [
       "One request connects a Vue console, Spring Boot, Oracle AI Database, OCI Generative AI, True Cache, and Grafana.",
     steps: [
       "Start Compose, then Maven. Start the UI separately with npm.",
-      "At AI startup, three seeded support policies receive 1536-dimensional embeddings before the consumer subscribes to ticket_event.",
+      "At AI startup, three seeded support policies and three synthetic resolved reference tickets receive 1536-dimensional embeddings before the consumer subscribes to ticket_event.",
       "Follow the chapters from left to right. Each chapter has its own tools below the instructions; results refresh here as you work.",
     ],
     mechanism:
@@ -80,14 +80,14 @@ export const walkthrough = [
     summary:
       "A background consumer embeds the request, retrieves matches, and saves generated assistance.",
     steps: [
-      "Select an ENRICHED ticket below. Read the saved summary, model name, prompt version, generation time, policy matches, and related tickets.",
-      "Choose Submit a comparison ticket below and publish the MFA sample again to build a comparison history. The first ticket may have no related-ticket matches.",
-      "Use the same sample form to try Account access or Billing dispute. Choose Inspect saved assistance to compare the results.",
+      "Select an ENRICHED ticket below. Read the saved summary, suggested resolution, model name, prompt version, generation time, policy matches, and related tickets.",
+      "Choose Submit a comparison ticket below and publish the MFA sample again to build a comparison history. Three synthetic resolved reference tickets provide initial comparison data.",
+      "Try Account access to distinguish a tenant mismatch from lost MFA, or Billing dispute to inspect a human-review recommendation. Outside the policy corpus demonstrates missing evidence. Choose Inspect saved assistance to compare the results.",
     ],
     mechanism:
-      "OCI creates the embedding; Oracle performs exact cosine retrieval against tickets and policies. The initial chat prompt uses the title and description. Retrieved matches are saved for the reviewer, not inserted into that prompt. Results, the processed event ID, and queue acknowledgement commit together.",
+      "OCI creates the embedding; Oracle performs exact cosine retrieval against tickets and policies. One chat call uses the ticket, retrieved policy bodies, and recorded resolutions from similar tickets to generate a summary and suggested next steps with source references. Unresolved descriptions and earlier AI suggestions are not proven fixes. Results, the processed event ID, and queue acknowledgement commit together.",
     evidence:
-      "Look for ENRICHED, a nonempty summary, model/prompt metadata, indexed policies, and saved match scores. The application generates assistance; it does not change accounts or issue refunds.",
+      "Look for ENRICHED, a summary and suggested resolution with source references, model/prompt metadata, indexed policies, and saved match scores. The application generates assistance; it does not change accounts or issue refunds.",
     nodes: ["queue", "worker", "ai", "vector", "data"],
     edges: ["consume", "generate", "retrieve", "save"],
     actions: [
@@ -105,7 +105,7 @@ export const walkthrough = [
   },
   {
     id: "review",
-    practice: "Revise and approve a saved summary",
+    practice: "Revise and approve saved assistance",
     title: "Revise, then approve",
     short: "Review",
     animation: {
@@ -118,13 +118,13 @@ export const walkthrough = [
     steps: [
       "In the review workspace below, select an enriched ticket and enter a reviewer ID, such as demo-reviewer.",
       "Choose Request revision. Enter: “The affected account belongs to the test tenant. Include that context in the summary.” Then click Send feedback & regenerate.",
-      "Wait for ENRICHED and a new generation timestamp. Compare the feedback with the revised summary, then choose Approve and click Approve summary.",
+      "Wait for ENRICHED and a new generation timestamp. Compare the feedback with the revised summary, then choose Approve and click Approve assistance.",
       "After approval, the workspace moves to the next pending ticket. Switch the list filter to All tickets to revisit the approved ticket and inspect both review snapshots.",
     ],
     mechanism:
-      "A rejection saves a blockchain review snapshot, appends feedback, and publishes regeneration in one transaction. Revision prompts include previous assistance and accumulated feedback. Approval preserves another snapshot and accepts the current summary without publishing a regeneration event.",
+      "A rejection saves a blockchain review snapshot, appends feedback, and publishes regeneration in one transaction. Revision prompts include previous assistance and accumulated feedback. Approval preserves another snapshot and accepts the current assistance without publishing a regeneration event.",
     evidence:
-      "Review history preserves the earlier and revised summaries, reviewer IDs, decisions, and SHA-256 summary digests. Oracle V2 blockchain row chaining protects the history. Approval accepts assistance; it does not resolve or close the ticket.",
+      "Review history preserves the earlier and revised summaries and suggested resolutions, reviewer IDs, decisions, and SHA-256 assistance digests. Oracle V2 blockchain row chaining protects the history. Approval accepts assistance; it does not resolve or close the ticket.",
     nodes: ["ui", "app", "history", "queue", "worker", "ai"],
     edges: ["submit", "review", "revise", "consume", "generate"],
     actions: [{ label: "Open Human Review", tab: "review" }],

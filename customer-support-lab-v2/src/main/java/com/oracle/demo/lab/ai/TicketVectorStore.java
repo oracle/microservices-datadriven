@@ -20,8 +20,8 @@ import java.util.List;
 public class TicketVectorStore {
     public List<RelatedTicket> search(double minScore, float[] vector, Long ticketId, Connection connection) {
         final String searchQuery = """
-                select id, score from (
-                    select id, 1 - vector_distance(embedding, ?, cosine) as score
+                select id, title, resolution, score from (
+                    select id, title, resolution, 1 - vector_distance(embedding, ?, cosine) as score
                     from support_ticket where id != ? and embedding is not null
                 )
                 where score >= ?
@@ -36,7 +36,8 @@ public class TicketVectorStore {
             stmt.setObject(3, minScore, OracleType.NUMBER.getVendorTypeNumber());
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    matches.add(new RelatedTicket(rs.getLong("id"), rs.getDouble("score")));
+                    matches.add(new RelatedTicket(rs.getLong("id"), rs.getDouble("score"),
+                            rs.getString("title"), rs.getString("resolution")));
                 }
             }
         } catch (SQLException e) {

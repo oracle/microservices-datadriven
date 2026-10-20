@@ -5,12 +5,12 @@ const tables = [
   [
     "support_ticket",
     "Source of truth",
-    "Request text, accumulated human feedback, workflow status, and the ticket embedding.",
+    "Request text, accumulated human feedback, workflow status, recorded resolution, and the ticket embedding.",
   ],
   [
     "ticket_assistance",
     "Current AI output",
-    "The latest saved summary with model, prompt version, and generation time.",
+    "The latest summary and suggested resolution with model, prompt version, and generation time.",
   ],
   [
     "related_ticket",
@@ -40,7 +40,7 @@ const tables = [
   [
     "ticket_approval_history",
     "Blockchain history",
-    "Append-only review snapshots, summary digests, reviewer IDs, and decisions.",
+    "Append-only review snapshots, complete assistance digests, reviewer IDs, and decisions.",
   ],
 ];
 </script>
@@ -99,7 +99,7 @@ const tables = [
         <dd>{{ snapshot.embeddingModel }}</dd>
       </dl>
       <p>
-        Embeds the request, retrieves matches, and generates a summary.
+        Embeds the request, retrieves matches, and generates a summary and suggested resolution from policy bodies and recorded ticket outcomes.
         Revisions include previous assistance and accumulated feedback.
         Retrieved matches are saved for human review.
       </p>
@@ -129,13 +129,13 @@ const tables = [
         <StatusBadge value="ENABLED" />
       </div>
       <p>
-        Approval accepts the saved summary. Rejection stores feedback and
+        Approval accepts the saved assistance. Rejection stores feedback and
         publishes a regeneration event in the review transaction.
       </p>
       <dl class="metadata">
         <dt>Integrity</dt>
         <dd>
-          Oracle V2 SHA2-512 row chaining; separate SHA-256 summary digest.
+          Oracle V2 SHA2-512 row chaining; separate SHA-256 assistance digest.
         </dd>
         <dt>Retention</dt>
         <dd>
