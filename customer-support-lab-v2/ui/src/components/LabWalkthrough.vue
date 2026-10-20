@@ -137,12 +137,13 @@ const count = (name) =>
           {{ instruction }}
         </li>
       </ol>
-      <div class="walkthrough-explanation">
+      <details :key="chapter.id" class="walkthrough-explanation">
+        <summary>How it works &amp; what to inspect</summary>
         <h3>What connects the components</h3>
         <p>{{ chapter.mechanism }}</p>
         <h3>What to look for</h3>
         <p>{{ chapter.evidence }}</p>
-      </div>
+      </details>
     </section>
   </div>
   <section class="walkthrough-practice" aria-labelledby="practice-title">
@@ -323,7 +324,7 @@ const count = (name) =>
       exploring.</span
     >
   </nav>
-  <details class="walkthrough-reference">
+  <details v-if="step === 0" class="walkthrough-reference">
     <summary>
       Component reference, all eight tables, and the policy corpus
     </summary>

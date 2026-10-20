@@ -39,6 +39,18 @@ const filtered = computed(() =>
     );
   }),
 );
+const page = ref(0);
+const pageSize = 4;
+const pageCount = computed(() => Math.max(1, Math.ceil(filtered.value.length / pageSize)));
+const currentPage = computed(() => Math.min(page.value, pageCount.value - 1));
+const visibleTickets = computed(() => filtered.value.slice(
+  currentPage.value * pageSize, (currentPage.value + 1) * pageSize,
+));
+watch([query, filter], () => { page.value = 0; });
+watch(selected, (id) => {
+  const index = filtered.value.findIndex(ticket => ticket.id === id);
+  if (index >= 0) page.value = Math.floor(index / pageSize);
+});
 watch(
   () => props.initialId,
   (id) => {
@@ -97,7 +109,7 @@ function reviewed(review) {
       </div>
       <div class="list-caption">
         {{ filtered.length }} {{ filtered.length === 1 ? "ticket" : "tickets"
-        }}<span>{{ reviewMode ? "Saved summaries" : "Latest IDs first" }}</span>
+        }}<span>{{ reviewMode ? "Saved assistance" : "Latest IDs first" }}</span>
       </div>
       <div v-if="!filtered.length" class="empty">
         <strong>{{
@@ -112,7 +124,7 @@ function reviewed(review) {
         </p>
       </div>
       <button
-        v-for="ticket in filtered"
+        v-for="ticket in visibleTickets"
         :key="ticket.id"
         class="ticket-row"
         :class="{ selected: selected === ticket.id }"
@@ -127,11 +139,14 @@ function reviewed(review) {
           ><StatusBadge :value="ticket.workflowStatus" />
         </div>
         <strong>{{ ticket.title }}</strong>
-        <p>{{ ticket.description }}</p>
-        <span v-if="reviewMode && awaitingReview(ticket)" class="review-hint"
-          >● Ready for human review</span
-        >
       </button>
+      <nav v-if="pageCount > 1" class="list-pagination" aria-label="Ticket pages">
+        <button class="text-button" :disabled="currentPage === 0"
+          @click="page = currentPage - 1">← Previous</button>
+        <span class="small" aria-live="polite">{{ currentPage + 1 }} / {{ pageCount }}</span>
+        <button class="text-button" :disabled="currentPage + 1 >= pageCount"
+          @click="page = currentPage + 1">Next →</button>
+      </nav>
     </section>
     <TicketDetail
       v-if="selected"

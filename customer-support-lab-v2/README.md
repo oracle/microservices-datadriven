@@ -176,6 +176,12 @@ application on port 9001.
 
 ## Walk through the lab
 
+The UI uses larger text and a focused layout for presenting. Choose one sample
+scenario at a time; ticket lists show four rows per page. Expand **Sources &
+generation details**, **Review history**, or walkthrough explanations when
+you want the supporting detail. On smaller screens, use the **Workspace**
+selector to switch views.
+
 The UI refreshes every five seconds. Use **Refresh** for an immediate update,
 or turn off **Live · 5s** to pause polling.
 
@@ -191,9 +197,12 @@ they do not submit tickets, reviews, or replay requests automatically.
 requests. Pause it to inspect a flow, or select a chapter to focus its components.
 The diagram is mocked; the separate **Current lab snapshot** shows real counts.
 Use **Return to Lab Walkthrough** to resume your chapter after trying an action.
-Expand the component reference for the database, queue, models, all eight tables,
-and the seeded policy corpus. Check policy indexing and table counts; the
-component inventory does not establish external service health.
+On Overview or the first walkthrough chapter, expand the component reference
+for the database, queue, models, all eight tables,
+the configured TxEventQ topic with its submission and feedback event types,
+and the seeded policy corpus. Replays use the same topic. Check policy indexing
+and table counts; the component inventory does not establish external service
+health.
 
 Open **Diagrams** for the architecture, schema, and complete event loop.
 Return here as you follow a ticket through the lab.

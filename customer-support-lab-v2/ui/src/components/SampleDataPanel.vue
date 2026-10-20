@@ -100,36 +100,17 @@ watch(
     new ticket and a TICKET_SUBMITTED event in one transaction.
   </p>
   <div class="sample-workspace">
-    <section class="sample-presets" aria-label="Ticket presets">
-      <button
-        v-for="preset in ticketSamples"
-        :key="preset.id"
-        class="panel sample-preset"
-        :class="{ selected: selected === preset.id }"
-        :aria-pressed="selected === preset.id"
-        :disabled="pending"
-        @click="choose(preset.id)"
-      >
-        <span class="eyebrow">{{ preset.category }}</span
-        ><strong>{{ preset.name }}</strong>
-        <p>{{ preset.outcome }}</p>
-        <span v-if="preset.requires" class="subtle-tag"
-          >Requires {{ preset.requires }}</span
-        >
-      </button>
-      <button
-        class="panel sample-preset"
-        :class="{ selected: selected === 'custom' }"
-        :aria-pressed="selected === 'custom'"
-        :disabled="pending"
-        @click="choose('custom')"
-      >
-        <span class="eyebrow">YOUR OWN DATA</span
-        ><strong>Custom ticket</strong>
-        <p>
-          Start with a blank request and write your own title and description.
-        </p>
-      </button>
+    <section class="panel sample-presets" aria-label="Ticket presets">
+      <label for="sample-scenario">Choose a scenario
+        <select id="sample-scenario" :value="selected" :disabled="pending"
+          @change="choose($event.target.value)">
+          <option v-for="preset in ticketSamples" :key="preset.id" :value="preset.id">
+            {{ preset.name }}
+          </option>
+          <option value="custom">Custom ticket</option>
+        </select>
+      </label>
+      <p>{{ sample?.outcome || "Write your own title and description below." }}</p>
     </section>
     <section class="panel padded sample-composer">
       <div class="section-heading">
@@ -157,15 +138,18 @@ watch(
               placeholder="Describe the issue, context, and requested help…"
             />
           </label>
-          <label
-            >Correlation ID (optional)<input
-              v-model="correlationId"
-              maxlength="36"
-              placeholder="Leave blank to generate one automatically"
-          /></label>
-          <p class="small muted">
-            A correlation ID groups work; it does not deduplicate submissions.
-          </p>
+          <details class="disclosure">
+            <summary>Correlation ID (optional)</summary>
+            <label
+              >Correlation ID (optional)<input
+                v-model="correlationId"
+                maxlength="36"
+                placeholder="Leave blank to generate one automatically"
+            /></label>
+            <p class="small muted">
+              A correlation ID groups work; it does not deduplicate submissions.
+            </p>
+          </details>
           <div v-if="error" class="alert error" role="alert">{{ error }}</div>
           <div class="split">
             <span class="small muted"
@@ -180,7 +164,7 @@ watch(
           </div>
         </fieldset>
       </form>
-      <details class="sample-request" open>
+      <details class="sample-request">
         <summary>Request preview</summary>
         <pre>{{ JSON.stringify(payload, null, 2) }}</pre>
         <p class="small muted">

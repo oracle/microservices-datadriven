@@ -1,6 +1,7 @@
 <script setup>
 import StatusBadge from "./StatusBadge.vue";
 defineProps({ snapshot: Object, actualPath: String, grafanaUrl: String });
+const ticketEvents = ["TICKET_SUBMITTED", "TICKET_FEEDBACK_SUBMITTED"];
 const tables = [
   [
     "support_ticket",
@@ -78,8 +79,12 @@ const tables = [
         processing results.
       </p>
       <dl class="metadata">
-        <dt>Topic</dt>
+        <dt>Topics</dt>
         <dd class="mono">{{ snapshot.topic }}</dd>
+        <dt>Event types</dt>
+        <dd>
+          <div v-for="event in ticketEvents" :key="event" class="mono">{{ event }}</div>
+        </dd>
         <dt>Envelopes</dt>
         <dd>
           IDs, timestamps, and trace context; ticket text stays in the database.
@@ -167,13 +172,13 @@ const tables = [
     <div class="section-heading">
       <div>
         <div class="eyebrow">THE APPLICATION SCHEMA</div>
-        <h3>Eight tables. Clear responsibilities.</h3>
+        <h3>Tables and TxEventQ topics.</h3>
       </div>
       <span class="subtle-tag">Snapshot row counts</span>
     </div>
     <p class="muted">
-      These tables store application state and outcomes. Queue storage is
-      managed separately by TxEventQ.
+      Eight tables store application state and outcomes. The configured topic
+      carries submission and feedback events; TxEventQ manages its queue storage.
     </p>
     <div class="table-scroll">
       <table>
@@ -196,6 +201,29 @@ const tables = [
           </tr>
         </tbody>
       </table>
+    </div>
+    <div class="schema-topics">
+      <h4>TxEventQ topics</h4>
+      <p class="mono">{{ snapshot.topic }}</p>
+      <p>
+        Ticket submission and feedback share this topic. The background consumer
+        processes both event types. Replay publishes a new event to the same
+        topic, preserving the original event type.
+      </p>
+      <details>
+        <summary>Event types &amp; transaction boundaries</summary>
+        <dl class="metadata">
+          <dt class="mono">{{ ticketEvents[0] }}</dt>
+          <dd>Ticket creation and event publication commit together.</dd>
+          <dt class="mono">{{ ticketEvents[1] }}</dt>
+          <dd>Review snapshot, feedback, and regeneration publication commit together.</dd>
+        </dl>
+        <p class="small muted">
+          Topic names reflect the application configuration. Failure history
+          is stored in failed_ticket_event. The table row counts above describe
+          stored application data; topic queue depth is a separate metric.
+        </p>
+      </details>
     </div>
   </section>
   <section class="panel padded">

@@ -107,6 +107,11 @@ window.addEventListener("hashchange", () => {
         ><span class="brand-icon">▱</span
         ><span>Support Lab<small>ORACLE AI DATABASE</small></span></a
       >
+      <label class="mobile-nav" for="workspace-view">Workspace
+        <select id="workspace-view" :value="active" @change="navigate($event.target.value)">
+          <option v-for="tab in tabs" :key="tab.id" :value="tab.id">{{ tab.title }}</option>
+        </select>
+      </label>
       <div class="nav-label">WORKSPACE</div>
       <nav aria-label="Main navigation">
         <button
@@ -194,6 +199,8 @@ window.addEventListener("hashchange", () => {
             :snapshot="snapshot"
             :failures="failures"
             :ready="ready"
+            :actual-path="actualPath"
+            :grafana-url="grafanaUrl"
             @navigate="navigate"
             @select="select"
           />

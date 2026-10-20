@@ -54,20 +54,23 @@ async function replay(event) {
       </div>
       <StatusBadge :value="event.status" />
     </div>
-    <dl class="metadata">
-      <dt>Event type</dt>
-      <dd>{{ event.eventType }}</dd>
-      <dt>Attempts</dt>
-      <dd>{{ event.attemptCount }}</dd>
-      <dt>Failed at</dt>
-      <dd>{{ formatTime(event.failedAt) }}</dd>
-      <dt>Event UUID</dt>
-      <dd class="mono">{{ event.eventId }}</dd>
-      <dt>Correlation UUID</dt>
-      <dd class="mono">{{ event.correlationId }}</dd>
-      <dt>Causation UUID</dt>
-      <dd class="mono">{{ event.causationId || "Original submission" }}</dd>
-    </dl>
+    <details class="disclosure">
+      <summary>Failure &amp; trace details</summary>
+      <dl class="metadata">
+        <dt>Event type</dt>
+        <dd>{{ event.eventType }}</dd>
+        <dt>Attempts</dt>
+        <dd>{{ event.attemptCount }}</dd>
+        <dt>Failed at</dt>
+        <dd>{{ formatTime(event.failedAt) }}</dd>
+        <dt>Event UUID</dt>
+        <dd class="mono">{{ event.eventId }}</dd>
+        <dt>Correlation UUID</dt>
+        <dd class="mono">{{ event.correlationId }}</dd>
+        <dt>Causation UUID</dt>
+        <dd class="mono">{{ event.causationId || "Original submission" }}</dd>
+      </dl>
+    </details>
     <div class="split">
       <p class="small muted">Replay may make additional OCI model calls.</p>
       <button

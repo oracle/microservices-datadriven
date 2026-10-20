@@ -102,59 +102,62 @@ async function saved(review) {
             <p class="pre-wrap">{{ assistance.suggestedResolution }}</p>
             <p class="small muted">Proposed steps for human review; no customer action has been executed.</p>
           </div>
-          <dl class="metadata">
-            <dt>Generated</dt>
-            <dd>{{ formatTime(assistance.generatedAt) }}</dd>
-            <dt>Model</dt>
-            <dd>{{ assistance.summaryModel }}</dd>
-            <dt>Prompt</dt>
-            <dd>{{ assistance.promptVersion }}</dd>
-          </dl>
-          <div class="matches">
-            <div>
-              <h4>Retrieved policies</h4>
-              <p v-if="!assistance.policies.length" class="muted small">
-                No policy matches above the threshold.
-              </p>
-              <div
-                v-for="policy in assistance.policies"
-                :key="policy.policyId"
-              >
-                <div class="match">
-                  <span>{{ policy.title }}<small>{{ policy.policyId }}</small></span>
-                  <span class="score">{{ percentage(policy.score) }}</span>
+          <details :key="ticket.id" class="disclosure">
+            <summary>Sources &amp; generation details</summary>
+            <dl class="metadata">
+              <dt>Generated</dt>
+              <dd>{{ formatTime(assistance.generatedAt) }}</dd>
+              <dt>Model</dt>
+              <dd>{{ assistance.summaryModel }}</dd>
+              <dt>Prompt</dt>
+              <dd>{{ assistance.promptVersion }}</dd>
+            </dl>
+            <div class="matches">
+              <div>
+                <h4>Retrieved policies</h4>
+                <p v-if="!assistance.policies.length" class="muted small">
+                  No policy matches above the threshold.
+                </p>
+                <div
+                  v-for="policy in assistance.policies"
+                  :key="policy.policyId"
+                >
+                  <div class="match">
+                    <span>{{ policy.title }}<small>{{ policy.policyId }}</small></span>
+                    <span class="score">{{ percentage(policy.score) }}</span>
+                  </div>
+                  <details v-if="policy.body">
+                    <summary>Read policy</summary>
+                    <p class="pre-wrap small">{{ policy.body }}</p>
+                  </details>
                 </div>
-                <details v-if="policy.body">
-                  <summary>Read policy</summary>
-                  <p class="pre-wrap small">{{ policy.body }}</p>
-                </details>
+              </div>
+              <div>
+                <h4>Related tickets</h4>
+                <p v-if="!assistance.similarTickets.length" class="muted small">
+                  No related tickets above the threshold.
+                </p>
+                <div
+                  v-for="related in assistance.similarTickets"
+                  :key="related.relatedTicketId"
+                >
+                  <button class="match match-link" @click="emit('select', related.relatedTicketId)">
+                    <span>Ticket #{{ related.relatedTicketId }}<small>{{ related.title }}</small></span>
+                    <span class="score">{{ percentage(related.score) }} ↗</span>
+                  </button>
+                  <details v-if="related.resolution">
+                    <summary>Recorded resolution</summary>
+                    <p class="pre-wrap small">{{ related.resolution }}</p>
+                  </details>
+                </div>
               </div>
             </div>
-            <div>
-              <h4>Related tickets</h4>
-              <p v-if="!assistance.similarTickets.length" class="muted small">
-                No related tickets above the threshold.
-              </p>
-              <div
-                v-for="related in assistance.similarTickets"
-                :key="related.relatedTicketId"
-              >
-                <button class="match match-link" @click="emit('select', related.relatedTicketId)">
-                  <span>Ticket #{{ related.relatedTicketId }}<small>{{ related.title }}</small></span>
-                  <span class="score">{{ percentage(related.score) }} ↗</span>
-                </button>
-                <details v-if="related.resolution">
-                  <summary>Recorded resolution</summary>
-                  <p class="pre-wrap small">{{ related.resolution }}</p>
-                </details>
-              </div>
-            </div>
-          </div>
-          <p class="small muted">
-            Scores are cosine similarity, not confidence. Matches are
-            retrieved context for a human agent. Only tickets with a recorded
-            resolution are used as resolution examples; earlier AI suggestions are not proven fixes.
-          </p>
+            <p class="small muted">
+              Scores are cosine similarity, not confidence. Matches are
+              retrieved context for a human agent. Only tickets with a recorded
+              resolution are used as resolution examples; earlier AI suggestions are not proven fixes.
+            </p>
+          </details>
         </template>
         <p v-else class="empty compact">
           {{ ticket.resolution ? "Historical reference case; its recorded resolution can support similar tickets."
