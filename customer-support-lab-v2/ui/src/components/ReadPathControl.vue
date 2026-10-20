@@ -11,7 +11,7 @@ defineEmits(["update:modelValue"]);
         @change="$emit('update:modelValue', $event.target.value)"
       >
         <option value="primary">Primary · fresh</option>
-        <option value="cache">True Cache · may lag</option>
+        <option value="cache">True Cache · cache</option>
       </select>
     </label>
     <span class="small muted">

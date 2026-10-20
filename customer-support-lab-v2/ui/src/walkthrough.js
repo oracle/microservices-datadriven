@@ -176,7 +176,7 @@ export const walkthrough = [
       "Read the ticket list through True Cache while keeping detail and review reads fresh.",
     steps: [
       "Choose Read list from primary below and note the ticket IDs and statuses.",
-      "Switch Ticket list read path to True Cache · may lag. Check Served by: true-cache confirms the cache served the list.",
+      "Switch Ticket list read path to True Cache · cache. Check Served by: true-cache confirms the cache served the list.",
       "If you see primary-fallback, the primary served the request because cache access failed. That does not prove a successful cache read.",
       "New tickets and statuses may lag while redo is applied. Switch back to Primary · fresh when checking the latest state. Detail and review screens always read primary.",
     ],
