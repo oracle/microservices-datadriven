@@ -18,10 +18,8 @@ services:
       - "4317:4317" # OTLP gRPC
       - "4318:4318" # OTLP HTTP
     volumes:
-      - ./dashboards/dashboards.yaml:/otel-lgtm/grafana/conf/provisioning/dashboards/ucp.yaml:ro
-      - ./dashboards/ucp-metrics.json:/otel-lgtm/grafana/conf/provisioning/dashboards/custom/ucp-metrics.json:ro
-      - ./dashboards/customer-support-workflow.json:/otel-lgtm/grafana/conf/provisioning/dashboards/custom/customer-support-workflow.json:ro
-      - ./dashboards/oracle-database-health.json:/otel-lgtm/grafana/conf/provisioning/dashboards/custom/oracle-database-health.json:ro
+      # Replace the bundled sample providers with the lab dashboards only.
+      - ./dashboards:/otel-lgtm/grafana/conf/provisioning/dashboards:ro
 
   # A read-only common user is created on the primary and replicated to True Cache.
   metrics-db-setup:
@@ -41,7 +39,7 @@ services:
     restart: "no"
 
   oracle-metrics-exporter:
-    image: container-registry.oracle.com/database/observability-exporter:2.5.0
+    image: container-registry.oracle.com/database/observability-exporter:2.5.1
     command: ["--config.file", "/exporter/config.yaml"]
     environment:
       METRICS_DB_PASSWORD: ${METRICS_DB_PASSWORD:-${APP_DB_PASSWORD:?Set APP_DB_PASSWORD before starting Compose}}

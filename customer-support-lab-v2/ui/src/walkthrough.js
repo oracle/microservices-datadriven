@@ -1,4 +1,4 @@
-// Chapters follow the README's manual workflow. Navigation never submits work.
+// Chapters follow the README's UI workflow. Navigation never submits work.
 export const walkthrough = [
   {
     id: "ready",
@@ -45,11 +45,11 @@ export const walkthrough = [
       "The publication receipt includes the ticket ID. Inspect the ticket below for workflow status and saved assistance. TRIAGED identifies imported reference cases; FAILED means continue to the Recover chapter.",
     actions: [
       {
-        label: "Open MFA sample",
+        label: "MFA sample",
         tab: "samples",
         preset: "mfa",
       },
-      { label: "Inspect tickets", tab: "tickets", readPath: "primary" },
+      { label: "Tickets", tab: "tickets", readPath: "primary" },
     ],
   },
   {
@@ -66,8 +66,8 @@ export const walkthrough = [
       "A background consumer embeds the request, retrieves matches, and saves generated assistance.",
     steps: [
       "Select an ENRICHED ticket below. Read the saved summary, suggested resolution, model name, prompt version, generation time, policy matches, and related tickets.",
-      "Choose Submit a comparison ticket below and publish the MFA sample again to build a comparison history. Three synthetic resolved reference tickets provide initial comparison data.",
-      "Try Account access to distinguish a tenant mismatch from lost MFA, or Billing dispute to inspect a human-review recommendation. Outside the policy corpus demonstrates missing evidence. Choose Inspect saved assistance to compare the results.",
+      "Choose Comparison sample below and publish the MFA sample again to build a comparison history. Three synthetic resolved reference tickets provide initial comparison data.",
+      "Try Account access to distinguish a tenant mismatch from lost MFA, or Billing dispute to inspect a human-review recommendation. Outside the policy corpus demonstrates missing evidence. Choose Saved assistance to compare the results.",
     ],
     mechanism:
       "OCI creates the embedding; Oracle performs exact cosine retrieval against tickets and policies. One chat call uses the ticket, retrieved policy bodies, and recorded resolutions from similar tickets to generate a summary and suggested next steps with source references. Unresolved descriptions and earlier AI suggestions are not proven fixes. Results, the processed event ID, and queue acknowledgement commit together.",
@@ -75,12 +75,12 @@ export const walkthrough = [
       "Look for ENRICHED, a summary and suggested resolution with source references, model/prompt metadata, indexed policies, and saved match scores. The application generates assistance; it does not change accounts or issue refunds.",
     actions: [
       {
-        label: "Inspect saved assistance",
+        label: "Saved assistance",
         tab: "tickets",
         readPath: "primary",
       },
       {
-        label: "Submit a comparison ticket",
+        label: "Comparison sample",
         tab: "samples",
         preset: "mfa",
       },
@@ -108,7 +108,7 @@ export const walkthrough = [
       "A rejection saves a blockchain review snapshot, appends feedback, and publishes regeneration in one transaction. Revision prompts include previous assistance and accumulated feedback. Approval preserves another snapshot and accepts the current assistance without publishing a regeneration event.",
     evidence:
       "Review history preserves the earlier and revised summaries and suggested resolutions, reviewer IDs, decisions, and SHA-256 assistance digests. Oracle V2 blockchain row chaining protects the history. Approval accepts assistance; it does not resolve or close the ticket.",
-    actions: [{ label: "Open Human Review", tab: "review" }],
+    actions: [{ label: "Human Review", tab: "review" }],
   },
   {
     id: "recover",
@@ -124,9 +124,9 @@ export const walkthrough = [
       "Deliberately fail an event, inspect the durable worklist, and replay the work.",
     steps: [
       "Open the failure sample below and keep the [demo-fail-once] title prefix. Publish the ticket.",
-      "Wait for FAILED, then choose Inspect Failed Events below. Inspect the error, attempt metadata, and replayable event ID.",
+      "Wait for FAILED, then choose Failed Events below. Inspect the error, attempt metadata, and replayable event ID.",
       "Click Replay event. The new event is linked to the original failure by its causation ID. With the default three attempts, replay fails transiently once before succeeding.",
-      "Choose Inspect ticket below and confirm ENRICHED. The original failure leaves the active worklist and remains recorded as replayed.",
+      "Choose the ticket panel below and confirm ENRICHED. The original failure leaves the active worklist and remains recorded as replayed.",
     ],
     mechanism:
       "A failed delivery stores failure metadata. Replay publishes a new event, so the normal consumer and retry path process it again. For an unexpected failure, fix its cause before replaying; OCI may be called again.",
@@ -134,11 +134,11 @@ export const walkthrough = [
       "Use the UI worklist for current replayable failures. A rolling Grafana failure count can remain positive after successful recovery because it still includes the earlier failure.",
     actions: [
       {
-        label: "Open failure sample",
+        label: "Failure sample",
         tab: "samples",
         preset: "failure",
       },
-      { label: "Inspect Failed Events", tab: "failures" },
+      { label: "Failed Events", tab: "failures" },
     ],
   },
   {
@@ -154,7 +154,7 @@ export const walkthrough = [
     summary:
       "Read the ticket list through True Cache while keeping detail and review reads fresh.",
     steps: [
-      "Choose Read list from primary below and note the ticket IDs and statuses.",
+      "Choose Primary ticket list below and note the ticket IDs and statuses.",
       "Switch Ticket list read path to True Cache · cache. Check Served by: true-cache confirms the cache served the list.",
       "If you see primary-fallback, the primary served the request because cache access failed. That does not prove a successful cache read.",
       "New tickets and statuses may lag while redo is applied. Switch back to Primary · fresh when checking the latest state. Detail and review screens always read primary.",
@@ -164,8 +164,8 @@ export const walkthrough = [
     evidence:
       "Compare the reported Served by value with the requested read path. A cache hit can be stale; primary-fallback is a different outcome. The snapshot below reports the last list read.",
     actions: [
-      { label: "Read list from primary", tab: "tickets", readPath: "primary" },
-      { label: "Read list from True Cache", tab: "tickets", readPath: "cache" },
+      { label: "Primary ticket list", tab: "tickets", readPath: "primary" },
+      { label: "True Cache ticket list", tab: "tickets", readPath: "cache" },
     ],
   },
   {

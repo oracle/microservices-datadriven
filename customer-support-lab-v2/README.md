@@ -40,7 +40,6 @@ You need:
   region, and private key. The identity must have access to OCI Generative AI
   in the compartment you select, including the configured chat and embedding
   models in that region.
-- `curl`, `jq`, and `uuidgen` if you want to use the command-line walkthroughs.
 
 Use a trusted development host: the lab APIs have no authentication, reviewer
 IDs are self-declared, and the True Cache setup helper uses the Docker socket.
@@ -137,11 +136,8 @@ Leave Maven running. On a fresh lab, startup creates embeddings for policies and
 OCI before starting the event consumer. Wait for **`Subscribed to topic ticket_event`**
 in the application logs before submitting tickets.
 
-From another terminal, check the backend:
-
-```bash
-curl -fsS http://localhost:9002/actuator/health
-```
+Open the [backend health page](http://localhost:9002/actuator/health) in your
+browser and confirm it reports `UP`.
 
 | Feature | Behavior |
 | --- | --- |
@@ -191,7 +187,9 @@ Start on **Overview**, then open **Lab Walkthrough** for seven guided chapters
 covering setup, submission, AI enrichment, human review, failure recovery,
 True Cache, and observability. Each chapter explains the handoff, what to inspect,
 and which real console screen to open. The buttons load samples or change views;
-they do not submit tickets, reviews, or replay requests automatically.
+they do not submit tickets, reviews, or replay requests automatically. The
+selected chapter is marked **Current**, and the visible panel is marked
+**✓ Showing**.
 
 Each walkthrough chapter includes an animated SVG explaining its handoff.
 The animation is illustrative; **Current lab snapshot** shows live counts.
@@ -362,8 +360,13 @@ an old zero. Recovery-area usage does not measure archive destinations outside
 the FRA or the container filesystem.
 
 Dashboard JSON lives in [dashboards/](dashboards/) and is provisioned from files;
-make lasting edits there. Existing database installations need no reset: the
-monitoring setup is idempotent and changes grants/views only. Restart Java after
+make lasting edits there. Compose provisions only **Customer Support Workflow**,
+**Oracle UCP Metrics**, and **Oracle Database Health**, replacing LGTM’s bundled
+JVM and RED sample dashboard providers. For an existing stack, run
+`docker compose up -d --no-deps --force-recreate grafana-lgtm` to apply the mount
+change; recreating this disposable LGTM container clears its stored telemetry.
+
+Existing database installations need no reset: the monitoring setup is idempotent and changes grants/views only. Restart Java after
 updating the lab to register the cache pool and new histogram buckets.
 
 Application logs are exported over OTLP to `http://localhost:4318/v1/logs` and
@@ -376,121 +379,11 @@ Set `MANAGEMENT_OTLP_LOGGING_ENDPOINT` to change the logs endpoint, or
 `MANAGEMENT_OTLP_LOGGING_EXPORT_ENABLED=false` to disable remote log export
 while keeping console logs.
 
-## Manual API walkthrough
+## API reference
 
-The **Lab Walkthrough** tab guides the same steps through the UI. The commands
-below let you perform each operation manually without helper scripts. Use a
-fresh shell with `curl`, `jq`, and `uuidgen`, and keep the Maven
-application running. Each ticket submission writes lab data and may call OCI.
-
-### Submit and inspect assistance
-
-```bash
-export LAB_BASE_URL=http://localhost:9001
-TICKET_ID=$(curl -fsS -H 'Content-Type: application/json' \
-  -d '{"title":"Lost MFA authenticator","description":"I replaced my lost phone and cannot sign in to our Northstar demo tenant because the MFA prompt still targets the old authenticator. My password reset completed, but I have no registered backup factor or recovery method. I have not completed identity verification with support. How can I restore access without bypassing MFA?"}' \
-  "$LAB_BASE_URL/tickets" | jq -er '.id')
-
-curl -fsS "$LAB_BASE_URL/tickets/$TICKET_ID?readPath=primary" | jq
-```
-
-Repeat the last GET until `workflowStatus` is `ENRICHED`. AI calls take time.
-If it becomes `FAILED`, inspect `/ticket-events/failures` and fix the cause;
-`TRIAGED` identifies imported reference cases. New submissions should become
-`ENRICHED`. Once enriched:
-
-```bash
-curl -fsS "$LAB_BASE_URL/tickets/$TICKET_ID/assistance" | jq
-```
-
-Inspect `summary`, `suggestedResolution`, `summaryModel`, `promptVersion`, `generatedAt`, `policies`,
-and `similarTickets`. Submit another MFA ticket to build related-ticket history.
-Related matches can include the three synthetic resolved reference cases.
-
-### Request a revision and approve the result
-
-Save the original generation timestamp, then reject the saved summary:
-
-```bash
-BEFORE=$(curl -fsS "$LAB_BASE_URL/tickets/$TICKET_ID/assistance" | jq -r '.generatedAt')
-ACTION_ID=$(uuidgen)
-FEEDBACK=$(jq -n --arg actionId "$ACTION_ID" \
-  '{actionId:$actionId, decision:"REJECTED", actorId:"demo-reviewer", reason:"The affected account belongs to the test tenant. Include that context in the summary."}')
-curl -fsS -H 'Content-Type: application/json' -d "$FEEDBACK" \
-  "$LAB_BASE_URL/tickets/$TICKET_ID/approvals" | jq
-
-curl -fsS "$LAB_BASE_URL/tickets/$TICKET_ID?readPath=primary" | jq
-curl -fsS "$LAB_BASE_URL/tickets/$TICKET_ID/assistance" | jq
-```
-
-Repeat the two GETs until the ticket is `ENRICHED` and `generatedAt` differs
-from `$BEFORE`. Read the revised summary before approving it. A retry after an
-uncertain review response must reuse the same `actionId` and payload; a new
-review decision needs a new UUID.
-
-```bash
-APPROVAL=$(jq -n --arg actionId "$(uuidgen)" \
-  '{actionId:$actionId, decision:"APPROVED", actorId:"demo-reviewer", reason:"Accepted the revision"}')
-curl -fsS -H 'Content-Type: application/json' -d "$APPROVAL" \
-  "$LAB_BASE_URL/tickets/$TICKET_ID/approvals" | jq
-curl -fsS "$LAB_BASE_URL/tickets/$TICKET_ID/approvals" | jq
-```
-
-The history includes the rejected and approved assistance snapshots. Approval
-accepts the current assistance; it does not close the ticket or generate another
-revision. Revisions use the previous assistance and accumulated feedback.
-
-### Fail, inspect, and replay an event
-
-With `demo-failures` enabled, create a separate deliberate failure:
-
-```bash
-FAILED_TICKET_ID=$(curl -fsS -H 'Content-Type: application/json' \
-  -d '{"title":"[demo-fail-once] Lost MFA authenticator","description":"I replaced my lost phone and cannot sign in to our Northstar demo tenant because the MFA prompt still targets the old authenticator. My password reset completed, but I have no registered backup factor or recovery method. I have not completed identity verification with support. How can I restore access without bypassing MFA?"}' \
-  "$LAB_BASE_URL/tickets" | jq -er '.id')
-curl -fsS "$LAB_BASE_URL/ticket-events/failures" | jq
-```
-
-Repeat the failures GET until a replayable record for `$FAILED_TICKET_ID` appears.
-Read its error and attempt metadata before replaying. For an unexpected failure,
-fix its cause first; replay can call OCI again.
-
-```bash
-EVENT_ID=$(curl -fsS "$LAB_BASE_URL/ticket-events/failures" \
-  | jq -er --argjson id "$FAILED_TICKET_ID" \
-    '[.[] | select(.ticketId == $id and .replayable)] | first | .eventId // empty')
-# Run only after EVENT_ID contains the inspected failure's UUID.
-curl -fsS -X POST "$LAB_BASE_URL/ticket-events/failures/$EVENT_ID/replay" | jq
-curl -fsS "$LAB_BASE_URL/tickets/$FAILED_TICKET_ID?readPath=primary" | jq
-curl -fsS "$LAB_BASE_URL/ticket-events/failures" | jq
-```
-
-The replay receipt has a new `eventId` and `causationId` pointing to the original
-failure. Repeat the ticket GET until `ENRICHED`; with the default three attempts,
-replay has one deliberate transient failure before succeeding. The original
-failure is no longer in the replayable worklist. A repeated replay request for
-the same resolved failure returns 404 rather than publishing another event.
-
-### Compare primary and True Cache
-
-The UI routes ticket lists to the selected read path and keeps details/review on
-primary. For a direct API comparison, inspect both the list and a known ticket:
-
-```bash
-curl -fsS -i "$LAB_BASE_URL/tickets?readPath=primary"
-curl -fsS -i "$LAB_BASE_URL/tickets?readPath=cache"
-curl -fsS -i "$LAB_BASE_URL/tickets/$TICKET_ID?readPath=primary"
-curl -fsS -i "$LAB_BASE_URL/tickets/$TICKET_ID?readPath=cache"
-```
-
-Check the `X-Read-Path` header: `primary` or `true-cache` identifies the actual
-source. `primary-fallback` does not prove a working cache. Redo application can
-lag, so retry a cache miss after a few seconds. Use primary for the freshest state.
-
-To inspect telemetry manually, open Grafana and follow the dashboard/Tempo steps
-in **Follow the work in Grafana** above. Metrics export every five seconds;
-Logs are also exported to Loki; use `{service_name="customer-support-lab-v2"}`
-in Explore to inspect them.
+Use **Lab Walkthrough** in the UI for submission, assistance, review, replay,
+and read-path comparisons. Endpoint and payload details are in the separate
+[API reference](API.md).
 
 ## Stop or reset
 

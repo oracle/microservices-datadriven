@@ -13,5 +13,5 @@ providers:
     allowUiUpdates: false
     updateIntervalSeconds: 30
     options:
-      path: /otel-lgtm/grafana/conf/provisioning/dashboards/custom
+      path: /otel-lgtm/grafana/conf/provisioning/dashboards
       foldersFromFilesStructure: false

@@ -1731,6 +1731,24 @@ td.count-cell {
   gap: 10px;
   margin: 20px 0;
 }
+/* Panel selectors have an explicit state separate from write actions. */
+.walkthrough-actions .button.selected {
+  background: var(--green);
+  border-color: var(--green);
+  color: white;
+  box-shadow: 0 0 0 3px #174d3e26;
+}
+.selection-state {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+.walkthrough-actions .selection-state {
+  margin-left: 8px;
+}
 .walkthrough-practice {
   margin-bottom: 28px;
 }

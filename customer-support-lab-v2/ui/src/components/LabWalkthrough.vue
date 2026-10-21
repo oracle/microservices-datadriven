@@ -55,6 +55,10 @@ watch(
     });
   },
 );
+function isSelected(action) {
+  return activeView.value === action.tab &&
+    (!action.readPath || props.readPath === action.readPath);
+}
 function act(action) {
   activeView.value = action.tab || "observe";
   if (action.readPath) emit("update:readPath", action.readPath);
@@ -99,6 +103,7 @@ const count = (name) =>
     >
       <span>{{ String(index + 1).padStart(2, "0") }}</span
       >{{ item.short }}
+      <small v-if="step === index" class="selection-state">Current</small>
     </button>
   </nav>
   <div class="walkthrough-layout">
@@ -162,8 +167,9 @@ const count = (name) =>
       ticket.
     </p>
     <p v-else class="small muted">
-      Results refresh with the console. Submit, review, and replay when you’re
-      ready; these actions write lab data and may call OCI.
+      Choose a panel below; “Showing” marks the panel already on screen.
+      Results refresh with the console. Publishing, reviewing, and replaying
+      write lab data and may call OCI.
     </p>
     <div
       v-if="chapter.actions.length"
@@ -183,18 +189,12 @@ const count = (name) =>
         <button
           v-else
           class="button"
-          :class="{
-            primary:
-              activeView === action.tab &&
-              (!action.readPath || readPath === action.readPath),
-          }"
-          :aria-pressed="
-            activeView === action.tab &&
-            (!action.readPath || readPath === action.readPath)
-          "
+          :class="{ selected: isSelected(action) }"
+          :aria-pressed="isSelected(action)"
           @click="act(action)"
         >
           {{ action.label }}
+          <span v-if="isSelected(action)" class="selection-state">✓ Showing</span>
         </button>
       </template>
       <button
@@ -202,11 +202,12 @@ const count = (name) =>
           selectedId && ['submit', 'enrich', 'recover'].includes(chapter.id)
         "
         class="button"
-        :class="{ primary: activeView === 'detail' }"
+        :class="{ selected: activeView === 'detail' }"
         :aria-pressed="activeView === 'detail'"
         @click="inspect(selectedId)"
       >
-        Inspect ticket #{{ selectedId }}
+        Ticket #{{ selectedId }}
+        <span v-if="activeView === 'detail'" class="selection-state">✓ Showing</span>
       </button>
     </div>
     <ReadPathControl
