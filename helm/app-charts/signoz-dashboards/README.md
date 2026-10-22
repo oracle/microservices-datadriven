@@ -77,12 +77,6 @@ Secret takes precedence. If the account belongs to multiple organizations, this
 key is required to select one explicitly. Empty or ambiguous discovery results
 fail before any dashboards are changed.
 
-The Job does not mount the SigNoz database PVC or require pod affinity. It works
-with SQLite or PostgreSQL metadata storage. The former
-`signoz.orgDiscovery.enabled` and `signoz.orgDiscovery.pvcName` settings are no
-longer used; remove them from existing values files. No discovery flag is needed
-when the Secret contains `orgID`.
-
 `signoz.url` can override the default `http://<releaseName>-signoz:8080`. The
 Secret must still exist in the namespace where this chart is installed.
 

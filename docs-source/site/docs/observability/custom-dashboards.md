@@ -78,13 +78,6 @@ discovery. Accounts belonging to multiple organizations must supply this key to
 select an organization explicitly. The Secret must contain `email` and `password`
 in either case.
 
-The Job does not mount the SigNoz metadata database PVC or require pod affinity,
-so it supports SQLite and PostgreSQL metadata storage. The former
-`signoz.orgDiscovery.enabled` and `signoz.orgDiscovery.pvcName` values are no
-longer used; remove them from existing values files. You can override
-`signoz.url` instead of using the default
-`http://<OBaaS-release-name>-signoz:8080`.
-
 For private registries, configure `image.repository`, `image.tag`, and
 `imagePullSecrets`. Replacement images must provide Python 3 and its standard
 library. No runtime package installation is needed.
