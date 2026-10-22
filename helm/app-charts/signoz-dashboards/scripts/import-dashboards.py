@@ -4,13 +4,13 @@
 
 import json
 import os
-from contextlib import closing
 from pathlib import Path
-import sqlite3
 import sys
 import time
 from urllib.error import HTTPError, URLError
+from urllib.parse import quote, urlencode
 from urllib.request import Request, urlopen
+from uuid import UUID
 
 
 class DashboardAPIUnavailable(Exception):
@@ -29,14 +29,40 @@ def request(url, method="GET", payload=None, token=None):
         return json.loads(content) if content else None
 
 
-def discover_org_id(database, output):
-    # Read the live SQLite database without writing to SigNoz's PVC.
-    with closing(sqlite3.connect(f"{database.as_uri()}?mode=ro", uri=True)) as connection:
-        organization = connection.execute("SELECT id FROM organizations LIMIT 1").fetchone()
-    if not organization or not organization[0]:
-        raise ValueError("No organization ID found in SigNoz database")
-    output.write_text(str(organization[0]))
-    print("SigNoz organization ID discovered", flush=True)
+def wait_until_ready(url):
+    while True:
+        try:
+            request(f"{url}/api/v1/health?live=1")
+            print("SigNoz ready", flush=True)
+            return
+        except (URLError, TimeoutError, DashboardAPIUnavailable):
+            print("Waiting for SigNoz...", flush=True)
+            time.sleep(5)
+
+
+def login(url, auth):
+    email = (auth / "email").read_text().strip()
+    password = (auth / "password").read_text().rstrip("\r\n")
+    org_path = auth / "orgID"
+    org_id = org_path.read_text().strip() if org_path.exists() else ""
+    if not org_id:
+        context = request(f"{url}/api/v2/sessions/context?" + urlencode({"email": email}))
+        orgs = context["data"]["orgs"]
+        if len(orgs) != 1:
+            raise ValueError(
+                f"Expected one organization for the configured email; found {len(orgs)}. "
+                "Set orgID in the credential secret to select one explicitly."
+            )
+        org_id = orgs[0]["id"]
+    UUID(org_id)
+    response = request(f"{url}/api/v2/sessions/email_password", method="POST", payload={
+        "email": email, "password": password, "orgID": org_id,
+    })
+    token = response.get("data", response).get("accessToken")
+    if not isinstance(token, str) or not token:
+        raise ValueError("SigNoz login returned no access token")
+    print("Login successful", flush=True)
+    return token
 
 
 def load_dashboards(directory):
@@ -76,7 +102,7 @@ def list_dashboards(url, token):
     offset = 0
     while True:
         records = page["dashboards"]
-        if not isinstance(records, list) or not isinstance(page["total"], int):
+        if not isinstance(records, list) or type(page["total"]) is not int or page["total"] < 0:
             raise ValueError("Invalid V2 dashboard list response")
         existing.extend(records)
         offset += len(records)
@@ -102,7 +128,7 @@ def reconcile(url, token, dashboards):
         else:
             title = dashboard.get("spec", {}).get("display", {}).get("name")
         if title in dashboards:
-            dashboard_id = dashboard["id"]
+            dashboard_id = quote(dashboard["id"], safe="")
             print(f"Deleting existing dashboard: {title} ({dashboard_id})", flush=True)
             request(f"{url}/api/{api_version}/dashboards/{dashboard_id}", method="DELETE", token=token)
     for title, dashboard in dashboards.items():
@@ -113,34 +139,11 @@ def reconcile(url, token, dashboards):
 
 
 def main():
-    if sys.argv[1:] == ["--discover-org"]:
-        discover_org_id(Path("/signoz-db/signoz.db"), Path("/shared/orgID"))
-        return
-    url = os.environ["SIGNOZ_URL"].rstrip("/")
-    if sys.argv[1:] == ["--wait"]:
-        while True:
-            try:
-                request(f"{url}/api/v1/health?live=1")
-                return
-            except (URLError, TimeoutError):
-                print("Waiting for SigNoz...", flush=True)
-                time.sleep(5)
-
     # Validate every local file before deleting any existing dashboards.
     dashboards = load_dashboards(Path("/dashboards"))
-    auth = Path("/signoz-authn")
-    org_path = Path("/shared/orgID")
-    if not org_path.is_file():
-        org_path = auth / "orgID"
-    credentials = {
-        "email": (auth / "email").read_text().strip(),
-        "password": (auth / "password").read_text(),
-        "orgID": org_path.read_text().strip(),
-    }
-    login = request(f"{url}/api/v2/sessions/email_password", method="POST", payload=credentials)
-    token = login.get("data", login).get("accessToken")
-    if not token:
-        raise ValueError("SigNoz login returned no access token")
+    url = os.environ["SIGNOZ_URL"].rstrip("/")
+    wait_until_ready(url)
+    token = login(url, Path("/signoz-authn"))
     reconcile(url, token, dashboards)
 
 
@@ -152,3 +155,6 @@ if __name__ == "__main__":
         print(f"SigNoz API request failed: HTTP {error.code}", file=sys.stderr)
         sys.exit(1)
 
+    except (ValueError, KeyError, TypeError, OSError, DashboardAPIUnavailable):
+        print("SigNoz setup failed: invalid setup input, API response, or connection", file=sys.stderr)
+        sys.exit(1)

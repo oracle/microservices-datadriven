@@ -28,7 +28,6 @@ docker.io/busybox:1.35
 docker.io/busybox:1.37
 docker.io/busybox:latest
 docker.io/clickhouse/clickhouse-server:25.12.5
-docker.io/curlimages/curl:8.22.0
 docker.io/envoyproxy/envoy:distroless-v1.39.1
 docker.io/envoyproxy/gateway:v1.9.1
 docker.io/envoyproxy/ratelimit:8fe6ea42

@@ -68,34 +68,19 @@ signoz:
 Replace `obaas` with your actual OBaaS platform release name, not the release name
 you will use for the dashboard chart. Keep passwords out of the values file.
 
-The Job uses `container-registry.oracle.com/os/oraclelinux:9` for its containers.
-It waits for SigNoz, reads the organization ID from the SigNoz SQLite database
-in read-only mode, logs in, and imports the dashboards through the detected API.
+The Job runs a Python standard-library importer on
+`container-registry.oracle.com/os/oraclelinux:9`. It waits for SigNoz, discovers
+the organization through `/api/v2/sessions/context` using the credential Secret's
+`email`, logs in, and imports dashboards through the detected dashboard API.
 
-By default, the Job mounts the PVC `signoz-db-<OBaaS-release-name>-signoz-0` and
-uses pod affinity to run on the same node as that instance's SigNoz pod. Override
-`signoz.orgDiscovery.pvcName` if your PVC has a different name. The storage must
-allow the Job to mount the PVC alongside SigNoz.
-
-If your credential Secret already contains an `orgID` key, you can disable PVC
-discovery:
-
-```yaml
-signoz:
-  releaseName: obaas
-  auth:
-    existingSecret: my-signoz-credentials
-  orgDiscovery:
-    enabled: false
-```
-
-This mode does not mount the SigNoz PVC or require pod affinity. You can also
-override `signoz.url` instead of using the default
-`http://<OBaaS-release-name>-signoz:8080`.
+If the Secret contains a non-empty `orgID` key, that value takes precedence over
+discovery. Accounts belonging to multiple organizations must supply this key to
+select an organization explicitly. The Secret must contain `email` and `password`
+in either case.
 
 For private registries, configure `image.repository`, `image.tag`, and
-`imagePullSecrets`. Any replacement image must contain Python 3 with its SQLite
-module.
+`imagePullSecrets`. Replacement images must provide Python 3 and its standard
+library. No runtime package installation is needed.
 
 ## Install and update dashboards
 
@@ -163,8 +148,8 @@ kubectl logs -n <application-namespace> job/my-dashboards-signoz-setup \
 ```
 
 Open SigNoz and confirm your dashboard titles appear. If the Job does not start,
-inspect its pod events and the `wait-for-signoz` and `signoz-id-discovery` init
-container logs. Check image pulls, SigNoz and ClickHouse health, the credential
-Secret, the PVC name, and the SigNoz pod labels used for affinity. HTTP 400 during
+inspect its pod events and the `signoz-setup` container logs. Check image pulls,
+SigNoz and ClickHouse health, the service URL, the credential Secret, and any
+explicit `orgID` selection. HTTP 400 during
 creation indicates the exported JSON needs checking against the deployed schema;
 HTTP 401 or 403 indicates a credential or permission problem.

@@ -6,17 +6,12 @@ signoz:
   # Empty derives http://<releaseName>-signoz:8080.
   url: ""
   auth:
-    # Existing secret with email and password; optionally orgID.
+    # Existing secret with email and password. Set orgID to select an organization
+    # explicitly; otherwise discover the single organization for this email via API.
     existingSecret: signoz-authn
-  orgDiscovery:
-    # Mirrors OBaaS setup: read the organization ID from SigNoz's SQLite PVC.
-    # Disable when the credential secret already contains orgID.
-    enabled: true
-    # Empty derives signoz-db-<releaseName>-signoz-0.
-    pvcName: ""
 
 image:
-  # The full Oracle Linux 9 image includes Python 3 and its SQLite module.
+  # The full Oracle Linux 9 image includes Python 3 and its standard library.
   repository: container-registry.oracle.com/os/oraclelinux
   tag: "9"
   pullPolicy: IfNotPresent
