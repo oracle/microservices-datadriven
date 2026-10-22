@@ -1704,6 +1704,12 @@ td.count-cell {
 .walkthrough-chapter ol {
   padding-left: 22px;
 }
+.walkthrough-pseudocode {
+  margin: 24px 0;
+}
+.walkthrough-pseudocode h3 {
+  font-size: 18px;
+}
 .walkthrough-chapter li {
   padding: 4px 0 10px 5px;
 }

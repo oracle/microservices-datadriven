@@ -21,6 +21,19 @@ export const walkthrough = [
     evidence:
       "The inventory below shows current table counts, configured models, and policy indexing. Table counts and indexing status do not establish external service health.",
     practice: "Check your starting point",
+    // PolicyIndex.run → OKafkaManager.init
+    pseudocode: `on Spring Boot startup:
+  for policies and resolved reference tickets missing embeddings:
+    vectors = OCI.embed(reference text)
+    require vectors have 1536 dimensions
+    save vectors in Oracle; commit
+
+on application ready:
+  ensure TxEventQ topic "ticket_event" exists
+  start background OKafka consumer in this process
+  subscribe to "ticket_event" with manual acknowledgement
+
+Vue console → Spring Boot API → Oracle AI Database`,
     actions: [],
   },
   {
@@ -34,6 +47,18 @@ export const walkthrough = [
       alt: "Animated transaction boundaries showing the ticket and event committed together, followed by the consumer outcome and queue acknowledgement.",
     },
     summary: "Create a ticket and publish its work event in one transaction.",
+    // TicketEventProducer.submit
+    pseudocode: `on publishTicket(title, description, optional correlationId):
+  begin OKafka producer transaction
+  connection = producer.getDBConnection()
+  ticketId = insert support_ticket(title, description, RECEIVED)
+             using connection
+  event = submitted(ticketId, correlationId or new UUID)
+  // Envelope: event ID, ticket ID, type, timestamp; no ticket text
+  inject trace context into event and message headers
+  send event to "ticket_event"
+  commit ticket + event together; return ticketId
+  on error: abort transaction`,
     steps: [
       "Use the MFA sample below. Read or edit the title and description; leave the optional correlation ID blank.",
       "Click Publish ticket event, then View ticket in the receipt. This creates a real ticket and can call OCI.",
@@ -54,7 +79,7 @@ export const walkthrough = [
   },
   {
     id: "enrich",
-    practice: "Inspect assistance or publish a comparison",
+    practice: "Compare similar problems",
     title: "Follow AI enrichment",
     short: "Enrich",
     animation: {
@@ -63,16 +88,33 @@ export const walkthrough = [
       alt: "Animated flow from ticket text through OCI Generative AI and Oracle vector search to saved assistance and scored matches.",
     },
     summary:
-      "A background consumer embeds the request, retrieves matches, and saves generated assistance.",
+      "See how AI enrichment uses retrieved evidence to suggest different next steps for two sign-in problems.",
+    // TicketEventConsumer.processRecord → GenAIEventProcessor → TicketSummarizer
+    pseudocode: `on consume(event):
+  if event already has an outcome: acknowledge; skip
+  validate event; load ticket; set TRIAGED in this transaction
+  vector = OCI.embed(title + description + reviewer feedback)
+  related = Oracle.cosineSearch(tickets excluding self, vector,
+                               minScore=0.2, limit=5)
+  policies = Oracle.cosineSearch(policies, vector, minScore=0.2, limit=3)
+  previous = saved assistance if this is a feedback event
+  draft = OCI.chat(ticket, policies, related recorded resolutions,
+                   previous, accumulated feedback)
+  require summary + suggested resolution; validate suggested source IDs
+  save vector, ENRICHED, draft, scores, model + prompt version
+  mark event processed
+  commit saved results + queue acknowledgement together`,
     steps: [
-      "Select an ENRICHED ticket below. Read the saved summary, suggested resolution, model name, prompt version, generation time, policy matches, and related tickets.",
-      "Choose Comparison sample below and publish the MFA sample again to build a comparison history. Three synthetic resolved reference tickets provide initial comparison data.",
-      "Try Account access to distinguish a tenant mismatch from lost MFA, or Billing dispute to inspect a human-review recommendation. Outside the policy corpus demonstrates missing evidence. Choose Saved assistance to compare the results.",
+      "Choose Saved assistance and select the ENRICHED Lost MFA authenticator ticket from Submit. Inspect its summary, suggested resolution, policy matches, and related tickets. Expand a recorded resolution to see the historical evidence.",
+      "Choose Sample requests below, select Account access, and publish it. This request has working MFA but a possible account or tenant mismatch. Wait for ENRICHED.",
+      "Return to Saved assistance and switch between the two tickets. Compare their request details, matched policies, recorded resolutions, and suggested next steps. Does the assistance distinguish a lost MFA factor from the wrong account or tenant?",
+      "Check the source citations, similarity scores, model, prompt version, and generation time. Scores measure relevance, not confidence; only related tickets with recorded resolutions supply historical resolution examples.",
+      "For another contrast, publish Billing dispute to inspect a human-review recommendation, or Outside the policy corpus to explore how the assistance handles missing evidence.",
     ],
     mechanism:
       "OCI creates the embedding; Oracle performs exact cosine retrieval against tickets and policies. One chat call uses the ticket, retrieved policy bodies, and recorded resolutions from similar tickets to generate a summary and suggested next steps with source references. Unresolved descriptions and earlier AI suggestions are not proven fixes. Results, the processed event ID, and queue acknowledgement commit together.",
     evidence:
-      "Look for ENRICHED, a summary and suggested resolution with source references, model/prompt metadata, indexed policies, and saved match scores. The application generates assistance; it does not change accounts or issue refunds.",
+      "Look for next steps grounded in each request’s retrieved evidence: verified recovery for lost MFA, and account or tenant checks when MFA still works. Three synthetic resolved reference tickets provide historical examples. Earlier AI suggestions are not proven fixes. The application generates assistance; it does not change accounts or issue refunds.",
     actions: [
       {
         label: "Saved assistance",
@@ -80,7 +122,7 @@ export const walkthrough = [
         readPath: "primary",
       },
       {
-        label: "Comparison sample",
+        label: "Sample requests",
         tab: "samples",
         preset: "mfa",
       },
@@ -98,6 +140,21 @@ export const walkthrough = [
     },
     summary:
       "Human feedback returns through the event loop; each reviewed version is preserved.",
+    // TicketReviewService.recordReview → TicketApprovalStore.record
+    pseudocode: `on review(ticketId, actionId, reviewer, decision, reason):
+  begin OKafka producer transaction; lock ticket
+  if actionId already recorded:
+    require same review; commit; return saved review
+  require ENRICHED ticket with saved assistance
+  append blockchain review snapshot:
+    assistance, SHA256(assistance), reviewer, decision, reason,
+    model, prompt version
+  if decision == REJECTED:
+    append feedback; set ticket RECEIVED
+    publish feedback event → normal enrichment with previous assistance
+  commit snapshot + feedback + any event together
+  on error: abort transaction
+  // APPROVED saves the snapshot without regenerating or closing the ticket`,
     steps: [
       "In the review workspace below, select an enriched ticket and enter a reviewer ID, such as demo-reviewer.",
       "Choose Request revision. Enter: “The affected account belongs to the test tenant. Include that context in the summary.” Then click Send feedback & regenerate.",
@@ -122,6 +179,23 @@ export const walkthrough = [
     },
     summary:
       "Deliberately fail an event, inspect the durable worklist, and replay the work.",
+    // TicketEventConsumer.processRecord, DemoFailureInjector, TicketEventProducer.replay
+    pseudocode: `on processing failure:
+  roll back attempt to savepoint
+  retry transient errors with exponential backoff (default: 3 attempts)
+  if non-retryable or attempts exhausted:
+    save FAILED + event envelope, attempt count, error type
+    commit failure + queue acknowledgement together
+
+on replay(failedEventId), in one producer transaction:
+  lock original failure; require replayable envelope
+  replay = original with new event ID and causationId = original.eventId
+  mark original replayed; reset FAILED ticket to RECEIVED
+  publish replay; commit; on error: abort
+  // Normal consumer processes the new event
+
+// [demo-fail-once]: original fails without retry;
+// replay fails transiently on attempt 1, then enriches on attempt 2`,
     steps: [
       "Open the failure sample below and keep the [demo-fail-once] title prefix. Publish the ticket.",
       "Wait for FAILED, then choose Failed Events below. Inspect the error, attempt metadata, and replayable event ID.",
@@ -153,6 +227,20 @@ export const walkthrough = [
     },
     summary:
       "Read the ticket list through True Cache while keeping detail and review reads fresh.",
+    // TicketReadRouter.route; UI detail and review requests explicitly use primary
+    pseudocode: `on GET /tickets?readPath=primary:
+  return primary.listTickets(), X-Read-Path: "primary"
+
+on GET /tickets?readPath=cache:
+  try:
+    return trueCache.listTickets(), X-Read-Path: "true-cache"
+  catch CacheUnavailable:
+    return primary.listTickets(), X-Read-Path: "primary-fallback"
+
+// True Cache applies committed primary changes through redo; reads may lag
+UI ticket detail + review → primary
+all writes → primary
+record actual read path, outcome, and latency`,
     steps: [
       "Choose Primary ticket list below and note the ticket IDs and statuses.",
       "Switch Ticket list read path to True Cache · cache. Check Served by: true-cache confirms the cache served the list.",
@@ -180,6 +268,18 @@ export const walkthrough = [
     },
     summary:
       "Follow the same work through traces, event metrics, retries, and connection pool activity.",
+    // TicketTelemetry, EventTraceContext, application.yaml, exporter/config.yaml
+    pseudocode: `on submit / review / replay: start operation observation
+on publish: inject traceparent + tracestate into headers and envelope
+on consume: restore trace context; start consumer observation
+  observe embedding, retrieval, generation, persistence
+  record retry count as retries occur
+  after queue commit: count outcome; record processing time + event age
+  log event ID, correlation ID, ticket ID with trace context
+
+Spring Boot → OTLP traces, metrics (every 5s), logs → LGTM
+Oracle Database Exporter → primary + True Cache metrics (every 15s)
+Grafana → Prometheus metrics, Tempo traces, Loki logs`,
     steps: [
       "Generate tickets, feedback, and a replay using the earlier chapters. Allow several five-second metric export intervals.",
       "Open Grafana → Oracle AI Database → Customer Support Workflow. Inspect event outcomes, retry attempts, processing time, and read paths.",

@@ -8,6 +8,7 @@ import FailuresPanel from "./FailuresPanel.vue";
 import TicketDetail from "./TicketDetail.vue";
 import ReadPathControl from "./ReadPathControl.vue";
 import ComponentsPanel from "./ComponentsPanel.vue";
+import PseudocodeBlock from "./PseudocodeBlock.vue";
 const props = defineProps({
   snapshot: Object,
   tickets: Array,
@@ -137,6 +138,10 @@ const count = (name) =>
           >
         </figcaption>
       </figure>
+      <section class="walkthrough-pseudocode" aria-labelledby="pseudocode-title">
+        <h3 id="pseudocode-title">The flow in pseudocode</h3>
+        <PseudocodeBlock :code="chapter.pseudocode" />
+      </section>
       <ol>
         <li v-for="instruction in chapter.steps" :key="instruction">
           {{ instruction }}
