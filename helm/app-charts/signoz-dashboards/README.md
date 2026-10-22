@@ -10,8 +10,8 @@ wait for SigNoz, discover its organization ID, log in, list existing dashboards,
 delete exact title matches, and create dashboards from the bundled JSON files.
 It uses a small Python standard-library importer to parse JSON reliably, including
 minified exports and titles containing quotes or other special characters.
-All containers use `container-registry.oracle.com/os/oraclelinux:9`, which includes Python 3 and
-its SQLite module. No custom image or runtime package installation is needed.
+The Job uses `container-registry.oracle.com/os/oraclelinux:9`, which includes Python 3 and
+its standard library. No custom image or runtime package installation is needed.
 
 ## Add dashboards
 
@@ -37,24 +37,6 @@ any dashboards. Arbitrary V2-to-V1 conversion is not provided.
 The V1-on-V2 create compatibility is a transitional SigNoz feature; for future
 SigNoz upgrades, re-export dashboards in the supported format. See the
 [SigNoz migration guide](https://signoz.io/docs/operate/migration/upgrade-0-135/).
-
-Compatibility checks performed for this sample:
-
-- OBaaS 2.1.0 / SigNoz v0.113.0: installed and upgraded a temporary copy of this
-  chart on an existing Kubernetes instance. The Oracle Linux Job completed the
-  health wait, read-only SQLite organization discovery, login, import, and
-  replacement. The upgrade changed the dashboard ID and applied its updated
-  description. The temporary release, retained hook Job, and dashboard were
-  removed, and all pre-existing dashboard IDs were preserved.
-- OBaaS 2.1.2's SigNoz v0.142.1: ran the importer in plain Oracle Linux 9 against
-  an isolated SigNoz container. V1/v5 conversion, native V2 creation, and
-  replacement passed. A real V1/v4 export from the older installation also
-  converted successfully.
-
-The complete Helm flow has been verified on OBaaS 2.1.0; the newer-version check
-verifies the importer against isolated SigNoz v0.142.1, not a complete OBaaS 2.1.2
-Helm deployment. The hook's health wait requires a healthy SigNoz instance,
-including its ClickHouse connection.
 
 Each file becomes its own ConfigMap. `orders.json` produces a ConfigMap named
 `orders`, with the JSON stored in its `dashboard.json` key. Short, valid lowercase
@@ -89,34 +71,24 @@ Change `releaseName` to your actual OBaaS release and `existingSecret` to the
 credential Secret configured for that instance. The Secret must contain `email`
 and `password`. This chart references it; it does not create or modify credentials.
 
-By default, organization discovery follows the OBaaS setup Job's approach: an
-Oracle Linux init container reads the organization ID from the SigNoz SQLite PVC
-using Python's built-in SQLite module in read-only mode. The PVC
-defaults to `signoz-db-<releaseName>-signoz-0`. Required pod affinity schedules the
-Job on the SigNoz pod's node so it can mount the same PVC. The platform must be
-healthy and the storage must support this access. Override
-`signoz.orgDiscovery.pvcName` if your instance uses a different PVC name.
+Organization discovery uses `/api/v2/sessions/context` for the configured email,
+following the OBaaS Python setup script. A non-empty `orgID` key in the credential
+Secret takes precedence. If the account belongs to multiple organizations, this
+key is required to select one explicitly. Empty or ambiguous discovery results
+fail before any dashboards are changed.
 
-If your existing credential Secret also contains `orgID`, disable PVC discovery:
+The Job does not mount the SigNoz database PVC or require pod affinity. It works
+with SQLite or PostgreSQL metadata storage. The former
+`signoz.orgDiscovery.enabled` and `signoz.orgDiscovery.pvcName` settings are no
+longer used; remove them from existing values files. No discovery flag is needed
+when the Secret contains `orgID`.
 
-```yaml
-signoz:
-  releaseName: obaas
-  auth:
-    existingSecret: my-signoz-credentials
-  orgDiscovery:
-    enabled: false
-```
-
-With discovery disabled, the Job does not mount the SigNoz PVC or require pod
-affinity. `signoz.url` can override the default
-`http://<releaseName>-signoz:8080`. The Secret must still exist in the namespace
-where this chart is installed.
+`signoz.url` can override the default `http://<releaseName>-signoz:8080`. The
+Secret must still exist in the namespace where this chart is installed.
 
 For private registries, override `image.repository`, `image.tag`, and
-`imagePullSecrets` as needed. The sample follows the full Oracle Linux `9` tag;
-use an approved version tag for your own deployment. Slim images are not supported
-unless they also contain `python3` with the `sqlite3` module.
+`imagePullSecrets` as needed. Replacement images must contain `python3` and its
+standard library; no packages are installed at runtime.
 
 ## Render and install
 
@@ -179,9 +151,7 @@ kubectl logs -n <application-namespace> job/my-dashboards-signoz-setup \
 ```
 
 Open SigNoz and confirm the imported titles appear. For startup problems, inspect
-the Job's pod events and the `wait-for-signoz` and `signoz-id-discovery` init
-container logs. Check the service URL, credential Secret, PVC name, and SigNoz
-pod labels. HTTP 400 during creation usually requires checking the exported
-dashboard against the deployed SigNoz schema; HTTP 401/403 requires checking the
-credentials and permissions.
-
+the Job's pod events and `signoz-setup` logs. Check the service URL, credential
+Secret, and any explicit `orgID` selection. HTTP 400 during creation usually
+requires checking the exported dashboard against the deployed SigNoz schema;
+HTTP 401/403 requires checking the credentials and permissions.

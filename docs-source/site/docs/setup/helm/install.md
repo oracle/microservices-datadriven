@@ -637,6 +637,12 @@ kubectl create secret generic my-signoz-secret \
 helm upgrade --install <app-release> obaas/obaas -f examples/values-signoz-existing-secret.yaml -n <application-namespace> [--debug]
 ```
 
+The setup Job discovers the organization associated with the Secret's `email`
+through the SigNoz API. If that account belongs to multiple organizations, include
+an `orgID` key containing the selected organization's UUID in the same Secret.
+See [dashboard setup](../../observability/dashboards.md#dashboard-setup-job) for
+reconciliation behavior and verification commands.
+
 #### Upgrade SigNoZ during an existing-release upgrade
 
 Follow the [OBaaS upgrade guide](../../upgrade/index.mdx) for prerequisite and
@@ -830,6 +836,13 @@ Each subchart has its own image configuration that must be set explicitly.
 
 - **ingress-nginx**: `controller.image.registry` when deprecated ingress-nginx is explicitly enabled
 - **signoz**: `global.imageRegistry`
+- **SigNoz setup Job**: `signoz.setup.image.registry`, with separate
+  `signoz.setup.image.repository` and `signoz.setup.image.tag` values. The default
+  is `container-registry.oracle.com/os/oraclelinux:9`; this Job does not use
+  `signoz.global.imageRegistry`. The private registry example mirrors it as
+  `myregistry.example.com/os/oraclelinux:9`. Replacement images must provide
+  `python3` and its standard library; no packages are installed at runtime.
+  The former `signoz.utilities.curlJq.image` override is no longer used.
 - **apisix etcd**: `apisix.etcd.image.registry`
 
 **OBaaS components requiring the full repository path** (include registry in `image.repository`):

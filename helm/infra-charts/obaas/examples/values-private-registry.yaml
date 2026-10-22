@@ -540,15 +540,15 @@ apisix:
 
 signoz:
   enabled: true
+  setup:
+    image:
+      registry: myregistry.example.com
+      repository: os/oraclelinux
+      tag: "9"
   global:
     imageRegistry: myregistry.example.com
-  # Utility images for setup jobs
+  # Utility images for initialization jobs
   utilities:
-    curlJq:
-      image:
-        registry: myregistry.example.com
-        repository: curlimages/curl
-        tag: "8.22.0"
     busybox:
       image:
         registry: myregistry.example.com

@@ -800,15 +800,15 @@ signoz:
   # Disable only during the first ClickHouse upgrade pass; re-enable for SigNoz.
   setup:
     enabled: true
+    # Oracle Linux 9 includes Python 3; no runtime package installation is needed.
+    image:
+      registry: container-registry.oracle.com
+      repository: os/oraclelinux
+      tag: "9"
   global:
     imagePullSecrets: *imagePullSecrets
-  # Utility images for setup jobs
+  # Utility images for initialization jobs
   utilities:
-    curlJq:
-      image:
-        registry: docker.io
-        repository: curlimages/curl
-        tag: "8.22.0"
     busybox:
       image:
         registry: docker.io

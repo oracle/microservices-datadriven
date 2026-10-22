@@ -25,48 +25,11 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if .Values.signoz.orgDiscovery.enabled }}
-      affinity:
-        podAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchLabels:
-                  app.kubernetes.io/component: signoz
-                  app.kubernetes.io/instance: {{ .Values.signoz.releaseName }}
-              topologyKey: kubernetes.io/hostname
-      {{- end }}
-      initContainers:
-        - name: wait-for-signoz
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: [python3, /scripts/import-dashboards.py, --wait]
-          env:
-            - name: SIGNOZ_URL
-              value: {{ include "signoz-dashboards.url" . | quote }}
-          volumeMounts:
-            - name: importer
-              mountPath: /scripts
-              readOnly: true
-        {{- if .Values.signoz.orgDiscovery.enabled }}
-        - name: signoz-id-discovery
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: [python3, /scripts/import-dashboards.py, --discover-org]
-          volumeMounts:
-            - name: importer
-              mountPath: /scripts
-              readOnly: true
-            - name: shared-data
-              mountPath: /shared
-            - name: signoz-db
-              mountPath: /signoz-db
-              readOnly: true
-        {{- end }}
       containers:
         - name: signoz-setup
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: [python3, /scripts/import-dashboards.py]
+          command: [python3, -u, /scripts/import-dashboards.py]
           env:
             - name: SIGNOZ_URL
               value: {{ include "signoz-dashboards.url" . | quote }}
@@ -82,8 +45,6 @@ spec:
             - name: signoz-authn
               mountPath: /signoz-authn
               readOnly: true
-            - name: shared-data
-              mountPath: /shared
       volumes:
         - name: importer
           configMap:
@@ -101,12 +62,3 @@ spec:
         - name: signoz-authn
           secret:
             secretName: {{ required "signoz.auth.existingSecret is required" .Values.signoz.auth.existingSecret }}
-        - name: shared-data
-          emptyDir: {}
-        {{- if .Values.signoz.orgDiscovery.enabled }}
-        - name: signoz-db
-          persistentVolumeClaim:
-            claimName: {{ .Values.signoz.orgDiscovery.pvcName | default (printf "signoz-db-%s-signoz-0" .Values.signoz.releaseName) }}
-            readOnly: true
-        {{- end }}
-
