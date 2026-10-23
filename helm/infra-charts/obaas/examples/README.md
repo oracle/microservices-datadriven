@@ -2,6 +2,13 @@
 
 This directory contains example values files demonstrating different configuration scenarios for the OBaaS Helm chart.
 
+Draft SigNoz [small, medium and distributed resource profiles](https://oracle.github.io/microservices-backend/obaas/docs/observability/signoz-profiles)
+provide starting allocations and document topology, storage and validation
+boundaries. The optional [PostgreSQL metadata example](values-signoz-postgres.yaml)
+can be layered with any size profile; sizing profiles do not configure PostgreSQL.
+An optional [persistent collector queue example](https://oracle.github.io/microservices-backend/obaas/docs/observability/signoz-persistent-queue)
+adds a dedicated PVC for a single small/medium collector.
+
 ## Available Examples
 
 ### 1. Default Configuration (`values-default.yaml`)
@@ -210,8 +217,8 @@ These files are upgrade profiles and must not be used for a fresh installation:
 
 Layer the selected profile after the customer's normal values files and use the
 same Helm release name and namespace for both stages. Do not use this README as
-the upgrade procedure. Follow [Upgrade SigNoz](../../../../docs-source/site/docs/observability/upgrade/index.md)
-to select a supported path and [Upgrade with protected recovery](../../../../docs-source/site/docs/observability/upgrade/protected-recovery.md)
+the upgrade procedure. Follow [Upgrade SigNoz](https://oracle.github.io/microservices-backend/obaas/docs/observability/upgrade/)
+to select a supported path and [Upgrade with protected recovery](https://oracle.github.io/microservices-backend/obaas/docs/observability/upgrade/protected-recovery)
 for the complete two-stage procedure, prerequisites, commands, validation, and
 recovery guidance.
 

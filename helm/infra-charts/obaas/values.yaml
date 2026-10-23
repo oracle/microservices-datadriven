@@ -934,7 +934,8 @@ signoz:
                     regex: apisix
                   - source_labels: [__meta_kubernetes_pod_ip]
                     target_label: __address__
-                    replacement: ${1}:9091
+                    # Escape capture groups through Collector config expansion.
+                    replacement: $$1:9091
               # scrape all the pods with the signoz annotations on them
               - job_name: "signoz-annotated-pods"
                 kubernetes_sd_configs:
@@ -956,7 +957,7 @@ signoz:
                       ]
                     action: replace
                     regex: ([^;]+);([^;]+)
-                    replacement: $1:$2
+                    replacement: $$1:$$2
                     target_label: __address__
                   - source_labels: [__meta_kubernetes_namespace]
                     action: replace
