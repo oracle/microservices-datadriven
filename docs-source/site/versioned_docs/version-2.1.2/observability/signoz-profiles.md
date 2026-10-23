@@ -46,6 +46,52 @@ The example sets both requests and limits to the reference allocation for those
 components. Small and medium provide lower resource starting points for OBaaS;
 validate their suitability against your workload.
 
+## Distributed availability and routing
+
+The distributed example spreads data over two ClickHouse shards with one replica
+per shard. It provides horizontal capacity, **no ClickHouse replica redundancy**.
+Loss of either shard can interrupt ingestion and complete queries; permanent
+volume loss can lose that shard's data. Three ZooKeeper instances provide
+coordination quorum, not additional copies of ClickHouse data. The SigNoz server
+and its default SQLite metadata store also remain single instances. This profile
+is not a highly available deployment.
+
+[SigNoz distributed ClickHouse guidance](https://signoz.io/docs/manage/administrator-guide/clickhouse/distributed-clickhouse/kubernetes/)
+illustrates two replicas per shard plus three ZooKeeper instances. Treat that as
+a separate availability design: budget resources and storage per replica, place
+replicas across failure domains, verify backup/restore and failover, and plan
+migration before changing an existing layout. That upstream page uses an older
+`schemaMigrator` key; this bundled chart uses `telemetryStoreMigrator`.
+
+The example moves Prometheus scraping and Kubernetes events to the singleton
+`k8s-infra.otelDeployment`. Its outage creates a collection gap even if all three
+central collectors are healthy. Do not increase this singleton's replica count
+without assigning disjoint scrape targets and event collection ownership;
+otherwise telemetry can be duplicated. Central collector replication does not
+replicate its work.
+
+Three central collector replicas also do not guarantee balanced ingestion. A
+Kubernetes Service balances connections, and long-lived OTLP/gRPC connections
+can remain pinned to one pod. Measure accepted telemetry, queues, memory and CPU
+**per pod**.
+Consider client-side gRPC balancing or a gRPC-aware proxy only after testing the
+client, discovery, connection churn and failure behavior. See
+[OpenTelemetry scaling guidance](https://opentelemetry.io/docs/collector/scaling/).
+
+The pinned SigNoz collector v0.144.10
+[span-metrics implementation](https://github.com/SigNoz/signoz-otel-collector/blob/v0.144.10/processor/signozspanmetricsprocessor/processor.go)
+aggregates individual spans in local maps, resets aggregates for delta export,
+and adds `signoz.collector.id` to dimensions. The bundled configuration selects
+`AGGREGATION_TEMPORALITY_DELTA` and retains that collector dimension. This source
+check supports keeping the current settings; it is not an end-to-end validation
+of multi-replica queries. Do not remove collector identity, switch temporality,
+or prescribe trace-ID affinity from generic stateful-processor advice alone.
+Before changing routing, distribute known spans across replicas and compare
+service/operation call counts, errors and merged histogram counts/buckets with a
+single-collector baseline, aggregating across collector IDs. Exercise reconnects
+and pod replacement. Verify metrics routing separately, especially cumulative
+streams, and avoid replaying the same spans to multiple collectors.
+
 ## Resource allocations
 
 Each cell shows CPU cores / memory GiB, as **request → limit**, per instance.
@@ -194,14 +240,34 @@ Choose application logs, traces and metrics retention independently (for example
 Verify dependent-table TTLs, existing-data behavior and disk reclamation before
 claiming that a retention policy bounds storage.
 
-The collector memory limiter is first in each signal pipeline and batch sizes are
-bounded. Memory limiting can refuse telemetry; SDK/agent retries can expire.
+All three collector tiers set `GOMEMLIMIT` and a `memory_limiter`, with
+headroom below their container limits. The central collector also bounds batch
+sizes. Starting values for the additional tiers are:
+
+<table>
+  <thead><tr><th>Tier / profile</th><th>Container limit (MiB)</th><th>GOMEMLIMIT</th><th>Limiter hard / spike (MiB)</th></tr></thead>
+  <tbody>
+    <tr><td>Node / small</td><td>512</td><td>300MiB</td><td>384 / 64</td></tr>
+    <tr><td>Node / medium or distributed</td><td>1024</td><td>600MiB</td><td>768 / 128</td></tr>
+    <tr><td>Cluster / small</td><td>1024</td><td>600MiB</td><td>768 / 128</td></tr>
+    <tr><td>Cluster / medium</td><td>2048</td><td>1200MiB</td><td>1536 / 256</td></tr>
+    <tr><td>Cluster / distributed</td><td>4096</td><td>2400MiB</td><td>3072 / 512</td></tr>
+  </tbody>
+</table>
+
+The soft refusal threshold is hard limit minus spike allowance. The Go runtime
+limit is a soft target, not a cap on total process RSS. Tune all three settings
+together under load.
+
+Memory pressure can refuse or lose telemetry at the agents and singleton before
+it reaches a central persistent queue. Pull receivers and file readers have
+different retry/checkpoint behavior; memory limiting cannot guarantee delivery.
+SDK/agent retries can expire.
+
 Exporter queues and retries retain chart defaults. These examples do not add
 persistent queue storage or promise restart-surviving buffering. For small or
 medium, the optional [persistent queue overlay](https://oracle.github.io/microservices-backend/obaas/docs/observability/signoz-persistent-queue)
-provides a dedicated PVC for a single collector. Distributed per-replica storage,
-outage duration and disk capacity need a separate design and recovery test. See the
-[OpenTelemetry exporter guidance](https://raw.githubusercontent.com/open-telemetry/opentelemetry-collector/v0.144.0/exporter/exporterhelper/README.md).
+provides a dedicated PVC for a single collector.
 
 ## Existing releases and validation
 
