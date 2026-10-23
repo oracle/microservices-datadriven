@@ -48,6 +48,18 @@ Oracle Backend for Microservices and AI ships with a fully integrated observabil
       <td>Add OpenTelemetry and Micrometer dependencies to your application</td>
     </tr>
     <tr>
+      <th scope="row"><a href="./signoz-profiles">SigNoz Resource Profiles</a></th>
+      <td>Draft small, medium and distributed allocations, storage planning and validation boundaries</td>
+    </tr>
+    <tr>
+      <th scope="row"><a href="./signoz-persistent-queue">Persistent Collector Queues</a></th>
+      <td>Configure a dedicated queue PVC for a single small or medium collector</td>
+    </tr>
+    <tr>
+      <th scope="row"><a href="https://oracle.github.io/microservices-backend/obaas/docs/observability/signoz-sqlstore">SigNoz SQLStore</a></th>
+      <td>Choose a metadata store, use the bundled PostgreSQL example, or connect to managed PostgreSQL</td>
+    </tr>
+    <tr>
       <th scope="row"><a href="./kafka">Kafka Observability</a></th>
       <td>Monitor Kafka clusters, producers, and consumers</td>
     </tr>
