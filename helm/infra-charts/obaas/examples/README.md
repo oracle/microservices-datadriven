@@ -8,6 +8,9 @@ boundaries. The optional [PostgreSQL metadata example](values-signoz-postgres.ya
 can be layered with any size profile; sizing profiles do not configure PostgreSQL.
 An optional [persistent collector queue example](https://oracle.github.io/microservices-backend/obaas/docs/observability/signoz-persistent-queue)
 adds a dedicated PVC for a single small/medium collector.
+Resource profiles add memory controls to every tier. The distributed profile
+provides shard capacity; it has no ClickHouse replica redundancy and requires
+per-pod ingestion checks.
 
 ## Available Examples
 

@@ -165,7 +165,25 @@ signoz:
             processors: [memory_limiter, batch/meter]
 
 k8s-infra:
+  # Presets prepend metadata enrichment ahead of memory_limiter. Preserve those
+  # processors; see the profile guide for ordering and custom-pipeline caveats.
   otelAgent:
+    additionalEnvs:
+      GOMEMLIMIT: 600MiB
+    config:
+      processors:
+        memory_limiter:
+          check_interval: 1s
+          limit_mib: 768
+          spike_limit_mib: 128
+      service:
+        pipelines:
+          traces:
+            processors: [memory_limiter, batch]
+          metrics:
+            processors: [memory_limiter, batch]
+          logs:
+            processors: [memory_limiter, batch]
     # Per scheduled worker node, in addition to the central components above.
     resources:
       requests:
@@ -205,7 +223,14 @@ k8s-infra:
         - apiGroups: [discovery.k8s.io]
           resources: [endpointslices]
           verbs: [get, list, watch]
+    additionalEnvs:
+      GOMEMLIMIT: 2400MiB
     config:
+      processors:
+        memory_limiter:
+          check_interval: 1s
+          limit_mib: 3072
+          spike_limit_mib: 512
       receivers:
         k8s_events:
           auth_type: serviceAccount
@@ -272,7 +297,11 @@ k8s-infra:
                     target_label: app
       service:
         pipelines:
+          metrics/internal:
+            processors: [memory_limiter, batch]
           metrics/scraper:
+            processors: [memory_limiter, batch]
             receivers: [prometheus]
           logs:
+            processors: [memory_limiter, batch]
             receivers: [k8s_events]

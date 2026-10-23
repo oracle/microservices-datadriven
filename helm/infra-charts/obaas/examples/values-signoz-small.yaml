@@ -150,7 +150,25 @@ signoz:
             processors: [memory_limiter, batch/meter]
 
 k8s-infra:
+  # Presets prepend metadata enrichment ahead of memory_limiter. Preserve those
+  # processors; see the profile guide for ordering and custom-pipeline caveats.
   otelAgent:
+    additionalEnvs:
+      GOMEMLIMIT: 300MiB
+    config:
+      processors:
+        memory_limiter:
+          check_interval: 1s
+          limit_mib: 384
+          spike_limit_mib: 64
+      service:
+        pipelines:
+          traces:
+            processors: [memory_limiter, batch]
+          metrics:
+            processors: [memory_limiter, batch]
+          logs:
+            processors: [memory_limiter, batch]
     # Per scheduled worker node, in addition to the central components above.
     resources:
       requests:
@@ -160,6 +178,22 @@ k8s-infra:
         cpu: "500m"
         memory: 512Mi
   otelDeployment:
+    additionalEnvs:
+      GOMEMLIMIT: 600MiB
+    config:
+      processors:
+        memory_limiter:
+          check_interval: 1s
+          limit_mib: 768
+          spike_limit_mib: 128
+      service:
+        pipelines:
+          metrics/internal:
+            processors: [memory_limiter, batch]
+          metrics/scraper:
+            processors: [memory_limiter, batch]
+          logs:
+            processors: [memory_limiter, batch]
     replicaCount: 1
     # Singleton cluster-wide collection; do not scale pull receivers blindly.
     resources:
